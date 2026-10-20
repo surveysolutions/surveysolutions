@@ -89,6 +89,7 @@
                     <InterviewFilter
                         :questionnaireId="questionnaireId ? questionnaireId.key : null"
                         :questionnaireVersion="questionnaireVersion ? questionnaireVersion.key : null"
+                        :showAdvancedFilter="false"
                         :value="conditions"
                         @change="questionFilterChanged" />
                 </template>
@@ -818,7 +819,9 @@ export default {
             requestData.id = this.id
             requestData.status = (this.status || {}).key
             if (this.conditions && this.conditions.length > 0) {
-                requestData.conditions = conditionToQueryString(this.conditions)
+                conditionToQueryString(this.conditions).forEach((condition, index) => {
+                    requestData[`conditions[${index}]`] = condition
+                })
             }
         },
 
@@ -829,11 +832,11 @@ export default {
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue
             this.questionnaireVersionSelected(null)
-            this.conditions = []
         },
 
         questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue
+            this.conditions = []
         },
 
         newResponsibleSelected(newValue) {

@@ -33,44 +33,46 @@
             </template>
         </ModalFrame>
 
-        <ModalFrame ref="questionsExposedSelector" id="modalQuestionsExposedSelector" class="vue-query-builder"
-            :title="$t('Interviews.DynamicFilter')" @hidden="restoreQueryAfterCancel">
-            <query-builder :config="config" v-model="queryExposedVariables">
+        <template v-if="showAdvancedFilter">
+            <ModalFrame ref="questionsExposedSelector" id="modalQuestionsExposedSelector" class="vue-query-builder"
+                :title="$t('Interviews.DynamicFilter')" @hidden="restoreQueryAfterCancel">
+                <query-builder :config="config" v-model="queryExposedVariables">
 
-                <template #groupOperator="props">
-                    <query-builder-group-operator :groupCtrl="props" :labels="labels" />
+                    <template #groupOperator="props">
+                        <query-builder-group-operator :groupCtrl="props" :labels="labels" />
+                    </template>
+
+                    <template #groupControl="props">
+                        <query-builder-group :groupCtrl="props" :labels="labels" />
+                    </template>
+
+                    <template #rule="props">
+                        <rule-slot :ruleCtrl="props" :rule="getRuleById(props.ruleIdentifier)" :labels="labels" />
+                    </template>
+
+                </query-builder>
+                <!-- <div>{{queryExposedVariables}}</div> -->
+                <template v-slot:actions>
+                    <div>
+                        <button id="btnQuestionsExposedSelectorOk" type="button" class="btn btn-primary"
+                            :disabled="saveDisabled" @click="saveExposedVariablesFilter">{{ $t("Common.Apply") }}</button>
+                    </div>
                 </template>
+            </ModalFrame>
 
-                <template #groupControl="props">
-                    <query-builder-group :groupCtrl="props" :labels="labels" />
-                </template>
-
-                <template #rule="props">
-                    <rule-slot :ruleCtrl="props" :rule="getRuleById(props.ruleIdentifier)" :labels="labels" />
-                </template>
-
-            </query-builder>
-            <!-- <div>{{queryExposedVariables}}</div> -->
-            <template v-slot:actions>
-                <div>
-                    <button id="btnQuestionsExposedSelectorOk" type="button" class="btn btn-primary"
-                        :disabled="saveDisabled" @click="saveExposedVariablesFilter">{{ $t("Common.Apply") }}</button>
-                </div>
-            </template>
-        </ModalFrame>
+            <div class="block-filter">
+                <button type="button" id="btnExposedQuestionsFilter" class="btn" :disabled="isDynamicDisabled"
+                    :title="isDynamicDisabled ? $t('Interviews.DynamicFilterNotAvailable') : ''"
+                    @click="$refs.questionsExposedSelector.modal()">
+                    {{ $t("Interviews.AdvancedFilterSelector") }}
+                </button>
+            </div>
+        </template>
 
         <InterviewFilter v-for="condition in conditions" :key="'filter_' + condition.variable"
             :id="'filter_' + condition.variable" :item="itemFor(condition)" :condition="condition"
             @change="conditionChanged">
         </InterviewFilter>
-
-        <div class="block-filter">
-            <button type="button" id="btnExposedQuestionsFilter" class="btn" :disabled="isDynamicDisabled"
-                :title="isDynamicDisabled ? $t('Interviews.DynamicFilterNotAvailable') : ''"
-                @click="$refs.questionsExposedSelector.modal()">
-                {{ $t("Interviews.AdvancedFilterSelector") }}
-            </button>
-        </div>
 
     </div>
 
@@ -114,6 +116,7 @@ export default {
         questionsFilter: { type: Object },
         value: { type: Array },
         exposedValuesFilter: { type: Object },
+        showAdvancedFilter: { type: Boolean, default: true },
     },
 
     emits: ['change', 'changeFilter'],
@@ -220,7 +223,7 @@ export default {
             this.savedQuery = this.cloneQuery(this.queryExposedVariables)
             this.lastSavedQuery = this.transformQuery
             this.$emit('changeFilter', this.transformQuery)
-            this.$refs.questionsExposedSelector.hide()
+            this.$refs.questionsExposedSelector?.hide()
         },
 
         restoreQueryAfterCancel() {

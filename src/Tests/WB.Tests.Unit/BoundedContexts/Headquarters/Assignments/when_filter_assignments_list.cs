@@ -167,13 +167,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var fixture = NewFixture();
 
-            var assignment1 = Create.Entity.Assignment(1, identifyingAnswers: new List<IdentifyingAnswer>
+            var assignment1 = Create.Entity.Assignment(1, questionnaireIdentity: Create.Entity.QuestionnaireIdentity(Id.gA, 1), identifyingAnswers: new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(variable: "region", answerAsString: "North East")
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gA), variable: "region", answerAsString: "North East")
             });
-            var assignment2 = Create.Entity.Assignment(2, identifyingAnswers: new List<IdentifyingAnswer>
+            var assignment2 = Create.Entity.Assignment(2, questionnaireIdentity: Create.Entity.QuestionnaireIdentity(Id.gA, 1), identifyingAnswers: new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(variable: "region", answerAsString: "South West")
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gA), variable: "region", answerAsString: "South West")
             });
 
             fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() =>
@@ -189,6 +189,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var result = sut.Load(new AssignmentsInputModel
             {
+                QuestionnaireId = Id.gA,
+                QuestionnaireVersion = 1,
                 Conditions = new[]
                 {
                     new AssignmentFilterCondition { Variable = "region", Field = "valueLowerCase|startsWith", Value = "north" }
@@ -206,13 +208,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var fixture = NewFixture();
 
-            var assignment1 = Create.Entity.Assignment(1, identifyingAnswers: new List<IdentifyingAnswer>
+            var assignment1 = Create.Entity.Assignment(1, questionnaireIdentity: Create.Entity.QuestionnaireIdentity(Id.gA, 1), identifyingAnswers: new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(variable: "city", answerAsString: "Paris")
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gB), variable: "city", answerAsString: "Paris")
             });
-            var assignment2 = Create.Entity.Assignment(2, identifyingAnswers: new List<IdentifyingAnswer>
+            var assignment2 = Create.Entity.Assignment(2, questionnaireIdentity: Create.Entity.QuestionnaireIdentity(Id.gA, 1), identifyingAnswers: new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(variable: "city", answerAsString: "London")
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gB), variable: "city", answerAsString: "London")
             });
 
             fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() =>
@@ -228,6 +230,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var result = sut.Load(new AssignmentsInputModel
             {
+                QuestionnaireId = Id.gA,
+                QuestionnaireVersion = 1,
                 Conditions = new[]
                 {
                     new AssignmentFilterCondition { Variable = "city", Field = "valueLowerCase|eq", Value = "paris" }
@@ -245,13 +249,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var fixture = NewFixture();
 
-            var assignment1 = Create.Entity.Assignment(1, identifyingAnswers: new List<IdentifyingAnswer>
+            var assignment1 = Create.Entity.Assignment(1, questionnaireIdentity: Create.Entity.QuestionnaireIdentity(Id.gA, 1), identifyingAnswers: new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(variable: "gender", answer: "1", answerAsString: "Male")
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gC), variable: "gender", answer: "1", answerAsString: "Male")
             });
-            var assignment2 = Create.Entity.Assignment(2, identifyingAnswers: new List<IdentifyingAnswer>
+            var assignment2 = Create.Entity.Assignment(2, questionnaireIdentity: Create.Entity.QuestionnaireIdentity(Id.gA, 1), identifyingAnswers: new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(variable: "gender", answer: "2", answerAsString: "Female")
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gC), variable: "gender", answer: "2", answerAsString: "Female")
             });
 
             fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() =>
@@ -267,6 +271,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var result = sut.Load(new AssignmentsInputModel
             {
+                QuestionnaireId = Id.gA,
+                QuestionnaireVersion = 1,
                 Conditions = new[]
                 {
                     new AssignmentFilterCondition { Variable = "gender", Field = "answerCode|neq", Value = "1" }
@@ -284,20 +290,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var fixture = NewFixture();
 
-            var assignment1 = Create.Entity.Assignment(1, identifyingAnswers: new List<IdentifyingAnswer>
+            var assignment1 = Create.Entity.Assignment(1, questionnaireIdentity: Create.Entity.QuestionnaireIdentity(Id.gA, 1), identifyingAnswers: new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(variable: "region", answerAsString: "North"),
-                Create.Entity.IdentifyingAnswer(variable: "city", answerAsString: "Oslo")
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gA), variable: "region", answerAsString: "North"),
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gB), variable: "city", answerAsString: "Oslo")
             });
-            var assignment2 = Create.Entity.Assignment(2, identifyingAnswers: new List<IdentifyingAnswer>
+            var assignment2 = Create.Entity.Assignment(2, questionnaireIdentity: Create.Entity.QuestionnaireIdentity(Id.gA, 1), identifyingAnswers: new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(variable: "region", answerAsString: "North"),
-                Create.Entity.IdentifyingAnswer(variable: "city", answerAsString: "Bergen")
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gA), variable: "region", answerAsString: "North"),
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gB), variable: "city", answerAsString: "Bergen")
             });
-            var assignment3 = Create.Entity.Assignment(3, identifyingAnswers: new List<IdentifyingAnswer>
+            var assignment3 = Create.Entity.Assignment(3, questionnaireIdentity: Create.Entity.QuestionnaireIdentity(Id.gA, 1), identifyingAnswers: new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(variable: "region", answerAsString: "South"),
-                Create.Entity.IdentifyingAnswer(variable: "city", answerAsString: "Oslo")
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gA), variable: "region", answerAsString: "South"),
+                Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gB), variable: "city", answerAsString: "Oslo")
             });
 
             fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() =>
@@ -314,6 +320,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var result = sut.Load(new AssignmentsInputModel
             {
+                QuestionnaireId = Id.gA,
+                QuestionnaireVersion = 1,
                 Conditions = new[]
                 {
                     new AssignmentFilterCondition { Variable = "region", Field = "valueLowerCase|eq", Value = "north" },
@@ -339,11 +347,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             
             autoFixture.Register(() => webInterviewConfigProvider.Object);
 
-            // Return null questionnaire so GetIdentifyingColumnText returns early
-            // (test assertions focus on filtering, not on column text rendering)
+            var questionnaire = new Mock<IQuestionnaire>();
+            questionnaire.Setup(x => x.GetQuestionIdByVariable("region")).Returns(Id.gA);
+            questionnaire.Setup(x => x.GetQuestionIdByVariable("city")).Returns(Id.gB);
+            questionnaire.Setup(x => x.GetQuestionIdByVariable("gender")).Returns(Id.gC);
+
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             questionnaireStorage.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
                 .Returns((IQuestionnaire)null);
+            questionnaireStorage.Setup(x => x.GetQuestionnaire(
+                    It.Is<QuestionnaireIdentity>(id => id.QuestionnaireId == Id.gA && id.Version == 1),
+                    It.IsAny<string>()))
+                .Returns(questionnaire.Object);
             autoFixture.Register(() => questionnaireStorage.Object);
 
             return autoFixture;

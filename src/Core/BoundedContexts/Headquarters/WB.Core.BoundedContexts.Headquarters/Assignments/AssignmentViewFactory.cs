@@ -385,35 +385,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             if (input.Conditions != null && input.Conditions.Length > 0)
             {
+                var questionnaire = input.QuestionnaireId.HasValue && input.QuestionnaireVersion.HasValue
+                    ? this.questionnaireStorage.GetQuestionnaire(
+                        new QuestionnaireIdentity(input.QuestionnaireId.Value, input.QuestionnaireVersion.Value), null)
+                    : null;
+
                 foreach (var condition in input.Conditions)
                 {
                     if (condition?.Variable == null || condition.Field == null || condition.Value == null)
                         continue;
 
-                    var variable = condition.Variable;
+                    var questionId = questionnaire?.GetQuestionIdByVariable(condition.Variable);
+                    if (!questionId.HasValue)
+                        continue;
+
                     var fieldParts = condition.Field.Split('|');
                     if (fieldParts.Length != 2) continue;
 
                     var fieldName = fieldParts[0];
                     var operation = fieldParts[1];
                     var value = condition.Value;
+                    var id = questionId.Value;
 
                     switch (fieldName, operation)
                     {
                         case ("valueLowerCase", "startsWith"):
-                            items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.AnswerAsString.ToLower().StartsWith(value)));
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.Identity.Id == id && a.AnswerAsString.ToLower().StartsWith(value)));
                             break;
                         case ("valueLowerCase", "eq"):
-                            items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.AnswerAsString.ToLower() == value));
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.Identity.Id == id && a.AnswerAsString.ToLower() == value));
                             break;
                         case ("answerCode", "eq"):
-                            items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.Answer == value));
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.Identity.Id == id && a.Answer == value));
                             break;
                         case ("answerCode", "neq"):
-                            items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.Answer != null && a.Answer != value));
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.Identity.Id == id && a.Answer != null && a.Answer != value));
                             break;
                         case ("value", "eq"):
-                            items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.Answer == value));
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.Identity.Id == id && a.Answer == value));
                             break;
                     }
                 }
