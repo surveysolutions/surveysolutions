@@ -69,14 +69,36 @@ namespace WB.Tests.Integration.AssignmentTests
         [Test]
         public void should_filter_assignment_identifying_data_by_mapped_question_id()
         {
+            var responsibleId = Guid.NewGuid();
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(
+                questionnaireId: Guid.NewGuid(),
+                questionnaireVersion: 1);
+            var questionnaire = Create.Entity.QuestionnaireBrowseItem(
+                Create.Entity.QuestionnaireDocument(id: questionnaireIdentity.QuestionnaireId));
+            unitOfWork.Session.Save(questionnaire);
+            unitOfWork.Session.CreateSQLQuery(@"
+                INSERT INTO users.users
+                    (""Id"", ""UserName"", ""IsArchived"", ""IsLockedBySupervisor"", ""IsLockedByHeadquaters"",
+                     ""CreationDate"", ""EmailConfirmed"", ""PhoneNumberConfirmed"", ""TwoFactorEnabled"",
+                     ""LockoutEnabled"", ""AccessFailedCount"")
+                VALUES
+                    (:id, :userName, false, false, false, CURRENT_TIMESTAMP, false, false, false, false, 0)")
+                .SetParameter("id", responsibleId)
+                .SetParameter("userName", responsibleId.ToString())
+                .ExecuteUpdate();
+
             var matching = Create.Entity.Assignment(
                 id: 1,
+                questionnaireIdentity: questionnaireIdentity,
+                responsibleId: responsibleId,
                 identifyingAnswers: new List<IdentifyingAnswer>
                 {
                     Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gA), answer: "yes", answerAsString: "Yes")
                 });
             var differentQuestion = Create.Entity.Assignment(
                 id: 2,
+                questionnaireIdentity: questionnaireIdentity,
+                responsibleId: responsibleId,
                 identifyingAnswers: new List<IdentifyingAnswer>
                 {
                     Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gB), answer: "yes", answerAsString: "Yes")

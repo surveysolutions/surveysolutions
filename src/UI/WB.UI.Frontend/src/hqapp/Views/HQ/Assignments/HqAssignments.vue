@@ -90,6 +90,7 @@
                         :questionnaireId="questionnaireId ? questionnaireId.key : null"
                         :questionnaireVersion="questionnaireVersion ? questionnaireVersion.key : null"
                         :showAdvancedFilter="false"
+                        :questionsOnly="true"
                         :value="conditions"
                         @change="questionFilterChanged" />
                 </template>

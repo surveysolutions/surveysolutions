@@ -117,6 +117,7 @@ export default {
         value: { type: Array },
         exposedValuesFilter: { type: Object },
         showAdvancedFilter: { type: Boolean, default: true },
+        questionsOnly: { type: Boolean, default: false },
     },
 
     emits: ['change', 'changeFilter'],
@@ -497,6 +498,8 @@ export default {
         },
         questionnaireItemsList() {
             const array = filter([...(this.questionnaireItems || [])], q => {
+                if (this.questionsOnly && q.entityType == 'VARIABLE')
+                    return false
                 return (q.type == 'SINGLEOPTION'
                     || q.type == 'TEXT'
                     || q.type == 'NUMERIC'
