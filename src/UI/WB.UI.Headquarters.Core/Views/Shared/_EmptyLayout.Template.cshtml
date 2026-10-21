@@ -1,6 +1,7 @@
 ﻿@using WB.UI.Shared.Web.Extensions
+@using System.Globalization
 <!DOCTYPE html>
-<html>
+<html dir="@(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
