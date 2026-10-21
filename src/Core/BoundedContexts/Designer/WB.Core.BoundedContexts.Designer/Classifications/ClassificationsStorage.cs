@@ -187,7 +187,6 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             };
 
             await this.dbContext.AddAsync(entity);
-            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateClassification(Classification classification, Guid userId, bool isAdmin)
@@ -202,7 +201,6 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             entity.Title = classification.Title;
 
             this.dbContext.Update(entity);
-            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteClassificationAsync(Guid classificationId, Guid userId, bool isAdmin)
@@ -215,7 +213,6 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             ThrowIfUserDoesNotHaveAccessToPrivate(classification, userId);
             
             await this.DeleteClassificationAsync(classification);
-            await dbContext.SaveChangesAsync();
         }
 
         public async Task CreateClassificationGroup(ClassificationGroup group, bool isAdmin)
@@ -229,7 +226,6 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 Title = group.Title,
                 Type = ClassificationEntityType.Group
             });
-            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateClassificationGroup(ClassificationGroup group, bool isAdmin)
@@ -241,7 +237,6 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             if(entity == null) throw new ClassificationException(ClassificationExceptionType.Undefined, "Classification was not found.");
             entity.Title = group.Title;
             this.dbContext.ClassificationEntities.Update(entity);
-            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteClassificationGroup(Guid groupId, bool isAdmin)
@@ -258,8 +253,6 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             var classification = await this.dbContext.ClassificationEntities.FindAsync(groupId);
             if(classification == null) throw new ClassificationException(ClassificationExceptionType.Undefined, "Classification was not found.");
             this.dbContext.ClassificationEntities.Remove(classification);
-
-            await this.dbContext.SaveChangesAsync();
         }
 
         private async Task DeleteClassificationAsync(ClassificationEntity classificationEntity)
@@ -308,8 +301,6 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
             foreach (var classificationEntity in categoriesToDelete)
                 this.dbContext.Remove(classificationEntity);
-
-            await this.dbContext.SaveChangesAsync();
         }
 
         private void ThrowIfUserDoesNotHaveAccessToPublicEntity(ClassificationEntity entity, bool isAdmin)
