@@ -1,7 +1,7 @@
 ﻿@using WB.Core.Infrastructure.Versions
 @inject IProductVersion productVersion
 <!DOCTYPE html>
-<html>
+<html dir="@(System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
 @{
     var isAuthenticated = User.Identity != null && User.Identity.IsAuthenticated;
 }

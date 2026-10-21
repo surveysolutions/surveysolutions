@@ -113,6 +113,7 @@ export default {
         gridOptions() {
             return {
                 theme: agGridTheme,
+                enableRtl: document.documentElement.dir === 'rtl',
                 suppressClickEdit: true,
                 suppressCellFocus: true,
                 suppressMovableColumns: true,
