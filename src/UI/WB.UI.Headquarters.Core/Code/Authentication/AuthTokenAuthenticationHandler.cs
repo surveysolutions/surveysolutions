@@ -47,7 +47,7 @@ namespace WB.UI.Headquarters.Code.Authentication
             BasicCredentials credentials;
             try
             {
-                credentials = Request.Headers.ParseBasicCredentials();
+                credentials = Request.Headers.ParseBasicCredentials(AuthType.AuthToken);
             }
             catch (Exception e)
             {

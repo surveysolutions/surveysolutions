@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.Code.Authentication
 
             try
             {
-                var credentials = Request.Headers.ParseBasicCredentials();
+                var credentials = Request.Headers.ParseBasicCredentials(AuthType.Basic);
                 if (credentials == null)
                     return AuthenticateResult.NoResult();
 
