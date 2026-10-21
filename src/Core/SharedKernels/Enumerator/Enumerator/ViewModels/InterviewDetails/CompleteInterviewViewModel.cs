@@ -98,9 +98,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var topUnansweredQuestions = this.entitiesListViewModelFactory.GetTopUnansweredQuestions(interviewId, navigationState, forSupervisor);
             var unansweredQuestions = topUnansweredQuestions.Entities.ToList();
 
-            this.ErrorsCount = InterviewState.InvalidAnswersCount;
-            var topEntitiesWithErrors = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState);
+            var topEntitiesWithErrors = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState, forSupervisor);
             var entitiesWithErrors = topEntitiesWithErrors.Entities.ToList();
+            this.ErrorsCount = topEntitiesWithErrors.Total;
             this.EntitiesWithErrorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(this.ErrorsCount);
 
             this.Tabs = new List<TabViewModel>();
