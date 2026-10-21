@@ -4,6 +4,7 @@ using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.Execution;
 using HotChocolate.Execution.Configuration;
+using HotChocolate.Language;
 using HotChocolate.Types;
 using HotChocolate.Types.Descriptors;
 using HotChocolate.Types.Pagination;
@@ -49,6 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
             return services
                 .AddGraphQLServer()
+                .UseMutationRollbackResponse()
                 .AddTransactionScopeHandler<UnitOfWorkTransactionScopeHandler>()
                 .DisableIntrospection(false) 
                 .ModifyOptions(o => o.EnableDirectiveIntrospection = true)
@@ -120,6 +122,34 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             options.Tool.ServeMode = GraphQLToolServeMode.Embedded;
             
             return app.UseEndpoints(x => x.MapGraphQL().WithOptions(options));
+        }
+    }
+
+    public static class MutationRollbackResponseExtensions
+    {
+        public static IRequestExecutorBuilder UseMutationRollbackResponse(this IRequestExecutorBuilder builder)
+        {
+            return builder
+                .UseRequest(next => async context =>
+                {
+                    await next(context);
+
+                    if (context.Operation?.Definition.Operation is OperationType.Mutation
+                        && context.Result is IOperationResult { Errors: { Count: > 0 } } operationResult)
+                    {
+                        var errorResult = new OperationResult(
+                            data: null,
+                            errors: operationResult.Errors,
+                            extensions: operationResult.Extensions,
+                            contextData: operationResult.ContextData,
+                            requestIndex: operationResult.RequestIndex,
+                            variableIndex: operationResult.VariableIndex);
+                        errorResult.RegisterForCleanup(operationResult);
+                        context.Result = errorResult;
+                    }
+                })
+                // Adding custom request middleware requires explicitly restoring the default pipeline.
+                .UseDefaultPipeline();
         }
     }
 }

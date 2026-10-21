@@ -100,6 +100,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddScoped<IUnitOfWork>(_ => unitOfWork);
             serviceCollection.AddGraphQLServer()
+                .UseMutationRollbackResponse()
                 .AddTransactionScopeHandler<UnitOfWorkTransactionScopeHandler>()
                 .ModifyOptions(o => o.DefaultMutationDependencyInjectionScope = DependencyInjectionScope.Request)
                 .ModifyRequestOptions(o => o.IncludeExceptionDetails = false)
@@ -224,6 +225,11 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
             Assert.That(fieldsExecuted, Is.EqualTo(2));
             transaction.Verify(x => x.Commit(), Times.Never);
             transaction.Verify(x => x.Rollback(), Times.Once);
+
+            var response = await Format(result);
+            using var json = JsonDocument.Parse(response.Body);
+            Assert.That(json.RootElement.GetProperty("errors").GetArrayLength(), Is.GreaterThan(0));
+            Assert.That(json.RootElement.TryGetProperty("data", out _), Is.False);
 
             requestScope.Dispose();
             transaction.Verify(x => x.Commit(), Times.Never);
