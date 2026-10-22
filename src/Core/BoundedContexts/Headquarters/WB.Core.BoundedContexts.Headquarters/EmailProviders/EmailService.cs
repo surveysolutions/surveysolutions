@@ -7,60 +7,59 @@ using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
 {
     public class EmailService : IEmailService
     {
-        private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
-        private readonly Dictionary<EmailProvider, IEmailService> providers;
+        private readonly IInScopeExecutor<IPlainKeyValueStorage<EmailProviderSettings>> settingsExecutor;
+        private readonly ISerializer serializer;
 
-        public EmailService(IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage, 
+        public EmailService(IInScopeExecutor<IPlainKeyValueStorage<EmailProviderSettings>> settingsExecutor,
             ISerializer serializer)
         {
-            this.emailProviderSettingsStorage = emailProviderSettingsStorage;
-            
-            this.providers = new Dictionary<EmailProvider, IEmailService>()
-            {
-                {EmailProvider.Amazon, new AmazonEmailService(emailProviderSettingsStorage)},
-                {EmailProvider.SendGrid, new SendGridEmailService(emailProviderSettingsStorage, serializer)},
-                {EmailProvider.Smtp, new SmtpEmailService(emailProviderSettingsStorage)}
-            };
+            this.settingsExecutor = settingsExecutor;
+            this.serializer = serializer;
         }
 
         public Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody, List<EmailAttachment>? attachments)
         {
-            var settings = emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
-            if (settings == null || !IsConfigured())
+            var emailService = GetProvider();
+            if (emailService == null || !emailService.IsConfigured())
                 throw new Exception("Email provider was not set up properly");
 
-            if (!providers.TryGetValue(settings.Provider, out var emailService))
-                throw new Exception("Email provider wasn't set up");
-            
             return emailService.SendEmailAsync(to, subject, htmlBody, textBody, attachments);
         }
 
-        public bool IsConfigured()
-        {
-            var settings = emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
-            if (settings == null)
-                return false;
-
-            if (!providers.TryGetValue(settings.Provider, out var emailService))
-                return false;
-
-            return emailService.IsConfigured();
-        }
+        public bool IsConfigured() => GetProvider()?.IsConfigured() == true;
 
         public ISenderInformation GetSenderInfo()
         {
-            var settings = emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
-
-            if (settings == null || !providers.TryGetValue(settings.Provider, out var emailService))
-                throw new Exception("Email provider wasn't set up");
+            var emailService = GetProvider() ?? throw new Exception("Email provider wasn't set up");
 
             return emailService.GetSenderInfo();
+        }
+
+        private IEmailService? GetProvider()
+        {
+            var settings = settingsExecutor.Execute(storage => storage.GetById(AppSetting.EmailProviderSettings));
+            if (settings == null)
+                return null;
+
+            // Providers read settings again during sending. Never give them database-backed storage:
+            // its unit of work would keep a connection checked out throughout the network operation.
+            var snapshot = new InMemoryKeyValueStorage<EmailProviderSettings>(
+                new Dictionary<string, EmailProviderSettings> { [AppSetting.EmailProviderSettings] = settings });
+            return settings.Provider switch
+            {
+                EmailProvider.Amazon => new AmazonEmailService(snapshot),
+                EmailProvider.SendGrid => new SendGridEmailService(snapshot, serializer),
+                EmailProvider.Smtp => new SmtpEmailService(snapshot),
+                _ => null
+            };
         }
     }
 }

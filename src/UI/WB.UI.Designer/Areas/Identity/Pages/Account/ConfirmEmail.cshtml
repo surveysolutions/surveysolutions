@@ -2,7 +2,9 @@
 @using WB.UI.Shared.Web.Extensions
 @model ConfirmEmailModel
 
-<form>
+<form method="post" id="confirmEmailForm">
+    <input type="hidden" asp-for="UserId" />
+    <input type="hidden" asp-for="Code" />
     <h1></h1>
     <p class="note text-danger">
         @TempData[Alerts.ERROR]
@@ -11,3 +13,7 @@
         <a class="btn btn-success btn-lg" asp-page="./Login">@AccountResources.BackToLogin</a>
     </div>
 </form>
+@if (Model.AutoSubmit)
+{
+    <script>document.getElementById('confirmEmailForm').submit();</script>
+}
