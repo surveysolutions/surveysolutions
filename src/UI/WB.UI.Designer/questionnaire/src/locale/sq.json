@@ -516,7 +516,9 @@
     "HelpCriticalityConditionExpression": "Një shprehje logjike që vlerëson intervistën si tërësi për të përcaktuar nëse plotëson rregullat kritike (kur kjo shprehje vlerësohet si \"E vërtetë\"). Mund t'u referohet çdo pyetjeje ose variabli.",
     "HelpCriticalityConditionMessage": "Ky mesazh shfaqet kur kushti kritik vlerësohet si \"E rreme\" ose ndodh një përjashtim gjatë vlerësimit të shprehjes. Mesazhi mund të përdorë hiperlidhje dhe zëvendësim teksti.",
     "SwitchTo": "Kalo te",
-    "SwitchToTranslationConfirm": "Kalimi do të ndryshojë gjuhën e shfaqjes të pyetësorit. Përkthimi duhet të përfshijë tekst për të gjithë elementët."
+    "SwitchToTranslationConfirm": "Kalimi do të ndryshojë gjuhën e shfaqjes të pyetësorit. Përkthimi duhet të përfshijë tekst për të gjithë elementët.",
+    "SideBarCategoriesDescription": "Përshkrim",
+    "SideBarLookupTableDescription": "Përshkrim"
   },
   "AccountResources": {
     "AccountInfoUpdated": "Të dhënat e llogarisë u përditësuan me sukses",

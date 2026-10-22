@@ -516,7 +516,9 @@
     "AttachmentSizeIsTooBig": "O tamanho do anexo é muito grande. Tamanho máximo: {{size}}",
     "SwitchTo": "Alterar para",
     "SwitchToTranslationConfirm": "Alterar para mudará o idioma de exibição do questionário. A tradução deve incluir texto para todos os elementos.",
-    "AIAssistant": "IA"
+    "AIAssistant": "IA",
+    "SideBarCategoriesDescription": "descrição",
+    "SideBarLookupTableDescription": "descrição"
   },
   "AccountResources": {
     "AllRights": "Todos os direitos reservados.",

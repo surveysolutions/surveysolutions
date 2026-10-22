@@ -1274,6 +1274,12 @@ Zkontrolujte prosím své síťové připojení nebo se obraťte na vaši IT pod
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>popis</value>
   </data>
+  <data name="SideBarCategoriesDescription" xml:space="preserve">
+    <value>popis</value>
+  </data>
+  <data name="SideBarLookupTableDescription" xml:space="preserve">
+    <value>popis</value>
+  </data>
   <data name="SideBarMacroEmptyLine1" xml:space="preserve">
     <value>Tato karta slouží k definování náhrad maker.</value>
   </data>

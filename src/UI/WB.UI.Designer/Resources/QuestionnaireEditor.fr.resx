@@ -271,6 +271,12 @@
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>description</value>
   </data>
+  <data name="SideBarCategoriesDescription" xml:space="preserve">
+    <value>description</value>
+  </data>
+  <data name="SideBarLookupTableDescription" xml:space="preserve">
+    <value>description</value>
+  </data>
   <data name="SideBarMacroEmptyLine1" xml:space="preserve">
     <value>Utilisez cet onglet pour définir les substitutions de macros.</value>
   </data>

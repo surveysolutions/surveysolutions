@@ -55,6 +55,7 @@ namespace WB.UI.Designer.Controllers
                 questionnaireId: id.QuestionnaireId.FormatGuid(),
                 categoriesId: categoriesId,
                 categoriesName: categoriesView.Name,
+                categoriesDescription: categoriesView.Description,
                 options: categories.ToList(),
                 isCascading: false,
                 isCategories: true,
@@ -342,7 +343,8 @@ namespace WB.UI.Designer.Controllers
                     this.User.GetId(),
                     categoriesId,
                     model.Value.CategoriesName ?? "",
-                    model.Value.CategoriesId);
+                    model.Value.CategoriesId,
+                    model.Value.CategoriesDescription ?? "");
 
                 var categoriesCommandResult = await this.ExecuteCommand(command);
                 if (categoriesCommandResult is ExpandoObject expando)
@@ -491,7 +493,8 @@ namespace WB.UI.Designer.Controllers
                 bool? isCascading = null,
                 bool? isCategories = null,
                 string? categoriesName = null,
-                bool? isReadonly = true)
+                bool? isReadonly = true,
+                string? categoriesDescription = null)
             {
                 if (questionId == null && categoriesId == null)
                     throw new InvalidOperationException(
@@ -505,6 +508,7 @@ namespace WB.UI.Designer.Controllers
                     CategoriesId = categoriesId.Value;
                 if (categoriesName != null)
                     CategoriesName = categoriesName;
+                CategoriesDescription = categoriesDescription;
 
                 Options = options ?? new List<QuestionnaireCategoricalOption>();
                 QuestionTitle = questionTitle;
@@ -517,6 +521,7 @@ namespace WB.UI.Designer.Controllers
             public Guid QuestionId { get; set; }
 
             public string? CategoriesName { get; set; }
+            public string? CategoriesDescription { get; set; }
             public Guid CategoriesId { get; set; }
 
             public List<QuestionnaireCategoricalOption> Options { get; set; }

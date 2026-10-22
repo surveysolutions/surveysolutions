@@ -971,6 +971,12 @@ Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj 
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>Përshkrim</value>
   </data>
+  <data name="SideBarCategoriesDescription" xml:space="preserve">
+    <value>Përshkrim</value>
+  </data>
+  <data name="SideBarLookupTableDescription" xml:space="preserve">
+    <value>Përshkrim</value>
+  </data>
   <data name="SideBarMacroEmptyLine1" xml:space="preserve">
     <value>Përdor këtë tab për të përcaktuar zëvendësimet e makros.</value>
   </data>

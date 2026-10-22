@@ -1123,6 +1123,12 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>descriere</value>
   </data>
+  <data name="SideBarCategoriesDescription" xml:space="preserve">
+    <value>descriere</value>
+  </data>
+  <data name="SideBarLookupTableDescription" xml:space="preserve">
+    <value>descriere</value>
+  </data>
   <data name="SideBarMacroEmptyLine1" xml:space="preserve">
     <value>Utilizați această filă pentru a defini substituțiile de tip macrocomandă.</value>
   </data>

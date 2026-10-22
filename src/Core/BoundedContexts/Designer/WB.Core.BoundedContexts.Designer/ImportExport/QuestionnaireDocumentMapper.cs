@@ -819,10 +819,10 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             new Documents.Macro { Name = src.Name, Description = src.Description, Content = src.Content };
 
         private static Models.LookupTable MapLookupTable(Documents.LookupTable src) =>
-            new Models.LookupTable { TableName = src.TableName, FileName = src.FileName };
+            new Models.LookupTable { TableName = src.TableName, FileName = src.FileName, Description = src.Description };
 
         private static Documents.LookupTable MapLookupTableFromModel(Models.LookupTable src) =>
-            new Documents.LookupTable { TableName = src.TableName, FileName = src.FileName };
+            new Documents.LookupTable { TableName = src.TableName, FileName = src.FileName, Description = src.Description };
 
         private static Models.Attachment MapAttachment(Documents.Attachment src) =>
             new Models.Attachment { Name = src.Name, FileName = src.ContentId, ContentType = string.Empty };
@@ -837,10 +837,10 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             new Documents.Translation { Id = src.Id ?? Guid.NewGuid(), Name = src.Name };
 
         private static Models.Categories MapCategories(Documents.Categories src) =>
-            new Models.Categories { Id = src.Id, Name = src.Name };
+            new Models.Categories { Id = src.Id, Name = src.Name, Description = src.Description };
 
         private static Documents.Categories MapCategoriesFromModel(Models.Categories src) =>
-            new Documents.Categories { Id = src.Id.HasValue ? src.Id.Value : Guid.NewGuid(), Name = src.Name };
+            new Documents.Categories { Id = src.Id.HasValue ? src.Id.Value : Guid.NewGuid(), Name = src.Name, Description = src.Description };
 
         private static Models.CriticalRule MapCriticalRule(Documents.CriticalRule src) =>
             new Models.CriticalRule { Id = src.Id, Message = src.Message, Expression = src.Expression, Description = src.Description };
