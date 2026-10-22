@@ -30,7 +30,7 @@ namespace WB.UI.Designer.HealthChecks
                     System.Drawing.FontStyle.Regular,
                     System.Drawing.GraphicsUnit.Pixel);
 
-                if (fontTester.Name !!= fontName)
+                if (fontTester.Name != fontName)
                 {
                     logger.LogCritical("Cannot start Designer. Noto Sans font is required for PDF functionality. Download it here https://www.google.com/get/noto/#sans-lgc");
                     throw new Exception("Cannot start Designer application. There is no installed Noto Sans font in system");

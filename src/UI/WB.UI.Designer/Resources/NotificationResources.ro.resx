@@ -176,4 +176,26 @@ Pentru a finaliza procesul de înregistrare, faceți clic pe acest link: "</valu
   <data name="TranfserOwnershipNotification" xml:space="preserve">
     <value>Bună ziua {0}, &lt;br&gt; {1} v-a transferat calitatea de proprietar al chestionarului {2}</value>
   </data>
+
+
+  <data name="AnonymousSharingEmail" xml:space="preserve">
+    <value>Salut {0}, &lt;br/&gt;&lt;br/&gt; Ați activat accesul numai pentru citire la chestionarul dvs. "{1}" pentru utilizatorii anonimi prin intermediul următorului link: </value>
+  </data>
+
+  <data name="EmailSendInfo" xml:space="preserve">
+    <value>Acest mesaj a fost trimis automat de instrumentul Survey Solutions Designer.</value>
+  </data>
+
+  <data name="SystemMailer_AnonymousSharingEmail_Subject" xml:space="preserve">
+    <value>Link de partajare anonimă</value>
+  </data>
+
+  <data name="EmailChange" xml:space="preserve">
+    <value>Salut {0}, &lt;br/&gt; &lt;br/&gt;
+Pentru a confirma schimbarea adresei de e-mail, vă rugăm să folosiți următorul link: </value>
+  </data>
+
+  <data name="EmailChangeLink" xml:space="preserve">
+    <value>confirmați</value>
+  </data>
 </root>

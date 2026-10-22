@@ -1,5 +1,6 @@
 <template>
-    <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'yes-no-question ordered' : 'yes-no-question'"
+    <wb-question :question="$me"
+        :questionCssClassName="$me.ordered ? 'yes-no-question ordered' : 'yes-no-question'"
         :no-comments="noComments">
         <div class="question-unit">
             <div class="yes-no-mark">
@@ -8,46 +9,66 @@
                 {{ $t("WebInterviewUI.No") }}
             </div>
             <div class="options-group">
-                <div class="radio" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value">
-                    <div class="field" v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
-                        <input class="wb-radio" type="radio" :name="$me.id + '_' + option.value"
-                            :id="$me.id + '_' + option.value + '_yes'" :checked="isYesChecked(option.value)"
-                            :disabled="!$me.acceptAnswer" value="true" @change="answerYes(option.value, $event.target)"
+                <div class="radio"
+                    v-for="option in answeredOrAllOptions"
+                    :key="$me.id + '_' + option.value">
+                    <div class="field"
+                        v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
+                        <input class="wb-radio"
+                            type="radio"
+                            :name="$me.id + '_' + option.value"
+                            :id="$me.id + '_' + option.value + '_yes'"
+                            :checked="isYesChecked(option.value)"
+                            :disabled="!$me.acceptAnswer"
+                            value="true"
+                            @change="answerYes(option.value, $event.target)"
                             v-disabledWhenUnchecked="{ maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer, forceDisabled: !$me.acceptAnswer || isProtected(option.value) }" />
                         <label :for="$me.id + '_' + option.value + '_yes'">
                             <span class="tick"></span>
                         </label>
                         <b>/</b>
-                        <input class="wb-radio" type="radio" :name="$me.id + '_' + option.value"
-                            :id="$me.id + '_' + option.value + '_no'" :checked="isNoChecked(option.value)"
-                            :disabled="!$me.acceptAnswer || isProtected(option.value)" value="false"
+                        <input class="wb-radio"
+                            type="radio"
+                            :name="$me.id + '_' + option.value"
+                            :id="$me.id + '_' + option.value + '_no'"
+                            :checked="isNoChecked(option.value)"
+                            :disabled="!$me.acceptAnswer || isProtected(option.value)"
+                            value="false"
                             @change="answerNo(option.value, $event.target)" />
                         <label :for="$me.id + '_' + option.value + '_no'">
                             <span class="tick"></span>
                         </label>
                         <span>{{ option.title }}</span>
-                        <button type="submit" v-if="$me.acceptAnswer && !isProtected(option.value)"
-                            class="btn btn-link btn-clear" @click="clearAnswer(option.value)"
+                        <button type="submit"
+                            v-if="$me.acceptAnswer && !isProtected(option.value)"
+                            class="btn btn-link btn-clear"
+                            @click="clearAnswer(option.value)"
                             :id="`btn_${$me.id}_removeAnswer_opt_${option.value}`">
                             <span></span>
                         </button>
-                        <div class="badge" v-if="$me.ordered">
+                        <div class="badge"
+                            v-if="$me.ordered">
                             {{ getAnswerOrder(option.value) }}
                         </div>
                         <div class="lock"></div>
                     </div>
-                    <wb-attachment :attachmentName="option.attachmentName" :interviewId="interviewId"
+                    <wb-attachment :attachmentName="option.attachmentName"
+                        :interviewId="interviewId"
                         v-if="option.attachmentName" />
 
                 </div>
-                <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions"
-                    v-if="shouldShowAnsweredOptionsOnly && !showAllOptions" :id="`btn_${$me.id}_ShowAllOptions`">
+                <button type="button"
+                    class="btn btn-link btn-horizontal-hamburger"
+                    @click="toggleOptions"
+                    v-if="shouldShowAnsweredOptionsOnly && !showAllOptions"
+                    :id="`btn_${$me.id}_ShowAllOptions`">
                     <span></span>
                 </button>
                 <wb-lock />
             </div>
         </div>
-        <div v-if="allAnswersGiven" class="information-block text-info">
+        <div v-if="allAnswersGiven"
+            class="information-block text-info">
             <h6>{{ $t("WebInterviewUI.MaxAnswersCountSelected", { value: $me.maxSelectedAnswersCount }) }}</h6>
         </div>
     </wb-question>
@@ -57,7 +78,7 @@ import { entityDetails } from '../mixins'
 import { nextTick } from 'vue'
 import * as $ from 'jquery'
 import modal from '@/shared/modal'
-import { find, findIndex, filter } from 'lodash'
+import { find, findIndex, filter } from 'lodash-es'
 import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
 
 export default {

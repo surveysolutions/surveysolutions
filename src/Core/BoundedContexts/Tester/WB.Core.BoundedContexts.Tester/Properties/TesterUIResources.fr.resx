@@ -175,6 +175,9 @@
     <data name="Login_Error_EmptyName" xml:space="preserve">
   <value>Veuillez entrer un identifiant correct</value>
 </data>
+    <data name="TesterLoginAccountHintText" xml:space="preserve">
+  <value>Connectez-vous à cette application avec les identifiants que vous avez créés sur https://designer.mysurvey.solutions. Pour créer un nouveau compte, rendez-vous sur le même site.</value>
+</data>
     <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
   <value>Questionnaires Anonymes</value>
 </data>

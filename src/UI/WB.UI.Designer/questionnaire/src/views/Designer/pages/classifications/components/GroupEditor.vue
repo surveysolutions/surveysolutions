@@ -22,11 +22,11 @@
         <ul v-if="isContextMenuSupport" class="context-menu-list context-menu-root" :id="'group-context-menu-' + index"
             style="z-index: 2;">
             <li class="context-menu-item context-menu-icon context-menu-icon-edit context-menu-visible" @click="edit()">
-                <span>Edit</span>
+                <span>{{ $t('QuestionnaireEditor.Edit') }}</span>
             </li>
             <li class="context-menu-item context-menu-separator context-menu-not-selectable"></li>
             <li class="context-menu-item context-menu-icon context-menu-icon-delete" @click="deleteItem()">
-                <span>Delete</span>
+                <span>{{ $t('QuestionnaireEditor.Delete') }}</span>
             </li>
         </ul>
     </Teleport>
@@ -34,6 +34,7 @@
 <script>
 
 import { Form, Field, ErrorMessage } from 'vee-validate';
+import { useClassificationsStore } from '../store';
 
 export default {
     name: 'GroupEditor',
@@ -41,6 +42,9 @@ export default {
         VeeForm: Form,
         VeeField: Field,
         ErrorMessage: ErrorMessage,
+    },
+    setup() {
+        return { store: useClassificationsStore() };
     },
     data: function () {
         return {
@@ -54,13 +58,13 @@ export default {
     },
     computed: {
         isContextMenuSupport() {
-            return this.$store.state.isAdmin
+            return this.store.isAdmin
         }
     },
     methods: {
         cancel() {
             if (this.group.isNew) {
-                this.$store.dispatch('deleteGroup', this.index);
+                this.store.deleteGroup(this.index);
             } else {
                 this.title = this.group.title;
                 this.isEditMode = false;
@@ -70,7 +74,7 @@ export default {
             this.isEditMode = true;
         },
         select() {
-            this.$store.dispatch('selectGroup', this.index);
+            this.store.selectGroup(this.index);
         },
         deleteItem() {
             if (
@@ -78,7 +82,7 @@ export default {
                     `Are you sure you want to delete classification group '${this.title}'?`
                 )
             ) {
-                this.$store.dispatch('deleteGroup', this.index);
+                this.store.deleteGroup(this.index);
             }
         },
         save() {
@@ -92,7 +96,7 @@ export default {
 
             this.$refs.form.validate().then(function (result) {
                 if (result.valid) {
-                    self.$store.dispatch('updateGroup', group).then(function () {
+                    self.store.updateGroup(group).then(function () {
                         self.isEditMode = false;
                     });
                 }

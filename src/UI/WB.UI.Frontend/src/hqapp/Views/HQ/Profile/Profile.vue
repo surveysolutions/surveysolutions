@@ -71,7 +71,9 @@
                         <div class="amount-of-questionnaires">
                             {{ this.$config.model.fullModel.waitingInterviewsForApprovalCount }}
                         </div>
-                        <div class="description">{{ $t('Pages.InterviewerProfile_WaitingForApproval') }}</div>
+                        <div class="description">
+                            {{ $t('Pages.InterviewerProfile_WaitingForApproval') }}
+                        </div>
                     </div>
                     <div class="number-information">
                         <div class="amount-of-questionnaires">
@@ -119,7 +121,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-9 map" v-if="!markerExist">{{ $t("Pages.InterviewerProfile_NoMarkers") }}</div>
+            <div class="col-sm-9 map" v-if="!markerExist">
+                {{ $t("Pages.InterviewerProfile_NoMarkers") }}
+            </div>
         </div>
         <div class="row" v-if="totalTrafficUsed > 0">
             <div class="col-sm-12 clearfix">
@@ -301,11 +305,11 @@
                         {{ formatDate(this.fullModel.lastCommunicationDate) }} ({{ formatLastCommunication() }})
                         <b>
                             <span
-                                v-if="this.fullModel.lastSuccessfulSync != undefined && this.fullModel.lastCommunicationDate == this.fullModel.lastSuccessfulSync.syncDate"
-                                class="success-text">Successful</span>
-                            <span
                                 v-if="this.fullModel.lastFailedSync != undefined && this.fullModel.lastCommunicationDate == this.fullModel.lastFailedSync.syncDate"
-                                class="error-text">Failed</span>
+                                class="error-text">{{ $t('Pages.Failed') }}</span>
+                            <span
+                                v-else-if="this.fullModel.lastSuccessfulSync != undefined && this.fullModel.lastCommunicationDate == this.fullModel.lastSuccessfulSync.syncDate"
+                                class="success-text">{{ $t('Pages.Successful') }}</span>
                         </b>
                     </li>
                 </ul>
@@ -438,7 +442,7 @@
 <script>
 import { MarkerClusterer, Cluster, SuperClusterAlgorithm } from '@googlemaps/markerclusterer'
 import { nextTick } from 'vue'
-import { Tooltip } from 'bootstrap'
+import Tooltip from 'bootstrap/js/dist/tooltip'
 import * as toastr from 'toastr'
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
@@ -743,7 +747,7 @@ export default {
             let AdvancedMarkerElement = null
             let PinElement = null
             if (hasMapId) {
-                const markerLib = await google.maps.importLibrary("marker")
+                const markerLib = await google.maps.importLibrary('marker')
                 AdvancedMarkerElement = markerLib.AdvancedMarkerElement
                 PinElement = markerLib.PinElement
             }

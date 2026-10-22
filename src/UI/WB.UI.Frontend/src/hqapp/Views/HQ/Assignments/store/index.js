@@ -16,9 +16,9 @@ const store = {
 }
 
 export default
-    {
-        webinterview,
-        takeNew,
-        takeNewExtra: store,
-        upload
-    }
+{
+    webinterview,
+    takeNew,
+    takeNewExtra: store,
+    upload,
+}

@@ -38,6 +38,15 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/loginLogo"/>
 
+            <TextView
+                    android:layout_width="@dimen/Login_Element_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/Login_Element_margin_vertical_thin"
+                    android:autoLink="web"
+                    android:gravity="center_horizontal"
+                    android:linksClickable="true"
+                    local:MvxBind="Text Localization('TesterLoginAccountHintText')"/>
+
 
             <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="@dimen/Login_Element_width"

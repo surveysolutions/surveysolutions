@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Administrator" xml:space="preserve"><value>អ្នកគ្រប់គ្រង</value></data>
+  <data name="Headquarter" xml:space="preserve"><value>ទីស្នាក់ការ</value></data>
+  <data name="Supervisor" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ</value></data>
+  <data name="Interviewer" xml:space="preserve"><value>អ្នកសំភាសន៍</value></data>
+  <data name="Observer" xml:space="preserve"><value>អ្នកសង្កេតការណ៍</value></data>
+  <data name="ApiUser" xml:space="preserve"><value>អ្នកប្រើប្រាស់ API</value></data>
+</root>

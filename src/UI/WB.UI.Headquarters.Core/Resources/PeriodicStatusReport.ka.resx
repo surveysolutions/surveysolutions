@@ -231,4 +231,29 @@
   <data name="Week" xml:space="preserve">
     <value>კვირები</value>
   </data>
+
+
+  <data name="BackToTeams" xml:space="preserve">
+    <value>გუნდებზე დაბრუნება</value>
+  </data>
+
+  <data name="OverTheLast" xml:space="preserve">
+    <value>წინა</value>
+  </data>
+
+  <data name="AverageInterviewDurationDescription" xml:space="preserve">
+    <value>საშუალო დრო, რომლის განმავლობაშიც ინტერვიუ დასრულებამდე ინტერვიუერის ეკრანზე იყო ნაჩვენები, თითოეული ინტერვიუერის მიხედვით.</value>
+  </data>
+
+  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+    <value>საშუალო დრო, რომლის განმავლობაშიც ინტერვიუ დასრულებამდე ინტერვიუერის ეკრანზე იყო ნაჩვენები, თითოეული სუპერვაიზერის მიხედვით.</value>
+  </data>
+
+  <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
+    <value>ინტერვიუერის მიერ დასრულებული ინტერვიუების რაოდენობა. უარყოფილი და შემდეგ დასრულებული ინტერვიუები ცალკე დასრულების მოვლენებად ითვლება.</value>
+  </data>
+
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
+    <value>სუპერვაიზერის მიერ ინტერვიუერზე შეგროვებულ ინტერვიუებზე შესრულებული დამტკიცებებისა და უარყოფების რაოდენობა</value>
+  </data>
 </root>

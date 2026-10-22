@@ -13,10 +13,13 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Models.Mails;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
 {
+    // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
+    [NoTransaction]
     public partial class IndexModel : PageModel
     {
         private readonly UserManager<DesignerIdentityUser> userManager;
@@ -41,6 +44,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
 
         [TempData]
         public string? ErrorMessage { get; set; }
+
+        public string LastLoginDate { get; set; } = string.Empty;
 
         public string? PendingEmail { get; set; }
 
@@ -74,6 +79,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
                 FullName = fullName
             };
             PendingEmail = user.PendingEmail;
+            LastLoginDate = user.LastLoginAtUtc?.ToUIString() ?? string.Empty;
 
             return Page();
         }

@@ -1,5 +1,5 @@
-import Supervisor from './Supervisor'
-import Interviewer from './Interviewer'
+const Supervisor = () => import('./Supervisor')
+const Interviewer = () => import('./Interviewer')
 
 export default class UsersComponent {
     constructor(rootStore) {

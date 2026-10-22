@@ -47,7 +47,7 @@ import { updateLookupTable, deleteLookupTable } from '../../../../services/looku
 import { isEmpty, isUndefined, isNull, cloneDeep } from 'lodash'
 import { createQuestionForDeleteConfirmationPopup, trimText } from '../../../../services/utilityService'
 
-import { sanitizeUrl } from '@braintree/sanitize-url';
+import { sanitizeUrl } from '../../../../utils/sanitizeUrl';
 
 export default {
     name: 'LookupTableItem',

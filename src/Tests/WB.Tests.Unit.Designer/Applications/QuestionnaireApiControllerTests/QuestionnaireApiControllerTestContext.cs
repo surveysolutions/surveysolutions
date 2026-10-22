@@ -6,9 +6,11 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Moq;
 using WB.Core.BoundedContexts.Designer.DataAccess;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -33,6 +35,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
             IWebTesterService webTesterService = null)
         {
+            var userStore = new Mock<IUserStore<DesignerIdentityUser>>();
+            var userManager = new Mock<UserManager<DesignerIdentityUser>>(
+                userStore.Object, null, null, null, null, null, null, null, null);
+
             var questionnaireController = new QuestionnaireApiController(
                 chapterInfoViewFactory ?? Mock.Of<IChapterInfoViewFactory>(),
                 questionnaireInfoViewFactory ?? Mock.Of<IQuestionnaireInfoViewFactory>(),
@@ -42,6 +48,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 Mock.Of<IOptions<WebTesterSettings>>(),
                 webTesterService ?? Mock.Of<IWebTesterService>(),
+                userManager.Object,
                 Mock.Of<DesignerDbContext>());
 
             return questionnaireController;

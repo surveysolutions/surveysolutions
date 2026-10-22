@@ -60,9 +60,7 @@ namespace WB.UI.Shared.Enumerator
                 // this is super dirty hack in order to get exception's stack trace which happend inside async method
                 FieldInfo stackTrace = typeof(Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance);
                 stackTrace?.SetValue(exception, null);
-                this.ProcessException(Java.Lang.Throwable.FromException(exception));
-
-                ProcessException(args.Exception);
+                this.ProcessException(exception);
             };
 
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
@@ -83,18 +81,21 @@ namespace WB.UI.Shared.Enumerator
         protected virtual void ProcessException(Exception exception)
         {
             NLog.LogManager.GetCurrentClassLogger().Error(exception);
+            NLog.LogManager.Flush(TimeSpan.FromSeconds(3));
 
             try
             {
                 if (ShouldSkipCrashlyticsReport(exception))
                     return;
 
-                // Unwrap TargetInvocationException layers to get the real root cause,
-                // then record it explicitly in Crashlytics so the inner exception is visible
-                // in the crash report (Crashlytics only sees the outermost JavaProxyThrowable otherwise).
+                // Unwrap the full InnerException chain (JavaProxyThrowable, TargetInvocationException,
+                // MvxException, etc.) to get the deepest real root cause. Crashlytics only shows the
+                // outermost wrapper's message otherwise, and MvxException's own message is just
+                // "check InnerException for more information" - so we must keep walking past it too,
+                // not stop at the first wrapper type we recognize.
                 var unwrapped = exception;
-                while (unwrapped is TargetInvocationException { InnerException: not null } tie)
-                    unwrapped = tie.InnerException;
+                while (unwrapped.InnerException != null)
+                    unwrapped = unwrapped.InnerException;
 
                 if (!ReferenceEquals(unwrapped, exception))
                 {
@@ -115,7 +116,14 @@ namespace WB.UI.Shared.Enumerator
 
         private static bool ShouldSkipCrashlyticsReport(Exception exception)
         {
-            var signature = $"{exception.GetType().FullName}|{exception.Message}|{exception.StackTrace}";
+            // Use the innermost exception for the signature so that different root causes
+            // are not collapsed into a single deduplicated report because they share the
+            // same JavaProxyThrowable / MvxException / TargetInvocationException outer wrapper(s).
+            var root = exception;
+            while (root.InnerException != null)
+                root = root.InnerException;
+
+            var signature = $"{root.GetType().FullName}|{root.Message}|{root.StackTrace}";
             var now = DateTime.UtcNow;
 
             lock (crashlyticsDeduplicationSync)

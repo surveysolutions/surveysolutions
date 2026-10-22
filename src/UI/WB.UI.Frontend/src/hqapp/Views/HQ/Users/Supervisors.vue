@@ -6,11 +6,13 @@
                     <div class="topic-with-button">
                         <h1>{{ $t('Users.SupervisorsCountDescription', { count: usersCount }) }}</h1>
                     </div>
-                    <ol v-if="!user.isObserver && !user.isObserving" class="list-unstyled">
+                    <ol v-if="!user.isObserver && !user.isObserving"
+                        class="list-unstyled">
                         <li>{{ $t('Pages.Users_Supervisors_Instruction2') }}</li>
                     </ol>
 
-                    <ol v-if="user.isObserver && !user.isObserving" class="list-unstyled">
+                    <ol v-if="user.isObserver && !user.isObserving"
+                        class="list-unstyled">
                         <li>{{ $t('Pages.Observer_Memo1') }}</li>
                         <li>{{ $t('Pages.Observer_Memo2') }}</li>
                     </ol>
@@ -18,10 +20,16 @@
             </div>
         </template>
 
-        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"
-            :supportContextMenu="user.isObserver && !user.isObserving" selectableId="userId"
-            @selectedRowsChanged="rows => selectedSupervisors = rows" @totalRows="(rows) => usersCount = rows"
-            @page="resetSelection" mutliRowSelect :noPaging="false"></DataTables>
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :contextMenuItems="contextMenuItems"
+            :supportContextMenu="user.isObserver && !user.isObserving"
+            selectableId="userId"
+            @selectedRowsChanged="rows => selectedSupervisors = rows"
+            @totalRows="(rows) => usersCount = rows"
+            @page="resetSelection"
+            mutliRowSelect
+            :noPaging="false"></DataTables>
 
     </HqLayout>
 </template>
@@ -86,7 +94,9 @@ export default {
                         orderable: true,
                         className: 'nowrap',
                         render: function (data, type, row) {
-                            return row.isArchived ? data : `<a href='/users/Manage/${row.userId}'>${data}</a>`
+                            if (row.isArchived || (self.user.isObserver && !self.user.isObserving))
+                                return data
+                            return `<a href='/users/Manage/${row.userId}'>${data}</a>`
                         },
                     },
                     {

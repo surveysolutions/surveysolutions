@@ -286,4 +286,173 @@
       <value>აირჩიეთ კითხვარი</value>
       <comment>აირჩიეთ კითხვარი</comment>
   </data>
+
+
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+    <value>დავალების დეტალების ნახვა</value>
+  </data>
+
+  <data name="Apply" xml:space="preserve">
+        <value>გამოყენება</value>
+  </data>
+
+  <data name="Assignments" xml:space="preserve">
+    <value>დავალებები</value>
+  </data>
+
+  <data name="AllAssignments" xml:space="preserve">
+    <value>ყველა დავალება</value>
+  </data>
+
+  <data name="Processing" xml:space="preserve">
+    <value>მიმდინარეობს…</value>
+  </data>
+
+  <data name="EmailProviders" xml:space="preserve">
+    <value>ელ. ფოსტის პროვაიდერები</value>
+  </data>
+
+  <data name="AuditLog" xml:space="preserve">
+    <value>აუდიტის ჟურნალი</value>
+  </data>
+
+  <data name="Clear" xml:space="preserve">
+    <value>გასუფთავება</value>
+  </data>
+
+  <data name="DownloadSupervisor" xml:space="preserve">
+    <value>Supervisor აპის ჩამოტვირთვა</value>
+  </data>
+
+  <data name="AllGpsQuestions" xml:space="preserve">
+    <value>ყველა GPS კითხვა</value>
+  </data>
+
+  <data name="MapDashboard" xml:space="preserve">
+    <value>რუკის დაფა</value>
+  </data>
+
+  <data name="OpenAssignment" xml:space="preserve">
+    <value>დავალების გახსნა</value>
+  </data>
+
+  <data name="Archived" xml:space="preserve">
+    <value>დაარქივებული</value>
+  </data>
+
+  <data name="NothingSelected" xml:space="preserve">
+    <value>არაფერია არჩეული</value>
+  </data>
+
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>კითხვარის ვერსია</value>
+  </data>
+
+  <data name="AllVersions" xml:space="preserve">
+    <value>ყველა ვერსია</value>
+  </data>
+
+  <data name="Reset" xml:space="preserve">
+    <value>განულება</value>
+  </data>
+
+  <data name="EqualValues" xml:space="preserve">
+    <value>უდრის</value>
+  </data>
+
+  <data name="NotEquals" xml:space="preserve">
+    <value>არ უდრის</value>
+  </data>
+
+  <data name="SelectOption" xml:space="preserve">
+    <value>აირჩიეთ ვარიანტი</value>
+  </data>
+
+  <data name="StartsWith" xml:space="preserve">
+    <value>იწყება</value>
+  </data>
+
+  <data name="Unknown" xml:space="preserve">
+    <value>უცნობი</value>
+  </data>
+
+  <data name="EditCalendarEvent" xml:space="preserve">
+    <value>კალენდრის მოვლენის რედაქტირება</value>
+  </data>
+
+  <data name="CalendarEvent" xml:space="preserve">
+    <value>კალენდრის მოვლენა</value>
+  </data>
+
+  <data name="Add" xml:space="preserve">
+    <value>დამატება</value>
+  </data>
+
+  <data name="Remove" xml:space="preserve">
+    <value>წაშლა</value>
+  </data>
+
+  <data name="Return" xml:space="preserve">
+    <value>დაბრუნება</value>
+  </data>
+
+  <data name="ChangeToCAPI" xml:space="preserve">
+    <value>CAPI-ზე შეცვლა</value>
+  </data>
+
+  <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
+    <value>არჩეული {{count}} ინტერვიუს რეჟიმი შეიცვლება CAPI-ზე</value>
+  </data>
+
+  <data name="ChangeToCAWI" xml:space="preserve">
+    <value>CAWI-ზე შეცვლა</value>
+  </data>
+
+  <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
+    <value>არჩეული {{count}} ინტერვიუს რეჟიმი შეიცვლება CAWI-ზე</value>
+  </data>
+
+  <data name="InterviewMode" xml:space="preserve">
+    <value>ინტერვიუს რეჟიმი</value>
+  </data>
+
+  <data name="Capi" xml:space="preserve">
+    <value>CAPI</value>
+  </data>
+
+  <data name="Cawi" xml:space="preserve">
+    <value>CAWI</value>
+  </data>
+
+  <data name="Enable" xml:space="preserve">
+    <value>ჩართვა</value>
+  </data>
+
+  <data name="Disable" xml:space="preserve">
+    <value>გამორთვა</value>
+  </data>
+
+  <data name="Properties" xml:space="preserve">
+      <value>თვისებები</value>
+  </data>
+
+  <data name="LinkedUsers" xml:space="preserve">
+      <value>დაკავშირებული მომხმარებლები</value>
+  </data>
+
+  <data name="LinkUser" xml:space="preserve">
+      <value>მომხმარებელი</value>
+  </data>
+
+  <data name="GeoTrackNumber" xml:space="preserve">
+      <value>ტრეკი</value>
+  </data>
+
+  <data name="DateRange" xml:space="preserve">
+      <value>თარიღების დიაპაზონი</value>
+  </data>
+
+  <data name="AllGeoTracks" xml:space="preserve">
+      <value>ყველა გეოტრეკი</value>
+  </data>
 </root>

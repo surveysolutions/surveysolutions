@@ -201,46 +201,46 @@
   <data name="PLU0014" xml:space="preserve">
     <value>Formato de nombre completo incorrecto</value>
   </data>
-  <data name="PLU0001Recomendation" xml:space="preserve">
+  <data name="PLU0001Recommendation" xml:space="preserve">
     <value>El usuario debe ser único</value>
   </data>
-  <data name="PLU0002Recomendation" xml:space="preserve">
+  <data name="PLU0002Recommendation" xml:space="preserve">
     <value>Resolver duplicados</value>
   </data>
-  <data name="PLU0003Recomendation" xml:space="preserve">
+  <data name="PLU0003Recommendation" xml:space="preserve">
     <value>El usuario archivado no puede ser reutilizado porque pertenece a otro equipo</value>
   </data>
-  <data name="PLU0004Recomendation" xml:space="preserve">
+  <data name="PLU0004Recommendation" xml:space="preserve">
     <value>El usuario archivado no puede ser reutilizado porque existe en otro rol</value>
   </data>
-  <data name="PLU0005Recomendation" xml:space="preserve">
+  <data name="PLU0005Recommendation" xml:space="preserve">
     <value>El nombre de usuario debe tener entre 3 y 15 caracteres y solo puede contener letras, dígitos y el símbolo de subrayado. Las letras deben ser solo del alfabeto latino (inglés): 'A'..'Z' o 'a'..'z'. Otras letras (cirílico, árabe, etc.) no son válidas para su uso en nombres de usuario.</value>
   </data>
-  <data name="PLU0006Recomendation" xml:space="preserve">
+  <data name="PLU0006Recommendation" xml:space="preserve">
     <value>Debe contener al menos un número, un carácter en mayúscula y un carácter en minúscula. La longitud debe estar entre 10 y 100 caracteres</value>
   </data>
-  <data name="PLU0007Recomendation" xml:space="preserve">
+  <data name="PLU0007Recommendation" xml:space="preserve">
     <value>Corregir correo electrónico</value>
   </data>
-  <data name="PLU0008Recomendation" xml:space="preserve">
+  <data name="PLU0008Recommendation" xml:space="preserve">
     <value>Corregir número de teléfono</value>
   </data>
-  <data name="PLU0009Recomendation" xml:space="preserve">
+  <data name="PLU0009Recommendation" xml:space="preserve">
     <value>Solo se permiten "supervisor" o "entrevistador"</value>
   </data>
-  <data name="PLU0010Recomendation" xml:space="preserve">
+  <data name="PLU0010Recommendation" xml:space="preserve">
     <value>Verificar valor para supervisor</value>
   </data>
-  <data name="PLU0011Recomendation" xml:space="preserve">
+  <data name="PLU0011Recommendation" xml:space="preserve">
     <value>Eliminar el valor del supervisor</value>
   </data>
-  <data name="PLU0012Recomendation" xml:space="preserve">
+  <data name="PLU0012Recommendation" xml:space="preserve">
     <value>No debe contener más de 100 caracteres</value>
   </data>
-  <data name="PLU0013Recomendation" xml:space="preserve">
+  <data name="PLU0013Recommendation" xml:space="preserve">
     <value>No debe contener más de 15 caracteres</value>
   </data>
-  <data name="PLU0014Recomendation" xml:space="preserve">
+  <data name="PLU0014Recommendation" xml:space="preserve">
     <value>Solo se permiten letras, puntos, espacios y apóstrofos</value>
   </data>
   <data name="PLU0015" xml:space="preserve">
@@ -249,7 +249,7 @@
   <data name="PLU0015Description" xml:space="preserve">
     <value>La contraseña '{0}' es demasiado corta</value>
   </data>
-  <data name="PLU0015Recomendation" xml:space="preserve">
+  <data name="PLU0015Recommendation" xml:space="preserve">
     <value>La contraseña debe tener al menos 10 caracteres</value>
   </data>
   <data name="PLU0016" xml:space="preserve">
@@ -258,7 +258,7 @@
   <data name="PLU0016Description" xml:space="preserve">
     <value>La contraseña '{0}' no contiene un carácter no alfanumérico</value>
   </data>
-  <data name="PLU0016Recomendation" xml:space="preserve">
+  <data name="PLU0016Recommendation" xml:space="preserve">
     <value>Agregar al menos un carácter no alfanumérico</value>
   </data>
   <data name="PLU0017" xml:space="preserve">
@@ -267,7 +267,7 @@
   <data name="PLU0017Description" xml:space="preserve">
     <value>La contraseña '{0}' no contiene un dígito</value>
   </data>
-  <data name="PLU0017Recomendation" xml:space="preserve">
+  <data name="PLU0017Recommendation" xml:space="preserve">
     <value>Agregar al menos un dígito ('0'-'9').</value>
   </data>
   <data name="PLU0018" xml:space="preserve">
@@ -276,7 +276,7 @@
   <data name="PLU0018Description" xml:space="preserve">
     <value>La contraseña '{0}' no contiene un carácter en minúscula</value>
   </data>
-  <data name="PLU0018Recomendation" xml:space="preserve">
+  <data name="PLU0018Recommendation" xml:space="preserve">
     <value>Agregar al menos un carácter en minúscula ('a'-'z').</value>
   </data>
   <data name="PLU0019" xml:space="preserve">
@@ -285,7 +285,7 @@
   <data name="PLU0019Description" xml:space="preserve">
     <value>La contraseña '{0}' no contiene un carácter en mayúscula</value>
   </data>
-  <data name="PLU0019Recomendation" xml:space="preserve">
+  <data name="PLU0019Recommendation" xml:space="preserve">
     <value>Agregar al menos un carácter en mayúscula ('A'-'Z').</value>
   </data>
   <data name="PLU0020" xml:space="preserve">
@@ -294,7 +294,7 @@
   <data name="PLU0020Description" xml:space="preserve">
     <value>La contraseña '{0}' no contiene suficientes caracteres únicos</value>
   </data>
-  <data name="PLU0020Recomendation" xml:space="preserve">
+  <data name="PLU0020Recommendation" xml:space="preserve">
     <value>Agregar caracteres diferentes.</value>
   </data>
   <data name="PLU0021" xml:space="preserve">
@@ -303,7 +303,7 @@
   <data name="PLU0021Description" xml:space="preserve">
     <value>Se requiere contraseña</value>
   </data>
-  <data name="PLU0021Recomendation" xml:space="preserve">
+  <data name="PLU0021Recommendation" xml:space="preserve">
     <value>Agregar contraseña</value>
   </data>
   <data name="PLU0022" xml:space="preserve">
@@ -312,7 +312,7 @@
   <data name="PLU0022Description" xml:space="preserve">
     <value>El espacio de trabajo debe existir y estar habilitado</value>
   </data>
-  <data name="PLU0022Recomendation" xml:space="preserve">
+  <data name="PLU0022Recommendation" xml:space="preserve">
     <value>Verificar el nombre del espacio de trabajo</value>
   </data>
 </root>

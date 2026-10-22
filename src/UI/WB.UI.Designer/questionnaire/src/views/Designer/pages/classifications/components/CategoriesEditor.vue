@@ -72,6 +72,7 @@
 import { newGuid } from '../../../../../helpers/guid'
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import _ from 'lodash'
+import { useClassificationsStore } from '../store';
 
 export default {
     name: 'CategoriesEditor',
@@ -79,6 +80,9 @@ export default {
         VeeForm: Form,
         VeeField: Field,
         ErrorMessage: ErrorMessage,
+    },
+    setup() {
+        return { store: useClassificationsStore() };
     },
     data: function () {
         return {
@@ -89,19 +93,19 @@ export default {
     },
     computed: {
         categories() {
-            return this.$store.state.categories;
+            return this.store.categories;
         },
         isEditMode() {
             return (
-                this.$store.state.isAdmin ||
-                this.$store.state.userId === this.$store.state.activeClassification.userId
+                this.store.isAdmin ||
+                this.store.userId === this.store.activeClassification.userId
             );
         },
         activeGroup() {
-            return this.$store.state.activeGroup;
+            return this.store.activeGroup;
         },
         activeClassification() {
-            return this.$store.state.activeClassification;
+            return this.store.activeClassification;
         },
         form() {
             return this.$refs.form;
@@ -189,7 +193,7 @@ export default {
             }
         },
         deleteCategory(index) {
-            this.$store.dispatch('deleteCategory', index);
+            this.store.deleteCategory(index);
             this.form.setFieldValue('collectionSizeTracker', this.categories.length);
         },
         showStrings() {
@@ -208,7 +212,7 @@ export default {
                         parsedCategories.length
                     );
                     for (var i = 0; i < commonLength; i++) {
-                        self.$store.dispatch('updateCategory', {
+                        self.store.updateCategory({
                             index: i,
                             title: parsedCategories[i].title,
                             value: parsedCategories[i].value
@@ -222,13 +226,13 @@ export default {
                             i < parsedCategories.length;
                             i++
                         ) {
-                            self.$store.dispatch('addCategory', {
+                            self.store.addCategory({
                                 id: newGuid(),
                                 isNew: true,
                                 title: parsedCategories[i].title,
                                 value: parsedCategories[i].value,
                                 parent:
-                                    self.$store.state.activeClassification.id
+                                    self.store.activeClassification.id
                             });
                         }
                     } else if (
@@ -240,7 +244,7 @@ export default {
                             i < self.categories.length;
                             i++
                         ) {
-                            self.$store.dispatch('deleteCategory', i);
+                            self.store.deleteCategory(i);
                         }
                     }
 
@@ -256,10 +260,9 @@ export default {
             var self = this;
             this.$refs.form.validate().then(function (result) {
                 if (result.valid) {
-                    self.$store
-                        .dispatch(
-                            'updateCategories',
-                            self.$store.state.activeClassification.id
+                    self.store
+                        .updateCategories(
+                            self.store.activeClassification.id
                         )
                         .then(function () {
                             self.$nextTick(() => {
@@ -270,12 +273,12 @@ export default {
             });
         },
         addCategory() {
-            this.$store.dispatch('addCategory', {
+            this.store.addCategory({
                 id: newGuid(),
                 isNew: true,
                 title: '',
                 value: null,
-                parent: this.$store.state.activeClassification.id
+                parent: this.store.activeClassification.id
             });
             this.form.setFieldValue('collectionSizeTracker', this.categories.length);
         },

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
@@ -15,7 +16,7 @@ public class WebInterviewInterviewEntityFactoryTests : WebInterviewInterviewEnti
     private Identity textListQuestionId = Id.Identity3;
     private Identity linkedToListQuestionId = Id.Identity4;
     private Identity doubleQuestionId = Id.Identity5;
-    
+
     protected override QuestionnaireDocument GetDocument()
     {
         return Create.Entity.QuestionnaireDocumentWithOneChapter(Id.gA,
@@ -84,5 +85,99 @@ public class WebInterviewInterviewEntityFactoryTests : WebInterviewInterviewEnti
         
         Assert.That(doubleQuestion, Is.Not.Null);
         Assert.That(doubleQuestion.Answer, Is.Null);
+    }
+
+    [Test]
+    public void when_GetEntityDetails_for_integer_answered_question_should_return_answer_value()
+    {
+        CurrentInterview.Apply(Create.Event.NumericIntegerQuestionAnswered(questionId: intQuestionId.Id, answer: 42));
+
+        var result = Subject.GetEntityDetails(intQuestionId.ToString(), CurrentInterview, questionnaire, false)
+            as InterviewIntegerQuestion;
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Answer, Is.EqualTo(42));
+        Assert.That(result.IsAnswered, Is.True);
+    }
+
+    [Test]
+    public void when_GetEntityDetails_for_double_answered_question_should_return_answer_value()
+    {
+        CurrentInterview.Apply(Create.Event.NumericRealQuestionAnswered(identity: doubleQuestionId, answer: 3.14m));
+
+        var result = Subject.GetEntityDetails(doubleQuestionId.ToString(), CurrentInterview, questionnaire, false)
+            as InterviewDoubleQuestion;
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Answer, Is.EqualTo((double)3.14m).Within(0.0001));
+        Assert.That(result.IsAnswered, Is.True);
+    }
+
+    [Test]
+    public void when_GetEntityDetails_for_single_option_answered_question_should_return_selected_value()
+    {
+        CurrentInterview.Apply(Create.Event.SingleOptionQuestionAnswered(singleOptionQuestionId.Id, singleOptionQuestionId.RosterVector, 2));
+
+        var result = Subject.GetEntityDetails(singleOptionQuestionId.ToString(), CurrentInterview, questionnaire, false)
+            as InterviewSingleOptionQuestion;
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Answer, Is.EqualTo(2));
+    }
+
+    [Test]
+    public void when_GetEntityDetails_for_text_list_answered_question_should_return_rows()
+    {
+        CurrentInterview.Apply(Create.Event.TextListQuestionAnswered(
+            questionId: textListQuestionId.Id,
+            answers: new[] { new Tuple<decimal, string>(1, "Item one"), new Tuple<decimal, string>(2, "Item two") }));
+
+        var result = Subject.GetEntityDetails(textListQuestionId.ToString(), CurrentInterview, questionnaire, false)
+            as InterviewTextListQuestion;
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Rows, Has.Count.EqualTo(2));
+        Assert.That(result.Rows[0].Text, Is.EqualTo("Item one"));
+        Assert.That(result.Rows[1].Text, Is.EqualTo("Item two"));
+    }
+
+    [Test]
+    public void when_GetEntityDetails_for_text_list_should_default_max_answers_count_to_200()
+    {
+        var result = Subject.GetEntityDetails(textListQuestionId.ToString(), CurrentInterview, questionnaire, false)
+            as InterviewTextListQuestion;
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.MaxAnswersCount, Is.EqualTo(200));
+    }
+
+    [Test]
+    public void when_GetEntityDetails_for_question_should_map_id()
+    {
+        var result = Subject.GetEntityDetails(intQuestionId.ToString(), CurrentInterview, questionnaire, false)
+            as InterviewIntegerQuestion;
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Id, Is.EqualTo(intQuestionId.ToString()));
+    }
+
+    [Test]
+    public void when_GetEntityDetails_with_includeVariableName_should_populate_Name()
+    {
+        var result = Subject.GetEntityDetails(intQuestionId.ToString(), CurrentInterview, questionnaire, false, includeVariableName: true)
+            as InterviewIntegerQuestion;
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Name, Is.Not.Null.And.Not.Empty);
+    }
+
+    [Test]
+    public void when_GetEntityDetails_without_includeVariableName_Name_should_be_null()
+    {
+        var result = Subject.GetEntityDetails(intQuestionId.ToString(), CurrentInterview, questionnaire, false, includeVariableName: false)
+            as InterviewIntegerQuestion;
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Name, Is.Null);
     }
 }

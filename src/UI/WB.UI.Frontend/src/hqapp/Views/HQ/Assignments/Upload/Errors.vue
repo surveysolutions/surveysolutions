@@ -8,7 +8,7 @@
                     </li>
                     <li>
                         <a :href="assignmentsUploadUrl">{{ $t('BatchUpload.BreadCrumbs_CreatingMultipleInterviews')
-                            }}</a>
+                        }}</a>
                     </li>
                 </ol>
                 <h1>{{ $t('BatchUpload.ImportAssignments_PageTitle') }}</h1>
@@ -24,7 +24,8 @@
                     }) }}
                     <router-link :to="{ name: 'questionnairedetails', params: { questionnaireId: questionnaire.id } }"
                         target='_blank'>
-                        <span :title="$t('Details.ShowQuestionnaireDetails')" class="glyphicon glyphicon-link" />
+                        <span :title="$t('Details.ShowQuestionnaireDetails')"
+                            class="glyphicon glyphicon-link" />
                     </router-link>
                 </h3>
             </div>
@@ -35,28 +36,33 @@
                     <p class="error-text">{{ $t('BatchUpload.BatchFileVerificationFailed') }}</p>
                     <p>{{ $t('BatchUpload.AssignmentsAreNotCreated') }}</p>
                 </div>
-                <h3 class="error-text" v-if="verificationErrors.length == 1">{{ $t('BatchUpload.SingleErrorFound') }}
+                <h3 class="error-text"
+                    v-if="verificationErrors.length == 1">{{ $t('BatchUpload.SingleErrorFound') }}
                 </h3>
-                <h3 class="error-text" v-else>{{ $t('BatchUpload.MultipleErrorsWereFound', {
+                <h3 class="error-text"
+                    v-else>{{ $t('BatchUpload.MultipleErrorsWereFound', {
                     count:
                         verificationErrors.length
                 }) }}</h3>
 
-                <div class="error-block" v-for="(error, index) in verificationErrors" :key="index">
+                <div class="error-block"
+                    v-for="(error, index) in verificationErrors"
+                    :key="index">
                     <h5 class="error-text">
                         <span>{{ error.code }}</span>
                         : {{ error.message }}
                     </h5>
-                    <div v-for="(reference, index) in error.references" :key="index">
+                    <div v-for="(reference, index) in error.references"
+                        :key="index">
                         <p>{{ $t('BatchUpload.FileName') }}: {{ reference.dataFile }}</p>
                         <p v-if="!isEmptyText(reference.content)">
                             <span v-if="reference.type == 0">{{ $t('BatchUpload.Column') }}: {{ reference.content
-                                }}</span>
+                            }}</span>
                             <span v-if="reference.type == 1">{{ $t('BatchUpload.Row') }}: {{ reference.content }}</span>
                             <span v-if="reference.type == 2">{{ $t('BatchUpload.Cell') }}: {{ reference.content
-                                }}</span>
+                            }}</span>
                             <span v-if="reference.type == 3">{{ $t('BatchUpload.File') }}: {{ reference.content
-                                }}</span>
+                            }}</span>
 
                             <span v-else>{{ reference.type }}: {{ reference.content }}</span>
                             (
@@ -68,7 +74,8 @@
                 </div>
 
                 <div class="action-buttons">
-                    <a class="back-link" v-bind:href="assignmentsUploadUrl">
+                    <a class="back-link"
+                        v-bind:href="assignmentsUploadUrl">
                         {{ $t('BatchUpload.BackToImport') }}
                     </a>
                 </div>
@@ -79,7 +86,7 @@
 
 
 <script>
-import { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash-es'
 
 export default {
     computed: {

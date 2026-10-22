@@ -87,8 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         {
             audioServiceSubscription?.Dispose();
             audioServiceSubscription = null;
-         
-            audioService?.Dispose();
+
             base.Dispose();
         }
     }
