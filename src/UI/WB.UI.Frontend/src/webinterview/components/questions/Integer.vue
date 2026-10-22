@@ -36,6 +36,7 @@
                                 :value="option.value" :disabled="!$me.acceptAnswer" v-model="specialValue" />
                             <label :for="$me.id + '_' + option.value">
                                 <span class="tick"></span>
+                                <span v-if="isDevMode" class="option-value-code">[{{ option.value }}]</span>
                                 {{ option.title }}
                             </label>
                             <wb-remove-answer :on-remove="removeAnswer" v-if="!$me.isProtected" />
