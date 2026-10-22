@@ -16,6 +16,7 @@ using WB.UI.Designer.Areas.Pdf.Services;
 using WB.UI.Designer.Areas.Pdf.Utils;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers.Api.WebTester;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Services;
 using WB.UI.Designer.Services.AttachmentPreview;
 using ILoggerProvider = Microsoft.Extensions.Logging.ILoggerProvider;
@@ -30,6 +31,7 @@ namespace WB.UI.Designer.Modules
         public void Load(IDependencyRegistry registry)
         {
             registry.BindAsScoped<LocalOrDevelopmentAccessOnlyAttribute, LocalOrDevelopmentAccessOnlyAttribute>();
+            registry.BindAsScoped<IPostCommitActions, PostCommitActions>();
 
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
 
