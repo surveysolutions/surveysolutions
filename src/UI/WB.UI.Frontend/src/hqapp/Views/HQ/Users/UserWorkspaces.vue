@@ -99,7 +99,7 @@ export default {
                     this.updated = true
                 }
             } catch (error) {
-                const errors = error?.response?.data?.errors
+                const errors = error?.response?.data?.Errors
                 if (errors) {
                     const messages = []
                     Object.values(errors).forEach(fieldErrors => {
@@ -109,7 +109,7 @@ export default {
                     })
                     this.errorMessage = messages.join('; ')
                 } else {
-                    this.errorMessage = error?.response?.data?.title || error?.message
+                    this.errorMessage = error?.response?.data?.Title || error?.message
                 }
                 await this.loadWorkspaces()
             } finally {
