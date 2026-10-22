@@ -398,6 +398,28 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
         }
 
         [Test]
+        public void GetExternalStoragePath_when_legacy_filename_shares_workspace_prefix_should_use_legacy_path()
+        {
+            const string legacyFileName = "g_cHJpbWFyeQ_basemap.tpk";
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempBase);
+            try
+            {
+                var service = Create.Service.MapFileStorageService(
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = tempBase }));
+                var generationStorageKey = $"g_cHJpbWFyeQ_{Guid.NewGuid():N}";
+
+                Assert.That(service.GetExternalStoragePath(legacyFileName), Is.EqualTo($"maps/{legacyFileName}"));
+                Assert.That(service.GetExternalStoragePath(generationStorageKey),
+                    Is.EqualTo($"maps/cHJpbWFyeQ/{generationStorageKey}"));
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
         public async Task SaveOrUpdateMapAsync_should_store_replacement_under_a_new_generation()
         {
             var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));

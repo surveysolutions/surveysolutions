@@ -92,8 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 fileSystemAccessor.CreateDirectory(this.mapsFolderPath);
         }
 
-        public string GetExternalStoragePath(string name) => name.StartsWith(
-            GetWorkspaceStorageKeyPrefix(), StringComparison.Ordinal)
+        public string GetExternalStoragePath(string name) => IsWorkspaceGenerationStorageKey(name)
             ? $"{GetWorkspaceStoragePathPrefix()}{name}"
             : $"maps/{name}";
 
