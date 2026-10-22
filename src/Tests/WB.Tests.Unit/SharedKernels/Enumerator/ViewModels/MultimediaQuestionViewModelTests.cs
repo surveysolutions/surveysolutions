@@ -7,6 +7,9 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using MvvmCross.Views;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -37,6 +40,35 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
             Ioc.RegisterType<ThrottlingViewModel>(() => Create.ViewModel.ThrottlingViewModel());
             Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+        }
+
+        [Test]
+        public async Task when_photo_capture_is_cancelled_should_return_to_picture_question()
+        {
+            var pictureChooser = new Mock<IPictureChooser>();
+            pictureChooser.Setup(x => x.TakePicture()).ThrowsAsync(new TaskCanceledException());
+            var userInteractionService = new Mock<IUserInteractionService>();
+            userInteractionService
+                .Setup(x => x.SelectOneOptionFromList(It.IsAny<string>(), It.IsAny<string[]>()))
+                .ReturnsAsync(WB.Core.SharedKernels.Enumerator.Properties.UIResources.Multimedia_TakePhoto);
+
+            var viewModel = new MultimediaQuestionViewModel(
+                Create.Service.Principal(Guid.NewGuid()),
+                Mock.Of<IStatefulInterviewRepository>(),
+                Mock.Of<IImageFileStorage>(),
+                Create.Service.LiteEventRegistry(),
+                Mock.Of<IQuestionnaireStorage>(),
+                pictureChooser.Object,
+                userInteractionService.Object,
+                Mock.Of<IViewModelNavigationService>(),
+                Create.ViewModel.QuestionState<PictureQuestionAnswered>(),
+                Create.ViewModel.QuestionInstructionViewModel(),
+                new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>(), Mock.Of<ILogger>()),
+                Mock.Of<IFileSystemAccessor>());
+
+            await viewModel.RequestAnswerCommand.ExecuteAsync();
+
+            pictureChooser.Verify(x => x.TakePicture(), Times.Once);
         }
 
         private static IEnumerable<TestCaseData> MissingPermissionCases()
