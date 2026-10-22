@@ -24,7 +24,7 @@
         </perfect-scrollbar>
     </div>
 </template>
-  
+
 <script>
 
 import LookupTableItem from './LookupTableItem.vue';
@@ -57,4 +57,3 @@ export default {
     }
 }
 </script>
-  

@@ -1261,8 +1261,8 @@
     <value>场景标题</value>
   </data>
 
-  <data name="SideBarScenarioRecordNew" xml:space="preserve">
-    <value>Record New Scenario</value>
+<data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>录制新场景</value>
   </data>
   <data name="SideBarDownload" xml:space="preserve">
     <value>下载：</value>
@@ -1798,8 +1798,8 @@
     <value>网络错误</value>
   </data>
 
-  <data name="PopupBlocked" xml:space="preserve">
-    <value>Unable to open window. Please allow pop-ups in your browser and try again.</value>
+<data name="PopupBlocked" xml:space="preserve">
+    <value>无法打开窗口。请在浏览器中允许弹出窗口，然后重试。</value>
   </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
     <value>添加新类别</value>
@@ -1864,5 +1864,11 @@
 
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>切换到将更改问卷的显示语言。翻译必须包含所有元素的文本。</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+      <value>编辑</value>
+  </data>
+  <data name="Stick" xml:space="preserve">
+      <value>附加</value>
   </data>
 </root>

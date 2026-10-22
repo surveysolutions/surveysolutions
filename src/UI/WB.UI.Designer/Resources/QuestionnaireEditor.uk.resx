@@ -250,7 +250,7 @@
     <value>Помилка мережі</value>
   </data>
   <data name="PopupBlocked" xml:space="preserve">
-    <value>Unable to open window. Please allow pop-ups in your browser and try again.</value>
+    <value>Не вдалося відкрити вікно. Дозвольте спливаючі вікна у браузері та спробуйте ще раз.</value>
   </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
     <value>знайдено {{count}} помилку</value>
@@ -1391,7 +1391,7 @@
     <value>назва сценарію</value>
   </data>
   <data name="SideBarScenarioRecordNew" xml:space="preserve">
-    <value>Record New Scenario</value>
+    <value>Записати новий сценарій</value>
   </data>
   <data name="SideBarScenarioTitle" xml:space="preserve">
     <value>Сценарії</value>
@@ -1713,5 +1713,11 @@
 
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Переключення змінить мову відображення анкети. Переклад має містити текст для всіх елементів.</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+      <value>Редагувати</value>
+  </data>
+  <data name="Stick" xml:space="preserve">
+      <value>Прикріпити</value>
   </data>
 </root>
