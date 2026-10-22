@@ -111,6 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string answer;
         private bool isPlaying;
         private bool canBePlayed;
+        private string currentAudioFileName;
 
         public string Answer
         {
@@ -131,7 +132,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             else
             {
-                var interviewBinaryData = await this.audioFileStorage.GetInterviewBinaryDataAsync(interviewId, this.GetAudioFileName());
+                var interviewBinaryData = await this.audioFileStorage.GetInterviewBinaryDataAsync(interviewId, this.currentAudioFileName);
                 this.audioService.Play(interviewBinaryData, this.questionIdentity);
                 this.IsPlaying = true;
             }
@@ -152,6 +153,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetAudioQuestion(entityIdentity);
             if (answerModel.IsAnswered())
             {
+                this.currentAudioFileName = answerModel.GetAnswer().FileName;
                 this.SetAnswer(answerModel.GetAnswer().Length);
             }
 
@@ -177,7 +179,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 using (var audioMemoryStream = new MemoryStream())
                 {
                     audioStream.CopyTo(audioMemoryStream);
-                    this.audioFileStorage.StoreInterviewBinaryData(this.interviewId, this.GetAudioFileName(),
+                    this.currentAudioFileName = this.GetAudioFileName();
+                    this.audioFileStorage.StoreInterviewBinaryData(this.interviewId, this.currentAudioFileName,
                         audioMemoryStream.ToArray(), this.audioService.GetMimeType());
                 }
 
@@ -198,7 +201,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answer = string.Format(UIResources.AudioQuestion_DurationFormat,
                 NumericTextFormatter.FormatTimeHumanized(duration));
             
-            this.CanBePlayed = this.audioFileStorage.GetInterviewBinaryData(this.interviewId, GetAudioFileName()) != null;
+            this.CanBePlayed = this.audioFileStorage.GetInterviewBinaryData(this.interviewId, this.currentAudioFileName) != null;
         }
 
         private async Task RecordAudioAsync()
@@ -281,7 +284,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
 
             this.Answer = null;
-            this.audioFileStorage.RemoveInterviewBinaryData(this.interviewId, this.GetAudioFileName());
+            this.CanBePlayed = false;
+            if (this.currentAudioFileName != null)
+                this.audioFileStorage.RemoveInterviewBinaryData(this.interviewId, this.currentAudioFileName);
         }
 
         private string GetAudioFileName() => $"{this.variableName}__{this.questionIdentity.RosterVector}.{this.audioService.GetAudioType()}";

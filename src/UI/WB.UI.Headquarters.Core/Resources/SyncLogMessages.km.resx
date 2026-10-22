@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="CanSynchronize" xml:space="preserve">
+        <value>ចាប់ផ្តើមធ្វើសមកាលកម្ម</value>
+    </data>
+    <data name="GetCensusQuestionnaires" xml:space="preserve">
+        <value>ទាញយកបញ្ជីសំណួរជំរឿន៖ &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+    </data>
+    <data name="GetInterviewer" xml:space="preserve">
+        <value>ទាញយកព័ត៌មានអ្នកសម្ភាសន៍។ &lt;br/&gt;អ្នកគ្រប់គ្រង៖ &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    </data>
+    <data name="GetInterviewPackage" xml:space="preserve">
+        <value>ទាញយកកញ្ចប់សម្ភាសន៍៖ &lt;b&gt;{0}&lt;/b&gt;</value>
+    </data>
+    <data name="GetInterviewPackages" xml:space="preserve">
+        <value>ទាញយកបញ្ជីកញ្ចប់សម្ភាសន៍។ &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;កញ្ចប់ធ្វើសមកាលកម្មចុងក្រោយ៖ &lt;b&gt;{0}&lt;/b&gt;</value>
+    </data>
+    <data name="GetQuestionnaire" xml:space="preserve">
+        <value>ទាញយកកម្រងសំណួរ៖ &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    </data>
+    <data name="GetQuestionnaireAssembly" xml:space="preserve">
+        <value>ទាញយកការជួបប្រជុំកម្រងសំណួរ៖ &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    </data>
+    <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
+        <value>ឧបករណ៍អាចត្រូវបានកំណត់ឱ្យអ្នកសម្ភាសន៍</value>
+    </data>
+    <data name="InterviewPackageProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;កញ្ចប់សម្ភាសន៍ &lt;b&gt;{0}&lt;/b&gt; ដំណើរការដោយជោគជ័យ&lt;/font&gt;</value>
+    </data>
+    <data name="LinkToDevice" xml:space="preserve">
+        <value>ភ្ជាប់អ្នកសម្ភាសន៍ទៅឧបករណ៍</value>
+    </data>
+    <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;ការជួបប្រជុំគ្នានៃកម្រងសំណួរ &lt;b&gt;{0}&lt;/b&gt; [{1}] បានដំណើរការដោយជោគជ័យ&lt;/font&gt;</value>
+    </data>
+    <data name="QuestionnaireProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;កម្រងសំណួរ &lt;b&gt;{0}&lt;/b&gt; [{1}] បានដំណើរការដោយជោគជ័យ&lt;/font&gt;</value>
+    </data>
+    <data name="CensusQuestionnaire" xml:space="preserve">
+        <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
+    </data>
+    <data name="DeleteInterviewPackage" xml:space="preserve">
+        <value>&lt;li&gt;លុបការសម្ភាសន៍៖ &lt;a href="{3}"&gt;{0}&lt;/a&gt;, កញ្ចប់៖ {1}, តម្រៀបសន្ទស្សន៍៖ {2}&lt;/li&gt;</value>
+    </data>
+    <data name="DeviceRelinkRequired" xml:space="preserve">
+        <value>&lt;font color="orange"&gt;ទាមទារ​ការ​ភ្ជាប់​ឡើងវិញ&lt;/font&gt;</value>
+    </data>
+    <data name="DeviceUpdateRequired" xml:space="preserve">
+        <value>&lt;font color="red"&gt;តម្រូវឱ្យធ្វើបច្ចុប្បន្នភាព។ កំណែម៉ាស៊ីនសម្ភាសន៍ - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+    </data>
+    <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
+        <value>មិនមានកញ្ចប់សម្ភាសន៍ថ្មីសម្រាប់ទាញយកទេ។</value>
+    </data>
+    <data name="NoMapsForUser" xml:space="preserve">
+        <value>មិនមានផែនទីដើម្បីទាញយកទេ។</value>
+    </data>
+    <data name="UpdateInterviewPackage" xml:space="preserve">
+        <value>&lt;li&gt;ធ្វើបច្ចុប្បន្នភាពបទសម្ភាសន៍៖ &lt;a href="{3}"&gt;{0}&lt;/a&gt;, កញ្ចប់៖ {1}, តម្រៀបសន្ទស្សន៍៖ {2}&lt;/li&gt;</value>
+    </data>
+    <data name="InterviewerHasDevice" xml:space="preserve">
+        <value>អ្នកសម្ភាសន៍មានឧបករណ៍រួចហើយ</value>
+    </data>
+    <data name="EmptyDevice" xml:space="preserve">
+        <value>&lt;b&gt;[ឧបករណ៍ទទេ]&lt;/b&gt;</value>
+    </data>
+    <data name="GetInterview" xml:space="preserve">
+        <value>ទាញយកបទសម្ភាសន៍៖ &lt;b&gt;{0}&lt;/b&gt;</value>
+    </data>
+    <data name="GetInterviews" xml:space="preserve">
+        <value>ទាញយកបញ្ជីសម្ភាសន៍។ &lt;/br&gt;&lt;ul&gt;{0} &lt;/ul&gt;</value>
+    </data>
+    <data name="GetMaps" xml:space="preserve">
+        <value>ទាញយកបញ្ជីផែនទី។ &lt;/br&gt;&lt;ul&gt;{0} &lt;/ul&gt;</value>
+    </data>
+    <data name="GetAssignmentsFormat" xml:space="preserve">
+        <value>ទាញយកបញ្ជីកិច្ចការ ({0}) ។ &lt;/br&gt;&lt;ul&gt;{1} &lt;/ul&gt;</value>
+    </data>
+    <data name="GetAssignmentFormat" xml:space="preserve">
+        <value>ទាញយកកិច្ចការ ({0})&lt;/br&gt;</value>
+    </data>
+    <data name="InterviewProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;បទសម្ភាសន៍ &lt;b&gt;{0}&lt;/b&gt; ដំណើរការដោយជោគជ័យ&lt;/font&gt;</value>
+    </data>
+    <data name="GetAttachmentContent" xml:space="preserve">
+        <value>ទាញយកខ្លឹមសារឯកសារភ្ជាប់៖ {0}</value>
+    </data>
+    <data name="GetMap" xml:space="preserve">
+        <value>ទាញយកផែនទី៖ {0}</value>
+    </data>
+    <data name="GetQuestionnaireAttachments" xml:space="preserve">
+        <value>ទាញយកឯកសារភ្ជាប់កម្រងសំណួរ៖ &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    </data>
+    <data name="PostPackage" xml:space="preserve">
+        <value>ផ្ទុកបទសម្ភាសន៍៖ {0}</value>
+    </data>
+    <data name="GetTranslations" xml:space="preserve">
+        <value>ទាញយកការបកប្រែសម្រាប់កម្រងសំណួរ &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    </data>
+    <data name="InterviewerLoggedIn" xml:space="preserve">
+        <value>អ្នកសម្ភាសន៍បានចូល និងទទួលបាន AuthToken</value>
+    </data>
+    <data name="InterviewerFailedToLogin" xml:space="preserve">
+        <value>អ្នកសម្ភាសន៍បរាជ័យក្នុងការចូល</value>
+    </data>
+    <data name="PasswordChanged" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់បានផ្លាស់ប្តូរ និងទទួលបាន AuthToken</value>
+    </data>
+    <data name="FailToChangePassword" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់បានបរាជ័យក្នុងការផ្លាស់ប្តូរពាក្យសម្ងាត់</value>
+    </data>
+    <data name="ApkRequested" xml:space="preserve">
+        <value>ឯកសារកម្មវិធីថ្មីត្រូវបានស្នើសុំ</value>
+    </data>
+    <data name="SupervisorApkRequested" xml:space="preserve">
+        <value>ឯកសារពាក្យសុំអ្នកគ្រប់គ្រងថ្មីត្រូវបានស្នើសុំ</value>
+    </data>
+    <data name="ExtendedApkRequested" xml:space="preserve">
+        <value>ឯកសារកម្មវិធីបន្ថែមថ្មីត្រូវបានស្នើសុំ</value>
+    </data>
+    <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+        <value>ឯកសារបំណះត្រូវបានស្នើសុំសម្រាប់កំណែបន្ថែម {0}</value>
+    </data>
+    <data name="PatchRequestedFormat" xml:space="preserve">
+        <value>ឯកសារបំណះត្រូវបានស្នើសុំសម្រាប់កំណែ {0}</value>
+    </data>
+    <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
+        <value>ឯកសារបំណះអ្នកគ្រប់គ្រងត្រូវបានស្នើសុំសម្រាប់កំណែ {0}</value>
+    </data>
+    <data name="GetInterviewPackageV3" xml:space="preserve">
+        <value>&lt;b&gt;V3&lt;/b&gt; ទាញយកកញ្ចប់សម្ភាសន៍៖ {0}</value>
+    </data>
+    <data name="GetInterviewPatch" xml:space="preserve">
+        <value>ទាញយកការផ្លាស់ប្តូរបទសម្ភាសន៍ពី HQ: {0}</value>
+    </data>
+    <data name="PostPackageV3" xml:space="preserve">
+        <value>&lt;b&gt;V3&lt;/b&gt; បង្ហោះបទសម្ភាសន៍៖ {0}</value>
+    </data>
+    <data name="CheckObsoleteInterviews" xml:space="preserve">
+        <value>ពិនិត្យមើលការសម្ភាសន៍ដែលលែងប្រើ។ សំណើ៖ &lt;pre&gt;{0}&lt;/pre&gt;</value>
+    </data>
+    <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+        <value>ពិនិត្យសំភាសន៍ស្ទួន។ បទសម្ភាសន៍៖ &lt;pre&gt;{0}&lt;/pre&gt;</value>
+    </data>
+    <data name="AssignmentReceivedByTablet" xml:space="preserve">
+        <value>កិច្ចការ &lt;b&gt;{0}&lt;/b&gt; បានទទួល និងរក្សាទុកដោយឧបករណ៍</value>
+    </data>
+    <data name="DownloadReusableCategories" xml:space="preserve">
+        <value>ការទាញយកប្រភេទ {0} ដែលអាចប្រើឡើងវិញបាន។</value>
+    </data>
+    <data name="PostCalendarEventPackage" xml:space="preserve">
+        <value>បង្ហោះព្រឹត្តិការណ៍ប្រតិទិន៖ {0}</value>
+    </data>
+    <data name="GetCalendarEventPackage" xml:space="preserve">
+        <value>ទាញយកកញ្ចប់ព្រឹត្តិការណ៍ប្រតិទិន៖ {0}</value>
+    </data>
+    <data name="CalendarEventsListFormat" xml:space="preserve">
+        <value>ទាញយកបញ្ជីព្រឹត្តិការណ៍ប្រតិទិន ({0}) ។ &lt;/br&gt;&lt;ul&gt;{1} &lt;/ul&gt;</value>
+    </data>
+</root>

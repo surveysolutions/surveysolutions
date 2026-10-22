@@ -27,12 +27,11 @@ namespace WB.UI.Headquarters.Code.Authentication
 
         public AuthTokenAuthenticationHandler(IOptionsMonitor<AuthTokenAuthenticationSchemeOptions> options, 
             ILoggerFactory logger,
-            UrlEncoder encoder, 
-            ISystemClock clock,
+            UrlEncoder encoder,
             IUserRepository userRepository,
             IUserClaimsPrincipalFactory<HqUser> claimFactory,
             IApiTokenProvider authTokenProvider, 
-            IWorkspaceContextAccessor workspaceContextAccessor) : base(options, logger, encoder, clock)
+            IWorkspaceContextAccessor workspaceContextAccessor) : base(options, logger, encoder)
         {
             this.userRepository = userRepository;
             this.claimFactory = claimFactory;
@@ -48,7 +47,7 @@ namespace WB.UI.Headquarters.Code.Authentication
             BasicCredentials credentials;
             try
             {
-                credentials = Request.Headers.ParseBasicCredentials();
+                credentials = Request.Headers.ParseBasicCredentials(AuthType.AuthToken);
             }
             catch (Exception e)
             {

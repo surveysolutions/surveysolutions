@@ -1063,4 +1063,13 @@
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Estado: Abierto</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>No hay un proveedor adecuado para determinar la ubicación</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>El proveedor de GPS está deshabilitado</value>
+  </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>La ubicación recibida fue rechazada porque no coincide con la fuente de ubicación aceptable configurada para este espacio de trabajo</value>
+  </data>
 </root>
