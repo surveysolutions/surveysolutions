@@ -74,7 +74,7 @@
                 </label>
             </div>
             <div class="container-info action-block" v-if="switchToWeb">
-                <p calss="info-block gray-uppercase">
+                <p class="info-block gray-uppercase">
                     {{ $t('WebInterviewUI.SwitchToWebMode_LinkDescription') }}
                 </p>
                 <p class="font-bold">
@@ -104,7 +104,6 @@
 </template>
 
 <style lang="scss" scoped>
-
 @import '../../assets/css/_variables.scss';
 
 .submit-info {
@@ -368,26 +367,26 @@ export default {
         }
     },
     beforeMount() {
-        this.wasCriticalityInfoLoaded = false;
+        this.wasCriticalityInfoLoaded = false
         this.fetchCompleteInfo()
     },
     watch: {
         completeGroups(newVal) {
             if (Array.isArray(newVal) && newVal.length > 0) {
-                let targetIndex = null;
+                let targetIndex = null
 
                 for (let i = 0; i < newVal.length; i++) {
-                    const group = newVal[i];
+                    const group = newVal[i]
                     if (Array.isArray(group.items) && group.items.length > 0) {
-                        targetIndex = i;
-                        break;
+                        targetIndex = i
+                        break
                     }
                 }
 
                 if (targetIndex !== null && (this.activeCompleteGroupIndex === null || this.shouldUpdateActiveTab(newVal))) {
-                    this.activeCompleteGroupIndex = targetIndex;
+                    this.activeCompleteGroupIndex = targetIndex
                 } else if (this.activeCompleteGroupIndex === null) {
-                    this.activeCompleteGroupIndex = 0;
+                    this.activeCompleteGroupIndex = 0
                 }
             }
         },
@@ -401,9 +400,9 @@ export default {
         },
         criticalityInfo(to, from) {
             if (to) {
-                this.wasCriticalityInfoLoaded = true;
+                this.wasCriticalityInfoLoaded = true
             }
-        }
+        },
     },
     computed: {
         completeInfo() {
@@ -419,13 +418,13 @@ export default {
             const criticalUnanswered = this.criticalityInfo?.unansweredCriticalQuestions || []
             const critical = criticalFailedRules.concat(criticalUnanswered)
             const criticalTotal = (this.criticalityInfo?.failedCriticalRulesTotal || 0)
-                + (this.criticalityInfo?.unansweredCriticalQuestionsTotal || 0);
+                + (this.criticalityInfo?.unansweredCriticalQuestionsTotal || 0)
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_CriticalErrors'),
                 items: critical,
                 total: criticalTotal,
                 cssClass: 'errors',
-                ariaLabel: 'Critical errors tab'
+                ariaLabel: 'Critical errors tab',
             })
 
             groups.push({
@@ -433,7 +432,7 @@ export default {
                 items: this.completeInfo?.entitiesWithError,
                 total: this.completeInfo?.errorsCount,
                 cssClass: 'errors',
-                ariaLabel: 'Errors tab'
+                ariaLabel: 'Errors tab',
             })
 
             groups.push({
@@ -441,10 +440,10 @@ export default {
                 items: this.completeInfo?.unansweredQuestions,
                 total: this.completeInfo?.unansweredCount,
                 cssClass: 'unanswered',
-                ariaLabel: 'Unanswered questions tab'
+                ariaLabel: 'Unanswered questions tab',
             })
 
-            return groups;
+            return groups
         },
         activeGroup() {
             const active = this.completeGroups[this.activeCompleteGroupIndex]
@@ -458,23 +457,23 @@ export default {
         },
         isCompletionPermitted() {
             if (this.mayBeSwitchedToWebMode && this.switchToWeb)
-                return true;
+                return true
 
             if (this.wasCriticalityInfoLoaded === false) {
-                return false;
+                return false
             }
 
             if (this.doesSupportCriticality !== false) {
                 if (this.hasCriticalIssues) {
                     if (this.criticalityLevel == 'Block') {
-                        return false;
+                        return false
                     }
                     if (this.criticalityLevel == 'Warn') {
                         return this.comment && this.comment.length > 0
                     }
                 }
             }
-            return true;
+            return true
         },
         completeButtionComment() {
             if (this.hasCriticalIssues) {
@@ -484,7 +483,7 @@ export default {
                     return this.$t('WebInterviewUI.CompleteCommentCriticalityLevelWarn')
                 }
             }
-            return '';
+            return ''
         },
         shouldCloseWindow() {
             return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
@@ -522,7 +521,7 @@ export default {
         errorsCount() {
             if (this.hasCriticalIssues)
                 return this.completeInfo.errorsCount + this.criticalityInfo.unansweredCriticalQuestions.length + this.criticalityInfo.failedCriticalRules.length
-            return this.completeInfo.errorsCount;
+            return this.completeInfo.errorsCount
         },
         invalidQuestionsCountString() {
             return this.hasErrors ? this.errorsCount : this.$t('WebInterviewUI.No')
@@ -553,10 +552,10 @@ export default {
             return this.hasErrors || this.hasUnansweredQuestions || this.hasCriticalIssues
         },
         moreCount() {
-            const activeGroup = this.activeGroup;
-            if (!activeGroup) return 0;
-            const displayedItemsCount = activeGroup.items ? activeGroup.items.length : 0;
-            return activeGroup.total - displayedItemsCount;
+            const activeGroup = this.activeGroup
+            if (!activeGroup) return 0
+            const displayedItemsCount = activeGroup.items ? activeGroup.items.length : 0
+            return activeGroup.total - displayedItemsCount
         },
     },
     methods: {
@@ -566,7 +565,7 @@ export default {
 
         completeInterview() {
             if (!this.isCompletionPermitted)
-                return;
+                return
 
             if (this.shouldCloseWindow) {
                 modal.dialog({
@@ -637,17 +636,17 @@ export default {
         },
 
         shouldUpdateActiveTab(newGroups) {
-            if (!Array.isArray(newGroups) || newGroups.length === 0) return false;
+            if (!Array.isArray(newGroups) || newGroups.length === 0) return false
 
-            const criticalErrorsGroup = newGroups[0];
+            const criticalErrorsGroup = newGroups[0]
 
             if (Array.isArray(criticalErrorsGroup.items) &&
                 criticalErrorsGroup.items.length > 0 &&
                 this.activeCompleteGroupIndex !== 0) {
-                return true;
+                return true
             }
 
-            return false;
+            return false
         },
     },
 }

@@ -28,7 +28,7 @@
                     </audio>
                 </div>
                 <div v-else-if="item.controlType === 'area'">
-                    <iframe title="Area preview" width="100%" height="250px" frameBorder="0"
+                    <iframe :title="$t('WebInterviewUI.GeographyPreview')" width="100%" height="250px" frameBorder="0"
                         :src="areaAnswerUrl"></iframe>
                 </div>
                 <div v-else-if="item.controlType === 'map'">
@@ -89,7 +89,7 @@ export default {
         }
     },
 
-    destroyed() {
+    unmounted() {
         if (this.watcher != null) {
             this.watcher.destroy()
         }

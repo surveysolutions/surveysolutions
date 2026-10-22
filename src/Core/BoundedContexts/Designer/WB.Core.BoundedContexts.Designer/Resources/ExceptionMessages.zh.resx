@@ -303,4 +303,161 @@
   <data name="RequiredHeaderWasNotFound" xml:space="preserve">
     <value>在excel文件中无法找到表头 {0} </value>
   </data>
+
+
+  <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+    <value>关键规则已存在。</value>
+  </data>
+
+  <data name="CriticalRuleIsAbsent" xml:space="preserve">
+    <value>关键规则不存在。</value>
+  </data>
+
+  <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+    <value>图片尺寸过大</value>
+  </data>
+
+  <data name="TranslationIsNotFull" xml:space="preserve">
+    <value>该翻译不完整，未包含每个元素所需的全部文本</value>
+  </data>
+
+  <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+    <value>类别翻译“{0}”不完整，未包含所有选项文本</value>
+  </data>
+
+  <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+    <value>问卷已支持封面页。</value>
+  </data>
+
+  <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+    <value>章节或子章节的直接子项不能超过 {0} 个</value>
+  </data>
+
+  <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+    <value>无法从问卷中删除封面章节</value>
+  </data>
+
+  <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+    <value>封面章节必须是问卷中的第一个章节</value>
+  </data>
+
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+    <value>封面章节只能包含问题、静态文本和变量</value>
+  </data>
+
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>这是只读的封面章节。您不能编辑其中的问题或调整其顺序。</value>
+  </data>
+
+  <data name="InvalidUserInfo" xml:space="preserve">
+    <value>无效的用户信息。</value>
+  </data>
+
+  <data name="ProvidedFileHasErrors" xml:space="preserve">
+    <value>在提供的文件中发现错误</value>
+  </data>
+
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+    <value>无法从上传的文件中提取类别</value>
+  </data>
+
+  <data name="HeaderWasNotFound" xml:space="preserve">
+    <value>在文件中找不到表头</value>
+  </data>
+
+    <data name="NoParentCascadingOptions" xml:space="preserve">
+    <value>未找到父级级联问题“{0}”的类别</value>
+  </data>
+
+    <data name="Column" xml:space="preserve">
+    <value>列</value>
+  </data>
+
+    <data name="Row" xml:space="preserve">
+    <value>行</value>
+  </data>
+
+  <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+    <value>缺少某些列。请确保上传的文件包含必需列</value>
+  </data>
+
+  <data name="ImportOptions_EmptyValue" xml:space="preserve">
+    <value>空值</value>
+  </data>
+
+    <data name="ImportOptions_NotNumber" xml:space="preserve">
+    <value>无效的 32 位整数值“{0}”。值应介于 -2147483647 和 2147483647 之间</value>
+  </data>
+
+    <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+    <value>父级问题中不存在值为“{0}”的类别</value>
+  </data>
+
+    <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+    <value>标题为“{0}”且父值为“{1}”的类别重复</value>
+  </data>
+
+    <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+    <value>父级问题“{0}”中有 {1} 个值为“{2}”的类别</value>
+  </data>
+
+  <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+    <value>标题过长。标题长度必须小于 {0}</value>
+  </data>
+
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>附件名称过长。附件名称长度必须小于 {0}</value>
+  </data>
+
+  <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+    <value>标题为“{0}”且值为“{1}”的类别重复</value>
+  </data>
+
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] 无效的数值</value>
+  </data>
+
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] 空标题</value>
+  </data>
+
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] 空值</value>
+  </data>
+
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+    <value>以下行中存在重复类别：{0}</value>
+  </data>
+
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+    <value>某些类别缺少父级 ID</value>
+  </data>
+
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+    <value>类别集包含的类别超过 {0} 个</value>
+  </data>
+
+  <data name="Excel_NoCategories" xml:space="preserve">
+    <value>文件中没有类别</value>
+  </data>
+
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+    <value>类别集至少应包含 2 个类别</value>
+  </data>
+
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+    <value>[{0}] 类别文本长度必须少于 250 个字符</value>
+  </data>
+
+  <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+    <value>仅接受制表符分隔值文件（*.tab、*.txt、*.tsv）或 Excel 文件（*.xslx、*.xls、*.ods）</value>
+  </data>
+
+  <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+    <value>问卷已支持封面</value>
+  </data>
+
+  <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+    <value>未找到类别</value>
+  </data>
 </root>

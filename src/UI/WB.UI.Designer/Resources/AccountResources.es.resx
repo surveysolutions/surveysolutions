@@ -187,7 +187,7 @@
     <value>Favor ingresar</value>
   </data>
   <data name="LoginName" xml:space="preserve">
-    <value>Login</value>
+    <value>Inicio de sesión</value>
   </data>
   <data name="LoginOrEmail" xml:space="preserve">
     <value>Login o correo</value>
@@ -268,7 +268,7 @@
     <value>La información de la cuenta se actualizó correctamente</value>
   </data>
   <data name="EditProfile" xml:space="preserve">
-    <value>Edit profile</value>
+    <value>Editar perfil</value>
   </data>
   <data name="Forum" xml:space="preserve">
     <value>Foro</value>

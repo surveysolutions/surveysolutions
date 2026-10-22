@@ -86,7 +86,7 @@
     <value>{0} (v{1})</value>
   </data>
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
-    <value>{0} interview(s)</value>
+    <value>{0} entretien(s)</value>
   </data>
   <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
     <value>Interviews créées : {0}</value>
@@ -452,7 +452,7 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
     <value>Langue</value>
   </data>
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Originale</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>Connexion</value>
@@ -1014,5 +1014,14 @@ Il apparaîtra sur l'appareil de l'enquêteur après la prochaine synchronisatio
   </data>
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Statut : Ouvert</value>
+  </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>Aucun fournisseur approprié pour déterminer la localisation</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>Le fournisseur GPS est désactivé</value>
+  </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>La position reçue a été refusée car elle ne correspond pas à la source de localisation acceptable configurée pour cet espace de travail</value>
   </data>
 </root>

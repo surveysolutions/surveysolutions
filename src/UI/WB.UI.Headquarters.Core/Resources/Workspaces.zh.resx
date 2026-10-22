@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Name" xml:space="preserve">
+        <value>名称</value>
+    </data>
+    <data name="DisplayName" xml:space="preserve">
+        <value>显示名称</value>
+    </data>
+    <data name="NameRequired" xml:space="preserve">
+        <value>名称为必填项</value>
+    </data>
+    <data name="DisplayNameRequired" xml:space="preserve">
+        <value>显示名称为必填项</value>
+    </data>
+    <data name="InvalidName" xml:space="preserve">
+        <value>只允许使用数字和小写字母</value>
+    </data>
+    <data name="NameShouldBeUnique" xml:space="preserve">
+        <value>名称必须唯一</value>
+    </data>
+    <data name="EditWorkspace" xml:space="preserve">
+        <value>编辑工作区"{{name}}"</value>
+    </data>
+    <data name="WorkspacesSubtitle" xml:space="preserve">
+        <value>每个工作区都有独立的问卷、访谈和任务分配。</value>
+    </data>
+    <data name="AddNew" xml:space="preserve">
+        <value>新建</value>
+    </data>
+    <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
+        <value>所提供的工作区名称不被允许</value>
+    </data>
+    <data name="CurrentWorkspace" xml:space="preserve">
+        <value>当前工作区</value>
+    </data>
+    <data name="CreateWorkspace" xml:space="preserve">
+        <value>创建工作区</value>
+    </data>
+    <data name="CanNotBeChanged" xml:space="preserve">
+        <value>创建后不可更改</value>
+    </data>
+    <data name="DisplayNameHelpText" xml:space="preserve">
+        <value>将用于在菜单中显示工作区。请尽量选择较短的名称</value>
+    </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+        <value>设置</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>编辑</value>
+    </data>
+    <data name="AssignedWorkspaces" xml:space="preserve">
+        <value>选择用户有权访问的工作区</value>
+    </data>
+    <data name="UserWorkspacesTab" xml:space="preserve">
+        <value>工作区</value>
+    </data>
+    <data name="WorkspacesUpdated" xml:space="preserve">
+        <value>工作区列表已更新</value>
+    </data>
+    <data name="DisableWorkspacePopupTitle" xml:space="preserve">
+        <value>确认禁用"{{name}}"</value>
+    </data>
+    <data name="Disable" xml:space="preserve">
+        <value>禁用</value>
+    </data>
+    <data name="DisableExplanation" xml:space="preserve">
+        <value>禁用工作区将阻止所有用户访问该工作区,并停止正在进行的所有数据采集。</value>
+    </data>
+    <data name="Enable" xml:space="preserve">
+        <value>启用</value>
+    </data>
+    <data name="DeleteWorkspacePopupTitle" xml:space="preserve">
+        <value>删除工作区"{{name}}"</value>
+    </data>
+    <data name="DeleteExplanation" xml:space="preserve">
+        <value>您确定要删除工作区 &lt;strong&gt;{{name}}&lt;/strong&gt; 吗？
+连接到该工作区的所有用户帐户都将从中移除。安装在这些用户平板电脑上的Survey Solutions调查员和督导员应用程序将无法再与此工作区通信,并且在此工作区中采集的数据将会丢失。
+
+与此工作区关联的以下数据将被删除：</value>
+    </data>
+    <data name="CantDeleteExplanation" xml:space="preserve">
+        <value>无法删除工作区。此工作区至少关联一份问卷。只有不含问卷的工作区才能被删除。</value>
+    </data>
+    <data name="InterviewersCount" xml:space="preserve">
+        <value>调查员：{{count}}</value>
+    </data>
+    <data name="SupervisorsCount" xml:space="preserve">
+        <value>督导员：{{count}}</value>
+    </data>
+    <data name="MapsCount" xml:space="preserve">
+        <value>已上传地图：{{count}}</value>
+    </data>
+    <data name="AgreeToDelete" xml:space="preserve">
+        <value>我理解此操作无法撤销</value>
+    </data>
+    <data name="WorkspaceDisabledReason" xml:space="preserve">
+        <value>工作区已被禁用,无法访问。如果您认为这是一个错误,请联系您的服务器管理员。</value>
+    </data>
+    <data name="WorkspaceAccessDisabledReason" xml:space="preserve">
+        <value>您的帐户所在的工作区已被系统管理员禁用,因此您无法使用此站点的功能。如果您认为这是一个错误,请联系您的服务器管理员。</value>
+    </data>
+    <data name="WorkspaceCantBeRemoved" xml:space="preserve">
+        <value>由于用户已分配工作,工作区无法删除。请重新分配所有任务（包括已归档的）、未完成的访谈,并为督导员将所有团队成员移至另一个团队。访谈数：{0}，任务数：{1}，团队成员数：{2}</value>
+    </data>
+    <data name="Open" xml:space="preserve">
+        <value>打开</value>
+    </data>
+    <data name="CreatedAt" xml:space="preserve">
+        <value>创建于</value>
+    </data>
+    <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+        <value>工作区最初创建的时间。点击排序图标可按时间排序。</value>
+    </data>
+</root>

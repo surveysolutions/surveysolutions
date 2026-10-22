@@ -175,7 +175,7 @@ import _ from 'lodash';
 
 export default {
     name: 'SingleOptionQuestion',
-    inject: ['questionnaire', 'currentChapter', 'openExternalEditor'],
+    inject: ['questionnaire', 'currentChapter', 'openOptionsEditor'],
     expose: ['prepareToSave'],
     components: {
         Help,
@@ -368,7 +368,7 @@ export default {
         },
 
         openCascadeOptionsEditor() {
-            this.openExternalEditor(this.activeQuestion.id, "/questionnaire/editoptions/" + this.questionnaireId + "?questionid=" + this.activeQuestion.id + "&cascading=true")
+            this.openOptionsEditor(this.activeQuestion.id, true)
         }
     }
 }

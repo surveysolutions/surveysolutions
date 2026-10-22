@@ -331,7 +331,7 @@
     <value>Překlad {0} aktualizován</value>
   </data>
   <data name="UnknownUserName" xml:space="preserve">
-    <value>&lt;&lt;UNKNOWN&gt;&gt;</value>
+    <value>&lt;&lt;NEZNÁMÝ&gt;&gt;</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Uživatelské jméno</value>
@@ -365,5 +365,14 @@
   </data>
   <data name="Translation_Replace" xml:space="preserve">
     <value>Dokument byl přepnut na překlad {0}</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Hledat</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Hledat</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Vymazat</value>
   </data>
 </root>

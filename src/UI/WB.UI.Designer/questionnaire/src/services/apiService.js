@@ -6,6 +6,7 @@ import { notice, error } from './notificationService';
 import { i18n } from '../plugins/localization';
 
 const api = mande('/' /*, globalOptions*/);
+const loginUrl = '/Identity/Account/Login';
 
 export function getSilently(url, queryParams) {
     return getImpl(url, queryParams, true);
@@ -51,7 +52,7 @@ function getImpl(url, queryParams, silent = false, responseAs = 'json') {
                     blockUI.stop();
                     progressStore.stop();
                 }
-                processResponseErrorOrThrow(error);
+                return processResponseErrorOrThrow(error);
             });
     }
 
@@ -72,7 +73,7 @@ function getImpl(url, queryParams, silent = false, responseAs = 'json') {
                 blockUI.stop();
                 progressStore.stop();
             }
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
@@ -110,7 +111,7 @@ export function post(url, params) {
             blockUI.stop();
             progressStore.stop();
 
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
@@ -134,7 +135,7 @@ export function patch(url, params) {
             blockUI.stop();
             progressStore.stop();
 
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
@@ -158,7 +159,7 @@ export function put(url, params) {
             blockUI.stop();
             progressStore.stop();
 
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
@@ -180,7 +181,7 @@ export function del(url) {
             blockUI.stop();
             progressStore.stop();
 
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
@@ -246,7 +247,7 @@ export function upload(url, file, command, fileName) {
             blockUI.stop();
             progressStore.stop();
 
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
@@ -283,6 +284,12 @@ function processResponseErrorOrThrow(errorResp) {
     if (!errorResp.response) {
         error(i18n.t('QuestionnaireEditor.RequestFailedUnexpectedly'));
         throw errorResp;
+    }
+
+    if (errorResp.response.status === 401) {
+        const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
+        window.location.replace(`${loginUrl}?returnUrl=${returnUrl}`);
+        return new Promise(() => {});
     }
 
     if (

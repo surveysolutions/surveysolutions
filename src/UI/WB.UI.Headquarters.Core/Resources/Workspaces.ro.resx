@@ -216,4 +216,22 @@ Următoarele date asociate acestui spațiu de lucru vor fi șterse:</value>
   <data name="WorkspacesUpdated" xml:space="preserve">
     <value>Lista spațiilor de lucru actualizate</value>
   </data>
+
+
+  <data name="WorkspaceCantBeRemoved" xml:space="preserve">
+    <value>Spațiul de lucru nu poate fi eliminat deoarece utilizatorul are lucru atribuit. Reatribuiți toate sarcinile (inclusiv cele arhivate), interviurile nefinalizate, iar pentru Supervizor mutați toți membrii echipei în altă echipă. Interviuri: {0}, Sarcini: {1}, Membri ai echipei: {2}</value>
+    <comment>{0} interviews count, {1} Assignments count, {2} Interviewers count</comment>
+  </data>
+
+  <data name="Open" xml:space="preserve">
+    <value>Deschis</value>
+  </data>
+
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Creat pe</value>L
+  </data>
+
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>Când a fost creat inițial spațiul de lucru. Faceți clic pe pictograma de sortare pentru a sorta după timp.</value>
+  </data>
 </root>

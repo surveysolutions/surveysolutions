@@ -166,9 +166,10 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
     
     protected async Task RefreshMarkers(bool setViewToMarkers)
     {
-        if (MapView?.Map?.SpatialReference != null)
+        var mapView = this.MapView;
+        if (mapView?.Map?.SpatialReference != null)
         {
-            await this.mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => { MapView.DismissCallout(); });
+            await this.mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => { mapView.DismissCallout(); });
 
             try
             {
@@ -400,6 +401,9 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
     {
         var markersGraphic = new List<Graphic>();
 
+        if (Map?.SpatialReference == null)
+            return markersGraphic;
+
         foreach (var assignment in assignments)
         {
             markersGraphic.Add(new Graphic(
@@ -473,6 +477,9 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
     private List<Graphic> GetInterviewsMarkers(IEnumerable<IInterviewMarkerViewModel> interviews)
     {
         var markersGraphics = new List<Graphic>();
+
+        if (Map?.SpatialReference == null)
+            return markersGraphics;
 
         foreach (var interview in interviews)
         {

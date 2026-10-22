@@ -1,7 +1,7 @@
 import { marked } from 'marked'
 import mdEditor from '@/hqapp/components/MdEditor'
 import Logo from './_Logo.vue'
-import emitter from '~/shared/emitter';
+import emitter from '~/shared/emitter'
 
 export default {
     props: {

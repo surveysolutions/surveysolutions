@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -20,7 +21,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         where TViewModel : BaseInterviewViewModel
     {
         private ActionBarDrawerToggle drawerToggle;
-        private DrawerLayout drawerLayout;
+        private SafeDrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken interviewCompleteActivityToken;
         
@@ -32,7 +33,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.rootLayout);
+            this.drawerLayout = this.FindViewById<SafeDrawerLayout>(Resource.Id.rootLayout);
             this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, base.Toolbar, 0, 0);
             this.drawerLayout.AddDrawerListener(this.drawerToggle);
             

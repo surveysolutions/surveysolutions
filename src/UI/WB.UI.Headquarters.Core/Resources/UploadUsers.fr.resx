@@ -145,7 +145,7 @@
     <value>Téléchargez le template .tab</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="EstimatedTime" xml:space="preserve">
     <value>Environ {{estimatedTime}} à gauche</value>
@@ -163,10 +163,10 @@
     <value>ligne</value>
   </data>
   <data name="ManualInterviewerCreateLink" xml:space="preserve">
-    <value>interviewer</value>
+    <value>enquêteur</value>
   </data>
   <data name="ManualSupervisorCreateLink" xml:space="preserve">
-    <value>interviewer</value>
+    <value>superviseur</value>
   </data>
   <data name="NoCreatedUsers" xml:space="preserve">
     <value>Aucun compte d'utilisateur n'a été créé</value>

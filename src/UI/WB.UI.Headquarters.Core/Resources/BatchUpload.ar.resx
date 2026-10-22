@@ -569,6 +569,7 @@
 &lt;b&gt;_password&lt;/b&gt; - كلمة المرور لبدء المقابلة (للمقابلات عبر الويب فقط);&lt;br/&gt;
 &lt;b&gt;_webmode&lt;/b&gt; - وضع التعيين (1 لـ CAWI، 0 أو فارغ لـ CAPI);&lt;br/&gt;
 &lt;b&gt;_record_audio&lt;/b&gt; - تمكين تسجيل الصوت للمقابلات (1 - تمكين، 0 - تعطيل، فارغ - احصل على هذه القيمة من الاستبيان);&lt;br/&gt;
+&lt;b&gt;_aascope&lt;/b&gt; - أسماء متغيرات الأقسام أو المجموعات أو الجداول (مفصولة بفواصل) لتسجيل الصوت عندما يكون _record_audio معطلاً (نطاق تدقيق صوتي انتقائي);&lt;br/&gt;
 &lt;b&gt;_comment&lt;/b&gt; - تعليقات على التعيين;&lt;br/&gt;
 &lt;b&gt;_target_area&lt;/b&gt; - المنطقة المستهدفة للتعيين</value>
         <comment>لا تترجم _responsible, _quantity, _email, _webmode, _record_audio. احتفظ بالأسماء الإنجليزية</comment>

@@ -6,6 +6,7 @@ using Humanizer;
 using Microsoft.Extensions.Options;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
+using SixLabors.ImageSharp;
 using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -78,10 +79,17 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                     var binaryData = imageFileStorage.GetInterviewBinaryData(interview.Id, fileName);
                     if (binaryData != null)
                     {
-                        ImageSource.IImageSource imageSource = ImageSource.FromBinary(fileName, () => binaryData);
-                        var image = paragraph.AddImage(imageSource);
-                        image.Width = Unit.FromPoint(300);
-                        image.Height = Unit.FromPoint(300);
+                        try
+                        {
+                            ImageSource.IImageSource imageSource = ImageSource.FromBinary(fileName, () => binaryData);
+                            var image = paragraph.AddImage(imageSource);
+                            image.Width = Unit.FromPoint(300);
+                            image.Height = Unit.FromPoint(300);
+                        }
+                        catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+                        {
+                            // image format is not supported, only file name is printed
+                        }
                     }
 
                     paragraph.AddLineBreak();

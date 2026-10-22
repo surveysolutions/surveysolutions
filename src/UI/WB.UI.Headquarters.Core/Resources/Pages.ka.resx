@@ -850,7 +850,10 @@
     <value>ზედამხედველები</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>პერსონალური ინფორმაციის დეტალები (სურვილისამებრ) &lt;br&gt; &lt;br&gt; იქნება ხილული მხოლოდ სათაო ოფისისთვის</value>
+    <value>პერსონალური ინფორმაციის დეტალები</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(სურვილისამებრ, მხოლოდ ავთენტიფიცირებული მომხმარებლებისთვის იქნება ხილული).</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
       <value>{{name}} (ვერ. {{version}})</value>
@@ -1041,7 +1044,7 @@
     <value>მომხმარებლების ჩვენება</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>პროფილი</value>
+    <value>კონტაქტი</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>ორფაქტორიანი ავთენტიფიკაცია</value>
@@ -1077,7 +1080,8 @@
     <value>მოქმედებების ჟურნალის ჩვენება</value>
   </data>
   <data name="InterviewerProfile_StorageSizeInfo" xml:space="preserve">
-    <value>სისტემის ინფორმაცია და არასინქრონიზებული ინტერვიუს მონაცემები</value>
+    <value>სისტემის ინფორმაცია და არასინქრონიზებული ინტერვიუს მონაცემები</value>
+
   </data>
   <data name="InterviewerProfile_Relinked" xml:space="preserve">
     <value>ხელახლა მიბმული</value>
@@ -1319,6 +1323,9 @@
   </data>
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>რუქა</value>
+  </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>რუკის წინასწარი ნახვა</value>
   </data>
   <data name="MapDetails_ImportedOn" xml:space="preserve">
     <value>იმპორტირებულია</value>
@@ -1657,7 +1664,13 @@
     <value>ინტერვიუ წარმატებით გადამოწმდა</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>მომხმარებლის შექმნა</value>
+    <value>მომხმარებლის ანგარიშის შექმნა</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>სამუშაო სივრცეში წვდომა</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>მომხმარებლის როლი</value>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>აღდგენის კოდების გენერირება</value>
@@ -1675,7 +1688,7 @@
     <value>ყველა სამუშაო სივრცე</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>სუპერვაიზერი (ინტერვიუერები დაემატება მის გუნდს)</value>
+    <value>სუპერვაიზერი</value>
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
     <value>სუპერვაიზერის არჩევა</value>
@@ -1778,5 +1791,11 @@
   </data>
   <data name="Observer_Memo2" xml:space="preserve">
     <value>დასაწყებად დააჭირეთ ანგარიშს და აირჩიეთ 'ნახვა, როგორც ეს მომხმარებელი მხოლოდ წასაკითხ რეჟიმში'. ანგარიშზე დასაბრუნებლად გამოიყენეთ ზედა ყვითელი ბმული.</value>
+  </data>
+  <data name="Successful" xml:space="preserve">
+      <value>წარმატებული</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>წარუმატებელი</value>
   </data>
 </root>

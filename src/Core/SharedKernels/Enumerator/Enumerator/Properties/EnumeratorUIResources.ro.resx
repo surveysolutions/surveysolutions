@@ -251,7 +251,7 @@ Trebuie să rezolvați problemele menționate pe copertă</value>
     <value>Afișare localizare</value>
   </data>
   <data name="Dashboard_Start" xml:space="preserve">
-    <value>Start</value>
+    <value>Începe</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Începute ({0})</value>
@@ -342,7 +342,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Colectarea și trimiterea datelor din tabletă către server</value>
   </data>
   <data name="Diagnostics_ServerUrl" xml:space="preserve">
-    <value>Server URL:</value>
+    <value>URL server: </value>
   </data>
   <data name="Diagnostics_Share_Description" xml:space="preserve">
     <value>Toate informațiile de mai jos for fi distribuite ca text. Pot fi trimise prin email, Google Hangouts sau altă aplicație de messenger</value>
@@ -447,7 +447,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Limba</value>
   </data>
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Originală</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>Autentificare</value>
@@ -1068,5 +1068,14 @@ Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
   </data>
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>Ați utilizat Geo Tracking sau Geo Fencing la crearea unui interviu. Activați-l din nou dacă doriți să îl utilizați.</value>
+  </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>Niciun furnizor potrivit pentru a determina locația</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>Furnizorul GPS este dezactivat</value>
+  </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>Locația primită a fost respinsă deoarece nu corespunde sursei de locație acceptabile configurate pentru acest spațiu de lucru</value>
   </data>
 </root>

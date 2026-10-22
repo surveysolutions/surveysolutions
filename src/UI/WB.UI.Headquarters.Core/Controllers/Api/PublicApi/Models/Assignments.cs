@@ -123,6 +123,13 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public bool IsAudioRecordingEnabled { get; set; }
 
         /// <summary>
+        /// List of section/group/roster variable names for which audio is recorded (selective Audio Audit).
+        /// Empty when audio recording follows the <see cref="IsAudioRecordingEnabled"/> flag.
+        /// </summary>
+        [DataMember]
+        public List<string> AudioAuditScope { get; set; } = new List<string>();
+
+        /// <summary>
         /// Current status of the assignment
         /// </summary>
         [DataMember]
@@ -250,6 +257,13 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         [DataMember] public bool? IsAudioRecordingEnabled { get; set; }
         [DataMember] public string Comments { get; set; }
         [DataMember] public string TargetArea { get; set; }
+        
+        /// <summary>
+        /// List of section, group or roster variable names for which audio should be recorded (selective audio audit).
+        /// When omitted or empty, audio audit follows the <see cref="IsAudioRecordingEnabled"/> flag.
+        /// </summary>
+        [DataMember]
+        public List<string> AudioAuditScope { get; set; } = new List<string>();
         
         /// <summary>
         /// List of protected variables

@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using WB.Core.Infrastructure.Versions
+@inject IProductVersion productVersion
+<!DOCTYPE html>
 <html>
 @{
     var isAuthenticated = User.Identity != null && User.Identity.IsAuthenticated;
@@ -33,6 +35,12 @@
             color: #808080;
             margin-top: 16px;
             font-size: 14pt;
+        }
+
+        .app-version {
+            color: #808080;
+            margin-top: 16px;
+            font-size: 10pt;
         }
     </style>
     <meta charset="utf-8" />
@@ -370,6 +378,7 @@
         <a href="@returnUrl" style="float: right">@Common.Return</a>
     }
 </div>
+<div class="app-version">@productVersion.ToString()</div>
 </div>
 </body>
 </html>

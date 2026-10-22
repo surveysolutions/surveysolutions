@@ -288,4 +288,9 @@
   <data name="WebInterviewResponsibleWarning" xml:space="preserve">
       <value>Ответственный не Интервьюер. Линк будет недоступен.</value>
   </data>
+
+
+  <data name="ApproveConfirmMessage_other" xml:space="preserve">
+      <value>{{count}} интервью будут одобрены.</value>
+  </data>
 </root>

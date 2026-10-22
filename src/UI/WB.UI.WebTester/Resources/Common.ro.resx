@@ -144,4 +144,9 @@
   <data name="TheWorldBankGroup" xml:space="preserve">
     <value>Grupul Băncii Mondiale</value>
   </data>
+
+
+  <data name="ReloadPartialInterviewErrorMessage" xml:space="preserve">
+    <value>Datele interviului nu pot fi aplicate la noua versiune a chestionarului. Aplicăm doar unele date.</value>
+  </data>
 </root>
