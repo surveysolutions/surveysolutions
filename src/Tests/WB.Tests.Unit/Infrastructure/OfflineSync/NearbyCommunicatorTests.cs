@@ -141,6 +141,24 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
         }
 
         [Test]
+        public async Task should_ignore_unknown_in_progress_transfer_update()
+        {
+            var communicator = new NearbyCommunicator(
+                Mock.Of<IRequestHandler>(),
+                Create.Fake.PayloadProvider(),
+                new PayloadSerializer(new JsonAllTypesSerializer()),
+                Mock.Of<IConnectionsApiLimits>(),
+                Mock.Of<ILogger>());
+
+            await communicator.ReceivePayloadTransferUpdate(new NoopNearbyConnection(), "endpoint",
+                new NearbyPayloadTransferUpdate
+                {
+                    Id = 42,
+                    Status = TransferStatus.InProgress
+                });
+        }
+
+        [Test]
         public void should_cancel_pending_response_when_failure_update_arrives_before_payload_registration()
         {
             using (new CommunicationSession())
@@ -163,6 +181,61 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                 Assert.CatchAsync<OperationCanceledException>(async () => await client.SendAsync<PingMessage, PongMessage>(
                     clientCommunicator, "server", new PingMessage { Id = id }, null, cts.Token));
                 Assert.That(cts.IsCancellationRequested, Is.False);
+            }
+        }
+
+        [Test]
+        public async Task should_discard_deferred_update_after_timeout()
+        {
+            using (new CommunicationSession())
+            {
+                var originalTimeout = NearbyCommunicator.MessageAwaitingTimeout;
+                NearbyCommunicator.MessageAwaitingTimeout = TimeSpan.FromMilliseconds(50);
+                try
+                {
+                    var handledRequests = 0;
+                    var requestHandler = new Mock<IRequestHandler>();
+                    requestHandler.Setup(x => x.Handle(It.IsAny<ICommunicationMessage>()))
+                        .ReturnsAsync(() =>
+                        {
+                            handledRequests++;
+                            return (ICommunicationMessage)new PongMessage();
+                        });
+
+                    var sender = new NearbyCommunicator(
+                        Mock.Of<IRequestHandler>(),
+                        new FixedIdPayloadProvider(42, 100),
+                        new PayloadSerializer(new JsonAllTypesSerializer()),
+                        Mock.Of<IConnectionsApiLimits>(c => c.MaxBytesLength == 0),
+                        Mock.Of<ILogger>());
+                    var receiver = new NearbyCommunicator(
+                        requestHandler.Object,
+                        Create.Fake.PayloadProvider(),
+                        new PayloadSerializer(new JsonAllTypesSerializer()),
+                        Mock.Of<IConnectionsApiLimits>(c => c.MaxBytesLength == 0),
+                        Mock.Of<ILogger>());
+
+                    var package = PreparePackage(sender, "endpoint", Guid.NewGuid(), new PingMessage { Id = Guid.NewGuid() });
+                    var header = GetPackagePayload(package, "Header");
+                    var content = GetPackagePayload(package, "Content");
+                    var connection = new NoopNearbyConnection();
+
+                    await receiver.ReceivePayloadTransferUpdate(connection, "endpoint", new NearbyPayloadTransferUpdate
+                    {
+                        Id = content.Id,
+                        Status = TransferStatus.Success,
+                        BytesTransferred = 100
+                    });
+                    await Task.Delay(TimeSpan.FromMilliseconds(500));
+                    await receiver.ReceivePayloadAsync(connection, "endpoint", header);
+                    await receiver.ReceivePayloadAsync(connection, "endpoint", content);
+
+                    Assert.That(handledRequests, Is.EqualTo(0));
+                }
+                finally
+                {
+                    NearbyCommunicator.MessageAwaitingTimeout = originalTimeout;
+                }
             }
         }
 

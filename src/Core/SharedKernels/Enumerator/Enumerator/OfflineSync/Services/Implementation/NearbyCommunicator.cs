@@ -228,7 +228,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     var key = (endpoint, update.Id);
                     while (true)
                     {
-                        var deferredUpdates = deferredTransferUpdates.GetOrAdd(key, _ => new DeferredTransferUpdatesQueue());
+                        var newDeferredUpdates = new DeferredTransferUpdatesQueue();
+                        var deferredUpdates = deferredTransferUpdates.GetOrAdd(key, newDeferredUpdates);
+                        if (ReferenceEquals(deferredUpdates, newDeferredUpdates))
+                        {
+                            deferredUpdates.StartExpirationTimer(MessageAwaitingTimeout,
+                                () => ExpireDeferredTransferUpdates(key, deferredUpdates));
+                        }
+
                         var shouldRetryWithNewQueue = false;
 
                         lock (deferredUpdates.SyncRoot)
@@ -254,8 +261,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     return;
                 }
 
-                throw new InvalidOperationException(
-                    $"Receive payload transfer update before ReceivePayload call. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
+                logger.Warn(
+                    $"Ignoring payload transfer update for an unregistered payload. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
+                return;
             }
 
             PayloadHeader header;
@@ -376,7 +384,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     }
                     else
                     {
-                        deferredUpdates.IsDetached = true;
+                        deferredUpdates.DetachUnderLock();
                         shouldDetachQueue = true;
                     }
                 }
@@ -398,11 +406,46 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
+        private void ExpireDeferredTransferUpdates((string Endpoint, long PayloadId) key,
+            DeferredTransferUpdatesQueue deferredUpdates)
+        {
+            lock (deferredUpdates.SyncRoot)
+            {
+                if (deferredUpdates.IsDetached)
+                    return;
+
+                deferredUpdates.DetachUnderLock();
+                deferredTransferUpdates.TryRemove(
+                    new KeyValuePair<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>(key, deferredUpdates));
+            }
+
+            logger.Warn(
+                $"Discarding expired deferred payload transfer updates. Endpoint: {key.Endpoint}, PayloadId: {key.PayloadId}");
+        }
+
         private sealed class DeferredTransferUpdatesQueue
         {
             public object SyncRoot { get; } = new object();
             public Queue<NearbyPayloadTransferUpdate> Updates { get; } = new Queue<NearbyPayloadTransferUpdate>();
             public bool IsDetached { get; set; }
+
+            private Timer expirationTimer;
+
+            public void StartExpirationTimer(TimeSpan timeout, Action expire)
+            {
+                lock (SyncRoot)
+                {
+                    if (!IsDetached)
+                        expirationTimer = new Timer(_ => expire(), null, timeout, Timeout.InfiniteTimeSpan);
+                }
+            }
+
+            public void DetachUnderLock()
+            {
+                IsDetached = true;
+                Updates.Clear();
+                expirationTimer?.Dispose();
+            }
         }
 
         private async Task HandlePayloadContent(INearbyConnection nearbyConnection, string endpoint,
