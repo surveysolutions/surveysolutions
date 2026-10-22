@@ -250,6 +250,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Min/Max filter value is not valid. Please correct it to see the report..
+        /// </summary>
+        public static string InvalidNumericFilter {
+            get {
+                return ResourceManager.GetString("InvalidNumericFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last month.
         /// </summary>
         public static string LastMonth {
