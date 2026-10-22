@@ -50,11 +50,6 @@ function NewRouter(store) {
                         name: 'cover',
                         path: 'Section/' + (config.coverPageId || 'newcover'),
                         component: Cover,
-                        beforeEnter: (to, from, next) => {
-                            if (config.coverPageId)
-                                to.params.sectionId = config.coverPageId
-                            next()
-                        },
                     },
                     {
                         name: 'section',
@@ -86,6 +81,9 @@ function NewRouter(store) {
 
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
+        if (to.name === 'cover' && config.coverPageId)
+            to.params.sectionId = config.coverPageId
+
         store.commit('SET_ROUTE', to)
 
         if (config.splashScreen) { next(); return }
