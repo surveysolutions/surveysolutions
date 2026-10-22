@@ -625,4 +625,10 @@ Sigurohuni që gjithë informacioni është korrekt.</value>
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
       <value>Pyetje me gabime: {{count}}</value>
   </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>Pamja paraprake gjeografike</value>
+  </data>  
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>Prekni për të futur një numër</value>
+  </data>
 </root>

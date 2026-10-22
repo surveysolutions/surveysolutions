@@ -43,15 +43,23 @@ namespace WB.Enumerator.Native.WebInterview
         {
             var ctx = this.Context.GetHttpContext();
             // Hub instances are transient; retain the workspace for the disconnect callback.
-            this.Context.Items[WorkspaceContextKey] = ctx.RequestServices
+            var workspace = ctx.RequestServices
                 .GetService<IWorkspaceContextAccessor>()?.CurrentWorkspace();
-            var hubPipelineModules = ctx.RequestServices.GetServices<IPipelineModule>();
+            this.Context.Items[WorkspaceContextKey] = workspace;
 
             await RegisterClient();
 
-            foreach (var pipelineModule in hubPipelineModules)
+            // Do NOT resolve services from ctx.RequestServices here: for WebSocket/SSE/long-polling transports
+            // that scope lives as long as the client connection (hours). Any DB access through it opens an
+            // NHibernate session + transaction that holds a DB connection until the client disconnects.
+            using (var scope = this.serviceProvider.CreateWorkspaceScope(workspace))
             {
-                await pipelineModule.OnConnected(this);
+                var hubPipelineModules = scope.ServiceProvider.GetServices<IPipelineModule>();
+
+                foreach (var pipelineModule in hubPipelineModules)
+                {
+                    await pipelineModule.OnConnected(this);
+                }
             }
 
             await base.OnConnectedAsync();
