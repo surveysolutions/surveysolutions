@@ -27,7 +27,8 @@ namespace WB.UI.WebTester.Services.Implementation
         public void RevokeQuestionnaire(ISession session, Guid interviewId, Guid questionnaireId)
         {
             session.Remove(AuthKey(interviewId));
-            session.Remove(QuestionnaireToInterviewKey(questionnaireId));
+            if (GetInterviewId(session, questionnaireId) == interviewId)
+                session.Remove(QuestionnaireToInterviewKey(questionnaireId));
             session.Remove(InterviewToQuestionnaireKey(interviewId));
         }
 
