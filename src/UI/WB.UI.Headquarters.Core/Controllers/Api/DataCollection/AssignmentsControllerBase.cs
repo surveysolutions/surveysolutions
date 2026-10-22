@@ -18,7 +18,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public abstract class AssignmentsControllerBase : ControllerBase
+    public abstract class AssignmentsControllerBase : DataCollectionControllerBase
     {
         protected readonly IAuthorizedUser authorizedUser;
         private readonly IAssignmentsService assignmentsService;

@@ -9,7 +9,7 @@ using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public abstract class AuditLogControllerBase : ControllerBase
+    public abstract class AuditLogControllerBase : DataCollectionControllerBase
     {
         private readonly IPlainStorageAccessor<AuditLogRecord> auditLogStorage;
         private readonly IPlainStorageAccessor<GlobalAuditLogRecord> globalAuditLogStorage;

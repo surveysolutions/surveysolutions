@@ -30,7 +30,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             private readonly NumericTextFormatter numericTextFormatter;
         
-            public CustomKeyListener(NumericTextFormatter numericTextFormatter, bool @decimal) : base(true, @decimal)
+            public CustomKeyListener(NumericTextFormatter numericTextFormatter, bool sign, bool @decimal) : base(sign, @decimal)
             {
                 this.numericTextFormatter = numericTextFormatter;
             }
@@ -117,6 +117,22 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             }
         }
 
+        private bool isNonNegative;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether negative (minus sign) input is disallowed,
+        /// both from the on-screen keyboard and by typed/pasted text.
+        /// </summary>
+        public bool IsNonNegative
+        {
+            get => this.isNonNegative;
+            set
+            {
+                this.isNonNegative = value;
+                this.InitKeyboard();
+            }
+        }
+
         /// <summary>
         /// <para>Occurs when numeric value changed.</para>
         /// <para>DOES NOT occur when the input is cleared.</para>
@@ -193,11 +209,12 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 IsDecimal = !this.NumbersOnly,
                 MaxDigitsAfterDecimal = this.MaxDigitsAfterDecimal,
                 MaxDigitsBeforeDecimal = this.MaxDigitsBeforeDecimal,
-                UseGroupSeparator = this.UseGroupSeparator
+                UseGroupSeparator = this.UseGroupSeparator,
+                IsNonNegative = this.IsNonNegative
             };
 
             this.numericTextFormatter = new NumericTextFormatter(androidNumericTextFormatterSettings);
-            this.KeyListener = new CustomKeyListener(this.numericTextFormatter, !this.NumbersOnly);
+            this.KeyListener = new CustomKeyListener(this.numericTextFormatter, !this.IsNonNegative, !this.NumbersOnly);
         }
 
         private void NumericEditText_AfterTextChanged(object sender, AfterTextChangedEventArgs e)

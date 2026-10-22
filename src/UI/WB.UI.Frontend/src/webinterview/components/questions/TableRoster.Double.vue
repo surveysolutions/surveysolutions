@@ -9,7 +9,7 @@
         :value="$me.answer"
         :disabled="!$me.acceptAnswer"
         v-numericFormatting="{
-            minimumValue: '-99999999999999.99999999999999',
+            minimumValue: minimumValue,
             maximumValue: '99999999999999.99999999999999',
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
@@ -49,6 +49,20 @@ export default {
         decimalPlacesCount() {
             return getDecimalPlacesCount(this.$me)
         },
+        hasNegativeSpecialValues() {
+            return (this.$me.options || []).some(o => o.value < 0)
+        },
+        hasNegativeCurrentNonSpecialAnswer() {
+            return this.$me.answer < 0 && !this.isSpecialValue(this.$me.answer)
+        },
+        minimumValue() {
+            if (!this.$me.isNonNegative)
+                return '-99999999999999.99999999999999'
+
+            return (this.hasNegativeSpecialValues || this.hasNegativeCurrentNonSpecialAnswer)
+                ? '-99999999999999.99999999999999'
+                : '0'
+        },
     },
     methods: {
         saveAnswer() {
@@ -79,8 +93,19 @@ export default {
                     return
                 }
 
+                if (this.$me.isNonNegative && answer < 0 && !this.isSpecialValue(answer)) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberNonNegativeError'), answer)
+                    return
+                }
+
                 this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
             })
+        },
+
+        isSpecialValue(value) {
+            const options = this.$me.options || []
+            if (options.length === 0) return false
+            return options.some(o => o.value === value)
         },
 
         isCancelBeforeStart() {

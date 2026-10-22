@@ -30,19 +30,17 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
-using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     [RequestSizeLimit(1 * 1024 * 1024 * 1024)]
     [RequestFormLimits(MultipartBodyLengthLimit = 1 * 1024 * 1024 * 1024)]
-    public abstract class InterviewsControllerBase : ControllerBase
+    public abstract class InterviewsControllerBase : DataCollectionControllerBase
     {
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IWebHostEnvironment webHostEnvironment;
-        private readonly IImageProcessingService imageProcessingService;
         private readonly IBrokenImageFileStorage brokenImageFileStorage;
         private readonly IBrokenAudioFileStorage brokenAudioFileStorage;
         private readonly IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage;
@@ -67,7 +65,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             IAudioAuditFileStorage audioAuditFileStorage,
             IUserToDeviceService userToDeviceService,
             IWebHostEnvironment webHostEnvironment,
-            IImageProcessingService imageProcessingService,
             IBrokenImageFileStorage brokenImageFileStorage,
             IBrokenAudioFileStorage brokenAudioFileStorage,
             IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage)
@@ -83,7 +80,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.eventStore = eventStore;
             this.audioAuditFileStorage = audioAuditFileStorage;
             this.webHostEnvironment = webHostEnvironment;
-            this.imageProcessingService = imageProcessingService;
             this.brokenImageFileStorage = brokenImageFileStorage;
             this.brokenAudioFileStorage = brokenAudioFileStorage;
             this.brokenAudioAuditFileStorage = brokenAudioAuditFileStorage;
@@ -155,8 +151,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 return BadRequest("Request is null");
             
             var bytes = Convert.FromBase64String(request.Data);
-            this.imageProcessingService.Validate(bytes);
-            
+
             if (AllowWorkWithInterview(request.InterviewId))
                 this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, bytes, null);
             else

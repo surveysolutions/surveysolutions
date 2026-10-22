@@ -5,24 +5,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Shared.Web.Attributes;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Services.Restore;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
 {
     [Authorize(Roles = nameof(SimpleRoleEnum.Administrator))]
     [RequestSizeLimit(200 * 1024 * 1024)]
+    [NoTransaction]
     public class RestoreQuestionnaireDocumentModel : PageModel
     {
         private readonly ILogger<RestoreQuestionnaireDocumentModel> logger;
         private readonly IQuestionnaireRestoreService restoreService;
+        private readonly ITransactionRollbackState transactionRollbackState;
 
         public RestoreQuestionnaireDocumentModel(ILogger<RestoreQuestionnaireDocumentModel> logger, 
-            IQuestionnaireRestoreService restoreService)
+            IQuestionnaireRestoreService restoreService,
+            ITransactionRollbackState transactionRollbackState)
         {
             this.logger = logger;
             this.restoreService = restoreService;
+            this.transactionRollbackState = transactionRollbackState;
         }
 
         public void OnGet()
@@ -64,15 +71,25 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 var openReadStream = Upload.OpenReadStream();
                 
                 var questionnaireId = restoreService.RestoreQuestionnaire(openReadStream, User.GetId(), state, CreateNew);
-                
+
+                if (state.HasFailures)
+                {
+                    // A restore deletes existing translations and categories before rewriting them, so a partial
+                    // restore must not be committed.
+                    this.transactionRollbackState.MarkRollbackOnly();
+                    this.Success = null;
+                    this.Error = state.Error;
+                    return Page();
+                }
+
                 this.Success = $"Restore finished. Restored {state.RestoredEntitiesCount} entities. Questionnaire Id: {questionnaireId.FormatGuid()}";
                 this.Error = state.Error;
                 return Page();
             }
             catch (Exception exception)
             {
-                this.Success = state.Success.ToString();
-                this.Error = state.Error;
+                this.transactionRollbackState.MarkRollbackOnly();
+                this.Success = null;
                 this.logger.LogError(exception, "Unexpected error occurred during restore of questionnaire from backup.");
                 this.Error = $"Unexpected error occurred.{Environment.NewLine}{exception.Message}";
                 return Page();

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Complete" xml:space="preserve"><value>បញ្ចប់</value></data>
+  <data name="FinishInterviewText" xml:space="preserve"><value>ការសំភាសន៍នេះបានបញ្ចប់</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>មិនអាចកែប្រែការសំភាសន៍ដែលទទួលបានដោយឧបករណ៍</value></data>
+  <data name="InvitationText" xml:space="preserve"><value>អ្នកត្រូវបានអញ្ជើញឱ្យចូលរួមក្នុងការស្ទង់មតិខាងក្រោម: "%QUESTIONNAIRE%"</value></data>
+  <data name="NoteForSupervisor" xml:space="preserve"><value>យោបល់</value></data>
+  <data name="Resume_InvitationText" xml:space="preserve"><value>អ្នកអាចចូលទៅកាន់ការសំភាសន៍ក្នុងការស្ទង់មតិខាងក្រោម: "%QUESTIONNAIRE%"</value></data>
+  <data name="Resume_WelcomeText" xml:space="preserve"><value>សូមស្វាគមន៍មកកាន់ការស្ទង់មតិតាមវែបរបស់ Survey Solutions</value></data>
+  <data name="SurveyFormatText" xml:space="preserve"><value>ការស្ទង់មតិ: "%QUESTIONNAIRE%"</value></data>
+  <data name="WebSurvey" xml:space="preserve"><value>ការស្ទង់មតិតាមវែបរបស់ Survey Solutions</value></data>
+  <data name="WelcomeText" xml:space="preserve"><value>សូមស្វាគមន៍មកកាន់ការស្ទង់មតិតាមវែបរបស់ Survey Solutions</value></data>
+  <data name="StartNewInterview" xml:space="preserve"><value>ចាប់ផ្តើមការសំភាសន៍ថ្មី</value></data>
+  <data name="ResumeInterview" xml:space="preserve"><value>បន្តការសំភាសន៍</value></data>
+  <data name="LinkInvitation" xml:space="preserve"><value>អ្នកត្រូវបានអញ្ជើញឱ្យចូលរួមក្នុងការស្ទង់មតិខាងក្រោម: "%QUESTIONNAIRE%"។ ការសំភាសន៍របស់អ្នកនៅមិនទាន់រួចរាល់ទេ</value></data>
+  <data name="LinkToInterviewPage" xml:space="preserve"><value>ការសំភាសន៍តាមវែប</value></data>
+  <data name="LinkWelcome" xml:space="preserve"><value>សូមស្វាគមន៍មកកាន់ការស្ទង់មតិតាមវែបរបស់ Survey Solutions</value></data>
+</root>
