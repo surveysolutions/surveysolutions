@@ -21,6 +21,7 @@ const store =
             firstSectionId: '',
             entities: [], /* IInterviewEntity[] */
             entityDetails: { /* string: object */ },
+            variableNames: { /* string: string */ },
             breadcrumbs: {
                 breadcrumbs: [],
             },
