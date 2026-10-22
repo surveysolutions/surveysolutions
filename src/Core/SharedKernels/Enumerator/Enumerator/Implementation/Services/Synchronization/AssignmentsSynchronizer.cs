@@ -212,7 +212,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
 
             local.IsAudioRecordingEnabled = remote.IsAudioRecordingEnabled;
-            local.Comments = remote.Comments;
+            if (remote.Comments != null)
+                local.Comments = remote.Comments;
 
             // Server status always overrides local status (server is authoritative).
             // Local status changes are best-effort: if the upload failed, the server's status
