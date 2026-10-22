@@ -14,7 +14,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         // InterviewTreeQuestion → Validity
         public static Validity ToValidity(this InterviewTreeQuestion question) => new Validity
         {
-            IsValid = question.IsValid
+            IsValid = !question.IsAnswered() || question.IsValid
         };
 
         // InterviewTreeStaticText → Validity
