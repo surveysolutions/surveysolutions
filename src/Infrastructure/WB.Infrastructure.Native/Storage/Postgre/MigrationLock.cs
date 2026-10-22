@@ -13,26 +13,46 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public MigrationLock(NpgsqlConnectionStringBuilder connectionStringBuilder, bool isGlobal = true)
         {
             this.db = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
-            this.db.Open();
-            this.tr = db.BeginTransaction();
-            
-            var statement = isGlobal
-                ? "select pg_advisory_xact_lock (1818, 20433)"
-                : "select pg_advisory_xact_lock (1919, 20433)";
-            
-            this.db.Execute(statement);
+            try
+            {
+                this.db.Open();
+                this.tr = db.BeginTransaction();
+
+                var statement = isGlobal
+                    ? "select pg_advisory_xact_lock (1818, 20433)"
+                    : "select pg_advisory_xact_lock (1919, 20433)";
+
+                this.db.Execute(statement);
+            }
+            catch
+            {
+                this.db.Dispose();
+                throw;
+            }
         }
 
         public void Dispose()
         {
-            this.tr.Commit();
-            this.db.Dispose();
+            try
+            {
+                this.tr.Commit();
+            }
+            finally
+            {
+                this.db.Dispose();
+            }
         }
 
         public async ValueTask DisposeAsync()
         {
-            await tr.CommitAsync();
-            await db.DisposeAsync();
+            try
+            {
+                await tr.CommitAsync();
+            }
+            finally
+            {
+                await db.DisposeAsync();
+            }
         }
     }
 }

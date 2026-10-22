@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="DataExport_Title" xml:space="preserve">
+        <value>การส่งออกข้อมูล</value>
+    </data>
+    <data name="DataExport_Header" xml:space="preserve">
+        <value>เลือกประเภทและรูปแบบของข้อมูลที่จะส่งออก</value>
+    </data>
+    <data name="BinaryData" xml:space="preserve">
+        <value>ข้อมูลไบนารี</value>
+    </data>
+    <data name="DDI" xml:space="preserve">
+        <value>ดีดีไอ</value>
+    </data>
+    <data name="ParaData" xml:space="preserve">
+        <value>ปาราดาตา</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>ชื่อ</value>
+    </data>
+    <data name="Format" xml:space="preserve">
+        <value>รูปแบบ</value>
+    </data>
+    <data name="StartDate" xml:space="preserve">
+        <value>วันที่เริ่มต้น</value>
+    </data>
+    <data name="LastUpdateDate" xml:space="preserve">
+        <value>วันที่อัปเดตล่าสุด</value>
+    </data>
+    <data name="Progress" xml:space="preserve">
+        <value>ความคืบหน้า</value>
+    </data>
+    <data name="ConfirmStop" xml:space="preserve">
+        <value>คุณแน่ใจหรือไม่ว่าต้องการหยุด</value>
+    </data>
+    <data name="export" xml:space="preserve">
+        <value>กระบวนการส่งออก</value>
+    </data>
+    <data name="Metadata" xml:space="preserve">
+        <value>ข้อมูลเมตา</value>
+    </data>
+    <data name="BinaryDescription" xml:space="preserve">
+        <value>เก็บถาวรด้วยข้อมูลไบนารี (เช่น รูปภาพ เสียง)</value>
+    </data>
+    <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+        <value>คุณไม่สามารถเปลี่ยนการตั้งค่าการส่งออกได้เนื่องจากกระบวนการส่งออกกำลังทำงานอยู่</value>
+    </data>
+    <data name="Bytes" xml:space="preserve">
+        <value>เอ็มบี</value>
+    </data>
+    <data name="Completed" xml:space="preserve">
+        <value>สมบูรณ์</value>
+    </data>
+    <data name="DataWasNotGenerated" xml:space="preserve">
+        <value>ไม่ได้สร้างขึ้น</value>
+    </data>
+    <data name="DDIDescription" xml:space="preserve">
+        <value>ข้อมูล XML ความคิดริเริ่มเอกสารข้อมูล</value>
+    </data>
+    <data name="Download" xml:space="preserve">
+        <value>ดาวน์โหลด</value>
+    </data>
+    <data name="ExportRange" xml:space="preserve">
+        <value>ช่วงการส่งออก:</value>
+    </data>
+    <data name="FileSizeTitle" xml:space="preserve">
+        <value>ขนาดไฟล์</value>
+    </data>
+    <data name="FormatTitle" xml:space="preserve">
+        <value>รูปแบบ</value>
+    </data>
+    <data name="Generate" xml:space="preserve">
+        <value>สร้าง</value>
+    </data>
+    <data name="Generating" xml:space="preserve">
+        <value>กำลังสร้าง</value>
+    </data>
+    <data name="Preparing" xml:space="preserve">
+        <value>กำลังเตรียมตัว</value>
+    </data>
+    <data name="Compressing" xml:space="preserve">
+        <value>การบีบอัด</value>
+    </data>
+    <data name="LastGeneratedTitle" xml:space="preserve">
+        <value>สร้างเมื่อ</value>
+    </data>
+    <data name="MainSurveyDataTitle" xml:space="preserve">
+        <value>ข้อมูลการสำรวจหลัก</value>
+    </data>
+    <data name="NoDataAvailable" xml:space="preserve">
+        <value>ไม่มีข้อมูล</value>
+    </data>
+    <data name="ParadataDescription" xml:space="preserve">
+        <value>ข้อมูลเมตาในกระบวนการสัมภาษณ์ (เหตุการณ์และช่วงเวลา)</value>
+    </data>
+    <data name="QueuedTitle" xml:space="preserve">
+        <value>เข้าคิว</value>
+    </data>
+    <data name="StatusOfExportTitle" xml:space="preserve">
+        <value>สถานะของการสัมภาษณ์ที่ส่งออก</value>
+    </data>
+    <data name="FromDate" xml:space="preserve">
+        <value>จาก</value>
+    </data>
+    <data name="ToDate" xml:space="preserve">
+        <value>ถึง</value>
+    </data>
+    <data name="SurveyTemplateTitle" xml:space="preserve">
+        <value>(ฉบับ) แบบสอบถามสำรวจ</value>
+    </data>
+    <data name="ZipArchiveDescription" xml:space="preserve">
+        <value>ไฟล์ ZIP พร้อมข้อมูลการสัมภาษณ์หลัก</value>
+    </data>
+    <data name="XMLFileDescription" xml:space="preserve">
+        <value>รูปแบบ XML</value>
+    </data>
+    <data name="ItemsInQueue" xml:space="preserve">
+        <value>รายการในคิวการส่งออก:</value>
+    </data>
+    <data name="TabularFormat" xml:space="preserve">
+        <value>รูปแบบตาราง</value>
+    </data>
+    <data name="ExportExplanation" xml:space="preserve">
+        <value>การกดปุ่ม "เพิ่มลงในคิว" จะสร้างการเก็บข้อมูลการสัมภาษณ์ที่มีอยู่ในเซิร์ฟเวอร์ในขณะนั้น เวลาที่สร้างไฟล์เก็บถาวรและขนาดไฟล์เก็บถาวรจะแสดงในตาราง สามารถดาวน์โหลดที่เก็บข้อมูลที่สร้างขึ้นล่าสุดได้โดยกดปุ่มดาวน์โหลด กดปุ่ม "เพิ่มลงในคิว" อีกครั้งเพื่อสร้างไฟล์เก็บถาวรใหม่</value>
+    </data>
+    <data name="ZipFile" xml:space="preserve">
+        <value>ไฟล์ซิป</value>
+    </data>
+    <data name="Dropbox" xml:space="preserve">
+        <value>ดรอปบ็อกซ์</value>
+    </data>
+    <data name="OneDrive" xml:space="preserve">
+        <value>วันไดรฟ์</value>
+    </data>
+    <data name="GoogleDrive" xml:space="preserve">
+        <value>Google ไดรฟ์</value>
+    </data>
+    <data name="SaveBinaryDataTo" xml:space="preserve">
+        <value>บันทึกข้อมูลไบนารีไปที่:</value>
+    </data>
+    <data name="ExportBtn" xml:space="preserve">
+        <value>ส่งออก</value>
+    </data>
+    <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+        <value>ไฟล์ส่งออกจะถูกอัปโหลดไปยัง Dropbox</value>
+    </data>
+    <data name="DataExport_Destination_File" xml:space="preserve">
+        <value>ไฟล์ส่งออกจะพร้อมให้ดาวน์โหลด</value>
+    </data>
+    <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+        <value>ไฟล์ส่งออกจะถูกอัปโหลดไปยัง Google Drive</value>
+    </data>
+    <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+        <value>ไฟล์ส่งออกจะถูกอัปโหลดไปยัง OneDrive</value>
+    </data>
+    <data name="DataExport_QueuedOn" xml:space="preserve">
+        <value>เข้าคิวบน {{date}}</value>
+    </data>
+    <data name="DataExport_CompletedOn" xml:space="preserve">
+        <value>เสร็จสิ้นเมื่อ {{date}}</value>
+    </data>
+    <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+        <value>{{title}} (เวอร์ชั่น {{version}})</value>
+    </data>
+    <data name="DataExport_Regenerate" xml:space="preserve">
+        <value>สร้างใหม่</value>
+    </data>
+    <data name="DataExport_RegenerateDesc" xml:space="preserve">
+        <value>จัดคิวการส่งออกด้วยพารามิเตอร์เดียวกัน</value>
+    </data>
+    <data name="DataExport_FileLastUpdate" xml:space="preserve">
+        <value>อัปเดตล่าสุด: {{date}}</value>
+    </data>
+    <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+        <value>ไฟล์ถูกสร้างใหม่หรือถูกลบ</value>
+    </data>
+    <data name="DataExport_FileSize" xml:space="preserve">
+        <value>ขนาดไฟล์: {{size}} MB</value>
+    </data>
+    <data name="DataExport_ProducedIn" xml:space="preserve">
+        <value>ผลิตใน:</value>
+    </data>
+    <data name="DataExport_InQueue" xml:space="preserve">
+        <value>ในคิว:</value>
+    </data>
+    <data name="DataExport_Destination" xml:space="preserve">
+        <value>ปลายทาง: {{dest}}</value>
+    </data>
+    <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+        <value>ไม่มีบริการส่งออก</value>
+    </data>
+    <data name="DataType" xml:space="preserve">
+        <value>ชนิดข้อมูล</value>
+    </data>
+    <data name="DataType_Binary" xml:space="preserve">
+        <value>ข้อมูลไบนารี เก็บถาวรด้วยข้อมูลไบนารี (เช่น รูปภาพ เสียง)</value>
+    </data>
+    <data name="DataType_Ddi" xml:space="preserve">
+        <value>ดีดีไอ. ข้อมูล XML ความคิดริเริ่มเอกสารข้อมูล</value>
+    </data>
+    <data name="DataType_MainSurveyData" xml:space="preserve">
+        <value>ข้อมูลการสำรวจหลัก ไฟล์ ZIP พร้อมข้อมูลการสัมภาษณ์หลัก</value>
+    </data>
+    <data name="FilterTitle" xml:space="preserve">
+        <value>กรองการสัมภาษณ์เพื่อส่งออก</value>
+    </data>
+    <data name="SurveyQuestionnaire" xml:space="preserve">
+        <value>แบบสอบถาม</value>
+    </data>
+    <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+        <value>เวอร์ชั่นแบบสอบถาม</value>
+    </data>
+    <data name="DataType_Paradata" xml:space="preserve">
+        <value>ปาราดาตา ข้อมูลเมตาในกระบวนการสัมภาษณ์ (เหตุการณ์และช่วงเวลา)</value>
+    </data>
+    <data name="DataDestination" xml:space="preserve">
+        <value>ปลายทางการส่งออกไฟล์</value>
+    </data>
+    <data name="DataFormat" xml:space="preserve">
+        <value>รูปแบบข้อมูล</value>
+    </data>
+    <data name="DataDestination_Dropbox" xml:space="preserve">
+        <value>อัปโหลดไปยังดรอปบ็อกซ์</value>
+    </data>
+    <data name="DataDestination_GoogleDrive" xml:space="preserve">
+        <value>อัปโหลดไปยัง Google ไดรฟ์</value>
+    </data>
+    <data name="DataDestination_OneDrive" xml:space="preserve">
+        <value>อัปโหลดไปยัง OneDrive</value>
+    </data>
+    <data name="DataDestination_Zip" xml:space="preserve">
+        <value>ดาวน์โหลด</value>
+    </data>
+    <data name="DataFormat_Spss" xml:space="preserve">
+        <value>รูปแบบ SPSS</value>
+    </data>
+    <data name="DataFormat_Stata" xml:space="preserve">
+        <value>รูปแบบสตาต้า 14</value>
+    </data>
+    <data name="DataFormat_Tab" xml:space="preserve">
+        <value>ข้อมูลที่คั่นด้วยแท็บ</value>
+    </data>
+    <data name="QuestionnaireInformation" xml:space="preserve">
+        <value>ข้อมูลแบบสอบถาม</value>
+    </data>
+    <data name="QuestionnaireInformation_Include" xml:space="preserve">
+        <value>รวมข้อมูลเมตาเกี่ยวกับแบบสอบถาม</value>
+    </data>
+    <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+        <value>ไม่รวมข้อมูลเมตาเกี่ยวกับแบบสอบถาม</value>
+    </data>
+    <data name="AddToQueue" xml:space="preserve">
+        <value>เพิ่มเข้าคิว</value>
+    </data>
+    <data name="GeneratedDataSets" xml:space="preserve">
+        <value>ชุดการส่งออกที่สร้างขึ้นก่อนหน้านี้</value>
+    </data>
+    <data name="GeneratedDataSets_Desc" xml:space="preserve">
+        <value>ข้อมูลจะถูกส่งออกในไฟล์ zip ที่มีไฟล์ข้อมูลของเนื้อหาและประเภทที่ระบุ ด้านล่างนี้คือรายการไฟล์ข้อมูลที่ส่งออกก่อนหน้านี้</value>
+    </data>
+    <data name="NoDataSets" xml:space="preserve">
+        <value>ยังไม่มีชุดข้อมูลที่สร้างขึ้น</value>
+    </data>
+    <data name="DataExportApi" xml:space="preserve">
+        <value>API การส่งออกข้อมูล</value>
+    </data>
+    <data name="DataExportApiDesc" xml:space="preserve">
+        <value>คุณสามารถตั้งค่าการส่งออกข้อมูลการสัมภาษณ์ที่รวบรวมไว้โดยอัตโนมัติโดยใช้ชุดเครื่องมือ API ของเราสำหรับข้อมูลเพิ่มเติมและคำแนะนำการใช้งาน:</value>
+    </data>
+    <data name="DataExportApiInfoPage" xml:space="preserve">
+        <value>การอ้างอิง API การส่งออกข้อมูล</value>
+    </data>
+    <data name="Error_Canceled" xml:space="preserve">
+        <value>งานส่งออกถูกยกเลิกโดยผู้ใช้</value>
+    </data>
+    <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+        <value>พื้นที่ไม่เพียงพอสำหรับพื้นที่เก็บข้อมูลบนคลาวด์ที่เลือกไว้ โปรดเพิ่มพื้นที่ว่างและเริ่มงานใหม่หรือเลือกผู้ให้บริการรายอื่น</value>
+    </data>
+    <data name="Error_Unhandled" xml:space="preserve">
+        <value>เกิดข้อผิดพลาดที่ไม่คาดคิดระหว่างการส่งออก ขออภัยในความไม่สะดวก โปรดติดต่อทีมสนับสนุนเซิร์ฟเวอร์ของคุณ ข้อมูลเพิ่มเติมเกี่ยวกับปัญหานี้มีอยู่ที่หน้าสนับสนุน: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+    </data>
+    <data name="AllStatuses" xml:space="preserve">
+        <value>สถานะทั้งหมด</value>
+    </data>
+    <data name="ApprovedByHeadquarters" xml:space="preserve">
+        <value>ได้รับการอนุมัติจากสถานะสำนักงานใหญ่</value>
+    </data>
+    <data name="ApprovedBySupervisor" xml:space="preserve">
+        <value>ได้รับการอนุมัติจากสถานะหัวหน้างาน</value>
+    </data>
+    <data name="DataExport_InterviewsStatus" xml:space="preserve">
+        <value>บทสัมภาษณ์ใน {{status}}.</value>
+    </data>
+    <data name="InterviewerAssigned" xml:space="preserve">
+        <value>สถานะผู้สัมภาษณ์ที่ได้รับมอบหมาย</value>
+    </data>
+    <data name="QuestionnaireTranslation" xml:space="preserve">
+        <value>การแปล</value>
+    </data>
+    <data name="Translation_CardLabel" xml:space="preserve">
+        <value>การแปล: {{language}}</value>
+    </data>
+    <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+        <value>การแปล</value>
+    </data>
+    <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+        <value>ช่วงวันที่</value>
+    </data>
+    <data name="DateRangeAllTime" xml:space="preserve">
+        <value>ตลอดเวลา</value>
+    </data>
+    <data name="DateRangeLast24hours" xml:space="preserve">
+        <value>24ชม.ที่ผ่านมา</value>
+    </data>
+    <data name="DateRangeLast7days" xml:space="preserve">
+        <value>7 วันที่ผ่านมา</value>
+    </data>
+    <data name="DateRangeLast30days" xml:space="preserve">
+        <value>30 วันที่ผ่านมา</value>
+    </data>
+    <data name="DateRangeLastToday" xml:space="preserve">
+        <value>วันนี้</value>
+    </data>
+    <data name="DateRangeLastYesterday" xml:space="preserve">
+        <value>เมื่อวาน</value>
+    </data>
+    <data name="DateRangeCustom" xml:space="preserve">
+        <value>กำหนดเอง</value>
+    </data>
+    <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+        <value>จาก</value>
+    </data>
+    <data name="DateRangeFromAll" xml:space="preserve">
+        <value>เร็วที่สุดที่มีอยู่</value>
+    </data>
+    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+        <value>ถึง</value>
+    </data>
+    <data name="DateRangeToAll" xml:space="preserve">
+        <value>ช่วงเวลาปัจจุบัน</value>
+    </data>
+    <data name="DataType_AudioAuditFiles" xml:space="preserve">
+        <value>การตรวจสอบเสียง ไฟล์ ZIP ที่มีข้อมูลการตรวจสอบเสียง</value>
+    </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+        <value>ตัวกรองเหตุการณ์</value>
+    </data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+        <value>ทั้งหมด</value>
+    </data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+        <value>ลดลง</value>
+    </data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+        <value>ชุด Paradata ที่ลดลงจะไม่รวมเหตุการณ์ที่มีรหัสต่อไปนี้: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24)</value>
+    </data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+        <value>วันที่ "เริ่มต้น" ต้องเป็นวันที่ที่ถูกต้อง</value>
+    </data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+        <value>วันที่ "เริ่มต้น" ไม่สามารถเป็นวันที่ในอนาคตได้</value>
+    </data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+        <value>วันที่ "ถึง" ต้องเป็นวันที่ที่ถูกต้อง</value>
+    </data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+        <value>วันที่ "เริ่มต้น" จะต้องถูกต้องก่อนที่จะตรวจสอบวันที่ "ถึง"</value>
+    </data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+        <value>วันที่ "ถึง" จะต้องมากกว่าวันที่ "เริ่มต้น"</value>
+    </data>
+</root>

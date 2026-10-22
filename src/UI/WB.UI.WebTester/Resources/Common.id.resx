@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AlRightsReserved" xml:space="preserve"><value>Semua hak dilindungi</value></data>
+  <data name="Legal" xml:space="preserve"><value>Hukum</value></data>
+  <data name="TheWorldBankGroup" xml:space="preserve"><value>Grup Bank Dunia</value></data>
+  <data name="QuestionnaireHasErrors" xml:space="preserve"><value>Kuesioner memiliki kesalahan</value></data>
+  <data name="CantOpenQuestionnaire" xml:space="preserve"><value>Tidak dapat membuka kuesioner</value></data>
+  <data name="FixErrorsOnDesigner" xml:space="preserve"><value>Harap perbaiki kesalahan di Designer</value></data>
+  <data name="PageNotFound" xml:space="preserve"><value>Halaman tidak ditemukan</value></data>
+  <data name="PageNotFoundDesc" xml:space="preserve"><value>Halaman yang diminta tidak ditemukan</value></data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve"><value>Gagal memuat ulang wawancara</value></data>
+  <data name="ReloadPartialInterviewErrorMessage" xml:space="preserve"><value>Gagal memuat ulang wawancara sebagian</value></data>
+</root>

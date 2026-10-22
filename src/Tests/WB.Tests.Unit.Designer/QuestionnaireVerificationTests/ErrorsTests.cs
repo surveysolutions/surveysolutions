@@ -424,6 +424,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     Create.Variable(Id1, expression: "@rowname.Contains(\"a\");" )
                 })
                 .ExpectError("WB0276");
+
+        [Test]
+        public void when_variable_expression_mentions_rowname_in_comment()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Variable(Id1, type: VariableType.String, expression: "/* @rowname */ \"A\"")
+                })
+                .ExpectNoError("WB0276");
         
         
         [Test]

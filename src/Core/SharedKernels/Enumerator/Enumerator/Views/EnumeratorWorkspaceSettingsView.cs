@@ -21,5 +21,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public bool? AllowSupervisorChangeAssignmentStatus { get; set; }
         public bool? AllowInterviewerChangeAssignmentStatus { get; set; }
         public AudioRecordingQuality? AudioRecordingQuality { get; set; }
+        public AcceptableGpsLocationSource? AcceptableGpsLocationSource { get; set; }
     }
 }

@@ -1069,4 +1069,13 @@ Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>Ați utilizat Geo Tracking sau Geo Fencing la crearea unui interviu. Activați-l din nou dacă doriți să îl utilizați.</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>Niciun furnizor potrivit pentru a determina locația</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>Furnizorul GPS este dezactivat</value>
+  </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>Locația primită a fost respinsă deoarece nu corespunde sursei de locație acceptabile configurate pentru acest spațiu de lucru</value>
+  </data>
 </root>

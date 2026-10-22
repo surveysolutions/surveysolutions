@@ -1,8 +1,6 @@
 <template>
     <div class="interviewChart">
-        <Line :data="chartData"
-            ref="chart"
-            :options="chartOptions" />
+        <LineChart :data="renderData" ref="chart" dataset-id-key="status" :options="chartOptions" />
     </div>
 </template>
 
@@ -10,7 +8,7 @@
 const chartOptions = {
     elements: {
         point: { radius: 0 },
-        line: { fill: true, tension: 0 },
+        line: { tension: 0 },
     },
     responsive: true,
     maintainAspectRatio: false,
@@ -25,11 +23,30 @@ const chartOptions = {
         legend: {
             display: true,
             position: 'top',
+            labels: {
+                generateLabels(chart) {
+                    const statuses = new Set()
+
+                    return Chart.defaults.plugins.legend.labels.generateLabels(chart).filter(item => {
+                        const status = chart.data.datasets[item.datasetIndex].status
+
+                        if (statuses.has(status)) return false
+
+                        statuses.add(status)
+                        return true
+                    })
+                },
+            },
         },
         tooltip: {
             mode: 'x',
             intersect: false,
             position: 'average',
+            filter(item, index, items, data) {
+                const status = data.datasets[item.datasetIndex].status
+
+                return items.findIndex(candidate => data.datasets[candidate.datasetIndex].status === status) === index
+            },
         },
     },
     scales: {
@@ -77,7 +94,7 @@ const chartOptions = {
     },
 }
 
-import { Line } from 'vue-chartjs'
+import { Line as LineChart } from 'vue-chartjs'
 import 'chartjs-adapter-dayjs-4'
 import { Chart, LineController, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale, TimeScale, Filler } from 'chart.js'
 
@@ -86,7 +103,7 @@ Chart.register(LineController, Title, Tooltip, Legend, LineElement, PointElement
 
 export default {
     name: 'ComulativeLineChart',
-    components: { Line },
+    components: { LineChart },
     props: {
         chartData: {
             type: Object,
@@ -98,15 +115,34 @@ export default {
         },
     },
     computed: {
-        chartOptions() {
-            var self = this
-            this.options.animation = {
-                onComplete: () => {
-                    self.$emit('ready')
-                },
+        renderData() {
+            return {
+                labels: [...(this.chartData.labels || [])],
+                datasets: this.chartData.datasets.map(dataset => ({
+                    ...dataset,
+                    data: dataset.data.map(point => {
+                        if (Array.isArray(point)) return [...point]
+                        return point !== null && typeof point === 'object' ? { ...point } : point
+                    }),
+                })),
             }
+        },
+        chartOptions() {
+            const options = this.options || {}
+            const animation = options.animation || {}
+            const userOnComplete = animation.onComplete
 
-            return Object.assign(chartOptions, this.options)
+            return Object.assign({}, chartOptions, options, {
+                animation: Object.assign({}, animation, {
+                    onComplete: (...args) => {
+                        if (typeof userOnComplete === 'function') {
+                            userOnComplete(...args)
+                        }
+
+                        this.$emit('ready')
+                    },
+                }),
+            })
         },
     },
     expose: ['getImage'],

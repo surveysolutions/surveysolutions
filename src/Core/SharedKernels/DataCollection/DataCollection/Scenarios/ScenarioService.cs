@@ -142,7 +142,8 @@ namespace WB.Core.SharedKernels.DataCollection.Scenarios
                             answerYesNo.AnsweredOptions.ToList()));
                         break;
                     case SwitchTranslation switchTranslation:
-                        result.Add(new Commands.Interview.SwitchTranslation(stubInterviewId, switchTranslation.TargetLanguage, stubUserId));
+                        if (switchTranslation.TargetLanguage == null || questionnaire.GetTranslationLanguages().Contains(switchTranslation.TargetLanguage))
+                            result.Add(new Commands.Interview.SwitchTranslation(stubInterviewId, switchTranslation.TargetLanguage, stubUserId));
                         break;
                 }
             }

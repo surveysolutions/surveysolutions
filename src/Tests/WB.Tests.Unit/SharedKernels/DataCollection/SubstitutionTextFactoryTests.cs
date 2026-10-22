@@ -134,5 +134,26 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(substitionText.substitutionVariables[0].Name, Is.EqualTo("rostertitle"));
         }
 
+        [Test]
+        public void When_CreateText_with_null_text_then_BrowserReadyText_should_be_empty_string_not_null()
+        {
+            //arrange
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.Roster(Id.g1, title: null, variable: "r1")
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var substitutionTextFactory = Create.Service.SubstitutionTextFactory();
+            var rosterIdentity = Create.Entity.Identity(Id.g1, Create.Entity.RosterVector(1));
+
+            //act
+            var substitutionText = substitutionTextFactory.CreateText(rosterIdentity, null, questionnaire);
+
+            //assert — must not be null to avoid rendering "null" in the WebInterview UI
+            Assert.That(substitutionText.Text, Is.EqualTo(string.Empty));
+            Assert.That(substitutionText.BrowserReadyText, Is.EqualTo(string.Empty));
+        }
+
     }
 }

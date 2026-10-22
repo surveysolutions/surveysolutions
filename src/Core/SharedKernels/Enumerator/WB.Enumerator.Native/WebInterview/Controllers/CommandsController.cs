@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -39,9 +40,18 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             this.webInterviewNotificationService = webInterviewNotificationService;
         }
 
-        protected virtual Guid GetCommandResponsibleId(Guid interviewId)
+        protected IStatefulInterview GetInterviewOrThrow(Guid interviewId)
         {
             var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
+            if (interview == null)
+                throw new InterviewException($"Interview {interviewId} not found", InterviewDomainExceptionType.InterviewHardDeleted);
+
+            return interview;
+        }
+
+        protected virtual Guid GetCommandResponsibleId(Guid interviewId)
+        {
+            var interview = GetInterviewOrThrow(interviewId);
             return interview.CurrentResponsibleId;
         }
 

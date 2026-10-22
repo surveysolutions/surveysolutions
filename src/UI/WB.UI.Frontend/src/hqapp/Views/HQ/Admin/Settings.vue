@@ -55,7 +55,9 @@
                         v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial"
                         v-model:allowSupervisorChangeAssignmentStatus="allowSupervisorChangeAssignmentStatus"
                         v-model:allowInterviewerChangeAssignmentStatus="allowInterviewerChangeAssignmentStatus"
-                        v-model:audioRecordingQuality="audioRecordingQuality" />
+                        v-model:audioRecordingQuality="audioRecordingQuality"
+                        v-model:allowSupervisorAudioAuditPlayback="allowSupervisorAudioAuditPlayback"
+                        v-model:acceptableGpsLocationSource="acceptableGpsLocationSource" />
 
                     <Logo />
                 </div>
@@ -105,7 +107,8 @@ export default {
             allowSupervisorChangeAssignmentStatus: true,
             allowInterviewerChangeAssignmentStatus: true,
             audioRecordingQuality: 'Mono44kHz',
-
+            acceptableGpsLocationSource: 'BuiltInGpsOnly',
+            allowSupervisorAudioAuditPlayback: false,
             isRetentionEnabled: false,
             retentionLimitInDays: null,
             retentionLimitQuantity: null,
@@ -136,6 +139,8 @@ export default {
             this.allowSupervisorChangeAssignmentStatus = workspaceSettings.data.allowSupervisorChangeAssignmentStatus ?? true
             this.allowInterviewerChangeAssignmentStatus = workspaceSettings.data.allowInterviewerChangeAssignmentStatus ?? true
             this.audioRecordingQuality = workspaceSettings.data.audioRecordingQuality ?? 'Mono44kHz'
+            this.acceptableGpsLocationSource = workspaceSettings.data.acceptableGpsLocationSource ?? 'BuiltInGpsOnly'
+            this.allowSupervisorAudioAuditPlayback = workspaceSettings.data.allowSupervisorAudioAuditPlayback ?? false
 
             this.encryptionEnabled = workspaceSettings.data.exportSettings.isEnabled
             this.encryptionPassword = workspaceSettings.data.exportSettings.password

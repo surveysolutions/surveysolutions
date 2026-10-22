@@ -588,6 +588,9 @@
   <data name="TargetAreaExplanation" xml:space="preserve">
     <value>Specifikoni emrin e hartës së Zonës së Synuar për detyrën</value>
   </data>
+  <data name="TargetAreaNameTooLong" xml:space="preserve">
+      <value>Emri i hartës së zonës së synuar është shumë i gjatë. Gjatësia maksimale e lejuar është {{limit}} karaktere.</value>
+  </data>
   <data name="Tooltip_Table_Email" xml:space="preserve">
     <value>Email për njoftime</value>
   </data>
