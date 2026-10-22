@@ -1273,6 +1273,12 @@
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>опис</value>
   </data>
+  <data name="SideBarCategoriesDescription" xml:space="preserve">
+    <value>опис</value>
+  </data>
+  <data name="SideBarLookupTableDescription" xml:space="preserve">
+    <value>опис</value>
+  </data>
   <data name="SideBarMacroEmptyLine1" xml:space="preserve">
     <value>Використовуйте цю вкладку для визначення макропідстановок.</value>
   </data>

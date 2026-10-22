@@ -884,6 +884,12 @@
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>描述</value>
   </data>
+  <data name="SideBarCategoriesDescription" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="SideBarLookupTableDescription" xml:space="preserve">
+    <value>描述</value>
+  </data>
   <data name="SideBarMacroEmptyLine1" xml:space="preserve">
     <value>用这个tab去定义宏的替换。</value>
   </data>

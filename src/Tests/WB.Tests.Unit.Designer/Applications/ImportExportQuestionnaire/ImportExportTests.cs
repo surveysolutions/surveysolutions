@@ -239,7 +239,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             );
             questionnaireDocument.Categories = new List<Categories>()
             {
-                new Categories() { Name = "Categories #1", Id = Guid.NewGuid() },
+                new Categories() { Name = "Categories #1", Id = Guid.NewGuid(), Description = "Categories description" },
                 new Categories() { Name = "Categories #2", Id = Guid.NewGuid() },
             };
 
@@ -326,7 +326,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             );
             questionnaireDocument.LookupTables = new Dictionary<Guid, LookupTable>()
             {
-                { Guid.NewGuid(), new LookupTable() { FileName = "FileName #1", TableName = "TableName 1", } },
+                { Guid.NewGuid(), new LookupTable() { FileName = "FileName #1", TableName = "TableName 1", Description = "Lookup table description" } },
                 { Guid.NewGuid(), new LookupTable() { FileName = "FileName #2", TableName = "TableName 2", } },
             };
 

@@ -247,6 +247,12 @@
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>описание</value>
   </data>
+  <data name="SideBarCategoriesDescription" xml:space="preserve">
+    <value>описание</value>
+  </data>
+  <data name="SideBarLookupTableDescription" xml:space="preserve">
+    <value>описание</value>
+  </data>
   <data name="SideBarMacroEmptyLine1" xml:space="preserve">
     <value>Используйте вкладку для определения макросов.</value>
   </data>

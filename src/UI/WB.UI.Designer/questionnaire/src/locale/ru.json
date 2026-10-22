@@ -516,7 +516,9 @@
     "WarningsCounter_other": "{{count}} warnings",
     "CompilationErrorsCounter_other": "{{count}} errors found",
     "CompilationWarningsCounter_other": "{{count}} warnings found",
-    "FindReplaceInAllFound_other": "in {{count}} found entities?"
+    "FindReplaceInAllFound_other": "in {{count}} found entities?",
+    "SideBarCategoriesDescription": "описание",
+    "SideBarLookupTableDescription": "описание"
   },
   "AccountResources": {
     "AllRights": "Все права защищены.",

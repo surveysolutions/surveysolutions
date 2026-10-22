@@ -211,6 +211,12 @@
     <data name="SideBarMacroDescription" xml:space="preserve">
         <value>აღწერა</value>
         </data>
+    <data name="SideBarCategoriesDescription" xml:space="preserve">
+        <value>აღწერა</value>
+        </data>
+    <data name="SideBarLookupTableDescription" xml:space="preserve">
+        <value>აღწერა</value>
+        </data>
     <data name="SideBarMacroEmptyLine1" xml:space="preserve">
         <value>გამოიყენეთ ეს ჩანართი მაკრო ჩანაცვლების დასადგენად.</value>
         </data>

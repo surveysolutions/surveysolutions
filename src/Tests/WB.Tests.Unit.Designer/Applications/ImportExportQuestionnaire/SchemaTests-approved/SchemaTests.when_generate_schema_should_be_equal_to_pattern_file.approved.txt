@@ -948,6 +948,9 @@
         },
         "FileName": {
           "type": "string"
+        },
+        "Description": {
+          "type": "string"
         }
       }
     },
@@ -1025,6 +1028,9 @@
           "type": "string"
         },
         "FileName": {
+          "type": "string"
+        },
+        "Description": {
           "type": "string"
         }
       }

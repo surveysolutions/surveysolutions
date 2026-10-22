@@ -211,6 +211,12 @@
     <data name="SideBarMacroDescription" xml:space="preserve">
         <value>ការពិពណ៌នា</value>
     </data>
+    <data name="SideBarCategoriesDescription" xml:space="preserve">
+        <value>ការពិពណ៌នា</value>
+    </data>
+    <data name="SideBarLookupTableDescription" xml:space="preserve">
+        <value>ការពិពណ៌នា</value>
+    </data>
     <data name="SideBarMacroEmptyLine1" xml:space="preserve">
         <value>ប្រើផ្ទាំងនេះដើម្បីកំណត់ការជំនួសម៉ាក្រូ។</value>
     </data>

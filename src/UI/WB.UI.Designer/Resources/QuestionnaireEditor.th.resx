@@ -211,6 +211,12 @@
     <data name="SideBarMacroDescription" xml:space="preserve">
         <value>คำอธิบาย</value>
     </data>
+    <data name="SideBarCategoriesDescription" xml:space="preserve">
+        <value>คำอธิบาย</value>
+    </data>
+    <data name="SideBarLookupTableDescription" xml:space="preserve">
+        <value>คำอธิบาย</value>
+    </data>
     <data name="SideBarMacroEmptyLine1" xml:space="preserve">
         <value>ใช้แท็บนี้เพื่อกำหนดการทดแทนมาโคร</value>
     </data>
