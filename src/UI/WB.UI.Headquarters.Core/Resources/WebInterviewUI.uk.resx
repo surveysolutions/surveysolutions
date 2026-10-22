@@ -378,6 +378,9 @@
   <data name="NoResultsFound" xml:space="preserve">
     <value>Не знайдено жодного результату</value>
   </data>
+  <data name="TypeToFilterForMore" xml:space="preserve">
+    <value>Показано перші {{count}} варіантів. Почніть вводити, щоб знайти більше.</value>
+  </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>Не розраховано</value>
   </data>
