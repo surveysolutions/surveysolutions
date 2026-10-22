@@ -56,6 +56,14 @@
                             :title="$t('WebInterviewUI.EmailLink_EmailResumeLink')">{{
                                 $t('WebInterviewUI.EmailLink_EmailResumeLink') }}</a>
                     </li>
+                    <li v-if="this.$config.pdfUrl">
+                        <a :href="this.$config.pdfUrl"
+                            target="_blank"
+                            download
+                            @click.prevent="downloadPdf"
+                            :title="$t('WebInterview.DownloadAnswersHint')">{{
+                                $t('WebInterview.DownloadAnswers') }}</a>
+                    </li>
                     <li v-if="this.$config.inWebTesterMode">
                         <button v-if="inDevMode" type="button" class="btn btn-default btn-link btn-icon"
                             @click="turnOffDevMode" :title="$t('WebInterviewUI.TurnOffDevMode')">
@@ -197,6 +205,7 @@
 <script lang="js">
 import axios from 'axios'
 import { filter } from 'lodash-es'
+import * as toastr from 'toastr'
 import Modal from 'bootstrap/js/dist/modal'
 import Collapse from 'bootstrap/js/dist/collapse'
 import 'bootstrap/js/dist/dropdown'
@@ -313,6 +322,38 @@ export default {
             }).catch(function (error) {
                 self.$errorHandler(error, self)
             })
+        },
+
+        async downloadPdf() {
+            const downloadWindow = window.open('', '_blank')
+            let answerWasNotSaved = false
+            const unsubscribe = this.$store.subscribe(mutation => {
+                if (mutation.type === 'SET_ANSWER_NOT_SAVED') {
+                    answerWasNotSaved = true
+                }
+            })
+
+            try {
+                document.activeElement?.blur()
+                await new Promise(resolve => setTimeout(resolve, 0))
+                while (this.$store.state.webinterview.fetch.inProgress) {
+                    await new Promise(resolve => setTimeout(resolve, 50))
+                }
+
+                const hasUnsavedAnswer = Object.values(this.$store.state.webinterview.entityDetails)
+                    .some(entity => entity.validity?.errorMessage)
+                if (answerWasNotSaved || hasUnsavedAnswer) {
+                    downloadWindow?.close()
+                    toastr.error(this.$t('WebInterviewUI.AnswerWasNotSaved'))
+                    return
+                }
+
+                if (downloadWindow) {
+                    downloadWindow.location.href = this.$config.pdfUrl
+                }
+            } finally {
+                unsubscribe()
+            }
         },
 
         changeLanguage(language) {
