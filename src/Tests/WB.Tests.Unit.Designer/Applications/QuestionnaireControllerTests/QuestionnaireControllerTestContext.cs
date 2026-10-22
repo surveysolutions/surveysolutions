@@ -31,6 +31,7 @@ using WB.Tests.Unit.Designer.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Controllers;
+using WB.UI.Designer.Filters;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
@@ -44,7 +45,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
             ICategoricalOptionsImportService categoricalOptionsImportService = null,
             DesignerDbContext dbContext = null,
-            ITransactionRollbackState transactionRollbackState = null)
+            ITransactionRollbackState transactionRollbackState = null,
+            IPostCommitActions postCommitActions = null,
+            UserManager<DesignerIdentityUser> users = null)
         {
             var questionnaireController = new QuestionnaireController(
                 questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
@@ -61,12 +64,13 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 reusableCategoriesService: Mock.Of<IReusableCategoriesService>(),
                 Mock.Of<IEmailSender>(),
                 Mock.Of<IViewRenderService>(),
-                null!,
+                users,
                 Mock.Of<ITagHelperComponentManager>(),
                 Mock.Of<IWebHostEnvironment>(),
                 Mock.Of<IOptions<ViteTagOptions>>(),
                 Mock.Of<IMemoryCache>(),
-                transactionRollbackState ?? new TransactionRollbackState());
+                transactionRollbackState ?? new TransactionRollbackState(),
+                postCommitActions ?? Mock.Of<IPostCommitActions>());
             questionnaireController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext
