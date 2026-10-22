@@ -33,12 +33,21 @@ class OptionsApi {
             isCategory
         });
 
-        return await api.post(
-            `/questionnaire/applyoptions/${questionnaireRev}?${params}`,
-            {
-                categories
+        try {
+            return await api.post(
+                `/questionnaire/applyoptions/${questionnaireRev}?${params}`,
+                {
+                    categories
+                }
+            );
+        } catch (error) {
+            // Command failures now return a non-2xx status; surface their envelope so callers still read isSuccess/error.
+            const body = error && error.body;
+            if (body && (body.isSuccess !== undefined || body.IsSuccess !== undefined)) {
+                return body;
             }
-        );
+            throw error;
+        }
     }
 
     getExportOptionsAsTabUri(

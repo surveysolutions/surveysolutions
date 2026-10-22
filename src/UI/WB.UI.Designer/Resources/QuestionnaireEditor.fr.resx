@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -1108,7 +1108,7 @@ Les vues Table et Matrice sont uniquement prises en charge dans l'enquête Web, 
   </data>
   <data name="HotkeysCloseComments" xml:space="preserve">
     <value>Fermer le panneau des commentaires</value>
-  </data>    
+  </data>
   <data name="HotkeysFocusTitle" xml:space="preserve">
     <value>Mettre le focus sur le champ de titre dans l'éditeur</value>
   </data>
@@ -1383,10 +1383,10 @@ Veuillez vérifier votre connexion réseau ou contacter votre support informatiq
   </data>
   <data name="CollaboratorsSettings" xml:space="preserve">
     <value>Collaborateurs</value>
-  </data>  
+  </data>
   <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
     <value>les utilisateurs suivants ont accès à ce questionnaire</value>
-  </data>  
+  </data>
   <data name="AccessSettings" xml:space="preserve">
     <value>Accès</value>
   </data>
@@ -1395,13 +1395,13 @@ Veuillez vérifier votre connexion réseau ou contacter votre support informatiq
   </data>
   <data name="PublicAccessDescriptionSettings" xml:space="preserve">
     <value>Les questionnaires publics sont visibles par tous les utilisateurs ayant un compte dans ce système en mode lecture seule.</value>
-  </data>  
+  </data>
   <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
     <value>Le questionnaire est actuellement partagé en tant que public.</value>
   </data>
   <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
     <value>Le questionnaire n'est actuellement pas partagé en tant que public.</value>
-  </data>  
+  </data>
   <data name="PublicAccessSettingsOn" xml:space="preserve">
     <value>Activer l'accès public.</value>
   </data>
@@ -1410,10 +1410,10 @@ Veuillez vérifier votre connexion réseau ou contacter votre support informatiq
   </data>
   <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
     <value>Partage de lien</value>
-  </data>  
+  </data>
   <data name="AnonymousLink" xml:space="preserve">
     <value>Lien anonyme :</value>
-  </data>  
+  </data>
   <data name="CopyLink" xml:space="preserve">
     <value>Copier le lien</value>
   </data>
@@ -1681,5 +1681,11 @@ Vous avez entré une entrée invalide. Chaque ligne doit suivre le format : "Tit
 </data>
   <data name="AIAssistant" xml:space="preserve">
     <value>IA</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+      <value>Modifier</value>
+  </data>
+  <data name="Stick" xml:space="preserve">
+      <value>Adhérer</value>
   </data>
 </root>
