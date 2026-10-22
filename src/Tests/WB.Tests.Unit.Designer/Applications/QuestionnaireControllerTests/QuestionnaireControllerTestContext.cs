@@ -48,7 +48,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             DesignerDbContext dbContext = null,
             IEmailSender emailSender = null,
             IViewRenderService viewRenderService = null,
-            UserManager<DesignerIdentityUser> userManager = null)
+            UserManager<DesignerIdentityUser> userManager = null,
+            ITransactionRollbackState transactionRollbackState = null)
         {
             var questionnaireController = new QuestionnaireController(
                 questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
@@ -69,7 +70,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 Mock.Of<ITagHelperComponentManager>(),
                 Mock.Of<IWebHostEnvironment>(),
                 Mock.Of<IOptions<ViteTagOptions>>(),
-                Mock.Of<IMemoryCache>());
+                Mock.Of<IMemoryCache>(),
+                transactionRollbackState ?? new TransactionRollbackState());
             questionnaireController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext
