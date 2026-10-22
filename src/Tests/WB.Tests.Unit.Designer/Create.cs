@@ -422,7 +422,8 @@ namespace WB.Tests.Unit.Designer
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
             bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
-            string title = "test", string variableLabel = null, Option[] options = null, bool? isCritical = null)
+            string title = "test", string variableLabel = null, Option[] options = null, bool? isCritical = null,
+            bool isNonNegative = false)
         {
             var publicKey = id ?? Guid.NewGuid();
             var stataExportCaption = variable ?? "numeric_question"+publicKey;
@@ -446,12 +447,13 @@ namespace WB.Tests.Unit.Designer
                         ParentValue = x.ParentValue, 
                         AttachmentName = x.AttachmentName}).ToList()
                     : Enumerable.Empty<Answer>().ToList(),
-                Properties = Create.QuestionProperties(isCritical)
+                Properties = Create.QuestionProperties(isCritical),
+                IsNonNegative = isNonNegative
             };
         }
 
         public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null,
-            string title = "test test", int? decimalPlaces = null)
+            string title = "test test", int? decimalPlaces = null, Option[] specialValues = null, bool isNonNegative = false)
         {
             return new NumericQuestion
             {
@@ -462,7 +464,17 @@ namespace WB.Tests.Unit.Designer
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 ValidationExpression = validationExpression,
                 QuestionText = title,
-                CountOfDecimalPlaces = decimalPlaces
+                CountOfDecimalPlaces = decimalPlaces,
+                Answers = specialValues != null
+                    ? specialValues.Select(x => new Answer
+                    {
+                        AnswerValue = x.Value,
+                        AnswerText = x.Title,
+                        ParentValue = x.ParentValue,
+                        AttachmentName = x.AttachmentName
+                    }).ToList()
+                    : Enumerable.Empty<Answer>().ToList(),
+                IsNonNegative = isNonNegative
             };
         }
 
@@ -796,33 +808,37 @@ namespace WB.Tests.Unit.Designer
             int? sequence = null,
             string diffWithPreviousVersion = null,
             Guid? userId = null,
-            params QuestionnaireChangeReference[] reference)
-        {
-            return new QuestionnaireChangeRecord()
-            {
-                UserId = userId ?? Guid.NewGuid(),
-                QuestionnaireChangeRecordId = questionnaireChangeRecordId ?? Guid.NewGuid().FormatGuid(),
-                QuestionnaireId = questionnaireId,
-                ActionType = action ?? QuestionnaireActionType.Add,
-                TargetItemId = targetId ?? Guid.NewGuid(),
-                TargetItemType = targetType ?? QuestionnaireItemType.Section,
-                References = reference.ToImmutableHashSet(),
-                Sequence = sequence ?? changeRecordSequence++,
-                ResultingQuestionnaireDocument = resultingQuestionnaireDocument,
-                Patch = diffWithPreviousVersion
-            };
-        }
+                    string targetTitle = null,
+                    params QuestionnaireChangeReference[] reference)
+                {
+                    return new QuestionnaireChangeRecord()
+                    {
+                        UserId = userId ?? Guid.NewGuid(),
+                        QuestionnaireChangeRecordId = questionnaireChangeRecordId ?? Guid.NewGuid().FormatGuid(),
+                        QuestionnaireId = questionnaireId,
+                        ActionType = action ?? QuestionnaireActionType.Add,
+                        TargetItemId = targetId ?? Guid.NewGuid(),
+                        TargetItemType = targetType ?? QuestionnaireItemType.Section,
+                        TargetItemTitle = targetTitle,
+                        References = reference.ToImmutableHashSet(),
+                        Sequence = sequence ?? changeRecordSequence++,
+                        ResultingQuestionnaireDocument = resultingQuestionnaireDocument,
+                        Patch = diffWithPreviousVersion
+                    };
+                }
 
-        public static QuestionnaireChangeReference QuestionnaireChangeReference(
-            Guid? referenceId = null,
-            QuestionnaireItemType? referenceType = null)
-        {
-            return new QuestionnaireChangeReference()
-            {
-                ReferenceId = referenceId ?? Guid.NewGuid(),
-                ReferenceType = referenceType ?? QuestionnaireItemType.Section
-            };
-        }
+                public static QuestionnaireChangeReference QuestionnaireChangeReference(
+                    Guid? referenceId = null,
+                    QuestionnaireItemType? referenceType = null,
+                    string referenceTitle = null)
+                {
+                    return new QuestionnaireChangeReference()
+                    {
+                        ReferenceId = referenceId ?? Guid.NewGuid(),
+                        ReferenceType = referenceType ?? QuestionnaireItemType.Section,
+                        ReferenceTitle = referenceTitle ?? string.Empty
+                    };
+                }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire_doc");
@@ -1462,10 +1478,11 @@ namespace WB.Tests.Unit.Designer
             public static UpdateNumericQuestion UpdateNumericQuestion(Guid questionnaireId, Guid questionId, Guid responsibleId, 
                 string title, bool isPreFilled = false, QuestionScope scope = QuestionScope.Interviewer, bool isInteger = false, 
                 bool useFormatting = false, int? countOfDecimalPlaces = null, List<ValidationCondition> validationConditions = null,
-                Option[] options = null)
+                Option[] options = null, bool isNonNegative = false)
             {
                 return new UpdateNumericQuestion(questionnaireId, questionId, responsibleId, new CommonQuestionParameters {Title = title}, isPreFilled, scope, 
-                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>(), options: options);
+                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>(), options: options,
+                    isNonNegative: isNonNegative);
             }
 
             public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, 

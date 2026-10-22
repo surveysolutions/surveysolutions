@@ -384,6 +384,9 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Zadaná hodnota nemůže být zadána jako celé číslo</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Záporné hodnoty nejsou pro tuto otázku povoleny</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Odpověď "{0}", zadaná hodnota je vyšší než je povoleno '{1}'.</value>
   </data>
@@ -560,6 +563,9 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   </data>
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Vyberte jednu možnost</value>
+  </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Fotografii nelze zpracovat, protože její formát není podporován. Vyfoťte ji prosím znovu.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Vyfotit</value>

@@ -1069,4 +1069,13 @@ hoặc liên hệ với giám sát viên của bạn
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Trạng thái: Mở</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>Không có nhà cung cấp phù hợp để xác định vị trí</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>Nhà cung cấp GPS đã bị tắt</value>
+  </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>Vị trí nhận được đã bị từ chối vì không khớp với nguồn vị trí được chấp nhận được cấu hình cho không gian làm việc này</value>
+  </data>
 </root>

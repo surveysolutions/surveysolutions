@@ -104,6 +104,24 @@
                 </div>
             </div>
             <div class="col-sm-9">
+                <div class="block-filter" style="padding-left: 30px">
+                    <div class="form-group">
+                        <label for="acceptableGpsLocationSource" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{ $t('Settings.AcceptableGpsLocationSource') }}
+                            <p style="font-weight: normal;margin-bottom: 0px">
+                                {{ $t('Settings.AcceptableGpsLocationSourceDescription') }}
+                            </p>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Typeahead control-id="acceptableGpsLocationSource" noSearch noClear
+                            :values="acceptableGpsLocationSourceOptions" :value="acceptableGpsLocationSourceValue"
+                            @selected="onAcceptableGpsLocationSourceSelected" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
                 <Form v-slot="{ meta }" @submit="noAction" :data-vv-scope="'geographyQuestion'">
                     <div class="block-filter" style="padding-left: 30px">
                         <div class="form-group">
@@ -124,7 +142,8 @@
                                         min_value: 1,
                                         max_value: 1000,
                                     }" :validateOnChange="true" :validateOnInput="true" name="accuracy"
-                                    label="Accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number"
+                                    :label="$t('Settings.InterviewerGeographyQuestionAccuracyInMeters')"
+                                    id="interviewerGeographyQuestionAccuracyInMeters" type="number"
                                     onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
                             <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMetersModel ==
@@ -167,7 +186,8 @@
                                         required: true,
                                         min_value: 5,
                                         max_value: 1000,
-                                    }" :validateOnChange="true" :validateOnInput="true" label="Period"
+                                    }" :validateOnChange="true" :validateOnInput="true"
+                                    :label="$t('Settings.InterviewerGeographyQuestionPeriodInSeconds')"
                                     id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number"
                                     onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
@@ -228,9 +248,8 @@
             <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox"
-                            v-model="allowSupervisorAudioAuditPlaybackModel" @change="updateDeviceSettings"
-                            id="allowSupervisorAudioAuditPlayback" type="checkbox" />
+                        <input class="checkbox-filter single-checkbox" v-model="allowSupervisorAudioAuditPlaybackModel"
+                            @change="updateDeviceSettings" id="allowSupervisorAudioAuditPlayback" type="checkbox" />
                         <label for="allowSupervisorAudioAuditPlayback" style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.AllowSupervisorAudioAuditPlayback') }}
@@ -272,6 +291,11 @@
 .block-filter .error {
     color: red;
 }
+
+:deep(#acceptableGpsLocationSource) {
+    width: 450px;
+    max-width: 100%;
+}
 </style>
 
 <script>
@@ -292,6 +316,7 @@ export default {
         allowSupervisorChangeAssignmentStatus: Boolean,
         allowInterviewerChangeAssignmentStatus: Boolean,
         audioRecordingQuality: String,
+        acceptableGpsLocationSource: String,
         allowSupervisorAudioAuditPlayback: Boolean,
     },
     emits: ['update:isInterviewerAutomaticUpdatesEnabled',
@@ -306,6 +331,7 @@ export default {
         'update:allowSupervisorChangeAssignmentStatus',
         'update:allowInterviewerChangeAssignmentStatus',
         'update:audioRecordingQuality',
+        'update:acceptableGpsLocationSource',
         'update:allowSupervisorAudioAuditPlayback',
     ],
     computed: {
@@ -427,6 +453,25 @@ export default {
         audioRecordingQualityValue() {
             return this.audioRecordingQualityOptions.find(o => o.key === this.audioRecordingQuality) || null
         },
+        acceptableGpsLocationSourceModel: {
+            get() {
+                return this.acceptableGpsLocationSource
+            },
+            set(value) {
+                this.$emit('update:acceptableGpsLocationSource', value)
+            },
+        },
+        acceptableGpsLocationSourceOptions() {
+            return [
+                { key: 'BuiltInGpsOnly', value: this.$t('Settings.AcceptableGpsLocationSource_BuiltInGpsOnly') },
+                { key: 'BuiltInOrExternalGps', value: this.$t('Settings.AcceptableGpsLocationSource_BuiltInOrExternalGps') },
+                { key: 'AnyNonMock', value: this.$t('Settings.AcceptableGpsLocationSource_AnyNonMock') },
+                { key: 'Any', value: this.$t('Settings.AcceptableGpsLocationSource_Any') },
+            ]
+        },
+        acceptableGpsLocationSourceValue() {
+            return this.acceptableGpsLocationSourceOptions.find(o => o.key === this.acceptableGpsLocationSource) || null
+        },
     },
 
     components: {
@@ -446,7 +491,8 @@ export default {
                     this.allowSupervisorChangeAssignmentStatusModel,
                     this.allowInterviewerChangeAssignmentStatusModel,
                     this.audioRecordingQualityModel,
-                    this.allowSupervisorAudioAuditPlaybackModel
+                    this.allowSupervisorAudioAuditPlaybackModel,
+                    this.acceptableGpsLocationSourceModel
                 )
             })
         },
@@ -454,6 +500,13 @@ export default {
         onAudioRecordingQualitySelected(item) {
             if (item != null) {
                 this.audioRecordingQualityModel = item.key
+                this.updateDeviceSettings()
+            }
+        },
+
+        onAcceptableGpsLocationSourceSelected(item) {
+            if (item != null) {
+                this.acceptableGpsLocationSourceModel = item.key
                 this.updateDeviceSettings()
             }
         },
