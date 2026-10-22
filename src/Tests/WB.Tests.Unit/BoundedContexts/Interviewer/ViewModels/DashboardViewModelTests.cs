@@ -118,7 +118,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     rejectedInterviewsViewModel: rejectedInterviewsViewModel ?? DashboardRejectedInterviewsViewModel(),
                     interviewsRepository: interviewsRepository ?? Substitute.For<IPlainStorage<InterviewView>>(),
                     auditLogService: Mock.Of<IAuditLogService>(),
-                    synchronizationCompleteSource: synchronizationCompleteSource ?? SyncCompleteSource, 
+                    synchronizationCompleteSource: synchronizationCompleteSource ?? new SynchronizationCompleteSource(),
                     permissionsService: Mock.Of<IPermissionsService>(), 
                     nearbyConnection: Mock.Of<INearbyConnection>(x => x.Events == new Subject<INearbyEvent>()), 
                     syncClient: Mock.Of<IOfflineSyncClient>(),
@@ -145,8 +145,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             await refreshCompleted.Task.WaitAsync(TimeSpan.FromSeconds(5));
             await Task.Delay(20);
         }
-
-        private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();
 
         private static CreateNewViewModel DashboardQuestionnairesViewModel()
         {
