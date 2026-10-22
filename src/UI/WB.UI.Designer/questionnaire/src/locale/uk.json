@@ -504,6 +504,7 @@
     "SideBarShowDescription": "add description",
     "SideBarAddCriticalityCondition": "add new critical rule",
     "AttachmentSizeIsTooBig": "Attachment size is too big. Max size: {{size}}",
+    "AttachmentTypeIsNotSupported": "Attachment type is not supported.",
     "SideBarCriticalityConditionsTitle": "Critical rules",
     "Default": "Default",
     "Reset": "Reset",
