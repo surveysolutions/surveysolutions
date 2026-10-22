@@ -1055,6 +1055,12 @@ Aparecerá no dispositivo do entrevistador após a próxima sincronização</val
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Aprovar</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Fechar</value>
+  </data>
+  <data name="PlayVideo_OpenFullScreen" xml:space="preserve">
+    <value>Abrir em tela cheia</value>
+  </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>Fechar atribuição</value>
   </data>
