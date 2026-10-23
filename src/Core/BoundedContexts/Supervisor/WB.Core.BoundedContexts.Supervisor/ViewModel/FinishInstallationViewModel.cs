@@ -64,15 +64,33 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                    + Environment.NewLine + string.Format(EnumeratorUIResources.SupervisorVersion, appVersion);
         }
 
-        protected override Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, string password, CancellationToken token) 
-            => throw new NotImplementedException();
+        protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, string password, CancellationToken token)
+        {
+            var identity = await GenerateSupervisorIdentityAsync(credentials, password, token).ConfigureAwait(false);
+
+            await this.ViewModelNavigationService
+                .NavigateToAsync<RelinkDeviceViewModel, RelinkDeviceViewModelArg>(
+                    new RelinkDeviceViewModelArg { Identity = identity });
+        }
 
         protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, string password, CancellationToken token)
+        {
+            var supervisorIdentity = await GenerateSupervisorIdentityAsync(credentials, password, token).ConfigureAwait(false);
+            this.supervisorsPlainStorage.Store(supervisorIdentity);
+        }
+
+        protected override async Task<List<UserWorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials, CancellationToken token)
+        {
+            var supervisor = await this.synchronizationService.GetSupervisorAsync(credentials, token: token).ConfigureAwait(false);
+            return supervisor.Workspaces;
+        }
+
+        private async Task<SupervisorIdentity> GenerateSupervisorIdentityAsync(RestCredentials credentials, string password, CancellationToken token)
         {
             var supervisor = await this.synchronizationService.GetSupervisorAsync(credentials, token: token).ConfigureAwait(false);
             var tenantId = await this.synchronizationService.GetTenantId(credentials, token).ConfigureAwait(false);
 
-            var supervisorIdentity = new SupervisorIdentity
+            return new SupervisorIdentity
             {
                 Id = supervisor.Id.FormatGuid(),
                 UserId = supervisor.Id,
@@ -83,14 +101,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 TenantId = tenantId,
                 Workspace = supervisor.Workspaces.First().Name
             };
-
-            this.supervisorsPlainStorage.Store(supervisorIdentity);
-        }
-
-        protected override async Task<List<UserWorkspaceApiView>> GetUserWorkspaces(RestCredentials credentials, CancellationToken token)
-        {
-            var supervisor = await this.synchronizationService.GetSupervisorAsync(credentials, token: token).ConfigureAwait(false);
-            return supervisor.Workspaces;
         }
     }
 }
