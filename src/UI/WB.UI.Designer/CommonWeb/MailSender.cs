@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Mail;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -19,7 +20,7 @@ namespace WB.UI.Designer.CommonWeb
         public bool EnableSSL { get; set; }
         public string PickupFolder { get; set; } = string.Empty;
         public bool UsePickupFolder { get; set; } = false;
-        /// <summary>Timeout in milliseconds for a single SMTP connection attempt. Default: 30 s.</summary>
+        /// <summary>Timeout in milliseconds for a single SMTP send. Default: 30 s.</summary>
         public int Timeout { get; set; } = 30_000;
     }
 
@@ -53,7 +54,6 @@ namespace WB.UI.Designer.CommonWeb
 
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.EnableSsl = config.EnableSSL;
-                client.Timeout = config.Timeout > 0 ? config.Timeout : 30_000;
 
                 if (this.settings.Value.UsePickupFolder)
                 {
@@ -71,7 +71,7 @@ namespace WB.UI.Designer.CommonWeb
                     client.EnableSsl = false;
                 }
                 
-                var message = new MailMessage(
+                using var message = new MailMessage(
                     to: email,
                     from: config.From,
                     subject: subject,
@@ -81,7 +81,8 @@ namespace WB.UI.Designer.CommonWeb
                     IsBodyHtml = true
                 };
 
-                await client.SendMailAsync(message);
+                using var timeoutCts = new CancellationTokenSource(config.Timeout > 0 ? config.Timeout : 30_000);
+                await client.SendMailAsync(message, timeoutCts.Token);
             }
         }
     }

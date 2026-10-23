@@ -550,34 +550,35 @@ namespace WB.UI.Designer.Controllers
 
         private async Task TrySendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId, QuestionnaireView? questionnaireView)
         {
-            // Resolve all request-scoped data eagerly before launching the email task.
-            // This ensures the background task does not access HttpContext or request-scoped
-            // services after the action returns (e.g. on timeout).
-            var user = await this.users.GetUserAsync(User);
-            if (user?.Email == null)
-                return;
-
-            questionnaireView ??= GetQuestionnaireView(id);
-            if (questionnaireView == null)
-            {
-                logger.LogWarning("Anonymous sharing email skipped: questionnaire {QuestionnaireId} not found", id);
-                return;
-            }
-
-            var questionnaireTitle = questionnaireView.Title;
-            var sharingLink = Url.Action("Details", "Q", new { id = anonymousQuestionnaireId }, Request.Scheme);
-            if (sharingLink == null)
-            {
-                logger.LogWarning("Anonymous sharing email skipped: could not generate sharing link for questionnaire {QuestionnaireId}", id);
-                return;
-            }
-
-            var requestAborted = HttpContext.RequestAborted;
-            // Only Razor rendering and SMTP send are potentially long-running and are launched
-            // as a timed task. They do not use request-scoped services: ViewRenderService
-            // creates its own DefaultHttpContext, and MailSender uses only singleton options.
+            var requestAborted = CancellationToken.None;
             try
             {
+                requestAborted = HttpContext.RequestAborted;
+                // Resolve all request-scoped data eagerly before launching the email task.
+                // This ensures the background task does not access HttpContext or request-scoped
+                // services after the action returns (e.g. on timeout).
+                var user = await this.users.GetUserAsync(User);
+                if (user?.Email == null)
+                    return;
+
+                questionnaireView ??= GetQuestionnaireView(id);
+                if (questionnaireView == null)
+                {
+                    logger.LogWarning("Anonymous sharing email skipped: questionnaire {QuestionnaireId} not found", id);
+                    return;
+                }
+
+                var questionnaireTitle = questionnaireView.Title;
+                var sharingLink = Url.Action("Details", "Q", new { id = anonymousQuestionnaireId }, Request.Scheme);
+                if (sharingLink == null)
+                {
+                    logger.LogWarning("Anonymous sharing email skipped: could not generate sharing link for questionnaire {QuestionnaireId}", id);
+                    return;
+                }
+
+                // Only Razor rendering and SMTP send are potentially long-running and are launched
+                // as a timed task. They do not use request-scoped services: ViewRenderService
+                // creates its own DefaultHttpContext, and MailSender uses only singleton options.
                 var userName = User.GetUserNameOrNull() ?? user.UserName ?? string.Empty;
                 var sendTask = SendEmailAsync(user.Email, userName, sharingLink, questionnaireTitle);
                 using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(requestAborted);

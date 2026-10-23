@@ -5,10 +5,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Services;
 
@@ -18,6 +21,65 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
     [TestOf(typeof(QuestionnaireController))]
     internal class AnonymousQuestionnaireSettingsTests : QuestionnaireControllerTestContext
     {
+        [TestCase(false, "user")]
+        [TestCase(true, "user")]
+        [TestCase(false, "link")]
+        [TestCase(true, "link")]
+        [TestCase(true, "questionnaire")]
+        public async Task when_notification_preparation_fails_should_return_success_and_preserve_saved_settings(
+            bool regenerate, string failure)
+        {
+            var questionnaireId = Guid.NewGuid();
+            using var dbContext = Create.InMemoryDbContext();
+            var previousLinkId = Guid.NewGuid();
+            if (regenerate)
+            {
+                dbContext.AnonymousQuestionnaires.Add(new AnonymousQuestionnaire
+                {
+                    QuestionnaireId = questionnaireId,
+                    AnonymousQuestionnaireId = previousLinkId,
+                    IsActive = true,
+                    GeneratedAtUtc = DateTime.UtcNow
+                });
+                await dbContext.SaveChangesAsync();
+            }
+
+            var userManager = CreateUserManager(new DesignerIdentityUser
+                { Email = "test@example.com", UserName = "testuser" });
+            var questionnaireViewFactory = CreateQuestionnaireViewFactory();
+            var urlHelper = CreateUrlHelper();
+            if (failure == "user")
+                Mock.Get(userManager).Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                    .ThrowsAsync(new InvalidOperationException("User lookup failed"));
+            else if (failure == "questionnaire")
+                Mock.Get(questionnaireViewFactory).Setup(f => f.Load(It.IsAny<QuestionnaireViewInputModel>()))
+                    .Throws(new InvalidOperationException("Questionnaire lookup failed"));
+            else
+                Mock.Get(urlHelper).Setup(u => u.Action(It.IsAny<UrlActionContext>()))
+                    .Throws(new InvalidOperationException("Link generation failed"));
+
+            var emailSender = new Mock<IEmailSender>();
+            var controller = CreateQuestionnaireController(
+                dbContext: dbContext,
+                questionnaireViewFactory: questionnaireViewFactory,
+                userManager: userManager,
+                emailSender: emailSender.Object);
+            controller.Url = urlHelper;
+
+            var result = regenerate
+                ? await controller.RegenerateAnonymousQuestionnaireLink(questionnaireId)
+                : await controller.UpdateAnonymousQuestionnaireSettings(questionnaireId,
+                    new QuestionnaireController.UpdateAnonymousQuestionnaireSettingsModel { IsActive = true });
+
+            Assert.That(result, Is.InstanceOf<JsonResult>());
+            dbContext.ChangeTracker.Clear();
+            var saved = await dbContext.AnonymousQuestionnaires.SingleAsync(a => a.QuestionnaireId == questionnaireId);
+            Assert.That(saved.IsActive, Is.True);
+            Assert.That(saved.AnonymousQuestionnaireId, Is.Not.EqualTo(previousLinkId).And.Not.EqualTo(Guid.Empty));
+            emailSender.Verify(s => s.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
+                Times.Never);
+        }
+
         [Test]
         public async Task UpdateAnonymousQuestionnaireSettings_when_email_sending_fails_should_still_return_success()
         {
