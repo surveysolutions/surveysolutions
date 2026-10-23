@@ -44,6 +44,41 @@ namespace WB.Tests.Unit.Infrastructure
         }
 
         [Test]
+        public async Task RunWithLock_should_wait_for_repository_read_before_acquiring_first_transaction_lock()
+        {
+            var aggregateLock = new AggregateLock();
+            var readerEntered = new ManualResetEventSlim();
+            var releaseReader = new ManualResetEventSlim();
+            var transactionEntered = new ManualResetEventSlim();
+            var completion = NewCompletion(out var completed);
+
+            var repositoryRead = Task.Run(() => aggregateLock.RunWithLock("aggregate", () =>
+            {
+                readerEntered.Set();
+                releaseReader.Wait();
+            }));
+
+            Assert.That(readerEntered.Wait(TimeSpan.FromSeconds(2)), Is.True);
+
+            var transactionCommand = Task.Run(() =>
+                aggregateLock.RunWithLock("aggregate", completion, transactionEntered.Set));
+
+            try
+            {
+                Assert.That(transactionEntered.Wait(TimeSpan.FromMilliseconds(100)), Is.False);
+                releaseReader.Set();
+
+                Assert.That(transactionEntered.Wait(TimeSpan.FromSeconds(2)), Is.True);
+                await Task.WhenAll(repositoryRead, transactionCommand).WaitAsync(TimeSpan.FromSeconds(2));
+                completed(false);
+            }
+            finally
+            {
+                releaseReader.Set();
+            }
+        }
+
+        [Test]
         public void RunWithLock_should_coordinate_transaction_locks_with_repository_reads()
         {
             var aggregateLock = new AggregateLock();

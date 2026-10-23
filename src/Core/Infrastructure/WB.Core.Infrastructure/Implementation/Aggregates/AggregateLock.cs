@@ -109,7 +109,9 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
                     if (heldLocks.ContainsKey(key))
                         return false;
 
-                    if (!semaphore.Wait(0))
+                    if (heldLocks.Count == 0)
+                        semaphore.Wait();
+                    else if (!semaphore.Wait(0))
                         throw new InvalidOperationException("Aggregate lock is currently held by another transaction.");
 
                     heldLocks.Add(key, semaphore);
