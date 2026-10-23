@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -73,8 +75,16 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (mapContent == null)
                 return NotFound();
 
+            string mapContentHash;
+            using (var hashStream = new MemoryStream(mapContent))
+                mapContentHash = Convert.ToBase64String(this.fileSystemAccessor.ReadHash(hashStream));
+
             Stream exportFileStream = new MemoryStream(mapContent);
-            var result = new FileStreamResult(exportFileStream, "application/octet-stream") { };
+            var result = new FileStreamResult(exportFileStream, "application/octet-stream")
+            {
+                EnableRangeProcessing = true,
+                EntityTag = mapContentHash == null ? null : new EntityTagHeaderValue($"\"{mapContentHash}\"")
+            };
             return result;
         }
     }

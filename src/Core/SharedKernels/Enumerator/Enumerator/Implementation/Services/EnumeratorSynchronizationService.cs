@@ -326,14 +326,46 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 url: this.MapsController, token: cancellationToken, credentials: this.restCredentials));
         }
         
-        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken)
+#nullable enable
+        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken, long offset = 0, string? ifRangeETag = null)
+#nullable restore
         {
-            return this.TryGetRestResponseOrThrowAsync(async () => 
-                await this.restService.GetResponseStreamAsync(
-                    url: $"{this.MapsController}/details",
-                    queryString: new {id = WebUtility.UrlEncode(mapName)},
-                    token: cancellationToken,
-                    credentials: this.restCredentials).ConfigureAwait(false));
+            return this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                Dictionary<string, string> headers = new Dictionary<string, string>
+                {
+                    ["Accept-Encoding"] = "identity"
+                };
+                if (offset > 0)
+                {
+                    headers["Range"] = $"bytes={offset}-";
+                    if (ifRangeETag != null)
+                        headers["If-Range"] = ifRangeETag.Length > 1 && ifRangeETag[0] == '"' && ifRangeETag[ifRangeETag.Length - 1] == '"'
+                            ? ifRangeETag
+                            : $@"""{ifRangeETag}""";
+                }
+                try
+                {
+                    return await this.restService.GetResponseStreamAsync(
+                        url: $"{this.MapsController}/details",
+                        queryString: new {id = WebUtility.UrlEncode(mapName)},
+                        token: cancellationToken,
+                        credentials: this.restCredentials,
+                        customHeaders: headers).ConfigureAwait(false);
+                }
+                catch (RestException ex) when (offset > 0 && ex.StatusCode == HttpStatusCode.RequestedRangeNotSatisfiable)
+                {
+                    var retryHeaders = new Dictionary<string, string>(headers);
+                    retryHeaders.Remove("Range");
+                    retryHeaders.Remove("If-Range");
+                    return await this.restService.GetResponseStreamAsync(
+                        url: $"{this.MapsController}/details",
+                        queryString: new {id = WebUtility.UrlEncode(mapName)},
+                        token: cancellationToken,
+                        credentials: this.restCredentials,
+                        customHeaders: retryHeaders).ConfigureAwait(false);
+                }
+            });
         }
 
         public Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
