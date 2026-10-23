@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SixLabors.ImageSharp;
+using WB.Core.Infrastructure.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Shared.Web.Modules;
@@ -169,7 +169,7 @@ namespace WB.UI.WebTester.Controllers
             {
                 return this.imageProcessingService.ResizeImage(content, height, 1920);
             }
-            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            catch (Exception exception) when (exception is InvalidImageException || exception is NotSupportedException)
             {
                 return null;
             }
@@ -179,10 +179,9 @@ namespace WB.UI.WebTester.Controllers
         {
             try
             {
-                this.imageProcessingService.Validate(content);
-                return SixLabors.ImageSharp.Image.DetectFormat(content)?.DefaultMimeType;
+                return this.imageProcessingService.GetImageMimeType(content);
             }
-            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            catch (Exception exception) when (exception is InvalidImageException || exception is NotSupportedException)
             {
                 return null;
             }
