@@ -288,6 +288,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     if (previousConfig != null)
                     {
                         var newConfig = previousConfig.CopyFor(questionnaireIdentity);
+                        newConfig.Started = false;
 
                         webInterviewConfigProvider.Store(questionnaireIdentity, newConfig);
                         logger.Verbose($"Copied web interview settings from version {sourceConfigIdentity.Version} to {questionnaireIdentity.Version} for questionnaire {questionnaireId}");
