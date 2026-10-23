@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc;
@@ -49,17 +51,19 @@ public class MapsControllerTests
     }
 
     [Test]
-    public async Task GetMapContent_should_use_content_hash_as_etag()
+    public async Task GetMapContent_should_use_hash_of_returned_content_as_etag()
     {
         var mapContent = new byte[] { 1, 2, 3, 4 };
-        const string mapHash = "stored-hash";
-        var controller = CreateApiController(mapContent, mapHash);
+        var controller = CreateApiController(mapContent);
 
         var result = await controller.GetMapContent("map.tif") as FileStreamResult;
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result!.EnableRangeProcessing, Is.True);
-        Assert.That(result.EntityTag?.Tag, Is.EqualTo($"\"{mapHash}\""));
+        Assert.That(result.EntityTag?.Tag, Is.EqualTo($"\"{Convert.ToBase64String(MD5.Create().ComputeHash(mapContent))}\""));
+        using var content = new MemoryStream();
+        await result.FileStream.CopyToAsync(content);
+        Assert.That(content.ToArray(), Is.EqualTo(mapContent));
     }
 
     private static MapsController CreateController(Guid uploaderId, UserRoles uploaderRole, out string uploaderName)
@@ -101,7 +105,7 @@ public class MapsControllerTests
         return controller;
     }
 
-    private static MapsApiV2Controller CreateApiController(byte[] mapContent, string mapHash)
+    private static MapsApiV2Controller CreateApiController(byte[] mapContent)
     {
         var map = new MapBrowseItem
         {
@@ -117,12 +121,13 @@ public class MapsControllerTests
 
         var mapRepository = new Mock<IMapStorageService>();
         mapRepository.Setup(x => x.GetMapContentAsync("map.tif")).ReturnsAsync(mapContent);
-        mapRepository.Setup(x => x.GetMapContentHashAsync("map.tif")).ReturnsAsync(mapHash);
 
         var authorizedUser = Mock.Of<IAuthorizedUser>(u => u.UserName == "interviewer" && u.IsSupervisor == false);
 
         var fileSystemAccessor = new Mock<IFileSystemAccessor>();
         fileSystemAccessor.Setup(x => x.GetFileName("map.tif")).Returns("map.tif");
+        fileSystemAccessor.Setup(x => x.ReadHash(It.IsAny<Stream>()))
+            .Returns<Stream>(stream => MD5.Create().ComputeHash(stream));
 
         return new MapsApiV2Controller(
             mapRepository.Object,

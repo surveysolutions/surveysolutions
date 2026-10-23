@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -74,7 +75,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (mapContent == null)
                 return NotFound();
 
-            var mapContentHash = await this.mapRepository.GetMapContentHashAsync(map.FileName);
+            string mapContentHash;
+            using (var hashStream = new MemoryStream(mapContent))
+                mapContentHash = Convert.ToBase64String(this.fileSystemAccessor.ReadHash(hashStream));
 
             Stream exportFileStream = new MemoryStream(mapContent);
             var result = new FileStreamResult(exportFileStream, "application/octet-stream")

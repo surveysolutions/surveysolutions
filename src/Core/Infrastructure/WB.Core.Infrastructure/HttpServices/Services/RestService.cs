@@ -376,7 +376,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             var contentLength = isPartialContent
                 ? response.Content.Headers.ContentRange?.Length ?? response.Content.Headers.ContentLength
                 : response.Content.Headers.ContentLength;
-            var eTag = response.Headers.ETag?.Tag;
+            var eTag = response.Headers.ETag?.ToString();
 
             var contentCompressionType = this.GetContentCompressionType(response.Content.Headers);
 

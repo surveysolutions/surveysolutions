@@ -143,7 +143,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                 try
                 {
                     var offset = this.mapService.GetTempMapOffset(mapDescription.MapName);
-                    var hadPartialTempFile = offset > 0;
                     var storedETag = offset > 0 ? this.mapService.GetTempMapETag(mapDescription.MapName) : null;
                     var restartDownloadFromBeginning = offset > 0 && string.IsNullOrWhiteSpace(storedETag);
                     if (restartDownloadFromBeginning)
@@ -181,11 +180,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                             {
                                 this.mapService.SaveTempMapETag(mapDescription.MapName, null);
                             }
-                            else if (!string.IsNullOrEmpty(contentStreamResult.ETag)
+                            if (!string.IsNullOrEmpty(contentStreamResult.ETag)
                                 && !contentStreamResult.ETag.StartsWith("W/", StringComparison.Ordinal))
                             {
-                                if (!hadPartialTempFile || contentStreamResult.IsPartialContent)
-                                    this.mapService.SaveTempMapETag(mapDescription.MapName, NormalizeStrongETag(contentStreamResult.ETag));
+                                this.mapService.SaveTempMapETag(mapDescription.MapName, NormalizeStrongETag(contentStreamResult.ETag));
                             }
 
                             var buffer = new byte[DownloadBufferSize];

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
@@ -187,6 +189,31 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
         }
 
         [Test]
+        public async Task when_resumed_download_gets_range_not_satisfiable_should_retry_without_range()
+        {
+            var restService = new Mock<IRestService>();
+            restService.SetupSequence(x => x.GetResponseStreamAsync(
+                    It.IsAny<string>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>(),
+                    It.IsAny<object>(), It.IsAny<Dictionary<string, string>>()))
+                .ThrowsAsync(new RestException("Range not satisfiable", HttpStatusCode.RequestedRangeNotSatisfiable))
+                .ReturnsAsync(new RestStreamResult { Stream = new MemoryStream() });
+            var service = Create.Service.SynchronizationService(restService: restService.Object);
+
+            using var result = await service.GetMapContentStream("resume-map.tpk", CancellationToken.None, 42, "etag-1");
+
+            Assert.That(result, Is.Not.Null);
+            restService.Verify(x => x.GetResponseStreamAsync(
+                It.IsAny<string>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>(),
+                It.IsAny<object>(), It.Is<Dictionary<string, string>>(headers =>
+                    headers["Range"] == "bytes=42-" && headers["If-Range"] == "\"etag-1\"")), Times.Once);
+            restService.Verify(x => x.GetResponseStreamAsync(
+                It.IsAny<string>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>(),
+                It.IsAny<object>(), It.Is<Dictionary<string, string>>(headers =>
+                    !headers.ContainsKey("Range") && !headers.ContainsKey("If-Range")
+                    && headers["Accept-Encoding"] == "identity")), Times.Once);
+        }
+
+        [Test]
         public async Task when_partial_resume_response_has_no_etag_should_keep_existing_resume_token()
         {
             var synchronizationService = new Mock<IOnlineSynchronizationService>();
@@ -325,6 +352,72 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
         }
 
         [Test]
+        public async Task when_restart_download_is_interrupted_should_save_etag_and_resume_next_time()
+        {
+            const string mapName = "interrupted-restart-map.tpk";
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = mapName } });
+            synchronizationService.Setup(x => x.GetMapContentStream(mapName, It.IsAny<CancellationToken>(), 0, null))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = 5,
+                    Stream = new FailingMemoryStream(new byte[] { 1, 2 }),
+                    ETag = "\"etag-2\""
+                });
+            synchronizationService.Setup(x => x.GetMapContentStream(mapName, It.IsAny<CancellationToken>(), 2, "etag-2"))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = 5,
+                    Stream = new MemoryStream(new byte[] { 3, 4, 5 }),
+                    IsPartialContent = true,
+                    ETag = "\"etag-2\""
+                });
+
+            var tempStream = new NonDisposingMemoryStream();
+            tempStream.Write(new byte[] { 9, 9, 9 }, 0, 3);
+            string storedETag = null;
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist(mapName)).Returns(false);
+            mapService.Setup(x => x.GetTempMapOffset(mapName)).Returns(() => tempStream.Length);
+            mapService.Setup(x => x.GetTempMapETag(mapName)).Returns(() => storedETag);
+            mapService.Setup(x => x.SaveTempMapETag(mapName, It.IsAny<string>()))
+                .Callback<string, string>((_, etag) => storedETag = etag);
+            mapService.Setup(x => x.GetTempMapSaveStream(mapName, It.IsAny<bool>()))
+                .Returns((string _, bool append) =>
+                {
+                    if (append)
+                    {
+                        tempStream.Position = tempStream.Length;
+                    }
+                    else
+                    {
+                        tempStream.SetLength(0);
+                        tempStream.Position = 0;
+                    }
+
+                    return tempStream;
+                });
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+
+            Assert.ThrowsAsync<IOException>(async () =>
+                await service.Synchronize(new Progress<SyncProgressInfo>(), CancellationToken.None, new SynchronizationStatistics()));
+            Assert.That(storedETag, Is.EqualTo("etag-2"));
+
+            await service.Synchronize(new Progress<SyncProgressInfo>(), CancellationToken.None, new SynchronizationStatistics());
+
+            synchronizationService.Verify(x => x.GetMapContentStream(mapName, It.IsAny<CancellationToken>(), 0, null), Times.Once);
+            synchronizationService.Verify(x => x.GetMapContentStream(mapName, It.IsAny<CancellationToken>(), 2, "etag-2"), Times.Once);
+            Assert.That(tempStream.ToArray(), Is.EqualTo(new byte[] { 1, 2, 3, 4, 5 }));
+            mapService.Verify(x => x.MoveTempMapToPermanent(mapName), Times.Once);
+        }
+
+        [Test]
         public async Task should_report_download_progress_for_unknown_content_length_without_spam()
         {
             var synchronizationService = new Mock<IOnlineSynchronizationService>();
@@ -416,6 +509,21 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
         {
             protected override void Dispose(bool disposing)
             {
+            }
+        }
+
+        private sealed class FailingMemoryStream : MemoryStream
+        {
+            public FailingMemoryStream(byte[] data) : base(data)
+            {
+            }
+
+            public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+            {
+                if (this.Position >= this.Length)
+                    return Task.FromException<int>(new IOException("Interrupted download"));
+
+                return base.ReadAsync(buffer, offset, count, cancellationToken);
             }
         }
     }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -64,6 +66,25 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
 
             var httpRequestMessage = testMessageHandler.ExecutedRequests.First();
             Assert.That(httpRequestMessage.RequestUri?.ToString(), Is.EqualTo("http://localhost/hq/q"));
+        }
+
+        [Test]
+        public async Task when_stream_response_has_weak_etag_should_preserve_weak_marker()
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(Array.Empty<byte>())
+            };
+            response.Headers.ETag = EntityTagHeaderValue.Parse("W/\"weak-tag\"");
+
+            var httpClient = new HttpClient(new ResponseMessageHandler(response));
+            var httpClientFactory =
+                Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
+            RestService service = Create.Service.RestService(httpClientFactory: httpClientFactory);
+
+            using var result = await service.GetResponseStreamAsync("maps/details", token: CancellationToken.None);
+
+            Assert.That(result.ETag, Is.EqualTo("W/\"weak-tag\""));
         }
 
         /*[Test]
@@ -214,6 +235,21 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
 
             // Act + Assert (should not throw even though integrity header is absent)
             await service.GetAsync("q", null, null, false, null, CancellationToken.None);
+        }
+
+        private sealed class ResponseMessageHandler : HttpMessageHandler
+        {
+            private readonly HttpResponseMessage response;
+
+            public ResponseMessageHandler(HttpResponseMessage response)
+            {
+                this.response = response;
+            }
+
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                return Task.FromResult(this.response);
+            }
         }
     }
 }

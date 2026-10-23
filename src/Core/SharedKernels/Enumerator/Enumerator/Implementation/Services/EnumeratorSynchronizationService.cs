@@ -344,12 +344,27 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             ? ifRangeETag
                             : $@"""{ifRangeETag}""";
                 }
-                return await this.restService.GetResponseStreamAsync(
-                    url: $"{this.MapsController}/details",
-                    queryString: new {id = WebUtility.UrlEncode(mapName)},
-                    token: cancellationToken,
-                    credentials: this.restCredentials,
-                    customHeaders: headers).ConfigureAwait(false);
+                try
+                {
+                    return await this.restService.GetResponseStreamAsync(
+                        url: $"{this.MapsController}/details",
+                        queryString: new {id = WebUtility.UrlEncode(mapName)},
+                        token: cancellationToken,
+                        credentials: this.restCredentials,
+                        customHeaders: headers).ConfigureAwait(false);
+                }
+                catch (RestException ex) when (offset > 0 && ex.StatusCode == HttpStatusCode.RequestedRangeNotSatisfiable)
+                {
+                    var retryHeaders = new Dictionary<string, string>(headers);
+                    retryHeaders.Remove("Range");
+                    retryHeaders.Remove("If-Range");
+                    return await this.restService.GetResponseStreamAsync(
+                        url: $"{this.MapsController}/details",
+                        queryString: new {id = WebUtility.UrlEncode(mapName)},
+                        token: cancellationToken,
+                        credentials: this.restCredentials,
+                        customHeaders: retryHeaders).ConfigureAwait(false);
+                }
             });
         }
 
