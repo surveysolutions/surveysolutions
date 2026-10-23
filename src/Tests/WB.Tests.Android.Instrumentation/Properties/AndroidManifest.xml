@@ -3,7 +3,7 @@
           package="wb.tests.android.instrumentation"
           android:versionCode="1"
           android:versionName="1.0">
-  <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="35" />
+  <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="36" />
 
   <uses-permission android:name="android.permission.VIBRATE" />
 

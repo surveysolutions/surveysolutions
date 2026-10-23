@@ -57,5 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         AudioRecordingQuality AudioRecordingQuality { get; }
         void SetAudioRecordingQuality(AudioRecordingQuality quality);
+
+        AcceptableGpsLocationSource AcceptableGpsLocationSource { get; }
+        void SetAcceptableGpsLocationSource(AcceptableGpsLocationSource source);
     }
 }

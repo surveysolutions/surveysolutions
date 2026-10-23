@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
@@ -170,6 +171,58 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels.FinishInstallation
             Assert.That(capturedArg.Identity.TenantId, Is.EqualTo(tenantId));
             Assert.That(capturedArg.Identity.Workspace, Is.EqualTo(workspaceName));
             Assert.That(capturedArg.Identity.PasswordHash, Is.EqualTo("hashedPass"));
+        }
+
+        [Test]
+        public async Task when_password_change_is_required_should_ask_user_to_sign_in_with_new_password()
+        {
+            const string oldPassword = "old password";
+            const string newPassword = "new password";
+
+            var synchronizationService = new Mock<ISupervisorSynchronizationService>();
+            synchronizationService
+                .Setup(x => x.LoginAsync(It.IsAny<LogonInfo>(), It.IsAny<RestCredentials>(),
+                    It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new SynchronizationException(SynchronizationExceptionType.ShouldChangePassword));
+            synchronizationService
+                .Setup(x => x.ChangePasswordAsync(It.IsAny<ChangePasswordInfo>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync("new token");
+
+            var userInteractionService = new Mock<IUserInteractionService>();
+            userInteractionService
+                .Setup(x => x.ConfirmNewPasswordInputAsync(It.IsAny<string>(), It.IsAny<string>(),
+                    It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Func<ChangePasswordDialogOkCallback, Task>>()))
+                .Returns(async (string _, string _, string _, string _,
+                    Func<ChangePasswordDialogOkCallback, Task> callback) =>
+                {
+                    var result = new ChangePasswordDialogResult
+                    {
+                        OldPassword = oldPassword,
+                        NewPassword = newPassword
+                    };
+                    await callback(new ChangePasswordDialogOkCallback { DialogResult = result });
+                    return result;
+                });
+
+            var viewModel = Create.ViewModel.FinishInstallationViewModel(
+                synchronizationService: synchronizationService.Object,
+                userInteractionService: userInteractionService.Object);
+            viewModel.Endpoint = "https://example.com";
+            viewModel.UserName = "supervisor";
+            viewModel.Password = oldPassword;
+
+            await viewModel.SignInCommand.ExecuteAsync();
+
+            synchronizationService.Verify(x => x.LoginAsync(It.IsAny<LogonInfo>(),
+                It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()), Times.Once);
+            synchronizationService.Verify(x => x.ChangePasswordAsync(
+                It.Is<ChangePasswordInfo>(p => p.Password == oldPassword && p.NewPassword == newPassword),
+                It.IsAny<CancellationToken>()), Times.Once);
+            synchronizationService.Verify(x => x.GetSupervisorAsync(It.IsAny<RestCredentials>(),
+                It.IsAny<CancellationToken>()), Times.Never);
+            Assert.That(viewModel.Password, Is.Null);
+            Assert.That(viewModel.ErrorMessage,
+                Is.EqualTo(EnumeratorUIResources.YouChangeYouPasswordTryToLoginAgainWithNewPassword));
         }
     }
 }

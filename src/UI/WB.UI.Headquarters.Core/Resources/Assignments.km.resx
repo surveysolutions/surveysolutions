@@ -568,4 +568,7 @@
     <data name="AudioRecordingScopeNotice" xml:space="preserve">
         <value>កិច្ចការនេះមានវិសាលភាពសវនកម្មសំឡេងដែលបានជ្រើសរើស។ ការបើកការថតសំឡេងពេញលេញនឹងថតគ្រប់ផ្នែកទាំងអស់។ ការបិទវានឹងត្រឡប់ទៅថតតែផ្នែកដែលបានជ្រើសរើសប៉ុណ្ណោះ។</value>
     </data>
+    <data name="TargetAreaNameTooLong" xml:space="preserve">
+        <value>ឈ្មោះផែនទីតំបន់គោលដៅវែងពេក។ ប្រវែងអតិបរមាដែលអនុញ្ញាតគឺ {{limit}} តួអក្សរ។</value>
+    </data>
 </root>

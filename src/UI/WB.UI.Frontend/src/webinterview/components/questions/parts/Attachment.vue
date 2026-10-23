@@ -4,11 +4,17 @@
             class="image-zoom-box image-wrapper"
             :class="customCssClass">
             <img :src="thumbPath"
+                v-show="!imageLoadFailed"
                 alt="custom photo"
                 class="zoomImg"
                 @load="imageLoaded"
+                @error="imageLoadFailed = true"
                 @click="showModal(true)"
                 :style="previewStyle" />
+            <div v-if="imageLoadFailed"
+                class="instructions-wrapper">
+                <span>{{ $t("WebInterviewUI.ImageFormatNotSupported") }}</span>
+            </div>
             <Teleport to="body">
                 <div class="modal-img"
                     v-if="modal"
@@ -16,8 +22,14 @@
                     @click="showModal(false)">
                     <span class="close-zoomming-img">×</span>
                     <img class="modal-img-content"
+                        v-show="!fullImageLoadFailed"
                         :src="fullPath"
+                        @error="fullImageLoadFailed = true"
                         alt />
+                    <div v-if="fullImageLoadFailed"
+                        class="instructions-wrapper">
+                        <span>{{ $t("WebInterviewUI.ImageFormatNotSupported") }}</span>
+                    </div>
                     <span class="caption"></span>
                 </div>
             </Teleport>
@@ -80,6 +92,8 @@ export default {
         return {
             modal: false,
             contentType: '',
+            imageLoadFailed: false,
+            fullImageLoadFailed: false,
             onEscape: null,
         }
     },
@@ -134,6 +148,12 @@ export default {
         document.removeEventListener('keydown', this.onEscape)
     },
     watch: {
+        thumbPath() {
+            this.imageLoadFailed = false
+        },
+        fullPath() {
+            this.fullImageLoadFailed = false
+        },
         contentId() {
             this.fetchContentType()
         },
@@ -214,6 +234,8 @@ export default {
         showModal(show) {
             if (this.previewOnly)
                 return
+            if (show)
+                this.fullImageLoadFailed = false
             this.modal = show
         },
         imageLoaded() {

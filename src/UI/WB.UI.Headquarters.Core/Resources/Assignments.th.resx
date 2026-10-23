@@ -568,4 +568,7 @@
     <data name="AudioRecordingScopeNotice" xml:space="preserve">
         <value>งานนี้มีขอบเขตการตรวจสอบเสียงแบบเลือกสรร การเปิดใช้งานการบันทึกเสียงแบบเต็มจะบันทึกทุกส่วน การปิดใช้งานจะเปลี่ยนกลับเป็นการบันทึกเฉพาะส่วนที่เลือก</value>
     </data>
+    <data name="TargetAreaNameTooLong" xml:space="preserve">
+        <value>ชื่อแผนที่พื้นที่เป้าหมายยาวเกินไป ความยาวสูงสุดที่อนุញ่าตคือ {{limit}} ตัวอักษร</value>
+    </data>
 </root>

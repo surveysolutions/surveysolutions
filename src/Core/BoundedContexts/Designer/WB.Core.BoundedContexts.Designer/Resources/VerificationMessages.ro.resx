@@ -860,4 +860,7 @@
   <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
     <value>Mesajul condiției critice are mai mult de {0} caractere.</value>
   </data>
+  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
+    <value>Valorile speciale negative nu sunt permise pentru întrebările numerice nenegative.</value>
+  </data>
 </root>

@@ -1,4 +1,12 @@
 ﻿@page
+@using WB.UI.Shared.Web.Extensions
 @model WB.UI.Designer.Areas.Identity.Pages.Account.ConfirmEmailChangeModel
-@{
+
+<form method="post" id="confirmEmailChangeForm">
+    <input type="hidden" asp-for="UserId" />
+    <input type="hidden" asp-for="Code" />
+</form>
+@if (Model.AutoSubmit)
+{
+    <script>document.getElementById('confirmEmailChangeForm').submit();</script>
 }

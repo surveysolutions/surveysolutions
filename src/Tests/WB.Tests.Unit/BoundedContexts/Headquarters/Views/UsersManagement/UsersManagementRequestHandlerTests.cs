@@ -107,6 +107,107 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
         }
 
         [Test]
+        public async Task should_return_interviewers_filtered_by_supervisor_across_workspaces()
+        {
+            var supervisorId = Id.gA;
+
+            Users = new[]
+            {
+                Create.Entity.HqUser(supervisorId, role: UserRoles.Supervisor, workspaces: new[] { "alpha", "beta" }),
+                Create.Entity.HqUser(Id.g1, supervisorId: supervisorId, userName: "int1", workspaces: new[] { "alpha" }),
+                Create.Entity.HqUser(Id.g2, supervisorId: supervisorId, userName: "int2", workspaces: new[] { "beta" }),
+                Create.Entity.HqUser(Id.g3, supervisorId: Id.gB, userName: "int3", workspaces: new[] { "alpha" }),
+                Create.Entity.HqUser(Id.g4, role: UserRoles.Headquarter, workspaces: new[] { "alpha" }),
+            };
+
+            var response = await Subject.Handle(new UsersManagementRequest
+            {
+                SupervisorId = supervisorId,
+                Length = 10
+            });
+
+            Assert.That(response.RecordsFiltered, Is.EqualTo(2));
+            Assert.That(response.Data.Select(x => x.UserId), Is.EquivalentTo(new[] { Id.g1, Id.g2 }));
+            Assert.That(response.Data.All(x => x.Role == UserRoles.Interviewer.ToString()), Is.True);
+        }
+
+        [Test]
+        public async Task should_combine_workspace_and_supervisor_filters()
+        {
+            var supervisorId = Id.gA;
+
+            Users = new[]
+            {
+                Create.Entity.HqUser(supervisorId, role: UserRoles.Supervisor, workspaces: new[] { "alpha", "beta" }),
+                Create.Entity.HqUser(Id.g1, supervisorId: supervisorId, userName: "int1", workspaces: new[] { "alpha" }),
+                Create.Entity.HqUser(Id.g2, supervisorId: supervisorId, userName: "int2", workspaces: new[] { "beta" }),
+            };
+
+            var response = await Subject.Handle(new UsersManagementRequest
+            {
+                SupervisorId = supervisorId,
+                WorkspaceName = "beta",
+                Length = 10
+            });
+
+            Assert.That(response.RecordsFiltered, Is.EqualTo(1));
+            Assert.That(response.Data.Single().UserId, Is.EqualTo(Id.g2));
+        }
+
+        [Test]
+        public async Task should_require_supervisor_assignment_in_selected_workspace()
+        {
+            var supervisorId = Id.gA;
+            var crossWorkspaceUser = Create.Entity.HqUser(Id.g3, supervisorId: Id.gB, userName: "int3", workspaces: new[] { "alpha", "beta" });
+            crossWorkspaceUser.Workspaces.Add(new Core.BoundedContexts.Headquarters.Workspaces.WorkspacesUsers(
+                new Core.BoundedContexts.Headquarters.Workspaces.Workspace("gamma", "gamma", DateTime.UtcNow),
+                crossWorkspaceUser,
+                new Core.BoundedContexts.Headquarters.Views.User.HqUser { Id = supervisorId }));
+
+            Users = new[]
+            {
+                Create.Entity.HqUser(supervisorId, role: UserRoles.Supervisor, workspaces: new[] { "alpha", "beta", "gamma" }),
+                Create.Entity.HqUser(Id.g1, supervisorId: supervisorId, userName: "int1", workspaces: new[] { "beta" }),
+                Create.Entity.HqUser(Id.g2, supervisorId: Id.gB, userName: "int2", workspaces: new[] { "beta" }),
+                crossWorkspaceUser,
+            };
+
+            var response = await Subject.Handle(new UsersManagementRequest
+            {
+                SupervisorId = supervisorId,
+                WorkspaceName = "beta",
+                Length = 10
+            });
+
+            Assert.That(response.RecordsFiltered, Is.EqualTo(1));
+            Assert.That(response.Data.Single().UserId, Is.EqualTo(Id.g1));
+        }
+
+        [Test]
+        public async Task should_ignore_role_filter_and_return_interviewers_when_supervisor_is_selected()
+        {
+            var supervisorId = Id.gA;
+
+            Users = new[]
+            {
+                Create.Entity.HqUser(supervisorId, role: UserRoles.Supervisor, workspaces: new[] { "alpha" }),
+                Create.Entity.HqUser(Id.g1, supervisorId: supervisorId, userName: "int1", workspaces: new[] { "alpha" }),
+                Create.Entity.HqUser(Id.g2, role: UserRoles.Headquarter, workspaces: new[] { "alpha" }),
+            };
+
+            var response = await Subject.Handle(new UsersManagementRequest
+            {
+                SupervisorId = supervisorId,
+                Role = UserRoles.Headquarter,
+                Length = 10
+            });
+
+            Assert.That(response.RecordsFiltered, Is.EqualTo(1));
+            Assert.That(response.Data.Single().UserId, Is.EqualTo(Id.g1));
+            Assert.That(response.Data.Single().Role, Is.EqualTo(UserRoles.Interviewer.ToString()));
+        }
+
+        [Test]
         public async Task paging_should_not_affect_filtered_count()
         {
             Users = new[] {

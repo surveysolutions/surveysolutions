@@ -199,6 +199,9 @@
     <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
         <value>ชื่อตัวแปรขอบเขตการตรวจสอบเสียง '{0}' ไม่ถูกต้อง จะต้องอ้างอิงถึงส่วน กลุ่ม หรือบัญชีรายชื่อที่มีอยู่ (ไม่อนุญาตให้ถามคำถามและบัญชีรายชื่อแบบเรียบ)</value>
     </data>
+  <data name="PL0065_TargetAreaTooLong" xml:space="preserve">
+    <value>พื้นที่เป้าหมายยาวเกินไป ต้องมี {0} ตัวอักษรหรือน้อยกว่า</value>
+  </data>
     <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
         <value>ไม่ได้ย้ายการมอบหมายงานเนื่องจากใช้การตรวจสอบเสียงแบบเลือกสรร (ขอบเขตการบันทึกเสียง) ซึ่งไม่สามารถย้ายไปยังเวอร์ชันแบบสอบถามใหม่ได้โดยอัตโนมัติ สร้างการมอบหมายใหม่ด้วยตนเองและกำหนดค่าขอบเขตการตรวจสอบเสียงอีกครั้ง</value>
     </data>

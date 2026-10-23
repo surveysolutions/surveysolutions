@@ -29,4 +29,5 @@
   <data name="MapFileSizeLimit" xml:space="preserve"><value>Kích thước tệp {0} lớn hơn giới hạn cho phép {1}</value></data>
   <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve"><value>Tên tệp {0} chứa ký tự không phải UTF-8.</value></data>
   <data name="MapFileNameHasInvalidChars" xml:space="preserve"><value>Tên tệp {0} chứa ký tự không hợp lệ.</value></data>
+  <data name="MapFileNameTooLong" xml:space="preserve"><value>Tên tệp '{0}' vượt quá độ dài tối đa cho phép là {1} ký tự.</value></data>
 </root>
