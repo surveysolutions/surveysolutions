@@ -1,6 +1,6 @@
 ﻿#nullable enable
 
-using MigraDocCore.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Infrastructure.Native.Sanitizer;

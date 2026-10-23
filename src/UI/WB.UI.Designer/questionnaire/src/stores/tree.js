@@ -7,6 +7,8 @@ import { isNotLinkedOrLinkedToTextList } from '../helpers/question';
 export const useTreeStore = defineStore('tree', {
     state: () => ({
         info: {},
+        questionnaireId: null,
+        chapterId: null,
         variableNamesStore: {
             getTokens() {
                 return this.variableNamesTokens;
@@ -355,9 +357,12 @@ export const useTreeStore = defineStore('tree', {
             this.removeVariableName(data.id);
         },
         groupDeleted(data) {
+            // these handlers are registered globally, so a tree may not be loaded yet (e.g. deleting a chapter from another tab)
+            if (!this.questionnaireId || !this.chapterId) return;
             this.fetchTree(this.questionnaireId, this.chapterId);
         },
         rosterDeleted(data) {
+            if (!this.questionnaireId || !this.chapterId) return;
             this.fetchTree(this.questionnaireId, this.chapterId);
         },
         deleteTreeNode(itemId) {
@@ -442,6 +447,7 @@ export const useTreeStore = defineStore('tree', {
         },
 
         itemPasted(event) {
+            if (!this.questionnaireId || !this.chapterId) return;
             this.fetchTree(this.questionnaireId, this.chapterId);
         }
     }
