@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class AnswersDeclaredImplausible : InterviewPassiveEvent
+    public class AnswersDeclaredImplausible : InterviewPassiveEvent, IEventWithAffectedEntities
     {
         private IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditionsDictionary;
 
@@ -26,5 +26,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         {
             this.FailedValidationConditions = failedValidationConditions;
         }
+
+        public IReadOnlyCollection<Identity> GetAffectedEntities() =>
+            System.Linq.Enumerable.ToArray(this.GetFailedValidationConditionsDictionary().Keys);
     }
 }

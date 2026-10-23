@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
@@ -13,42 +14,52 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         private readonly IViewModelEventRegistry viewModelEventRegistry;
         private readonly ILogger logger;
         private readonly ICurrentViewModelPresenter currentViewModelPresenter;
+        private readonly IUserInterfaceStateService userInterfaceStateService;
 
         public AsyncEventDispatcher(IViewModelEventRegistry viewModelEventRegistry,
             ILogger logger,
-            ICurrentViewModelPresenter currentViewModelPresenter)
+            ICurrentViewModelPresenter currentViewModelPresenter,
+            IUserInterfaceStateService userInterfaceStateService)
         {
             this.viewModelEventRegistry = viewModelEventRegistry;
             this.logger = logger;
             this.currentViewModelPresenter = currentViewModelPresenter;
+            this.userInterfaceStateService = userInterfaceStateService;
         }
 
         public async Task ExecuteAsync(IReadOnlyCollection<CommittedEvent> events)
         {
-            foreach (var @event in events)
-            foreach (var viewModel in this.viewModelEventRegistry.GetViewModelsByEvent(@event))
+            this.userInterfaceStateService.NotifyRefreshStarted();
+            try
             {
-                var eventType = @event.Payload.GetType();
-                var viewModelType = viewModel.GetType();
-
-                var handler = this.viewModelEventRegistry.GetViewModelHandleMethod(viewModelType, eventType);
-
-                try
+                foreach (var @event in events)
+                foreach (var viewModel in this.viewModelEventRegistry.GetViewModelsByEvent(@event))
                 {
-                    var taskOrVoid = (Task) handler?.Invoke(viewModel, new object[] {@event.Payload});
-                    if (taskOrVoid != null) await taskOrVoid;
-                }
-                catch (Exception e)
-                {
-                    this.logger.Error($"Unhandled exception in {viewModelType.Name}.{handler?.Name}<{eventType.Name}>", e);
+                    var eventType = @event.Payload.GetType();
+                    var viewModelType = viewModel.GetType();
 
-                    ((BaseInterviewViewModel) this.currentViewModelPresenter.CurrentViewModel)?.ReloadCommand
-                        ?.Execute();
+                    var handler = this.viewModelEventRegistry.GetViewModelHandleMethod(viewModelType, eventType);
 
-                    return;
+                    try
+                    {
+                        var taskOrVoid = (Task) handler?.Invoke(viewModel, new object[] {@event.Payload});
+                        if (taskOrVoid != null) await taskOrVoid;
+                    }
+                    catch (Exception e)
+                    {
+                        this.logger.Error($"Unhandled exception in {viewModelType.Name}.{handler?.Name}<{eventType.Name}>", e);
+
+                        ((BaseInterviewViewModel) this.currentViewModelPresenter.CurrentViewModel)?.ReloadCommand
+                            ?.Execute();
+
+                        return;
+                    }
                 }
             }
-
+            finally
+            {
+                this.userInterfaceStateService.NotifyRefreshFinished();
+            }
         }
     }
 }
