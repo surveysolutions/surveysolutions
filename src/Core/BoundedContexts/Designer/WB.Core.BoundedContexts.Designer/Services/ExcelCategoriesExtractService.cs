@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
 using ClosedXML.Graphics;
-using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Verifier;

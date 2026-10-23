@@ -6,15 +6,14 @@ using System.IO;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
-using MigraDocCore.DocumentObjectModel.Tables;
-using MigraDocCore.Rendering;
-using PdfSharpCore.Drawing;
-using PdfSharpCore.Drawing.BarCodes;
-using PdfSharpCore.Fonts;
-using PdfSharpCore.Pdf;
-using PdfSharpCore.Utils;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Tables;
+using MigraDoc.Rendering;
+using PdfSharp;
+using PdfSharp.Drawing;
+using PdfSharp.Drawing.BarCodes;
+using PdfSharp.Fonts;
+using PdfSharp.Pdf;
 using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -60,8 +59,6 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
         {
             IFontResolver pdfInterviewFontResolver = new PdfInterviewFontResolver();
             GlobalFontSettings.FontResolver = pdfInterviewFontResolver;
-            
-            ImageSource.ImageSourceImpl = new ImageSharpSource<SixLabors.ImageSharp.PixelFormats.Rgba32>();
         }
 
         public Stream? Generate(Guid interviewId)
@@ -107,7 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             SetPagesMargins(document);
             WriteFooterToAllPages(document, questionnaire, interview);
             
-            PdfDocumentRenderer renderer = new PdfDocumentRenderer(true);
+            PdfDocumentRenderer renderer = new PdfDocumentRenderer();
             renderer.Document = document;
             renderer.PdfDocument = pdfDocument;
             renderer.RenderDocument();
@@ -291,7 +288,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         private void SetPagesMargins(Document document)
         {
-            foreach (Section section in document.Sections)
+            foreach (var section in document.Sections.OfType<Section>())
             {
                 section.PageSetup.PageFormat = PageFormat.A4;
                 
@@ -314,7 +311,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             barcode.StartChar = Convert.ToChar("*");
             barcode.EndChar = Convert.ToChar("*");
             barcode.Direction = CodeDirection.LeftToRight;
-            XFont fontBarcode = new XFont(DefinePdfStyles.DefaultFonts, 14, XFontStyle.Regular);
+            XFont fontBarcode = new XFont(DefinePdfStyles.DefaultFonts, 14, XFontStyleEx.Regular);
             var position = new XPoint(Convert.ToDouble(37), Convert.ToDouble(0));
             XSize size = new XSize(Convert.ToDouble(149), Convert.ToDouble(53));
             barcode.Size = size;
@@ -335,35 +332,59 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         private void WriteFooterToAllPages(Document document, IQuestionnaire questionnaire, IStatefulInterview interview)
         {
-            foreach (Section section in document.Sections)
-            {
-                //section.Footers.Primary.Format.SpaceAfter = Unit.FromPoint(10);
-                //section.Footers.Primary.Format. SpaceBefore = Unit.FromPoint(10);
-                section.Footers.Primary.Format.LeftIndent = Unit.FromPoint(0);
-                section.Footers.Primary.Format.RightIndent = Unit.FromPoint(0);
-                section.Footers.Primary.Format.Borders.Top = new Border()
-                {
-                    Style = BorderStyle.DashLargeGap,
-                    Width = Unit.FromPoint(1)
-                };
-                
-                Paragraph leftFooter = section.Footers.Primary.AddParagraph();
-                leftFooter.AddPageField();
-                leftFooter.AddText(PdfInterviewRes.PageOf);
-                leftFooter.AddNumPagesField();
-                leftFooter.Format.Font.Size = Unit.FromPoint(6);
-                leftFooter.Format.Alignment = ParagraphAlignment.Left;            
-                
-                Paragraph centerFooter = section.Footers.Primary.AddParagraph();
-                centerFooter.AddText(questionnaire.Title);
-                centerFooter.Format.Font.Size = Unit.FromPoint(6);
-                centerFooter.Format.Alignment = ParagraphAlignment.Center;            
+            var interviewKey = interview.GetInterviewKey().ToString();
 
-                Paragraph rightFooter = section.Footers.Primary.AddParagraph();
-                rightFooter.AddText(interview.GetInterviewKey().ToString());
-                rightFooter.Format.Font.Size = Unit.FromPoint(6);
-                rightFooter.Format.Alignment = ParagraphAlignment.Right;            
-            }
+            foreach (var section in document.Sections.OfType<Section>())
+                WriteFooter(section, questionnaire.Title, interviewKey);
+        }
+
+        internal static void WriteFooter(Section section, string? questionnaireTitle, string interviewKey)
+        {
+            var pageSetup = section.PageSetup;
+            PageSetup.GetPageSize(pageSetup.PageFormat, out var pageWidth, out _);
+            var contentWidth = pageWidth.Point - pageSetup.LeftMargin.Point - pageSetup.RightMargin.Point;
+
+            // columns have fixed widths, so a long title is wrapped inside its column and does not move page number and key
+            var table = section.Footers.Primary.AddTable();
+            table.Format.Font.Size = Unit.FromPoint(6);
+            table.LeftPadding = Unit.FromPoint(0);
+            table.RightPadding = Unit.FromPoint(0);
+            table.Borders.Top.Style = BorderStyle.DashLargeGap;
+            table.Borders.Top.Width = Unit.FromPoint(1);
+            table.AddColumn(Unit.FromPoint(FooterSideColumnWidth));
+            table.AddColumn(Unit.FromPoint(contentWidth - 2 * FooterSideColumnWidth));
+            table.AddColumn(Unit.FromPoint(FooterSideColumnWidth));
+            var row = table.AddRow();
+
+            Paragraph pageNumber = row.Cells[0].AddParagraph();
+            pageNumber.Format.Alignment = ParagraphAlignment.Left;
+            pageNumber.AddPageField();
+            pageNumber.AddText(PdfInterviewRes.PageOf);
+            pageNumber.AddNumPagesField();
+
+            Paragraph centerFooter = row.Cells[1].AddParagraph();
+            centerFooter.Format.Alignment = ParagraphAlignment.Center;
+            centerFooter.AddText(ShortenFooterTitle(questionnaireTitle));
+
+            Paragraph rightFooter = row.Cells[2].AddParagraph();
+            rightFooter.Format.Alignment = ParagraphAlignment.Right;
+            rightFooter.AddText(interviewKey);
+        }
+
+        // footer must fit the bottom margin of the page and not touch the body, titles can be up to 2000 characters long
+        internal const int FooterTitleMaxLength = 150;
+        private const double FooterSideColumnWidth = 70;
+
+        internal static string ShortenFooterTitle(string? title)
+        {
+            if (title == null || title.Length <= FooterTitleMaxLength)
+                return title ?? string.Empty;
+
+            var length = FooterTitleMaxLength - 1;
+            if (char.IsHighSurrogate(title[length - 1]))
+                length--;
+
+            return title[..length].TrimEnd() + "…";
         }
 
         private void WritePageOfContentRecord(Paragraph paragraph, string text)
