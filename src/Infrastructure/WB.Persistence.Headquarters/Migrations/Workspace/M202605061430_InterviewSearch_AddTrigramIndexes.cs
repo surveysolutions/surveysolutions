@@ -1,3 +1,5 @@
+using System.Data;
+using Dapper;
 using System.ComponentModel;
 using FluentMigrator;
 
@@ -25,6 +27,15 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                 END
                 $$;");
 
+            Execute.WithConnection((connection, _) =>
+            {
+                DropInvalidIndex(connection, "interviewsummaries_key_trgm_idx");
+                DropInvalidIndex(connection, "interviewsummaries_clientkey_trgm_idx");
+                DropInvalidIndex(connection, "interviewsummaries_responsible_name_lower_case_trgm_idx");
+                DropInvalidIndex(connection, "interviewsummaries_teamlead_name_lower_case_trgm_idx");
+                DropInvalidIndex(connection, "identifyingentityvalue_value_lower_case_trgm_idx");
+            });
+
             // GIN trigram indexes on interviewsummaries fields used in substring search
             Execute.Sql(@"CREATE INDEX CONCURRENTLY IF NOT EXISTS interviewsummaries_key_trgm_idx
                 ON interviewsummaries USING GIN (key public.gin_trgm_ops);");
@@ -41,6 +52,22 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
             // GIN trigram index on identifyingentityvalue used in substring search
             Execute.Sql(@"CREATE INDEX CONCURRENTLY IF NOT EXISTS identifyingentityvalue_value_lower_case_trgm_idx
                 ON identifyingentityvalue USING GIN (value_lower_case public.gin_trgm_ops);");
+        }
+
+        private static void DropInvalidIndex(IDbConnection connection, string indexName)
+        {
+            var invalidIndex = connection.QuerySingleOrDefault<string>(@"
+                SELECT format('%I.%I', index_schema.nspname, index_class.relname)
+                FROM pg_index
+                JOIN pg_class index_class ON index_class.oid = pg_index.indexrelid
+                JOIN pg_namespace index_schema ON index_schema.oid = index_class.relnamespace
+                WHERE index_class.relname = @indexName
+                    AND index_schema.nspname = current_schema()
+                    AND NOT pg_index.indisvalid",
+                new { indexName });
+
+            if (invalidIndex != null)
+                connection.Execute($"DROP INDEX CONCURRENTLY IF EXISTS {invalidIndex}");
         }
     }
 }
