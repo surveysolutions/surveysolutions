@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
 using ClosedXML.Graphics;
-using SixLabors.Fonts;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
