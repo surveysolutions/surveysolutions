@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve"><value>อนุมัติโดยสำนักงานใหญ่</value></data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve"><value>อนุมัติโดยหัวหน้างาน</value></data>
+  <data name="InterviewStatus_Completed" xml:space="preserve"><value>เสร็จสมบูรณ์</value></data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve"><value>ผู้สัมภาษณ์ได้รับมอบหมาย</value></data>
+  <data name="UserRoles_Administrator" xml:space="preserve"><value>ผู้ดูแลระบบ</value></data>
+  <data name="UserRoles_Supervisor" xml:space="preserve"><value>หัวหน้างาน</value></data>
+  <data name="UserRoles_Interviewer" xml:space="preserve"><value>ผู้สัมภาษณ์</value></data>
+  <data name="UserRoles_Headquarter" xml:space="preserve"><value>สำนักงานใหญ่</value></data>
+  <data name="UserRoles_Observer" xml:space="preserve"><value>ผู้สังเกตการณ์</value></data>
+  <data name="UserRoles_ApiUser" xml:space="preserve"><value>ผู้ใช้API</value></data>
+  <data name="MenuItem_Completed" xml:space="preserve"><value>เสร็จสมบูรณ์</value></data>
+  <data name="MenuItem_Rejected" xml:space="preserve"><value>ถูกปฏิเสธ</value></data>
+  <data name="MenuItem_Started" xml:space="preserve"><value>เริ่มต้นแล้ว</value></data>
+  <data name="MenuItem_Profile" xml:space="preserve"><value>โปรไฟล์</value></data>
+  <data name="InterviewerFacet_None" xml:space="preserve"><value>ไม่มี</value></data>
+  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve"><value>ข้อความสิ้นสุด</value></data>
+  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve"><value>คำเชิญต้อนรับ</value></data>
+  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve"><value>เชิญกลับมาต่อ</value></data>
+  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve"><value>ส่วนหัวกลับมาต่อ</value></data>
+  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve"><value>ชื่อการสำรวจ</value></data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve"><value>ส่วนหัวเสร็จสิ้น</value></data>
+  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve"><value>ส่วนหัวต้อนรับ</value></data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve"><value>หมายเหตุสำหรับหัวหน้างาน</value></data>
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve"><value>เสร็จสิ้น</value></data>
+  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve"><value>เริ่มการสัมภาษณ์ใหม่</value></data>
+  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve"><value>ดำเนินการต่อ</value></data>
+  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve"><value>คำเชิญ</value></data>
+  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve"><value>ส่วนหัวต้อนรับ</value></data>
+</root>

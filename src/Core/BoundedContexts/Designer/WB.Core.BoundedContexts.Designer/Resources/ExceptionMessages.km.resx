@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="LookupTableAlreadyExist" xml:space="preserve">
+        <value>តារាងស្វែងរកដែលមានលេខសម្គាល់បែបនេះមានរួចហើយ។</value>
+    </data>
+    <data name="LookupTableIsAbsent" xml:space="preserve">
+        <value>តារាងស្វែងរកដែលមានលេខសម្គាល់បែបនេះគឺអវត្តមាន។</value>
+    </data>
+    <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+        <value>ឯកសារដែលគ្មានទិន្នន័យមិនអាចផ្ទុកបានទេ។</value>
+    </data>
+    <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+        <value>តម្លៃ {0} មិនអាចញែកជាលេខទសភាគបានទេ។ ជួរ {1} ជួរ {2} ។</value>
+    </data>
+    <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+        <value>បឋមកថាទទេ ឬមិនត្រឹមត្រូវមិនត្រូវបានអនុញ្ញាតទេ។</value>
+    </data>
+    <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+        <value>បាត់ជួរឈរកូដជួរចាំបាច់</value>
+    </data>
+    <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+        <value>តម្លៃកូដជួរដេកត្រូវតែមានតែមួយគត់</value>
+    </data>
+    <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+        <value>តម្លៃ {0} មិនអាចញែកជាចំនួនគត់វែងបានទេ។ ជួរ {1} ជួរ {2} ។</value>
+    </data>
+    <data name="LookupTables_too_many_columns" xml:space="preserve">
+        <value>មានជួរឈរច្រើនពេកនៅក្នុងឯកសារដែលបានបង្ហោះ។ ចំនួនជួរឈរអតិបរមាគឺ {0}</value>
+    </data>
+    <data name="LookupTables_too_many_rows" xml:space="preserve">
+        <value>តារាងរកមើលមានជួរ {1} ដែលលើសពីដែនកំណត់លើចំនួនជួរដេកក្នុងតារាងរកមើល (ជួរ {0})។</value>
+    </data>
+    <data name="MacroAlreadyExist" xml:space="preserve">
+        <value>ម៉ាក្រូមានរួចហើយ។</value>
+    </data>
+    <data name="MacroIsAbsent" xml:space="preserve">
+        <value>ម៉ាក្រូគឺអវត្តមាន។</value>
+    </data>
+    <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+        <value>ច្បាប់សំខាន់មានរួចហើយ។</value>
+    </data>
+    <data name="CriticalRuleIsAbsent" xml:space="preserve">
+        <value>ច្បាប់សំខាន់គឺអវត្តមាន។</value>
+    </data>
+    <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+        <value>ចំណងជើងដែលមានឈ្មោះដូចគ្នាមិនត្រូវបានអនុញ្ញាតទេ។</value>
+    </data>
+    <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+        <value>ឯកសារដែលបានបង្ហោះមិនមែនជារូបភាពទេ។</value>
+    </data>
+    <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+        <value>ទំហំរូបភាពធំពេក</value>
+    </data>
+    <data name="Attachments_Unsupported_content" xml:space="preserve">
+        <value>មាតិកាដែលបានបង្ហោះមិនត្រូវបានគាំទ្រទេ។</value>
+    </data>
+    <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+        <value>អ្នកមិនអាចផ្លាស់ទីទៅផ្នែករង {0} បានទេព្រោះវាដាក់ទីតាំង {1} មិនអាចទទួលយកបាន។</value>
+    </data>
+    <data name="ComboboxCannotBeFound" xml:space="preserve">
+        <value>សំណួរប្រអប់បន្សំជាមួយសោសាធារណៈ {0} រកមិនឃើញទេ។</value>
+    </data>
+    <data name="ItemWithIdExistsAlready" xml:space="preserve">
+        <value>ធាតុកម្រងសំណួរមួយ ឬច្រើនដែលមានលេខសម្គាល់ {0} មានរួចហើយ។</value>
+    </data>
+    <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+        <value>ផ្នែករងមួយ ឬច្រើនដែលមានលេខសម្គាល់ {0} មានរួចហើយ៖ {1}{2} ។</value>
+    </data>
+    <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+        <value>អ្នកមិនមានការអនុញ្ញាតសម្រាប់ការផ្លាស់ប្តូរកម្រងសំណួរនេះទេ។</value>
+    </data>
+    <data name="TranslationIsNotFull" xml:space="preserve">
+        <value>ការបកប្រែមិនពេញលេញ ហើយមិនរួមបញ្ចូលអត្ថបទដែលត្រូវការសម្រាប់គ្រប់ធាតុទាំងអស់។</value>
+    </data>
+    <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+        <value>ការបកប្រែប្រភេទ "{0}" គឺមិនពេញលេញ ហើយមិនរួមបញ្ចូលអត្ថបទជម្រើសទាំងអស់</value>
+    </data>
+    <data name="QuestionCannotBeFound" xml:space="preserve">
+        <value>សំណួរជាមួយសោសាធារណៈ {0} មិនអាចត្រូវបានរកឃើញទេ។</value>
+    </data>
+    <data name="QuestionIsNotCombobox" xml:space="preserve">
+        <value>សំណួរ {0} មិនមែនជាប្រអប់បន្សំទេ។</value>
+    </data>
+    <data name="QuestionnaireCantBeFound" xml:space="preserve">
+        <value>រកមិនឃើញធាតុកម្រងសំណួរដែលមានលេខសម្គាល់ {0} ទេ។</value>
+    </data>
+    <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+        <value>ចំណងជើងនៃកម្រងសំណួរមិនអាចទទេ ឬមានចន្លោះទទេតែប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+        <value>កម្រងសំណួរគាំទ្រទំព័រគម្របរួចហើយ។</value>
+    </data>
+    <data name="SubSectionCantBeFound" xml:space="preserve">
+        <value>រកមិនឃើញផ្នែករងដែលមានសោសាធារណៈ {0} ទេ។</value>
+    </data>
+    <data name="SubSectionDepthLimit" xml:space="preserve">
+        <value>ផ្នែករង ឬជំរៅបញ្ជីឈ្មោះមិនអាចខ្ពស់ជាង {0} ទេ។</value>
+    </data>
+    <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+        <value>ផ្នែកមិនអាចមានធាតុកូនច្រើនជាង {0} ទេ។</value>
+    </data>
+    <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+        <value>ផ្នែក ឬផ្នែករងមិនអាចមានច្រើនជាង {0} ដោយផ្ទាល់របស់កូន</value>
+    </data>
+    <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+        <value>សំណួរមួយ ឬច្រើនដែលមានលេខសម្គាល់ {0} មានរួចហើយ៖ {1}{2} ។</value>
+    </data>
+    <data name="CantPasteQuestion" xml:space="preserve">
+        <value>សំណួរមិនអាចបិទភ្ជាប់នៅទីនេះបានទេ។</value>
+    </data>
+    <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+        <value>ផ្នែកដែលមានស្រាប់ចុងក្រោយមិនអាចដកចេញពីកម្រងសំណួរបានទេ។</value>
+    </data>
+    <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+        <value>ផ្នែកគម្របមិនអាចដកចេញពីកម្រងសំណួរបានទេ។</value>
+    </data>
+    <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+        <value>ផ្នែកគ្របដណ្តប់ត្រូវតែជាផ្នែកទីមួយនៅក្នុងកម្រងសំណួរ</value>
+    </data>
+    <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+        <value>ផ្នែកគម្របអាចមានតែសំណួរ អត្ថបទឋិតិវន្ត និងអថេរ</value>
+    </data>
+    <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+        <value>វាត្រូវបានអានតែផ្នែកគម្រប។ អ្នក​មិន​អាច​កែ​សម្រួល ឬ​បញ្ជា​សំណួរ​ឡើង​វិញ​នៅ​ក្នុង​វា​បាន​ទេ។</value>
+    </data>
+    <data name="CantRemoveUserFromTheList" xml:space="preserve">
+        <value>មិន​អាច​លុប​អ្នក​ប្រើ​ចេញ​ទេ ព្រោះ​វា​មិន​មាន​ក្នុង​បញ្ជី​ចែក​រំលែក</value>
+    </data>
+    <data name="FailedToAddGroup" xml:space="preserve">
+        <value>បរាជ័យក្នុងការព្យាយាមបន្ថែមក្រុម {0} ទៅក្នុងក្រុម {1} ។ ប៉ុន្តែក្រុម {1} មិនមាននៅក្នុងឯកសារ {2} ទេ</value>
+    </data>
+    <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+        <value>កំពុងព្យាយាមនាំចូលគំរូនៃកម្រងសំណួរដែលបានលុប</value>
+    </data>
+    <data name="InvalidFixedTitle" xml:space="preserve">
+        <value>បញ្ជីចំណងជើងមិនត្រឹមត្រូវ</value>
+    </data>
+    <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+        <value>តម្លៃមិនទទេសម្រាប់ចំណងជើងបញ្ជីឈ្មោះថេរគឺត្រូវបានទាមទារ</value>
+    </data>
+    <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+        <value>មានតែ QuestionnaireDocuments ប៉ុណ្ណោះដែលត្រូវបានគាំទ្រសម្រាប់ពេលនេះ</value>
+    </data>
+    <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+        <value>កម្រងសំណួរ {0} នៃកំណែ {1} មិនអាចត្រូវបានរកឃើញទេ</value>
+    </data>
+    <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+        <value>ប្រភេទសំណួរមិនត្រូវបានគាំទ្រ៖ {0}</value>
+    </data>
+    <data name="RosterCantBePaste" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះមិនអាចបិទភ្ជាប់នៅទីនេះបានទេ។</value>
+    </data>
+    <data name="StaticTextCantBePaste" xml:space="preserve">
+        <value>អត្ថបទឋិតិវន្តមិនអាចបិទភ្ជាប់នៅទីនេះបានទេ។</value>
+    </data>
+    <data name="UnknownTypeCantBePaste" xml:space="preserve">
+        <value>ប្រភេទធាតុមិនស្គាល់។ ការបិទភ្ជាប់បានបរាជ័យ។</value>
+    </data>
+    <data name="UserIsInTheList" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ {0} មានរួចហើយនៅក្នុងបញ្ជីចែករំលែក។</value>
+    </data>
+    <data name="InvalidUserInfo" xml:space="preserve">
+        <value>ព័ត៌មានអ្នកប្រើប្រាស់មិនត្រឹមត្រូវ។</value>
+    </data>
+    <data name="UserIsOwner" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ {0} គឺជាម្ចាស់នៃកម្រងសំណួរនេះ។ សូមបញ្ចូលអ៊ីមែលផ្សេងទៀត។</value>
+    </data>
+    <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+        <value>សំណុំនៃធាតុដែលបានកំណត់តម្លៃបញ្ជីឈ្មោះគួរតែមានតែតួអក្សរលេខប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="VariableCantBePaste" xml:space="preserve">
+        <value>អថេរមិនអាចបិទភ្ជាប់នៅទីនេះបានទេ។</value>
+    </data>
+    <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+        <value>ប្រភេទ​ក្នុង​សំណួរ​ជា​ល្បាក់​មិន​អាច​មាន​ជួរ​ឈរ ParentValue ទទេ។</value>
+    </data>
+    <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+        <value>ប្រភេទ​ក្នុង​សំណួរ​ជា​ល្បាក់​មិន​អាច​មាន​តម្លៃ​ជា​លេខ​ក្នុង​ជួរ​ឈរ ParentValue ទេ។</value>
+    </data>
+    <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+        <value>យ៉ាងហោចណាស់មានគូ "ចំណងជើង" និង "តម្លៃមេ" ស្ទួនមួយ។ បញ្ជីមិនគួរមានស្ទួនទេ។</value>
+    </data>
+    <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+        <value>តម្លៃ​ប្រភេទ​គួរ​តែ​មាន​តួ​លេខ​ប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="AttachmentIdIsMissing" xml:space="preserve">
+        <value>បាត់ឯកសារភ្ជាប់ជាមួយ id {0}</value>
+    </data>
+    <data name="LookupTableHasEmptyContent" xml:space="preserve">
+        <value>តារាងរកមើលដោយប្រើលេខសម្គាល់ {0} មិនមានខ្លឹមសារទេ។</value>
+    </data>
+    <data name="LookupTableIsMissing" xml:space="preserve">
+        <value>តារាងស្វែងរកជាមួយលេខសម្គាល់ {0} បាត់</value>
+    </data>
+    <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+        <value>លេខសម្គាល់ឯកសារភ្ជាប់ចាស់គឺទទេ ហើយឯកសារគឺអវត្តមានសម្រាប់ឯកសារភ្ជាប់ {0} នៅក្នុងកម្រងសំណួរ {1}</value>
+    </data>
+    <data name="ProvidedFileHasErrors" xml:space="preserve">
+        <value>បានរកឃើញកំហុសនៅក្នុងឯកសារដែលបានផ្តល់</value>
+    </data>
+    <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+        <value>បានរកឃើញកំហុសនៅក្នុងឯកសារ Excel</value>
+    </data>
+    <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+        <value>{0} មានសន្ទស្សន៍មិនត្រឹមត្រូវនៅ [{1}]</value>
+    </data>
+    <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+        <value>{0} មានប្រភេទមិនត្រឹមត្រូវ [{1}]</value>
+    </data>
+    <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+        <value>{0} មានលេខសម្គាល់មិនត្រឹមត្រូវនៅ [{1}]</value>
+    </data>
+    <data name="TranslationFileIsEmpty" xml:space="preserve">
+        <value>ឯកសារ Excel គឺទទេ - មិនមានសន្លឹកកិច្ចការទេ។</value>
+    </data>
+    <data name="TranslationsCantBeExtracted" xml:space="preserve">
+        <value>បរាជ័យក្នុងការទាញយកការបកប្រែពីឯកសារដែលបានបង្ហោះ</value>
+    </data>
+    <data name="CategoriesCantBeExtracted" xml:space="preserve">
+        <value>បរាជ័យក្នុងការស្រង់ប្រភេទចេញពីឯកសារដែលបានផ្ទុកឡើង</value>
+    </data>
+    <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+        <value>រកមិនឃើញសន្លឹកកិច្ចការដែលមានការបកប្រែទេ។</value>
+    </data>
+    <data name="VariableWithIdWasNotFound" xml:space="preserve">
+        <value>អថេរដែលមានលេខសម្គាល់ {0} មិនត្រូវបានរកឃើញនៅក្នុងកម្រងសំណួរ {1}</value>
+    </data>
+    <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+        <value>បឋមកថា {0} រកមិនឃើញក្នុងឯកសារ Excel ទេ។</value>
+    </data>
+    <data name="HeaderWasNotFound" xml:space="preserve">
+        <value>រកមិនឃើញបឋមកថានៅក្នុងឯកសារទេ។</value>
+    </data>
+    <data name="NoParentCascadingOptions" xml:space="preserve">
+        <value>រកមិនឃើញប្រភេទសម្រាប់សំណួរមេ '{0}' ទេ។</value>
+    </data>
+    <data name="Column" xml:space="preserve">
+        <value>ជួរឈរ</value>
+    </data>
+    <data name="Row" xml:space="preserve">
+        <value>ជួរ</value>
+    </data>
+    <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+        <value>ជួរឈរមួយចំនួនត្រូវបានបាត់។ ត្រូវប្រាកដថាអ្នកផ្ទុកឡើងឯកសារជាមួយនឹងជួរឈរដែលត្រូវការ</value>
+    </data>
+    <data name="ImportOptions_EmptyValue" xml:space="preserve">
+        <value>តម្លៃទទេ</value>
+    </data>
+    <data name="ImportOptions_NotNumber" xml:space="preserve">
+        <value>តម្លៃចំនួនគត់ 32 ប៊ីតមិនត្រឹមត្រូវ '{0}' ។ តម្លៃគួរតែនៅចន្លោះ -2147483647 និង 2147483647</value>
+    </data>
+    <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+        <value>សំណួរមាតាបិតាមិនមានប្រភេទដែលមានតម្លៃ '{0}' ទេ</value>
+    </data>
+    <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+        <value>ប្រភេទស្ទួន '{0}' ជាមួយនឹងតម្លៃមេ '{1}'</value>
+    </data>
+    <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+        <value>សំណួរមេ '{0}' មានប្រភេទ {1} ដែលមានតម្លៃ '{2}'</value>
+    </data>
+    <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+        <value>ចំណងជើងវែងពេក។ ប្រវែងចំណងជើងគួរតែតិចជាង {0}</value>
+    </data>
+    <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+        <value>ឈ្មោះឯកសារភ្ជាប់គឺវែងពេក។ ឈ្មោះឯកសារភ្ជាប់គួរតែតិចជាង {0}</value>
+    </data>
+    <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+        <value>ប្រភេទស្ទួន '{0}' ជាមួយនឹងតម្លៃ '{1}'</value>
+    </data>
+    <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+        <value>[{0}] តម្លៃលេខមិនត្រឹមត្រូវ</value>
+    </data>
+    <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+        <value>[{0}] ចំណងជើងទទេ</value>
+    </data>
+    <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+        <value>[{0}] តម្លៃទទេ</value>
+    </data>
+    <data name="Excel_Categories_Duplicated" xml:space="preserve">
+        <value>ប្រភេទស្ទួនក្នុងជួរ៖ {0}</value>
+    </data>
+    <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+        <value>ប្រភេទខ្លះមិនមានលេខសម្គាល់មាតាបិតាទេ។</value>
+    </data>
+    <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+        <value>ប្រភេទដែលបានកំណត់មានច្រើនជាងប្រភេទ {0}</value>
+    </data>
+    <data name="Excel_NoCategories" xml:space="preserve">
+        <value>មិនមានប្រភេទនៅក្នុងឯកសារទេ។</value>
+    </data>
+    <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+        <value>ប្រភេទដែលបានកំណត់គួរតែមានយ៉ាងហោចណាស់ 2 ប្រភេទ</value>
+    </data>
+    <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+        <value>[{0}] អត្ថបទនៃប្រភេទគួរតែមានតិចជាង 250 តួអក្សរ</value>
+    </data>
+    <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+        <value>មានតែតម្លៃដែលបំបែកដោយផ្ទាំង (*.tab, *.txt, *.tsv) ឬឯកសារ excel (*.xslx, *.xls, *.ods) ប៉ុណ្ណោះដែលត្រូវបានទទួលយក</value>
+    </data>
+    <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+        <value>កម្រងសំណួរគាំទ្រការគ្របដណ្តប់រួចហើយ</value>
+    </data>
+    <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+        <value>ប្រភេទមិនត្រូវបានរកឃើញទេ។</value>
+    </data>
+</root>

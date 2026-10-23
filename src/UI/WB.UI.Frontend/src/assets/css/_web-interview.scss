@@ -578,6 +578,13 @@
 .static-text {
     h5 {
         margin: 0;
+        font-family: "RobotoRegular", sans-serif;
+
+        b,
+        strong {
+            font-family: "RobotoBold", sans-serif;
+            font-weight: normal;
+        }
 
         .static-text-image {
             margin-top: 10px;
@@ -595,6 +602,10 @@
 
 .variable {
     @extend .static-text;
+
+    h5 {
+        font-family: "RobotoBold", sans-serif;
+    }
 }
 
 .ordered-question {

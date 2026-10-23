@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Cancel" xml:space="preserve">
+        <value>បោះបង់</value>
+    </data>
+    <data name="Total" xml:space="preserve">
+        <value>សរុប</value>
+    </data>
+    <data name="WithErrors" xml:space="preserve">
+        <value>ជាមួយនឹងកំហុស</value>
+    </data>
+    <data name="Average" xml:space="preserve">
+        <value>មធ្យម</value>
+    </data>
+    <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
+        <value>ធ្វើបច្ចុប្បន្នភាពព័ត៌មានគណនីដោយជោគជ័យ</value>
+    </data>
+    <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+        <value>ព័ត៌មានអំពី &lt;b&gt;{0}&lt;/b&gt; បានធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យ</value>
+    </data>
+    <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+        <value>បានធ្វើបច្ចុប្បន្នភាពពាក្យសម្ងាត់គណនីដោយជោគជ័យ</value>
+    </data>
+    <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់សម្រាប់គណនី &lt;b&gt;{0}&lt;/b&gt; បានធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យ</value>
+    </data>
+    <data name="HQ_Views_Manage_Title" xml:space="preserve">
+        <value>គ្រប់គ្រងគណនី</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+        <value>ការផ្ទៀងផ្ទាត់កត្តាពីរ</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+        <value>ការផ្ទៀងផ្ទាត់កត្តាពីរគឺជាមុខងារសុវត្ថិភាពកម្រិតខ្ពស់ដែលធ្វើឱ្យវាកាន់តែពិបាកសម្រាប់ពួក Hacker ក្នុងការចូលគណនីរបស់អ្នកដោយគ្រាន់តែលួចយកពាក្យសម្ងាត់ប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+        <value>បានបើកដំណើរការ</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+        <value>ពិការ</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+        <value>ដំឡើងឧបករណ៍ថ្មីសម្រាប់ការផ្ទៀងផ្ទាត់កត្តាពីរ។ អ្នកអាចដំឡើងឧបករណ៍ជាច្រើនក្នុងពេលដំណាលគ្នា។</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+        <value>កំណត់ឡើងវិញទៅលេខកូដសម្ងាត់ថ្មី ប្រសិនបើឧបករណ៍ណាមួយរបស់អ្នកដែលប្រើសម្រាប់ការផ្ទៀងផ្ទាត់កត្តាពីរត្រូវបានបាត់បង់ ឬត្រូវបានគេលួច។</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+        <value>ធ្វើ​ឱ្យ​កូដ​សង្គ្រោះ​ដែល​មិន​បាន​ប្រើ​មិន​ត្រឹមត្រូវ និង​បង្កើត​លេខ​កូដ​ថ្មី​ចំនួន 10 ។</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+        <value>បិទការផ្ទៀងផ្ទាត់កត្តាពីរដោយទុកឱ្យគណនីត្រូវបានការពារដោយពាក្យសម្ងាត់ប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+        <value>ដំឡើងកម្មវិធីផ្ទៀងផ្ទាត់</value>
+    </data>
+    <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+        <value>កំណត់សោផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវឡើងវិញ</value>
+    </data>
+    <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+        <value>លេខកូដសង្គ្រោះ</value>
+    </data>
+    <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+        <value>បិទការផ្ទៀងផ្ទាត់កត្តាពីរ</value>
+    </data>
+    <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+        <value>កំណត់លេខកូដសង្គ្រោះឡើងវិញ</value>
+    </data>
+    <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+        <value>អនុម័តដោយការិយាល័យកណ្តាល</value>
+    </data>
+    <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+        <value>អនុម័តដោយអ្នកគ្រប់គ្រង</value>
+    </data>
+    <data name="InterviewStatus_Completed" xml:space="preserve">
+        <value>បានបញ្ចប់</value>
+    </data>
+    <data name="InterviewStatus_Created" xml:space="preserve">
+        <value>បានបង្កើត</value>
+    </data>
+    <data name="InterviewStatus_Deleted" xml:space="preserve">
+        <value>បានលុប</value>
+    </data>
+    <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+        <value>អ្នកសម្ភាសន៍ត្រូវបានចាត់តាំង</value>
+    </data>
+    <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
+        <value>ត្រៀមខ្លួនសម្រាប់ការសម្ភាសន៍</value>
+    </data>
+    <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+        <value>បដិសេធដោយការិយាល័យកណ្តាល</value>
+    </data>
+    <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+        <value>បដិសេធដោយអ្នកគ្រប់គ្រង</value>
+    </data>
+    <data name="InterviewStatus_Restarted" xml:space="preserve">
+        <value>បានចាប់ផ្ដើមឡើងវិញ</value>
+    </data>
+    <data name="InterviewStatus_Restored" xml:space="preserve">
+        <value>បានស្ដារឡើងវិញ</value>
+    </data>
+    <data name="InterviewStatus_SentToCapi" xml:space="preserve">
+        <value>ផ្ញើទៅ Capi</value>
+    </data>
+    <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+        <value>អ្នកគ្រប់គ្រងត្រូវបានចាត់តាំង</value>
+    </data>
+    <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
+        <value>គ្រប់គ្រងគណនី</value>
+    </data>
+    <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+        <value>ផ្លាស់ប្តូរពាក្យសម្ងាត់</value>
+    </data>
+    <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+        <value>ទ្រព្យសម្បត្តិមិនត្រឹមត្រូវ</value>
+    </data>
+    <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+        <value>មិនអាចញែកចម្លើយរបស់សំណួរបានទេ។</value>
+    </data>
+    <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+        <value>ស្ថានភាពកំណត់ដោយក្រុមគាំទ្រដំណោះស្រាយការស្ទង់មតិ</value>
+    </data>
+    <data name="ObserverNotAllowed" xml:space="preserve">
+        <value>អ្នកសង្កេតការណ៍មិនត្រូវបានអនុញ្ញាតឱ្យធ្វើសកម្មភាពនេះទេ។</value>
+    </data>
+    <data name="UnexpectedErrorOccurred" xml:space="preserve">
+        <value>កំហុសដែលមិនបានរំពឹងទុកបានកើតឡើង</value>
+    </data>
+    <data name="Error" xml:space="preserve">
+        <value>កំហុស</value>
+    </data>
+    <data name="AnyHeadquarters" xml:space="preserve">
+        <value>ទីស្នាក់ការកណ្តាលណាមួយ។</value>
+    </data>
+    <data name="Days" xml:space="preserve">
+        <value>ថ្ងៃ</value>
+    </data>
+    <data name="Assignments" xml:space="preserve">
+        <value>កិច្ចការ</value>
+    </data>
+    <data name="Interviews" xml:space="preserve">
+        <value>បទសម្ភាសន៍</value>
+    </data>
+    <data name="AllTeams" xml:space="preserve">
+        <value>ក្រុមទាំងអស់។</value>
+    </data>
+    <data name="Teams" xml:space="preserve">
+        <value>ក្រុម</value>
+    </data>
+    <data name="AllPeriods" xml:space="preserve">
+        <value>រយៈពេលទាំងអស់។</value>
+    </data>
+    <data name="AllQuestionnaires" xml:space="preserve">
+        <value>កម្រងសំណួរទាំងអស់។</value>
+    </data>
+    <data name="AllInterviewers" xml:space="preserve">
+        <value>អ្នកសម្ភាសន៍ទាំងអស់។</value>
+    </data>
+    <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+        <value>មិនត្រូវបានអនុម័តដោយការិយាល័យកណ្តាល</value>
+    </data>
+    <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+        <value>មិនត្រូវបានចាត់តាំងឱ្យអ្នកសម្ភាសន៍</value>
+    </data>
+    <data name="NoPermissionsToExecute" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់មិនត្រូវបានអនុញ្ញាតឱ្យអនុវត្តសកម្មភាពដែលបានផ្តល់ទេ។</value>
+    </data>
+    <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
+        <value>ការចូលប្រើ API</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
+        <value>API token ត្រូវបានប្រើដើម្បីធ្វើការហៅ API ទៅកាន់ប្រព័ន្ធ</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
+        <value>បានបើកដំណើរការ</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
+        <value>ពិការ</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
+        <value>សូមរក្សាទុកនិមិត្តសញ្ញាឥឡូវនេះ។ អ្នកនឹងអាចមើលឃើញវាតែម្តងប៉ុណ្ណោះ!</value>
+    </data>
+</root>

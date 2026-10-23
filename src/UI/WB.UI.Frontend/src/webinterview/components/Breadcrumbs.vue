@@ -6,7 +6,7 @@
                 :key="breadcrumb.target">
                 <a href="javascript:void(0)"
                     @click="navigate(breadcrumb)">
-                    <span v-dompurify-html="breadcrumb.title"></span><span
+                    <span v-dompurify-html="breadcrumb.title ?? ''"></span><span
                         v-if="breadcrumb.isRoster && !breadcrumb.hasCustomRosterTitle"> -
                         <i>{{ getRosterTitle(breadcrumb.rosterTitle) }}</i></span>
                 </a>
@@ -47,7 +47,7 @@ export default {
             return this.info.breadcrumbs
         },
         title() {
-            var title = this.info.title
+            var title = this.info.title ?? ''
 
             if (this.info.isRoster && !this.info.hasCustomRosterTitle)
                 title += '<span> - <i>' + this.getRosterTitle(this.info.rosterTitle) + '</i></span>'

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve"><value>Seksi selesai: {{value}}</value></data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve"><value>{{value}} jawaban</value></data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve"><value>{{value}} sub-seksi</value></data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve"><value>tidak ada sub-seksi</value></data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve"><value>Seksi belum dimulai</value></data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve"><value>satu jawaban</value></data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve"><value>satu sub-seksi</value></data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve"><value>Seksi dimulai: {{value}}</value></data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve"><value>{{value}} kesalahan</value></data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve"><value>satu kesalahan</value></data>
+  <data name="ServerUnderLoad" xml:space="preserve"><value>Maaf, terlalu banyak orang yang mengakses situs web ini secara bersamaan. Kami sedang menangani masalah ini. Silakan coba lagi nanti.</value></data>
+  <data name="RefreshPage" xml:space="preserve"><value>Segarkan halaman</value></data>
+  <data name="InvitationSmallText" xml:space="preserve"><value>Proses wawancara memerlukan koneksi internet. Tidak diperlukan perangkat lunak tambahan.</value></data>
+  <data name="InvitationText" xml:space="preserve"><value>Anda diundang untuk berpartisipasi dalam survei berikut: "%QUESTIONNAIRE%"</value></data>
+  <data name="WelcomeText" xml:space="preserve"><value>Halo dan Selamat Datang di Survei Web Survey Solutions</value></data>
+  <data name="WebSurvey" xml:space="preserve"><value>Survei Web Survey Solutions</value></data>
+  <data name="CompletionText" xml:space="preserve"><value>Wawancara ini telah selesai</value></data>
+  <data name="InProgressText" xml:space="preserve"><value>Sedang berlangsung</value></data>
+  <data name="NotStartedText" xml:space="preserve"><value>Belum dimulai</value></data>
+  <data name="FinishInterviewText" xml:space="preserve"><value>Wawancara ini telah selesai</value></data>
+  <data name="StartedInterviewText" xml:space="preserve"><value>Wawancara ini belum selesai</value></data>
+  <data name="SurveyFormatText" xml:space="preserve"><value>Survei: "%QUESTIONNAIRE%"</value></data>
+  <data name="InterviewIdFormatText" xml:space="preserve"><value>ID Wawancara: {0}</value></data>
+  <data name="InterviewStartDateFormatText" xml:space="preserve"><value>Tanggal mulai wawancara: </value></data>
+  <data name="InterviewCompletionDateFormatText" xml:space="preserve"><value>Tanggal selesai wawancara: </value></data>
+  <data name="DownloadAnswers" xml:space="preserve"><value>Unduh transkrip wawancara</value></data>
+  <data name="DownloadAnswersHint" xml:space="preserve"><value>Unduh jawaban wawancara sebagai file pdf</value></data>
+  <data name="Start" xml:space="preserve"><value>Mulai wawancara baru</value></data>
+  <data name="StartPageTitle" xml:space="preserve"><value>Survei Web</value></data>
+  <data name="PleaseFillCaptcha" xml:space="preserve"><value>Harap isi bidang captcha</value></data>
+  <data name="InvalidPassword" xml:space="preserve"><value>Kata sandi salah</value></data>
+  <data name="Original_Language" xml:space="preserve"><value>Asli</value></data>
+  <data name="ToInterview" xml:space="preserve"><value>Ke wawancara</value></data>
+  <data name="ResumeInterview" xml:space="preserve"><value>Lanjutkan wawancara</value></data>
+  <data name="DiscardAndStart" xml:space="preserve"><value>Buka kembali</value></data>
+  <data name="OrStartInterview" xml:space="preserve"><value>Atau Anda dapat memulai wawancara baru</value></data>
+  <data name="HasPreviousStartedInterview" xml:space="preserve"><value>Anda telah memulai wawancara</value></data>
+  <data name="Resume_InvitationSmallText" xml:space="preserve"><value>Proses wawancara memerlukan koneksi internet, tidak diperlukan perangkat lunak tambahan</value></data>
+  <data name="Resume_InvitationText" xml:space="preserve"><value>Anda dapat menavigasi ke wawancara dalam survei berikut: "%QUESTIONNAIRE%"</value></data>
+  <data name="Resume_WelcomeText" xml:space="preserve"><value>Halo dan Selamat Datang di Survei Web Survey Solutions</value></data>
+  <data name="Error_InterviewExpired" xml:space="preserve"><value>Tautan telah kedaluwarsa</value></data>
+  <data name="Error_NoActionsNeeded" xml:space="preserve"><value>Informasi tentang wawancara tersebut telah dicatat. Tidak diperlukan tindakan lebih lanjut</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>Tidak dapat mengubah wawancara yang telah diterima oleh perangkat</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>Wawancara tidak ditemukan atau tidak diperlukan wawancara baru</value></data>
+  <data name="EnterPasswordText" xml:space="preserve"><value>Tautan ini dilindungi dengan kata sandi yang didistribusikan bersama tautan. Harap masukkan di sini</value></data>
+  <data name="PictureQuestionNotAPicture" xml:space="preserve"><value>Hanya file gambar yang diterima</value></data>
+  <data name="Error_CookiesTurnedOff" xml:space="preserve"><value>Cookie tidak diaktifkan di browser Anda. Harap aktifkan cookie di preferensi browser Anda untuk melanjutkan</value></data>
+  <data name="Error_Forbidden" xml:space="preserve"><value>Terlarang</value></data>
+  <data name="Error_UserNotAuthorised" xml:space="preserve"><value>Pengguna tidak diotorisasi</value></data>
+  <data name="CompleteInterview" xml:space="preserve"><value>Selesaikan wawancara</value></data>
+  <data name="Filters_Title" xml:space="preserve"><value>Filter Pertanyaan</value></data>
+  <data name="Filters_Flagged" xml:space="preserve"><value>Ditandai</value></data>
+  <data name="Filters_WithComments" xml:space="preserve"><value>Dengan komentar</value></data>
+  <data name="Filters_Invalid" xml:space="preserve"><value>Tidak valid</value></data>
+  <data name="Filters_Valid" xml:space="preserve"><value>Valid</value></data>
+  <data name="Filters_Answered" xml:space="preserve"><value>Dijawab</value></data>
+  <data name="Filters_NotAnswered" xml:space="preserve"><value>Tidak dijawab</value></data>
+  <data name="Filters_ForSupervisor" xml:space="preserve"><value>Untuk supervisor</value></data>
+  <data name="Filters_ForInterviewer" xml:space="preserve"><value>Untuk pewawancara</value></data>
+  <data name="Filters_NotFlagged" xml:space="preserve"><value>Tidak ditandai</value></data>
+  <data name="Filters_CriticalQuestions" xml:space="preserve"><value>Pertanyaan kritis</value></data>
+  <data name="Filters_CriticalRules" xml:space="preserve"><value>Aturan kritis</value></data>
+  <data name="PoweredBy" xml:space="preserve"><value>Didukung oleh</value></data>
+  <data name="Filters_ClearSelection" xml:space="preserve"><value>Hapus semua filter</value></data>
+  <data name="Error" xml:space="preserve"><value>Kesalahan</value></data>
+  <data name="Warning" xml:space="preserve"><value>Peringatan</value></data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve"><value>{0} (ver. {1})</value></data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve"><value>Wawancara berisi total jumlah instansi daftar dan pertanyaan yang melebihi batas sistem.</value></data>
+  <data name="AssignmentLimitReached" xml:space="preserve"><value>Kami mengumpulkan semua wawancara dalam survei ini.</value></data>
+  <data name="InterviewNotFound" xml:space="preserve"><value>Wawancara tidak ditemukan.</value></data>
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve"><value>Undangan untuk berpartisipasi dalam %SURVEYNAME%</value></data>
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve"><value>Selamat datang di %SURVEYNAME%!</value></data>
+  <data name="Email_NoResponse_Subject" xml:space="preserve"><value>Pengingat, jangan lupa berpartisipasi dalam %SURVEYNAME%</value></data>
+  <data name="Email_NoResponse_Message" xml:space="preserve"><value>Anda menerima pengingat ini karena Anda belum mulai merespons %SURVEYNAME%!</value></data>
+  <data name="Email_PartialResponse_Subject" xml:space="preserve"><value>Pengingat, harap selesaikan respons Anda untuk %SURVEYNAME%</value></data>
+  <data name="Email_PartialResponse_Message" xml:space="preserve"><value>Anda menerima pengingat ini karena Anda telah mulai merespons %SURVEYNAME%, tetapi belum menyelesaikan prosesnya.</value></data>
+  <data name="Email_RejectEmail_Subject" xml:space="preserve"><value>Tindakan Anda diperlukan dalam %SURVEYNAME%</value></data>
+  <data name="Email_RejectEmail_Message" xml:space="preserve"><value>Terima kasih telah berpartisipasi dalam %SURVEYNAME%!</value></data>
+  <data name="NoteForSupervisor" xml:space="preserve"><value>Komentar</value></data>
+  <data name="Complete" xml:space="preserve"><value>Selesai</value></data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve"><value>Contoh tautan ke halaman arahan wawancara web</value></data>
+</root>

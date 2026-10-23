@@ -543,6 +543,9 @@
   <data name="TargetAreaExplanation" xml:space="preserve">
       <value>Задайте имя карты области назначения</value>
   </data>
+  <data name="TargetAreaNameTooLong" xml:space="preserve">
+      <value>Имя карты области назначения слишком длинное. Максимально допустимая длина — {{limit}} символов.</value>
+  </data>
   <data name="Action_TargetAreaChanged" xml:space="preserve">
       <value>Целевая область изменена</value>
   </data>
