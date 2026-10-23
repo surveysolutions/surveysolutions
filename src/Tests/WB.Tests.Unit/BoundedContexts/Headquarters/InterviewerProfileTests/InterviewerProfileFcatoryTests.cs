@@ -159,6 +159,76 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
         }
 
         [Test]
+        public async Task When_last_sync_is_successful_with_zero_transferred_counts_then_LastSuccessfulSync_date_is_set()
+        {
+            var inter = Create.Entity.HqUser(Id.g1, Id.g3, userName: "u1");
+            var super = Create.Entity.HqUser(Id.g3, userName: "super", role: UserRoles.Supervisor);
+
+            var userManager = Mock.Of<IUserRepository>(x
+                => x.FindByIdAsync(Id.g1, It.IsAny<CancellationToken>()) == Task.FromResult(inter)
+                && x.FindByIdAsync(Id.g3, It.IsAny<CancellationToken>()) == Task.FromResult(super)
+            );
+
+            // Sync that completed successfully but transferred nothing (empty success)
+            var emptySuccessSync = Create.Entity.DeviceSyncInfo(Id.g1, "device1");
+            var lastSyncDate = emptySuccessSync.SyncDate;
+
+            var deviceSyncInfoRepository = Mock.Of<IDeviceSyncInfoRepository>(x
+                => x.GetLastSuccessByInterviewerId(Id.g1) == emptySuccessSync
+                && x.GetLastSynchronizationDate(Id.g1) == lastSyncDate
+                && x.GetTotalTrafficUsageForInterviewer(Id.g1) == Task.FromResult(0L));
+
+            var factory = Create.Service.InterviewerProfileFactory(userManager: userManager, deviceSyncInfoRepository: deviceSyncInfoRepository);
+
+            InterviewerProfileModel profile = await factory.GetInterviewerProfileAsync(Id.g1);
+
+            Assert.That(profile, Is.Not.Null);
+            Assert.That(profile.LastSuccessfulSync.SyncDate, Is.EqualTo(lastSyncDate),
+                "Empty successful sync should have its date exposed");
+            Assert.That(profile.LastSuccessfulSync.HasStatistics, Is.True,
+                "Empty successful sync should be marked as having statistics");
+            Assert.That(profile.LastCommunicationDate, Is.EqualTo(lastSyncDate),
+                "Last communication date should match the sync date");
+        }
+
+        [Test]
+        public async Task When_all_syncs_failed_then_LastSuccessfulSync_date_is_not_set()
+        {
+            var inter = Create.Entity.HqUser(Id.g1, Id.g3, userName: "u1");
+            var super = Create.Entity.HqUser(Id.g3, userName: "super", role: UserRoles.Supervisor);
+
+            var userManager = Mock.Of<IUserRepository>(x
+                => x.FindByIdAsync(Id.g1, It.IsAny<CancellationToken>()) == Task.FromResult(inter)
+                && x.FindByIdAsync(Id.g3, It.IsAny<CancellationToken>()) == Task.FromResult(super)
+            );
+
+            // Fallback sync record with no Statistics (failed sync)
+            var failedSyncFallback = Create.Entity.DeviceSyncInfo(Id.g1, "device1");
+            failedSyncFallback.Statistics = null;
+            var lastSyncDate = failedSyncFallback.SyncDate;
+
+            var deviceSyncInfoRepository = Mock.Of<IDeviceSyncInfoRepository>(x
+                => x.GetLastSuccessByInterviewerId(Id.g1) == failedSyncFallback
+                && x.GetLastFailedByInterviewerId(Id.g1) == failedSyncFallback
+                && x.GetLastSynchronizationDate(Id.g1) == lastSyncDate
+                && x.GetTotalTrafficUsageForInterviewer(Id.g1) == Task.FromResult(0L));
+
+            var factory = Create.Service.InterviewerProfileFactory(userManager: userManager, deviceSyncInfoRepository: deviceSyncInfoRepository);
+
+            InterviewerProfileModel profile = await factory.GetInterviewerProfileAsync(Id.g1);
+
+            Assert.That(profile, Is.Not.Null);
+            Assert.That(profile.LastSuccessfulSync.SyncDate, Is.Null,
+                "Fallback failed sync should not expose a date in LastSuccessfulSync");
+            Assert.That(profile.LastSuccessfulSync.HasStatistics, Is.False,
+                "Fallback failed sync should not be marked as having statistics");
+            Assert.That(profile.LastFailedSync.SyncDate, Is.EqualTo(lastSyncDate),
+                "The failed sync date should be in LastFailedSync");
+            Assert.That(profile.LastCommunicationDate, Is.EqualTo(lastSyncDate),
+                "Last communication date should still reflect the most recent sync");
+        }
+
+        [Test]
         public void When_getting_interviewer_profile()
         {
             var lastLoginDate = DateTime.UtcNow;

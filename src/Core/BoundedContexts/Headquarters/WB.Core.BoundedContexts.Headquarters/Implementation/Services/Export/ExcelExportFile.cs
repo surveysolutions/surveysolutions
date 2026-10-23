@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
 using ClosedXML.Graphics;
-using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Infrastructure.Native.Utils;
 
@@ -11,12 +10,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 {
     public class ExcelExportFile : ExportFile
     {
+        private const string DefaultFontName = "Noto Sans";
+
         public override byte[] GetFileBytes(ReportView report)
         {
             var headers = report.Headers;
             var data = report.Data;
 
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(DefaultFontName) };
             
             using (XLWorkbook excelPackage = new XLWorkbook(loadOptions))
             {
