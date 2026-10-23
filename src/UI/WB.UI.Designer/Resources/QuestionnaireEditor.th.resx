@@ -280,6 +280,9 @@
     <data name="SideBarScenarioName" xml:space="preserve">
         <value>ชื่อสถานการณ์</value>
     </data>
+    <data name="SideBarScenarioRecordNew" xml:space="preserve">
+      <value>บันทึกสถานการณ์ใหม่</value>
+    </data>
     <data name="SideBarSectionsCounter" xml:space="preserve">
         <value>ส่วน {{count}}:</value>
     </data>
@@ -1567,6 +1570,9 @@
     </data>
     <data name="CommunicationError" xml:space="preserve">
         <value>ข้อผิดพลาดของเครือข่าย</value>
+    </data>
+    <data name="PopupBlocked" xml:space="preserve">
+      <value>ไม่สามารถเปิดหน้าต่างได้ โปรดอนุญาตป๊อปอัปในเบราว์เซอร์แล้วลองอีกครั้ง</value>
     </data>
     <data name="SideBarCategoriesAddNew" xml:space="preserve">
         <value>เพิ่มหมวดหมู่ใหม่</value>

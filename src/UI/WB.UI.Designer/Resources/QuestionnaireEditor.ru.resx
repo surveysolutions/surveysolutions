@@ -1495,6 +1495,9 @@
   <data name="Run" xml:space="preserve">
     <value>Выполнить</value>
   </data>
+<data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>Записать новый сценарий</value>
+  </data>
   <data name="View" xml:space="preserve">
     <value>Просмотреть</value>
   </data>
@@ -1644,6 +1647,9 @@
   </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
     <value>Добавить новую категорию</value>
+  </data>
+<data name="PopupBlocked" xml:space="preserve">
+    <value>Не удалось открыть окно. Разрешите всплывающие окна в браузере и повторите попытку.</value>
   </data>
   <data name="RowAdded" xml:space="preserve">
     <value>Строка добавлена</value>
