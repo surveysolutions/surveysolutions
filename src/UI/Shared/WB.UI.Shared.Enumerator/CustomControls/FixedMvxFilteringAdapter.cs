@@ -204,6 +204,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             }
         }
 
+        public override int ViewTypeCount => base.ViewTypeCount + 1;
+
+        public override int GetItemViewType(int position)
+            => Loading ? base.ViewTypeCount : base.GetItemViewType(position);
+
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             if (Loading)
@@ -211,6 +216,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     Resource.Layout.interview_question_filtered_single_option_loading);
             return base.GetView(position, convertView, parent);
         }
+
+        public override View GetDropDownView(int position, View convertView, ViewGroup parent)
+            => GetView(position, convertView, parent);
 
         #region Implementation of IFilterable
 
