@@ -548,7 +548,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private async Task AcquireMapFileLockAsync(string fileName)
         {
             await unitOfWork.Session
-                .CreateSQLQuery($"select pg_advisory_xact_lock({MapFileLockClass}, hashtext(:fileName))")
+                .CreateSQLQuery("select pg_advisory_xact_lock(:lockClass, hashtext(:fileName))")
+                .SetInt32("lockClass", MapFileLockClass)
                 .SetString("fileName", fileName)
                 .ExecuteUpdateAsync()
                 .ConfigureAwait(false);
