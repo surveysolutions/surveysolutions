@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Commands;
-using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -21,7 +22,6 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -79,10 +79,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             RunConfiguration(interviewId, navigationState, true);
 
             this.Name.InitAsStatic(InterviewDetails.Resolve);
-
             this.CommentLabel = InterviewDetails.ResolveComment;
 
-            interview = this.interviewRepository.Get(interviewId);
+            // Load the interview for fast fields needed by Approve/Reject/Assign canExecute predicates.
+            interview = this.interviewRepository.GetOrThrow(interviewId);
             this.status = interview.Status;
 
             var interviewKey = interview.GetInterviewKey()?.ToString();
@@ -90,39 +90,90 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 ? UIResources.Interview_Complete_Screen_Description
                 : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
 
-            base.AnsweredCount = interview.CountActiveAnsweredQuestionsInInterviewForSupervisor();
-            base.ErrorsCount = interview.CountInvalidEntitiesInInterviewForSupervisor();
-            base.UnansweredCount = interview.CountActiveQuestionsInInterviewForSupervisor() - base.AnsweredCount;
-
             var interviewView = this.interviews.GetById(interviewId);
-            this.receivedByInterviewerTabletAt = interviewView.ReceivedByInterviewerAtUtc;
+            this.receivedByInterviewerTabletAt = interviewView?.ReceivedByInterviewerAtUtc;
 
-            var topFailedCriticalRulesFromState = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState);
-            var topFailedCriticalRules = topFailedCriticalRulesFromState.Entities.ToList();
-            if (topFailedCriticalRules.Count > 0)
-            {
-                var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                tabViewModel.Items.AddRange(topFailedCriticalRules);
-                tabViewModel.Total += topFailedCriticalRulesFromState.Total;
-            }
+            // IsLoading stays true; OnTabDataLoadedAsync loads supervisor-specific counts and clears it.
+        }
+        protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, int loadVersion, CancellationToken cancellationToken)
+        {
+            List<EntityWithErrorsViewModel> topFailedCriticalRules = null;
+            List<EntityWithErrorsViewModel> topUnansweredCriticalQuestions = null;
+            var criticalItemsTransferred = false;
 
-            var topUnansweredCriticalQuestionsInfo = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
-            var topUnansweredCriticalQuestions = topUnansweredCriticalQuestionsInfo.Entities.ToList();
-            if (topUnansweredCriticalQuestions.Count > 0)
+            try
             {
-                var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                tabViewModel.Items.AddRange(topUnansweredCriticalQuestions);
-                tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
+                // Override base counts with supervisor-specific values (run on background thread).
+                cancellationToken.ThrowIfCancellationRequested();
+                var iv = this.interviewRepository.GetOrThrow(interviewId);
+                var answeredCount = iv.CountActiveAnsweredQuestionsInInterviewForSupervisor();
+                var errorsCount = iv.CountInvalidEntitiesInInterviewForSupervisor();
+                var unansweredCount = iv.CountActiveQuestionsInInterviewForSupervisor() - answeredCount;
+                var errorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount);
+
+                var topFailedCriticalRulesFromState = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState);
+                topFailedCriticalRules = topFailedCriticalRulesFromState.Entities.ToList();
+
+                cancellationToken.ThrowIfCancellationRequested();
+                var topUnansweredCriticalQuestionsInfo = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
+                topUnansweredCriticalQuestions = topUnansweredCriticalQuestionsInfo.Entities.ToList();
+                cancellationToken.ThrowIfCancellationRequested();
+
+                await InvokeOnMainThreadAsync(() =>
+                {
+                    if (ShouldSkipLoadUpdate(loadVersion, cancellationToken))
+                        return;
+
+                    base.AnsweredCount = answeredCount;
+                    base.ErrorsCount = errorsCount;
+                    base.UnansweredCount = unansweredCount;
+                    base.EntitiesWithErrorsDescription = errorsDescription;
+                    RaisePropertyChanged(nameof(AnsweredCount));
+                    RaisePropertyChanged(nameof(ErrorsCount));
+                    RaisePropertyChanged(nameof(UnansweredCount));
+                    RaisePropertyChanged(nameof(EntitiesWithErrorsDescription));
+
+                    if (topFailedCriticalRules.Count > 0)
+                    {
+                        var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
+                        var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
+                        tabViewModel.Items.AddRange(topFailedCriticalRules.Take(takeCount));
+                        topFailedCriticalRules.Skip(takeCount).ToList().ForEach(vm => vm.DisposeIfDisposable());
+                        tabViewModel.Total += topFailedCriticalRulesFromState.Total;
+                    }
+
+                    if (topUnansweredCriticalQuestions.Count > 0)
+                    {
+                        var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
+                        var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
+                        tabViewModel.Items.AddRange(topUnansweredCriticalQuestions.Take(takeCount));
+                        topUnansweredCriticalQuestions.Skip(takeCount).ToList().ForEach(vm => vm.DisposeIfDisposable());
+                        tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
+                    }
+
+                    criticalItemsTransferred = true;
+
+                    IsCompletionAllowed = CalculateIsCompletionAllowed();
+                    IsLoading = false;
+                    RaisePropertyChanged(nameof(IsAllOk));
+                });
             }
-            
-            IsLoading = false;
+            finally
+            {
+                if (!criticalItemsTransferred)
+                {
+                    topFailedCriticalRules?.ForEach(vm => vm.DisposeIfDisposable());
+                    topUnansweredCriticalQuestions?.ForEach(vm => vm.DisposeIfDisposable());
+                }
+            }
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
         {
             try
             {
-                if (this.interview.Status != InterviewStatus.ApprovedBySupervisor)
+                var currentInterview = this.interviewRepository.GetOrThrow(InterviewId.FormatGuid());
+                if (currentInterview.Status != InterviewStatus.ApprovedBySupervisor)
                 {
                     if (receivedByInterviewerTabletAt != null)
                     {
@@ -140,7 +191,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                     var command = new ApproveInterviewCommand(InterviewId, this.principal.CurrentUserIdentity.UserId,
                         Comment);
                     await this.commandService.ExecuteAsync(command);
-                    auditLogService.Write(new ApproveInterviewAuditLogEntity(this.InterviewId, interview.GetInterviewKey().ToString()));
+                    auditLogService.Write(new ApproveInterviewAuditLogEntity(this.InterviewId, currentInterview.GetInterviewKey().ToString()));
 
                     CompleteCalendarEventIfExists();
                 }
@@ -159,13 +210,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             try
             {
-                if (this.interview.Status != InterviewStatus.RejectedBySupervisor)
+                var currentInterview = this.interviewRepository.GetOrThrow(InterviewId.FormatGuid());
+                if (currentInterview.Status != InterviewStatus.RejectedBySupervisor)
                 {
                     var command = new RejectInterviewCommand(InterviewId, this.principal.CurrentUserIdentity.UserId,
                         Comment);
                     await this.commandService.ExecuteAsync(command);
                     auditLogService.Write(new RejectInterviewAuditLogEntity(this.InterviewId,
-                        interview.GetInterviewKey().ToString()));
+                        currentInterview.GetInterviewKey().ToString()));
 
                     CompleteCalendarEventIfExists();
                 }
@@ -185,12 +237,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             if (calendarEvent == null)
                 return;
 
+            var currentInterview = this.interviewRepository.GetOrThrow(InterviewId.FormatGuid());
+
             var command = new CompleteCalendarEventCommand(calendarEvent.Id, this.principal.CurrentUserIdentity.UserId, 
                 new QuestionnaireIdentity() //dummy
                 );
             this.commandService.Execute(command);
 
-            Logger.Info($"Calendar event {calendarEvent.Id} completed after approve/reject interview {interview.GetInterviewKey()?.ToString()} ({InterviewId})");
+            Logger.Info($"Calendar event {calendarEvent.Id} completed after approve/reject interview {currentInterview.GetInterviewKey()?.ToString()} ({InterviewId})");
         }
 
         public IMvxAsyncCommand Assign => new MvxAsyncCommand(SelectInterviewer, () => 
