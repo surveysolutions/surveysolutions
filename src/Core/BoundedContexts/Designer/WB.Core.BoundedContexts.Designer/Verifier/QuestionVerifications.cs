@@ -25,6 +25,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private readonly Dictionary<(Guid questionnaire, Guid category), List<CategoriesItem>> categoriesCache
             = new Dictionary<(Guid questionnaire, Guid category), List<CategoriesItem>>();
 
+        // 0 is still accepted by the verifier for backward compatibility with existing questionnaires,
+        // but 1 is the smallest meaningful value and the one enforced by the Designer UI, so it is the one reported to the user.
+        private const int ReportedMinCountOfDecimalPlaces = 1;
+
         public QuestionVerifications(ISubstitutionService substitutionService, IReusableCategoriesService reusableCategoriesService)
         {
             this.substitutionService = substitutionService;
@@ -44,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<SingleQuestion>("WB0086", CascadingQuestionReferencesMissingParent, VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
             Error<SingleQuestion>("WB0088", CascadingQuestionHasMoreThanAllowedOptions, string.Format(VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers, MaxOptionsCountInFilteredComboboxQuestion)),
             Error<SingleQuestion>("WB0089", CascadingQuestionOptionsWithParentValuesShouldBeUnique, VerificationMessages.WB0089_CascadingQuestionOptionWithParentShouldBeUnique),
-            Error<INumericQuestion>("WB0128", CountOfDecimalPlacesIsInRange1_15, string.Format(VerificationMessages.WB0128_CountOfDecimalPlacesIsNotInRange, MinCountOfDecimalPlaces, MaxCountOfDecimalPlaces)),
+            Error<INumericQuestion>("WB0128", CountOfDecimalPlacesIsInRange1_15, string.Format(VerificationMessages.WB0128_CountOfDecimalPlacesIsNotInRange, ReportedMinCountOfDecimalPlaces, MaxCountOfDecimalPlaces)),
             Error<INumericQuestion>("WB0131", SpecialValuesHasNonIntegerOptionsValues, string.Format(VerificationMessages.WB0131_SpecialValuesHasNonIntegerOptionsValues, int.MinValue, int.MaxValue)),
             Error<INumericQuestion>("WB0132", SpecialValuesHasOptionsWithLongTexts, string.Format(VerificationMessages.WB0132_SpecialValuesHasOptionsWithLongTexts, 1, MaxOptionLength)),
             Error<INumericQuestion>("WB0133", SpecialValuesMustBeUniqueForNumericQuestion, VerificationMessages.WB0133_SpecialValuesMustBeUniqueForNumericlQuestion),
