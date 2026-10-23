@@ -449,7 +449,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             webInterviewConfigProvider.Verify(x => x.Store(
                 It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 2),
                 It.Is<WebInterviewConfig>(c =>
-                    c.Started == false &&
+                    c.Started == true &&
                     c.UseCaptcha == true &&
                     c.SingleResponse == false &&
                     c.EmailOnComplete == true &&

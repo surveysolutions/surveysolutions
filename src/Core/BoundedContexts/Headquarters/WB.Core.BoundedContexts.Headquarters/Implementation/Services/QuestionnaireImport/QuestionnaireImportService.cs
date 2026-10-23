@@ -287,33 +287,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                     if (previousConfig != null)
                     {
-                        var newConfig = new WebInterviewConfig
-                        {
-                            QuestionnaireId = questionnaireIdentity,
-                            Started = false,
-                            UseCaptcha = previousConfig.UseCaptcha,
-                            SingleResponse = previousConfig.SingleResponse,
-                            EmailOnComplete = previousConfig.EmailOnComplete,
-                            AttachAnswersInEmail = previousConfig.AttachAnswersInEmail,
-                            AllowSwitchToCawiForInterviewer = previousConfig.AllowSwitchToCawiForInterviewer,
-                            AllowTranscriptDownloading = previousConfig.AllowTranscriptDownloading,
-                            ReminderAfterDaysIfNoResponse = previousConfig.ReminderAfterDaysIfNoResponse,
-                            ReminderAfterDaysIfPartialResponse = previousConfig.ReminderAfterDaysIfPartialResponse,
-                            CustomMessages = previousConfig.CustomMessages != null
-                                ? new Dictionary<WebInterviewUserMessages, string>(previousConfig.CustomMessages)
-                                : new Dictionary<WebInterviewUserMessages, string>(),
-                            EmailTemplates = previousConfig.EmailTemplates != null
-                                ? previousConfig.EmailTemplates
-                                    .Where(template => template.Value != null)
-                                    .ToDictionary(
-                                        template => template.Key,
-                                        template => new EmailTextTemplate(
-                                            template.Value.Subject,
-                                            template.Value.Message,
-                                            template.Value.PasswordDescription,
-                                            template.Value.LinkText))
-                                : new Dictionary<EmailTextTemplateType, EmailTextTemplate>(),
-                        };
+                        var newConfig = previousConfig.CopyFor(questionnaireIdentity);
 
                         webInterviewConfigProvider.Store(questionnaireIdentity, newConfig);
                         logger.Verbose($"Copied web interview settings from version {sourceConfigIdentity.Version} to {questionnaireIdentity.Version} for questionnaire {questionnaireId}");
