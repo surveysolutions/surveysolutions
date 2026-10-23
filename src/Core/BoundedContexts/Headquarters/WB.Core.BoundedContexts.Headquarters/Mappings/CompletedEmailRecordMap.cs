@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             Property(x => x.RequestTime);
             Property(x => x.FailedCount);
+            Property(x => x.NextAttemptAt);
         }
     }
 }
