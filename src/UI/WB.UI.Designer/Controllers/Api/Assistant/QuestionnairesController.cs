@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -84,6 +85,26 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
 
         [QuestionnairePermissions]
         [HttpGet]
+        [Route("{id}/lookup/{lookupTableId}/headers")]
+        public IActionResult GetLookupTableHeaders(QuestionnaireRevision id, Guid lookupTableId)
+        {
+            string[]? headers;
+            try
+            {
+                headers = this.lookupTableService.GetLookupTableHeaders(id, lookupTableId);
+            }
+            catch (ArgumentException)
+            {
+                return NotFound();
+            }
+
+            if (headers == null)
+                return NotFound();
+
+            return Ok(headers);
+        }
+        
+        [HttpGet]
         [Route("{id}/categories")]
         public IActionResult GetCategories(QuestionnaireRevision id)
         {
@@ -105,17 +126,5 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
             }));
         }
 
-        [QuestionnairePermissions]
-        [HttpGet]
-        [Route("{id}/lookup/{lookupTableId}/headers")]
-        public IActionResult GetLookupTableHeaders(QuestionnaireRevision id, Guid lookupTableId)
-        {
-            var content = this.lookupTableService.GetLookupTableContent(id, lookupTableId);
-            if (content == null)
-                return NotFound();
-
-            var result = JsonConvert.SerializeObject(new[] { "rowcode" }.Concat(content.VariableNames).ToArray(), Formatting.None);
-            return Content(result, "application/json", Encoding.UTF8);
-        }
     }
 }
