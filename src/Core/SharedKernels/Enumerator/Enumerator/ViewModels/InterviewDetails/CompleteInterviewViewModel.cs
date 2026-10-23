@@ -238,7 +238,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 cancellationToken.ThrowIfCancellationRequested();
                 if (ShouldSkipLoadUpdate(loadVersion, cancellationToken)) return;
-                await OnTabDataLoadedAsync(interviewId, navigationState, loadVersion, cancellationToken);
+                await Task.Run(
+                    () => OnTabDataLoadedAsync(interviewId, navigationState, loadVersion, cancellationToken),
+                    cancellationToken).ConfigureAwait(false);
             }
             finally
             {
