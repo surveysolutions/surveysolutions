@@ -1290,6 +1290,7 @@ namespace WB.Tests.Abc.TestFactories
             if (unitOfWork == null)
             {
                 var sqlQuery = new Mock<ISQLQuery>();
+                sqlQuery.Setup(x => x.SetInt32(It.IsAny<string>(), It.IsAny<int>())).Returns(sqlQuery.Object);
                 sqlQuery.Setup(x => x.SetString(It.IsAny<string>(), It.IsAny<string>())).Returns(sqlQuery.Object);
                 sqlQuery.Setup(x => x.ExecuteUpdateAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
                 var session = new Mock<ISession>();

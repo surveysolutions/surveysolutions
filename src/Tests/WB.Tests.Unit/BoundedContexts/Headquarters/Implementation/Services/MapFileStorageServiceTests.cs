@@ -189,6 +189,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
                 .ReturnsAsync(map);
             var deletionRequests = new TestPlainStorage<MapFileDeletionRequest>();
             var sqlQuery = new Mock<ISQLQuery>();
+            sqlQuery.Setup(query => query.SetInt32(It.IsAny<string>(), It.IsAny<int>())).Returns(sqlQuery.Object);
             sqlQuery.Setup(query => query.SetString("fileName", mapName)).Returns(sqlQuery.Object);
             sqlQuery.Setup(query => query.ExecuteUpdateAsync(It.IsAny<CancellationToken>()))
                 .Callback(() => calls.Add("lock"))
