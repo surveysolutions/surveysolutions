@@ -6,10 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Options;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
-using MigraDocCore.DocumentObjectModel.Shapes;
-using MigraDocCore.DocumentObjectModel.Tables;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Shapes;
+using MigraDoc.DocumentObjectModel.Tables;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -62,9 +61,10 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
             var headerRow = headerTable.AddRow();
 
 
-            var logoContent = GetEmbeddedResource("pdf_logo.png");
-            ImageSource.IImageSource logoImageSource = ImageSource.FromStream("logo.png", () => logoContent);
-            var image = headerRow[1].AddImage(logoImageSource);
+            var logoContent = GetEmbeddedResource("pdf_logo.png")!;
+            using var logoBuffer = new MemoryStream();
+            logoContent.CopyTo(logoBuffer);
+            var image = headerRow[1].AddImage(PdfImageSource.FromBinary(logoBuffer.ToArray()));
             image.Width = Unit.FromPoint(14);
             image.Height = Unit.FromPoint(35);
             image.LockAspectRatio = true;
