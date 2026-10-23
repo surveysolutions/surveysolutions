@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="BeforeSignInToDesigner" xml:space="preserve"><value>Para se të hyni në Designer</value></data>
+  <data name="LoginToDesignerError" xml:space="preserve"><value>Gabim gjatë hyrjes në Designer {0}</value></data>
+  <data name="SignInToDesigner" xml:space="preserve"><value>Hyrje në Designer</value></data>
+  <data name="SignInToDesignerTitle" xml:space="preserve"><value>Hyrje në Designer</value></data>
+  <data name="DesignerQuestionnaires" xml:space="preserve"><value>Pyetësorët e Designer</value></data>
+  <data name="ImportModeTitle" xml:space="preserve"><value>Mënyra e importit</value></data>
+  <data name="ImportModePageTitle" xml:space="preserve"><value>Importo pyetësor</value></data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve"><value>Lista e pyetësorëve të mi</value></data>
+  <data name="Chapters" xml:space="preserve"><value>Kapituj</value></data>
+  <data name="CreatedAt" xml:space="preserve"><value>Krijuar më</value></data>
+
+
+
+  <data name="Questions" xml:space="preserve"><value>Pyetje</value></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <data name="Gropus" xml:space="preserve"><value>Grupe</value></data>
+  <data name="LastModifiedAt" xml:space="preserve"><value>Ndryshuar së fundmi më</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>Pyetje me kushte {{count}}</value></data>
+  <data name="Rosters" xml:space="preserve"><value>Regjistra</value></data>
+  <data name="QuestionnaireExists" xml:space="preserve"><value>Pyetësori ekziston</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>Importo si version i ri {{version}}</value></data>
+  <data name="RegularImportTitle" xml:space="preserve"><value>Importo pyetësor</value></data>
+  <data name="RegularImportSubTitle" xml:space="preserve"><value>Zgjidhni pyetësorin për ta importuar</value></data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve"><value>Pyetësorët e mi</value></data>
+  <data name="UpgradeAssignments" xml:space="preserve"><value>Përmirëso detyrat</value></data>
+
+
+
+
+
+
+  <data name="Importing" xml:space="preserve"><value>Duke importuar {{percent}}%</value></data>
+  <data name="Prepare" xml:space="preserve"><value>Duke marrë të dhënat e pyetësorit</value></data>
+</root>

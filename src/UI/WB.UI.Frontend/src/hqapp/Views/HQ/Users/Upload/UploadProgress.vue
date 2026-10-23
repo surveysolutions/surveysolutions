@@ -7,18 +7,24 @@
             <div class="col-sm-7 col-xs-12 action-block uploading-verifying active-preloading">
                 <div class="import-progress">
                     <p>{{ $t('UploadUsers.Uploading', {
-                importedUsersCount: importedUsersCount, totalUsersToImportCount:
-                    totalUsersToImportCount
-            }) }}</p>
+                        importedUsersCount: importedUsersCount, totalUsersToImportCount:
+                            totalUsersToImportCount
+                    }) }}</p>
                 </div>
                 <div class="cancelable-progress">
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                            aria-valuemax="100" v-bind:style="{ width: importedUsersInPercents + '%' }">
+                        <div class="progress-bar"
+                            role="progressbar"
+                            aria-valuenow="60"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            v-bind:style="{ width: importedUsersInPercents + '%' }">
                             <span class="sr-only">{{ importedUsersInPercents }}%</span>
                         </div>
                     </div>
-                    <button class="btn  btn-link" type="button" @click="cancelUpload">
+                    <button class="btn  btn-link"
+                        type="button"
+                        @click="cancelUpload">
                         {{ $t('UploadUsers.Cancel')}}
                     </button>
                 </div>

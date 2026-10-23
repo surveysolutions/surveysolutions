@@ -556,6 +556,9 @@
   <data name="TargetAreaExplanation" xml:space="preserve">
       <value>Specify Target Area map name for assignment</value>
   </data>
+  <data name="TargetAreaNameTooLong" xml:space="preserve">
+      <value>Target area map name is too long. The maximum allowed length is {{limit}} characters.</value>
+  </data>
   <data name="EnterTargetArea" xml:space="preserve">
       <value>Enter Target area</value>
   </data>
@@ -618,5 +621,14 @@
   </data>
   <data name="Action_Reopened" xml:space="preserve">
       <value>Reopened</value>
+  </data>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Selective</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Audio audit scope</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>This assignment has a selective audio audit scope. Enabling full audio recording will record all sections. Disabling it will revert to recording only the selected sections.</value>
   </data>
 </root>

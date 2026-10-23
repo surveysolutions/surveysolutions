@@ -124,6 +124,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         ResponsibleRole = x.Responsible.RoleIds.First().ToUserRole().ToString(),
                         IdentifyingQuestions = this.GetIdentifyingColumnText(x),
                         IsAudioRecordingEnabled = x.AudioRecording,
+                        HasAudioAuditScope = x.AudioAuditScope != null && x.AudioAuditScope.Count > 0,
+                        AudioAuditScope = x.AudioAuditScope,
                         Email = x.Email,
                         Password = x.Password,
                         WebMode = x.WebMode,
@@ -446,7 +448,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             if (input.Statuses != null && input.Statuses.Length > 0)
             {
-                items = items.Where(x => input.Statuses.Contains(x.Status));
+                // Use List<> to avoid C# 14+ compiling Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T)
+                // which puts an op_Implicit call into the expression tree that NHibernate cannot evaluate.
+                var statusList = input.Statuses.ToList();
+                items = items.Where(x => statusList.Contains(x.Status));
             }
 
             return items;

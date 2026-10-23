@@ -50,6 +50,13 @@
 .btn-primary {
   background-color: @success-button-color;
   &:hover { background-color: darken(@success-button-color, 5%); }
+  &:focus {
+    background-color: @success-button-color;
+    color: @inline-button-medium-fg-color;
+  }
+  &:focus:hover {
+    background-color: darken(@success-button-color, 5%);
+  }
   &:active { 
     background-color: darken(@success-button-color, 5%); 
     &:hover { background-color: darken(@success-button-color, 5%); }

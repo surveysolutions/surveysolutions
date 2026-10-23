@@ -297,6 +297,7 @@ Všechny datové soubory musí obsahovat proměnnou interview__id s jedinečným
 &lt;b&gt;_password&lt;/b&gt; - heslo pro zahájení rozhovoru (pouze pro webové dotazníky);&lt;br/&gt;
 &lt; b&gt;_webmode&lt;/b&gt; - režim pro dotazníky (1 pro CAWI, 0 nebo nic pro CAPI);&lt;br/&gt;
 &lt;b&gt;_record_audio&lt;/b&gt; - zvukové nahrávky jsou povoleny pro rozhovory (1 - povoleno, 0 - zakázáno , nic – získat tuto hodnotu z dotazníku);&lt;br/&gt;
+&lt;b&gt;_aascope&lt;/b&gt; - názvy proměnných (oddělené čárkami) sekcí, skupin nebo rosterů pro nahrávání zvuku, když je _record_audio vypnuto (výběrový rozsah zvukového auditu);&lt;br/&gt;
 &lt;b&gt;_comment&lt;/b&gt; – poznámky k dotazníkům</value>
   </data>
   <data name="CreateAssignments" xml:space="preserve">

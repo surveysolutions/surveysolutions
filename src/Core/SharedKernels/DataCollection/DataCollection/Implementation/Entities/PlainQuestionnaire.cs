@@ -1259,6 +1259,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.innerDocument.Translations.SingleOrDefault(t =>
                 t.Id == this.innerDocument.DefaultTranslation)?.Name;
         }
+
+        public Guid? GetDefaultTranslationId()
+        {
+            return this.innerDocument.DefaultTranslation;
+        }
         
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
@@ -1380,6 +1385,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             //throw new QuestionnaireException($"Question with id '{questionId}' must be multiple options question.");
 
             return multipleOptionsQuestion.YesNoView;
+        }
+
+        public bool IsQuestionNonNegative(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion == null)
+                return false;
+
+            return numericQuestion.IsNonNegative;
         }
 
         public int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId)

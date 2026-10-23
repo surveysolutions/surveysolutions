@@ -258,7 +258,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 assignmentToImport.Answers,
                 assignmentToImport.ProtectedVariables,
                 assignmentToImport.Comments,
-                assignmentToImport.TargetArea);
+                assignmentToImport.TargetArea,
+                audioAuditScope: assignmentToImport.AudioAuditScope?.ToArray());
 
             this.invitationService.CreateInvitationForWebInterview(assignment);
 
@@ -380,6 +381,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var isAudioRecordingEnabled = assignment.Select(_ => _.RecordAudio).FirstOrDefault(_ => _ != null)?.DoesNeedRecord;
             var comments = assignment.Select(_ => _.Comments).FirstOrDefault(_ => _ != null)?.Value;
             var targetArea = assignment.Select(_ => _.TargetArea).FirstOrDefault(_ => _ != null)?.Value;
+            var audioAuditScopeNames = assignment.Select(_ => _.AudioAuditScope).FirstOrDefault(_ => _ != null)?.VariableNames;
+            var audioAuditScope = audioAuditScopeNames == null
+                ? new List<string>()
+                : AudioAuditScopeResolver.Resolve(questionnaire, audioAuditScopeNames).VariableNames.ToList();
 
             return new AssignmentToImport
             {
@@ -390,6 +395,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Headquarters = responsible?.HeadquartersId,
                 Verified = false,
                 ProtectedVariables = protectedQuestions,
+                AudioAuditScope = audioAuditScope,
                 Email = email,
                 Password = password,
                 WebMode = webMode ?? false,

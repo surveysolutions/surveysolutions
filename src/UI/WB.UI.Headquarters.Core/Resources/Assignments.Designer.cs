@@ -405,9 +405,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Filter_ShowAll {
+        public static string ReceivedByTablet_All {
             get {
-                return ResourceManager.GetString("Filter_ShowAll", resourceCulture);
+                return ResourceManager.GetString("ReceivedByTablet_All", resourceCulture);
             }
         }
         
@@ -651,9 +651,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Downsize {
+        public static string Close {
             get {
-                return ResourceManager.GetString("Downsize", resourceCulture);
+                return ResourceManager.GetString("Close", resourceCulture);
             }
         }
         
@@ -927,6 +927,18 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string Filter_ShowAll {
+            get {
+                return ResourceManager.GetString("Filter_ShowAll", resourceCulture);
+            }
+        }
+        
+        public static string Downsize {
+            get {
+                return ResourceManager.GetString("Downsize", resourceCulture);
+            }
+        }
+        
         public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
@@ -999,12 +1011,6 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Close {
-            get {
-                return ResourceManager.GetString("Close", resourceCulture);
-            }
-        }
-        
         public static string Reopen {
             get {
                 return ResourceManager.GetString("Reopen", resourceCulture);
@@ -1038,6 +1044,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Action_Reopened {
             get {
                 return ResourceManager.GetString("Action_Reopened", resourceCulture);
+            }
+        }
+        
+        public static string AudioRecordingSelective {
+            get {
+                return ResourceManager.GetString("AudioRecordingSelective", resourceCulture);
+            }
+        }
+        
+        public static string AudioAuditScopeLabel {
+            get {
+                return ResourceManager.GetString("AudioAuditScopeLabel", resourceCulture);
+            }
+        }
+        
+        public static string AudioRecordingScopeNotice {
+            get {
+                return ResourceManager.GetString("AudioRecordingScopeNotice", resourceCulture);
             }
         }
     }

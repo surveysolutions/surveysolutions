@@ -213,6 +213,86 @@ div#table-message {
     }
 }
 
+.questionnaire-history-header {
+    margin: 0;
+    min-height: 45px;
+    padding: 7px 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.questionnaire-history-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: normal;
+}
+
+.questionnaire-history-search-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    font-size: 14px;
+
+    .input-group {
+        width: 200px;
+    }
+
+    .control-label,
+    .checkbox label {
+        margin: 0;
+        font-size: 14px;
+        line-height: 30px;
+    }
+
+    .form-control,
+    .input-group-btn .btn {
+        height: 30px;
+    }
+
+    .clear-search {
+        width: 30px;
+        height: 30px;
+        border: none;
+        padding: 0;
+        display: inline-block;
+        background: transparent url("../i/cross.png") -5px -5px;
+
+        &:hover {
+            background-position: -5px -45px;
+        }
+    }
+
+    .checkbox {
+        margin: 0;
+        height: 30px;
+        display: flex;
+        align-items: center;
+
+        label {
+            display: flex;
+            align-items: center;
+            padding-left: 0;
+        }
+
+        input[type="checkbox"] {
+            position: static;
+            margin: 0 6px 0 0;
+        }
+    }
+
+    .search-id-option {
+        font-family: "Lucida Console", Monaco, monospace;
+        color: #3da802;
+    }
+}
+
 
 table.table-header {
     cursor: default;

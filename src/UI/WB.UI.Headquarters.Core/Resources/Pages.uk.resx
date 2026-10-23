@@ -370,7 +370,13 @@
     <value>Створити адміністратора</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Створити користувача</value>
+    <value>Створити обліковий запис користувача</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Доступ до робочого простору</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Роль користувача</value>
   </data>
   <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
     <value>Написати коментар...</value>
@@ -1185,6 +1191,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Карта</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>Попередній перегляд карти</value>
+  </data>
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>Максимальний масштаб</value>
   </data>
@@ -1381,7 +1390,10 @@
     <value>Супервізори</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Особиста інформація (необов'язково) &lt;br&gt; буде видима лише користувачам Headquarters</value>
+    <value>Особиста інформація</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(необов'язково, буде видима лише аутентифікованим користувачам).</value>
   </data>
   <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
     <value>Змінні, що використовуються для звітів</value>
@@ -1706,7 +1718,7 @@
     <value>Виберіть супервізора</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>Супервізор (до його команди будуть додані інтерв'юери)</value>
+    <value>Супервізор</value>
   </data>
   <data name="UsersManage_TeamFilter" xml:space="preserve">
     <value>Команда</value>
@@ -1776,5 +1788,11 @@
   </data>
   <data name="Observer_Memo2" xml:space="preserve">
     <value>Натисніть на обліковий запис і виберіть «Переглянути як цей користувач у режимі тільки для читання», щоб почати. Використовуйте жовте посилання вгорі, щоб повернутися до свого облікового запису.</value>
+  </data>
+  <data name="Successful" xml:space="preserve">
+      <value>Успішно</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>Не вдалося</value>
   </data>
 </root>

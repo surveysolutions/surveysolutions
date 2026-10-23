@@ -7,7 +7,7 @@ toastr.options.escapeHtml = true
 const vue = createApp(App)
 setupErrorHandler(vue)
 
-import VueDOMPurifyHTML from 'vue-dompurify-html';
+import VueDOMPurifyHTML from 'vue-dompurify-html'
 vue.use(VueDOMPurifyHTML)
 
 import config from '~/shared/config'
@@ -25,27 +25,24 @@ const i18n = Vuei18n.initialize(browserLanguage, vue)
 import { validatePageLoad } from '~/shared/serverValidator'
 validatePageLoad()
 
-import 'bootstrap'
 import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
+import 'bootstrap/js/dist/dropdown'
 
 import moment from 'moment'
 moment.locale(browserLanguage)
-
-import * as poly from 'smoothscroll-polyfill'
-poly.polyfill()
 
 import box from '@/shared/modal'
 
 import createRouter from './router'
 import webinterviewStore from './stores'
-import { createStore } from 'vuex';
+import { createStore } from 'vuex'
 import routeParams from '../shared/stores/store.routeParams.js'
 
 const store = createStore({
     modules: {
         webinterview: webinterviewStore,
-        route: routeParams
+        route: routeParams,
     },
 })
 
@@ -57,8 +54,8 @@ const router = createRouter(store)
 vue.use(store)
 vue.use(router)
 
-import { registerGlobalComponents } from './componentsRegistry'
-registerGlobalComponents(vue, { router, store })
+import { registerBaseGlobalComponents } from './componentsRegistry'
+registerBaseGlobalComponents(vue, { router, store })
 
 box.init(i18n, browserLanguage)
 
@@ -68,5 +65,5 @@ window._api = {
 }
 
 router.isReady().then(() => {
-    vue.mount('#app');
-});
+    vue.mount('#app')
+})

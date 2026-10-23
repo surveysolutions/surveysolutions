@@ -1,21 +1,26 @@
 <template>
-    <local-query-builder-group-node :group="query" :config="normalizedConfig" :depth="1">
+    <local-query-builder-group-node :group="query"
+        :config="normalizedConfig"
+        :depth="1">
         <template #groupOperator="slotProps">
-            <slot name="groupOperator" v-bind="slotProps" />
+            <slot name="groupOperator"
+                v-bind="slotProps" />
         </template>
 
         <template #groupControl="slotProps">
-            <slot name="groupControl" v-bind="slotProps" />
+            <slot name="groupControl"
+                v-bind="slotProps" />
         </template>
 
         <template #rule="slotProps">
-            <slot name="rule" v-bind="slotProps" />
+            <slot name="rule"
+                v-bind="slotProps" />
         </template>
     </local-query-builder-group-node>
 </template>
 
 <script>
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash-es'
 import LocalQueryBuilderGroupNode from './LocalQueryBuilderGroupNode.vue'
 
 const defaultGroup = () => ({ operatorIdentifier: 'all', children: [] })

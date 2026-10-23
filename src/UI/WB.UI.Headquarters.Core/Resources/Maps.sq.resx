@@ -201,4 +201,7 @@
   <data name="MapFileNameHasInvalidChars" xml:space="preserve">
     <value>Emri i skedarit {0} përmban karaktere të pavlefshme.</value>
   </data>
+  <data name="MapFileNameTooLong" xml:space="preserve">
+    <value>Emri i skedarit '{0}' tejkalon gjatësinë maksimale të lejuar prej {1} karakteresh.</value>
+  </data>
 </root>

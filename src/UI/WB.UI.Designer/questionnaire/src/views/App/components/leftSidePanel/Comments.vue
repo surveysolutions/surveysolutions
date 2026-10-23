@@ -67,6 +67,7 @@
 <script>
 import { getCommentThreads } from '../../../../services/commentsService';
 import { sanitize } from '../../../../services/utilityService';
+import { useCommentThreadsStore } from '../../../../stores/commentThreads';
 import _ from 'lodash';
 import dayjs from 'dayjs';
 
@@ -75,9 +76,26 @@ export default {
     props: {
         questionnaireId: { type: String, required: true },
     },
+    setup() {
+        const commentThreadsStore = useCommentThreadsStore();
+        return { commentThreadsStore };
+    },
     data() {
         return {
             commentThreads: [],
+        }
+    },
+    computed: {
+        unresolvedCommentIds() {
+            return this.commentThreads.flatMap(thread => thread.comments.map(comment => comment.id));
+        }
+    },
+    watch: {
+        unresolvedCommentIds: {
+            handler(value) {
+                this.commentThreadsStore.setUnresolvedCommentIds(value);
+            },
+            immediate: true,
         }
     },
     async beforeMount() {

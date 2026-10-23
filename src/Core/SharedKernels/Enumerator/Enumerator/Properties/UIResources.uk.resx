@@ -317,6 +317,9 @@
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Введене значення не може бути оброблено як ціле число</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Від'ємні значення не дозволені для цього запитання</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Відповідь '{0}' некорректна, оскільки відповідь більша за верхню межу ростеру '{1}'..</value>
   </data>
@@ -427,7 +430,7 @@
       <value>Додаток повинен мати дозвіл на використання мікрофона. Повторіть останню дію і дозвольте доступ. Якщо ви не бачите спливаюче вікно з дозволами, перейдіть до налаштувань і дозвольте програмі використовувати мікрофон.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-      <value>Додаток повинен мати дозвіл на використання сховища. Повторіть останню дію і дозвольте доступ. Якщо ви не бачите спливаюче вікно з дозволами, перейдіть до Налаштувань і дозвольте програмі використовувати сховище.</value>
+      <value>Щоб зберігати карти на мобільному пристрої, Survey Solutions потрібен доступ до файлів. Якщо цей дозвіл не надано, застосунок не зможе зберігати карти для офлайн-використання.</value>
   </data>
   <data name="Adjust" xml:space="preserve">
     <value>Налаштувати</value>
@@ -783,6 +786,9 @@
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Виберіть опцію</value>
   </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Не вдалося обробити фотографію, оскільки її формат не підтримується. Будь ласка, сфотографуйте ще раз.</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Сфотографуйте</value>
   </data>
@@ -1052,5 +1058,8 @@
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
     <value>Питання
 без відповіді</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Для проведення інтерв'ю потрібен доступ до мікрофона. Інтерв'ю не можна розпочати, доки не надано доступ.</value>
   </data>
 </root>

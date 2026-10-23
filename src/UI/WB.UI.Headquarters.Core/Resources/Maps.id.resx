@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Levels" xml:space="preserve"><value>Tingkat</value></data>
+  <data name="MapLoadingInvalidFilesError" xml:space="preserve"><value>Terjadi kesalahan. File-file berikut diabaikan:</value></data>
+  <data name="MapLoadingNotZipError" xml:space="preserve"><value>Terjadi kesalahan. File bukan arsip .zip</value></data>
+  <data name="MapsLoadingError" xml:space="preserve"><value>Terjadi kesalahan saat memuat peta</value></data>
+  <data name="MaxScale" xml:space="preserve"><value>Skala Maks</value></data>
+  <data name="MinScale" xml:space="preserve"><value>Skala Min</value></data>
+  <data name="Name" xml:space="preserve"><value>Nama</value></data>
+  <data name="Size" xml:space="preserve"><value>Ukuran (MB)</value></data>
+  <data name="UpdateDate" xml:space="preserve"><value>Diimpor pada</value></data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve"><value>{0} peta diproses dengan {1} file peta tidak valid</value></data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve"><value>Komponen peta tidak diinisialisasi. Hubungi administrator sistem.</value></data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve"><value>tautan untuk {0} peta diproses dengan {1} tidak valid</value></data>
+  <data name="FileLoadingNotTsvError" xml:space="preserve"><value>Terjadi kesalahan. File bukan .tab</value></data>
+  <data name="MappingsLoadingError" xml:space="preserve"><value>Terjadi kesalahan saat memuat tautan peta</value></data>
+  <data name="MapOverlapsWith" xml:space="preserve"><value>Tumpang tindih dengan:</value></data>
+  <data name="MapOverlapsWithOther" xml:space="preserve"><value>dan {0} lainnya.</value></data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve"><value>Terjadi kesalahan. Arsip tidak berisi file peta</value></data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve"><value>Terjadi kesalahan. Arsip berisi file yang bukan peta</value></data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve"><value>File '{0}' berisi data yang tidak dapat diproses sistem. Kesalahan: {1}</value></data>
+  <data name="ShpIsMissingInArchive" xml:space="preserve"><value>File {0}.shp tidak ada untuk {0}</value></data>
+  <data name="ShxIsMissingInArchive" xml:space="preserve"><value>File {0}.shx tidak ada untuk {0}.shp</value></data>
+  <data name="DbfIsMissingInArchive" xml:space="preserve"><value>File {0}.dbf tidak ada untuk {0}.shp</value></data>
+  <data name="MapFileSizeLimit" xml:space="preserve"><value>Ukuran file {0} lebih besar dari batas yang berlaku {1}</value></data>
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve"><value>Nama file {0} berisi karakter non-UTF-8.</value></data>
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve"><value>Nama file {0} berisi karakter yang tidak valid.</value></data>
+  <data name="MapFileNameTooLong" xml:space="preserve"><value>Nama file '{0}' melebihi panjang maksimum yang diizinkan yaitu {1} karakter.</value></data>
+</root>

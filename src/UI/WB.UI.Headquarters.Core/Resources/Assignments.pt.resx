@@ -540,6 +540,9 @@
   <data name="TargetAreaExplanation" xml:space="preserve">
     <value>Especifique o nome do mapa da área alvo para a atribuição</value>
   </data>
+  <data name="TargetAreaNameTooLong" xml:space="preserve">
+      <value>O nome do mapa da área alvo é muito longo. O comprimento máximo permitido é de {{limit}} caracteres.</value>
+  </data>
   <data name="EnterTargetArea" xml:space="preserve">
     <value>Digite a área alvo</value>
   </data>
@@ -618,5 +621,14 @@
   </data>
   <data name="Action_Reopened" xml:space="preserve">
       <value>Reaberto</value>
+  </data>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Seletivo</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Escopo de auditoria de áudio</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Esta atribuição tem um escopo seletivo de auditoria de áudio. Habilitar a gravação de áudio completa gravará todas as seções. Desabilitá-la voltará a gravar apenas as seções selecionadas.</value>
   </data>
 </root>

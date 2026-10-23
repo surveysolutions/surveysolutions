@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Controllers.Api.Designer;
+using WB.UI.Designer.Filters;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -42,7 +43,7 @@ namespace WB.UI.Designer.Controllers
                         option => new QuestionnaireCategoricalOption
                         {
                             Value = option.Id,
-                            ParentValue = option.ParentId != null ? (int)option.ParentId.Value : (int?)null,
+                            ParentValue = option.ParentId != null ? option.ParentId.Value : null,
                             Title = option.Text,
                             AttachmentName = option.AttachmentName
                         });
@@ -81,12 +82,12 @@ namespace WB.UI.Designer.Controllers
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
-            var options = editQuestionView != null
+            var questionOptions = editQuestionView != null
                 ? editQuestionView.Options.Select(
                               option => new QuestionnaireCategoricalOption
                               {
                                   Value = option.Value != null ? (int)option.Value : throw new InvalidOperationException("Option Value must be not null."),
-                                  ParentValue = option.ParentValue != null ? (int)option.ParentValue.Value : (int?)null,
+                                  ParentValue = option.ParentValue != null ? (int)option.ParentValue.Value : null,
                                   Title = option.Title,
                                   AttachmentName = option.AttachmentName
                               })
@@ -99,7 +100,7 @@ namespace WB.UI.Designer.Controllers
                 questionnaireId: id.QuestionnaireId.FormatGuid(),
                 questionId: questionId,
                 questionTitle: editQuestionView?.Title,
-                options: options.ToList(),
+                options: questionOptions.ToList(),
                 isCascading: isCascading,
                 isReadonly: isReadonly
             )
@@ -237,7 +238,7 @@ namespace WB.UI.Designer.Controllers
                             Title = x.Text,
                             Value = int.Parse(x.Id!),
                             ParentValue = string.IsNullOrEmpty(x.ParentId)
-                                ? (int?)null
+                                ? null
                                 : int.Parse(x.ParentId),
                             AttachmentName = x.AttachmentName
                         })
@@ -293,7 +294,10 @@ namespace WB.UI.Designer.Controllers
             [FromBody] UpdateCategoriesModel? categoriesModel)
         {
             if (categoriesModel?.Categories == null)
-                return Json(GetNotFoundResponseObject());
+            {
+                this.transactionRollbackState.MarkRollbackOnly();
+                return CommandJsonResult(GetNotFoundResponseObject());
+            }
 
             if (isCategory)
             {
@@ -316,18 +320,20 @@ namespace WB.UI.Designer.Controllers
                 catch (Exception e)
                 {
                     this.logger.LogError(e, "Error on categories saving");
+                    this.transactionRollbackState.MarkRollbackOnly();
 
                     dynamic commandResult = new ExpandoObject();
                     commandResult.IsSuccess = false;
                     commandResult.Error = "Error occurred: " + e.Message;
 
-                    return Json(commandResult);
+                    return CommandJsonResult((object)commandResult);
                 }
 
                 var model = this.GetCategoryOptions(id, entityId);
 
                 if (model.Value == null)
                 {
+                    this.transactionRollbackState.MarkRollbackOnly();
                     return model.Result;
                 }
 
@@ -339,7 +345,18 @@ namespace WB.UI.Designer.Controllers
                     model.Value.CategoriesId);
 
                 var categoriesCommandResult = await this.ExecuteCommand(command);
-                return Json(categoriesCommandResult);
+                if (categoriesCommandResult is ExpandoObject expando)
+                {
+                    var result = (IDictionary<string, object?>)expando;
+                    if (result.TryGetValue("IsSuccess", out var isSuccessObj)
+                        && isSuccessObj is bool isSuccess
+                        && isSuccess)
+                    {
+                        result["NewEntityId"] = categoriesId;
+                    }
+                }
+
+                return CommandJsonResult(categoriesCommandResult);
             }
             else
             {
@@ -365,7 +382,7 @@ namespace WB.UI.Designer.Controllers
 
                 var commandResult = await this.ExecuteCommand(command);
 
-                return Json(commandResult);
+                return CommandJsonResult(commandResult);
             }
         }
 
@@ -389,6 +406,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
+                this.transactionRollbackState.MarkRollbackOnly();
                 var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {
@@ -401,6 +419,24 @@ namespace WB.UI.Designer.Controllers
                 commandResult.Error = domainEx != null ? domainEx.Message : "Something went wrong";
             }
             return commandResult;
+        }
+
+        private JsonResult CommandJsonResult(object commandResult)
+        {
+            var jsonResult = Json(commandResult);
+
+            // A failed command still uses the IsSuccess=false envelope. The 400 status helps clients treat
+            // it as an error, but TransactionFilter commits/rolls back BEFORE result execution and does not
+            // inspect result or response status when deciding whether to save staged changes.
+            if (commandResult is IDictionary<string, object?> result
+                && result.TryGetValue("IsSuccess", out var isSuccessObj)
+                && isSuccessObj is bool isSuccess
+                && !isSuccess)
+            {
+                jsonResult.StatusCode = StatusCodes.Status400BadRequest;
+            }
+
+            return jsonResult;
         }
 
         public IActionResult ExportLookupTable(QuestionnaireRevision id, Guid lookupTableId)

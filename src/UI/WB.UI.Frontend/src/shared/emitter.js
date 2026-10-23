@@ -1,4 +1,4 @@
-import mitt from 'mitt';
-const emitter = mitt();
+import mitt from 'mitt'
+const emitter = mitt()
 
-export default emitter;
+export default emitter

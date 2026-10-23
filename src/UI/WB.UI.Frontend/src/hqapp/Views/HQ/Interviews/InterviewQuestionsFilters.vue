@@ -34,7 +34,7 @@
         </ModalFrame>
 
         <ModalFrame ref="questionsExposedSelector" id="modalQuestionsExposedSelector" class="vue-query-builder"
-            :title="$t('Interviews.DynamicFilter')">
+            :title="$t('Interviews.DynamicFilter')" @hidden="restoreQueryAfterCancel">
             <query-builder :config="config" v-model="queryExposedVariables">
 
                 <template #groupOperator="props">
@@ -78,27 +78,28 @@
 <script>
 
 import QueryBuilder from './components/LocalQueryBuilder.vue'
-import RuleSlot from "./components/CustomBootstrapRule.vue";
+import RuleSlot from './components/CustomBootstrapRule.vue'
 import QueryBuilderGroup from './components/CustomBootstrapGroup.vue'
 import QueryBuilderGroupOperator from './components/CustomBootstrapGroupOperator.vue'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 import InterviewFilter from './InterviewFilter'
-import { find, filter } from 'lodash'
+import { find, filter, cloneDeep, isEqual } from 'lodash-es'
 import DOMPurify from 'dompurify'
 const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
 export default {
     data() {
         return {
-            queryExposedVariables: { operatorIdentifier: "all", children: [] },
+            queryExposedVariables: { operatorIdentifier: 'all', children: [] },
             conditions: [], /** { } */
             questionnaireItems: [],
             selectedQuestion: null,
             checked: {},
 
             lastSavedQuery: null,
+            savedQuery: { operatorIdentifier: 'all', children: [] },
 
         }
     },
@@ -117,31 +118,11 @@ export default {
 
     emits: ['change', 'changeFilter'],
 
-    apollo: {
-        questionnaireItems: {
-            query: gql`query questionnaireItems($workspace: String!, $id: UUID!, $version: Long!) {
-                questionnaireItems(workspace: $workspace, id: $id, version: $version, where: { or: [{identifying: {eq: true}}, {includedInReportingAtUtc: {neq: null}}]}) {
-                    title, label, type, variable, entityType, variableType, identifying
-                    options { title, value, parentValue }
-                }
-            }`,
-            variables() {
-                return {
-                    id: (this.questionnaireId || '').replace(/-/g, ''),
-                    version: this.questionnaireVersion,
-                    workspace: this.$store.getters.workspace,
-                }
-            },
-            skip() {
-                return this.questionnaireId == null || this.questionnaireVersion == null
-            },
-        },
-    },
-
-    mounted() {
+    async mounted() {
         if (this.value != null) {
             this.conditions = this.value
         }
+        await this.fetchQuestionnaireItems()
     },
 
     watch: {
@@ -151,18 +132,41 @@ export default {
 
         questionnaireId() {
             this.conditions = this.value
-            this.queryExposedVariables = { operatorIdentifier: "all", children: [] }
+            this.queryExposedVariables = { operatorIdentifier: 'all', children: [] }
             this.saveExposedVariablesFilter()
+            this.fetchQuestionnaireItems()
         },
 
         questionnaireVersion() {
             this.conditions = this.value
-            this.queryExposedVariables = { operatorIdentifier: "all", children: [] }
+            this.queryExposedVariables = { operatorIdentifier: 'all', children: [] }
             this.saveExposedVariablesFilter()
+            this.fetchQuestionnaireItems()
         },
     },
 
     methods: {
+        async fetchQuestionnaireItems() {
+            if (this.questionnaireId == null || this.questionnaireVersion == null) {
+                this.questionnaireItems = []
+                return
+            }
+            const data = await gqlRequest(
+                gql`query questionnaireItems($workspace: String!, $id: UUID!, $version: Long!) {
+                    questionnaireItems(workspace: $workspace, id: $id, version: $version, where: { or: [{identifying: {eq: true}}, {includedInReportingAtUtc: {neq: null}}]}) {
+                        title, label, type, variable, entityType, variableType, identifying
+                        options { title, value, parentValue }
+                    }
+                }`,
+                {
+                    id: (this.questionnaireId || '').replace(/-/g, ''),
+                    version: this.questionnaireVersion,
+                    workspace: this.$store.getters.workspace,
+                }
+            )
+            this.questionnaireItems = data.questionnaireItems
+        },
+
         isChecked(item) {
             return find(this.conditions, { variable: item.variable }) != null
         },
@@ -206,10 +210,21 @@ export default {
                 this.$emit('change', [...this.conditions])
             }
         },
+        cloneQuery(value) {
+            if (value == null)
+                return value
+
+            return cloneDeep(value)
+        },
         saveExposedVariablesFilter() {
+            this.savedQuery = this.cloneQuery(this.queryExposedVariables)
             this.lastSavedQuery = this.transformQuery
             this.$emit('changeFilter', this.transformQuery)
             this.$refs.questionsExposedSelector.hide()
+        },
+
+        restoreQueryAfterCancel() {
+            this.queryExposedVariables = this.cloneQuery(this.savedQuery)
         },
 
         sanitizeHtml: sanitizeHtml,
@@ -296,7 +311,7 @@ export default {
                                 and: [
                                     { identifyingData: { some: leftOn } },
                                     { identifyingData: { some: rightOn } },
-                                ]
+                                ],
                             }
                             return dateOnResult
                         }
@@ -311,7 +326,7 @@ export default {
                                 or: [
                                     { identifyingData: { some: leftNotOn } },
                                     { identifyingData: { some: rightNotOn } },
-                                ]
+                                ],
                             }
                             return dateNotOnResult
                         }
@@ -447,7 +462,7 @@ export default {
                 rule.unaryOperators = map.unaryOperators
 
             return rule
-        }
+        },
     },
 
     computed: {
@@ -473,7 +488,7 @@ export default {
                     'ffff00',
                     'ff00ff',
                     '9900ff',
-                    '999900'
+                    '999900',
                 ],
             }
         },
@@ -566,7 +581,7 @@ export default {
             }
         },
         saveDisabled() {
-            return this.transformQuery === this.lastSavedQuery
+            return isEqual(this.transformQuery, this.lastSavedQuery)
         },
     },
 
@@ -575,7 +590,7 @@ export default {
         QueryBuilder,
         QueryBuilderGroup,
         QueryBuilderGroupOperator,
-        RuleSlot
+        RuleSlot,
     },
 }
 </script>

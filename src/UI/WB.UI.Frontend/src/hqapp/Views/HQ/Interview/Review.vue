@@ -2,7 +2,13 @@
     <main class="web-interview web-interview-for-supervisor" :class="classes">
         <div class="container-fluid">
             <div class="row">
-                <DetailsInfo />
+                <DetailsInfo
+                    :audioAuditPanelOpen="audioAuditPanelOpen"
+                    @toggleAudioPanel="toggleAudioPanel" />
+                <AudioAuditPanel
+                    v-if="audioAuditPanelOpen"
+                    :interviewId="interviewId"
+                    @close="audioAuditPanelOpen = false" />
                 <Facets />
                 <SearchResults />
                 <Sidebar :showComplete="false" :show-foldback-button-as-hamburger="false" />
@@ -21,16 +27,28 @@ import Facets from './Facets'
 import SearchResults from './SearchResults'
 import Sidebar from '~/webinterview/components/Sidebar'
 import DetailsInfo from './DetailsInfo.vue'
+import AudioAuditPanel from './AudioAuditPanel.vue'
+import { ensureQuestionGlobalComponents } from '~/webinterview/componentsQuestionRegistry'
 import { nextTick } from 'vue'
 import http from '~/webinterview/api/http'
 //const Interview = () => import('~/webinterview/components/Interview.vue')
 //import Interview from '~/webinterview/components/Interview.vue'
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent } from 'vue'
 
 import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'
 
 export default {
+    async beforeCreate() {
+        ensureQuestionGlobalComponents(this.$.appContext.app)
+    },
+
+    data() {
+        return {
+            audioAuditPanelOpen: false,
+        }
+    },
+
     watch: {
         ['$route.hash'](to) {
             if (to != null) {
@@ -66,6 +84,10 @@ export default {
             this.$store.dispatch('screenWidthChanged', screenWidth)
         },
 
+        toggleAudioPanel() {
+            this.audioAuditPanelOpen = !this.audioAuditPanelOpen
+        },
+
         connected() {
             this.$store.dispatch('getLanguageInfo')
             this.$store.dispatch('loadInterview')
@@ -74,8 +96,8 @@ export default {
     },
 
     beforeMount() {
-        const app = this.$root;
-        http.install(app, { store: this.$store });
+        const app = this.$root
+        http.install(app, { store: this.$store })
     },
 
     mounted() {
@@ -99,10 +121,11 @@ export default {
         SearchResults,
         Sidebar,
         DetailsInfo,
+        AudioAuditPanel,
         Interview: defineAsyncComponent(() => import('~/webinterview/components/Interview.vue')),
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         window.removeEventListener('resize', this.onResize)
     },
 }

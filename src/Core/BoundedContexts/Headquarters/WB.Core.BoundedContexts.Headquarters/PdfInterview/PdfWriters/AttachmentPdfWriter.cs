@@ -1,6 +1,6 @@
 ﻿using System;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
+using MigraDoc.DocumentObjectModel;
+using WB.Core.Infrastructure.Exceptions;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 
@@ -41,13 +41,17 @@ public class AttachmentPdfWriter : IPdfWriter
         {
             paragraph.Format.LineSpacingRule = LineSpacingRule.Single;
 
-            var imageSource = ImageSharpSource<SixLabors.ImageSharp.PixelFormats.Rgba32>
-                .FromBinaryResized(attachment.FileName, attachment.Content!);
-
-            var image = paragraph.AddImage(imageSource);
-            image.LockAspectRatio = true;
-            image.Width = Unit.FromPoint(300);
-            image.Height = Unit.FromPoint(300);
+            try
+            {
+                var image = paragraph.AddImage(PdfImageSource.FromBinaryResized(attachment.Content));
+                image.LockAspectRatio = true;
+                image.Width = Unit.FromPoint(300);
+                image.Height = Unit.FromPoint(300);
+            }
+            catch (Exception exception) when (exception is InvalidImageException || exception is NotSupportedException)
+            {
+                paragraph.AddWrapFormattedText($"{attachment.FileName}", PdfStyles.QuestionAnswer);
+            }
         }
         else if (attachment.IsVideo())
         {

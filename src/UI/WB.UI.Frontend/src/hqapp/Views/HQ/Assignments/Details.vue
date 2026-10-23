@@ -6,7 +6,7 @@
                     <div class="panel-body clearfix">
                         <div class="about-questionnaire clearfix">
                             <div class="about-questionnaire-details clearfix">
-                                <ul class="main-info-column list-unstyled pull-left">
+                                <ul class="main-info-column list-unstyled">
                                     <li id="detailsInfo_interviewKeyListItem">
                                         {{ $t('Assignments.AssignmentId') }}:
                                         {{ model.id }}
@@ -16,7 +16,7 @@
                                         {{ model.questionnaire.title }}
                                     </li>
                                 </ul>
-                                <ul class="list-unstyled pull-left table-info">
+                                <ul class="list-unstyled table-info">
                                     <li id="detailsInfo_createdAtListItem">
                                         <span class="data-label">{{
                                             this.$t(
@@ -25,12 +25,12 @@
                                         }}:</span>
                                         <span class="data">{{
                                             createdDate
-                                            }}</span>
+                                        }}</span>
                                     </li>
                                     <li id="detailsInfo_responsibleListItem">
                                         <span class="data-label">{{
                                             $t('Details.Responsible')
-                                            }}:
+                                        }}:
                                         </span>
                                         <span v-if="isInterviewerResponsible" class="data">
                                             <a v-bind:href="interviewerProfileUrl
@@ -41,19 +41,19 @@
                                         }}</span>
                                     </li>
                                 </ul>
-                                <ul class="list-unstyled pull-left table-info">
+                                <ul class="list-unstyled table-info">
                                     <li id="detailsInfo_lastUpdatedListItem">
                                         <span class="data-label">{{
                                             this.$t('Details.LastUpdated')
-                                            }}:</span>
+                                        }}:</span>
                                         <span class="data">{{
                                             updatedDate
-                                            }}</span>
+                                        }}</span>
                                     </li>
                                     <li>
                                         <span class="data-label">{{
                                             $t('Common.CalendarEvent')
-                                            }}:</span>
+                                        }}:</span>
                                         <span class="data" data-bs-toggle="tooltip" v-if="calendarEventComment != null"
                                             :title="calendarEventComment == null ||
                                                 calendarEventComment == ''
@@ -143,7 +143,9 @@
                                 <td class="text-nowrap">
                                     {{ $t('Assignments.Expected') }}
                                 </td>
-                                <td class="pointer editable" @click="quantityChange">{{ quantity }}</td>
+                                <td class="pointer editable" @click="quantityChange">
+                                    {{ quantity }}
+                                </td>
                             </tr>
                             <tr v-if="model.isHeadquarters">
                                 <td class="text-nowrap">
@@ -187,6 +189,14 @@
                                 </td>
                                 <td :class="{ 'pointer editable': model.isHeadquarters }" @click="audioRecordingChange">
                                     {{ isAudioRecordingEnabled }}
+                                </td>
+                            </tr>
+                            <tr v-if="hasAudioAuditScope">
+                                <td class="text-nowrap">
+                                    {{ $t('Assignments.AudioAuditScopeLabel') }}
+                                </td>
+                                <td>
+                                    {{ model.audioAuditScopeVariableNames.join(', ') }}
                                 </td>
                             </tr>
                             <tr>
@@ -309,6 +319,9 @@
                 <ModalFrame ref="editAudioEnabledModal"
                     :title="$t('Assignments.ChangeAudioRecordingModalTitle', { id: model.id })">
                     <p>{{ $t('Assignments.AudioRecordingExplanation') }}</p>
+                    <p v-if="hasAudioAuditScope" class="text-info">
+                        {{ $t('Assignments.AudioRecordingScopeNotice') }}
+                    </p>
                     <form onsubmit="return false;">
                         <div class="form-group">
                             <Checkbox :label="$t('Assignments.AudioRecordingEnable')" name="audioRecordingEnabled"
@@ -364,14 +377,16 @@
                     :title="$t('Assignments.ChangeTargetAreaModalTitle', { assignmentId: model.id })">
                     <p>{{ $t("Assignments.TargetAreaExplanation") }}</p>
 
-                    <Form ref="quantityForm" onsubmit="return false;" v-slot="{ meta }">
+                    <Form ref="targetAreaForm" onsubmit="return false;" v-slot="{ meta }">
                         <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
                             <label class="control-label" for="newTargetArea">
                                 {{ $t("Assignments.TargetArea") }}
                             </label>
                             <Field type="text" class="form-control" v-model.trim="editedTargetAreaName"
-                                name="editedTargetAreaName" :data-vv-as="$t('Assignments.TargetArea')"
-                                autocomplete="off" @keyup.enter="updateTargetArea" id="newTargetArea" />
+                                name="editedTargetAreaName" :rules="validateTargetArea"
+                                :data-vv-as="$t('Assignments.TargetArea')"
+                                autocomplete="off" @keyup.enter="updateTargetArea" id="newTargetArea"
+                                :validateOnBlur="true" :validateOnChange="true" :validateOnInput="true" />
                             <span class="text-danger">
                                 <ErrorMessage name="editedTargetAreaName" />
                             </span>
@@ -379,7 +394,7 @@
                     </Form>
                     <template v-slot:actions>
                         <div>
-                            <button type="button" class="btn btn-primary" :disabled="!showSelectors"
+                            <button type="button" class="btn btn-primary" :disabled="!showSelectors || !targetAreaValid"
                                 @click="updateTargetArea">{{ $t("Common.Save") }}</button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t("Common.Cancel") }}
@@ -444,8 +459,8 @@ import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
 import * as toastr from 'toastr'
 
-import moment from 'moment-timezone'
-import { escape } from 'lodash'
+import moment from 'moment'
+import { escape } from 'lodash-es'
 
 import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'
@@ -462,6 +477,7 @@ export default {
             reassignComment: null,
             editedQuantity: null,
             editedTargetAreaName: null,
+            mapFileNameLengthLimit: 64,
 
             canEditQuantity: true,
 
@@ -477,7 +493,7 @@ export default {
                     (data) => {
                         this.editedAudioRecordingEnabled = data.Enabled
                         this.$refs.editAudioEnabledModal.modal()
-                    },
+                    }
                 )
             }
         },
@@ -501,10 +517,20 @@ export default {
             }
         },
 
+        validateTargetArea(value) {
+            if (value != null && value.length > this.mapFileNameLengthLimit) {
+                return this.$t('Assignments.TargetAreaNameTooLong', {
+                    limit: this.mapFileNameLengthLimit,
+                })
+            }
+
+            return true
+        },
+
         upateAudioRecording() {
             this.$hq.Assignments.setAudioSettings(
                 this.model.id,
-                this.editedAudioRecordingEnabled,
+                this.editedAudioRecordingEnabled
             ).then(() => {
                 this.$refs.editAudioEnabledModal.hide()
                 window.location.reload(true)
@@ -577,19 +603,19 @@ export default {
         },
 
         validateQuantity(value) {
-            const regex = /^-?([0-9]+)$/i;
+            const regex = /^-?([0-9]+)$/i
 
             if (!regex.test(value)) {
-                return 'This field must be a valid number';
+                return 'This field must be a valid number'
             }
 
             if (value <= -2)
-                return 'This field must be greater or equal to -1';
+                return 'This field must be greater or equal to -1'
 
             if (value > this.config.maxInterviewsByAssignment)
-                return 'This field must be less than limit';
+                return 'This field must be less than limit'
 
-            return true;
+            return true
 
         },
         async updateQuantity() {
@@ -630,23 +656,24 @@ export default {
             return false
         },
         async updateTargetArea() {
-            const self = this
+            const validationResult = await this.$refs.targetAreaForm.validate()
+            if (validationResult.valid != true) {
+                return false
+            }
 
-            this.$hq.Assignments.changeTargetArea(this.model.id, this.editedTargetAreaName)
-                .then(() => {
-
-                    window.location.reload(true)
+            try {
+                await this.$hq.Assignments.changeTargetArea(this.model.id, this.editedTargetAreaName)
+                window.location.reload(true)
+                return true
+            } catch (error) {
+                const msg = error?.response?.data?.message
+                    || error?.response?.data
+                    || error?.message
+                this.$refs.targetAreaForm.setErrors({
+                    editedTargetAreaName: msg,
                 })
-                .catch(error => {
-                    self.errors.clear()
-                    self.errors.add({
-                        field: 'editedQuantity',
-                        msg: error.response.data.message,
-                        id: error.toString(),
-                    })
-                })
-
-            return false
+                return false
+            }
         },
 
         openCloseModal() {
@@ -683,6 +710,10 @@ export default {
     computed: {
         showSelectors() {
             return !this.config.isObserver && !this.config.isObserving
+        },
+        targetAreaValid() {
+            return this.editedTargetAreaName == null
+                || this.editedTargetAreaName.length <= this.mapFileNameLengthLimit
         },
         singleCloseMessage() {
             if (this.isWebModeAssignmentSelected) {
@@ -744,6 +775,9 @@ export default {
             return this.model.isAudioRecordingEnabled
                 ? this.$t('Common.Yes')
                 : this.$t('Common.No')
+        },
+        hasAudioAuditScope() {
+            return this.model.audioAuditScopeVariableNames && this.model.audioAuditScopeVariableNames.length > 0
         },
         isReceivedByTablet() {
             return this.model.receivedByTabletAtUtc != null
@@ -809,7 +843,7 @@ export default {
             return this.model.calendarEvent != null
                 ? convertToLocal(
                     this.model.calendarEvent.startUtc,
-                    this.model.calendarEvent.startTimezone,
+                    this.model.calendarEvent.startTimezone
                 )
                 : ''
         },
@@ -821,7 +855,7 @@ export default {
                 ? this.$t('Assignments.NoComment')
                 : escape(this.model.calendarEvent.comment).replaceAll(
                     '\n',
-                    '<br/>',
+                    '<br/>'
                 )
         },
 
@@ -862,14 +896,14 @@ export default {
                                     'Assignments.Action_Created_Responsible',
                                     {
                                         responsible: data.Responsible,
-                                    },
+                                    }
                                 )
                                 if (data.Comment) {
                                     createdText +=
                                         '<br/>' +
                                         self.$t(
                                             'Assignments.Action_Created_Comment',
-                                            { comment: escape(data.Comment) },
+                                            { comment: escape(data.Comment) }
                                         )
                                 }
 
@@ -880,7 +914,7 @@ export default {
                                             'Assignments.Action_UpgradedFrom',
                                             {
                                                 id: `<a href='./${data.UpgradedFromId}'>${data.UpgradedFromId}</a>`,
-                                            },
+                                            }
                                         )
                                 }
                                 return createdText
@@ -888,11 +922,11 @@ export default {
                             case 'AudioRecordingChanged':
                                 if (data.AudioRecording) {
                                     return self.$t(
-                                        'Assignments.Action_AudioRecordingChanged_True',
+                                        'Assignments.Action_AudioRecordingChanged_True'
                                     )
                                 } else {
                                     return self.$t(
-                                        'Assignments.Action_AudioRecordingChanged_False',
+                                        'Assignments.Action_AudioRecordingChanged_False'
                                     )
                                 }
                             case 'Reassigned': {
@@ -900,7 +934,7 @@ export default {
                                     'Assignments.Action_Reassigned_To',
                                     {
                                         newResponsible: data.NewResponsible,
-                                    },
+                                    }
                                 )
                                 if (data.Comment) {
                                     result += '<br/>'
@@ -908,7 +942,7 @@ export default {
                                         'Assignments.Action_Reassigned_To_Comment',
                                         {
                                             comment: escape(data.Comment),
-                                        },
+                                        }
                                     )
                                 }
                                 return result
@@ -916,21 +950,21 @@ export default {
                             case 'QuantityChanged':
                                 if (data.Quantity == null) {
                                     return self.$t(
-                                        'Assignments.Action_ExpectedValueChanged_To_Unlimited',
+                                        'Assignments.Action_ExpectedValueChanged_To_Unlimited'
                                     )
                                 }
                                 return self.$t(
                                     'Assignments.Action_ExpectedValueChanged_To',
-                                    { quantity: data.Quantity },
+                                    { quantity: data.Quantity }
                                 )
                             case 'WebModeChanged':
                                 if (data.WebMode) {
                                     return self.$t(
-                                        'Assignments.Action_WebModeChanged_True',
+                                        'Assignments.Action_WebModeChanged_True'
                                     )
                                 } else {
                                     return self.$t(
-                                        'Assignments.Action_WebModeChanged_False',
+                                        'Assignments.Action_WebModeChanged_False'
                                     )
                                 }
                             case 'ReceivedByTablet':

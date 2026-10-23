@@ -44,7 +44,7 @@ namespace WB.Services.Infrastructure.EventSourcing
         public static Identity Create(Guid id, RosterVector rosterVector) => new Identity(id, rosterVector);
 
       
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;

@@ -550,6 +550,9 @@
     <data name="TargetAreaExplanation" xml:space="preserve">
     <value>حدد اسم خريطة المنطقة المستهدفة للتعيين</value>
 </data>
+    <data name="TargetAreaNameTooLong" xml:space="preserve">
+        <value>اسم خريطة المنطقة المستهدفة طويل جدًا. الحد الأقصى المسموح به هو {{limit}} حرفًا.</value>
+    </data>
     <data name="Action_TargetAreaChanged" xml:space="preserve">
     <value>تم تغيير المنطقة المستهدفة</value>
 </data>
@@ -618,5 +621,14 @@
   </data>
   <data name="Action_Reopened" xml:space="preserve">
       <value>أُعيد فتحه</value>
+  </data>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>انتقائي</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>نطاق التدقيق الصوتي</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>يحتوي هذا التكليف على نطاق تدقيق صوتي انتقائي. تمكين التسجيل الصوتي الكامل سيسجل جميع الأقسام. تعطيله سيعود إلى تسجيل الأقسام المحددة فقط.</value>
   </data>
 </root>
