@@ -80,7 +80,7 @@
     "AreaQuestion": {
       "type": "object",
       "properties": {
-        "Type": { "const": "AreaQuestion" },
+        "Type": { "enum": ["AreaQuestion"] },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -96,10 +96,10 @@
         "GeometryType": {
           "type": "string",
           "oneOf": [
-            { "const": "Polygon",    "description": "Polygon" },
-            { "const": "Polyline",   "description": "Polyline" },
-            { "const": "Point",      "description": "Point" },
-            { "const": "Multipoint", "description": "Multipoint" }
+            { "enum": ["Polygon"],    "description": "Polygon" },
+            { "enum": ["Polyline"],   "description": "Polyline" },
+            { "enum": ["Point"],      "description": "Point" },
+            { "enum": ["Multipoint"], "description": "Multipoint" }
           ],
           "default": "Polygon"
         },
@@ -107,9 +107,9 @@
         "GeometryInputMode": {
           "type": "string",
           "oneOf": [
-            { "const": "Manual",    "description": "Manual" },
-            { "const": "Automatic",   "description": "Automatic" },
-            { "const": "Semiautomatic",      "description": "Semiautomatic" }
+            { "enum": ["Manual"],    "description": "Manual" },
+            { "enum": ["Automatic"],   "description": "Automatic" },
+            { "enum": ["Semiautomatic"],      "description": "Semiautomatic" }
           ],
           "default": "Manual"
         },
@@ -134,7 +134,7 @@
     "AudioQuestion": {
       "type": "object",
       "properties": {
-        "Type": { "const": "AudioQuestion" },
+        "Type": { "enum": ["AudioQuestion"] },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -177,7 +177,7 @@
     "DateTimeQuestion": {
       "type": "object",
       "properties": {
-        "Type": { "const": "DateTimeQuestion" },
+        "Type": { "enum": ["DateTimeQuestion"] },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -210,7 +210,7 @@
     "GpsCoordinateQuestion": {
       "type": "object",
       "properties": {
-        "Type": { "const": "GpsCoordinateQuestion" },
+        "Type": { "enum": ["GpsCoordinateQuestion"] },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -230,7 +230,7 @@
     "CoverPage": {
       "type": "object",
       "properties": {
-        "Type": {"const": "CoverPage"},
+        "Type": {"enum": ["CoverPage"]},
         "Children": {
           "type": "array",
           "items": {
@@ -257,7 +257,7 @@
     "Group": {
       "type": "object",
       "properties": {
-        "Type": {"const": "Group"},
+        "Type": {"enum": ["Group"]},
         "Children": {
           "type": "array",
           "items": {
@@ -294,7 +294,7 @@
     "Roster": {
       "type": "object",
       "properties": {
-        "Type": {"const": "Roster"},
+        "Type": {"enum": ["Roster"]},
         "Children": {
           "type": "array",
           "items": {
@@ -326,10 +326,10 @@
         "DisplayMode": {
           "type": "string",
           "oneOf": [
-            { "const": "SubSection", "description": "Sub Section" },
-            { "const": "Flat", "description": "Flat" },
-            { "const": "Table", "description": "Table" },
-            { "const": "Matrix", "description": "Matrix" }
+            { "enum": ["SubSection"], "description": "Sub Section" },
+            { "enum": ["Flat"], "description": "Flat" },
+            { "enum": ["Table"], "description": "Table" },
+            { "enum": ["Matrix"], "description": "Matrix" }
           ],
           "default": "SubSection"
         },
@@ -338,8 +338,8 @@
         "RosterSizeSource": {
           "type": "string",
           "oneOf": [
-            { "const": "FixedTitles", "description": "Fixed Titles" },
-            { "const": "Question", "description": "Question" }
+            { "enum": ["FixedTitles"], "description": "Fixed Titles" },
+            { "enum": ["Question"], "description": "Question" }
           ],
           "default": "FixedTitles"
         },
@@ -389,7 +389,7 @@
     "PictureQuestion": {
       "Type": "object",
       "properties": {
-        "Type": { "const": "PictureQuestion" },
+        "Type": { "enum": ["PictureQuestion"] },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -411,7 +411,7 @@
     "MultiOptionsQuestion": {
       "type": "object",
       "properties": {
-        "Type": { "const": "MultiOptionsQuestion" },
+        "Type": { "enum": ["MultiOptionsQuestion"] },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -427,9 +427,9 @@
         "DisplayMode": {
           "type": "string",
           "oneOf": [
-            { "const": "Checkboxes", "description": "Checkboxes" },
-            { "const": "YesNo", "description": "Yes/No buttons" },
-            { "const": "Combobox", "description": "Combo box" }
+            { "enum": ["Checkboxes"], "description": "Checkboxes" },
+            { "enum": ["YesNo"], "description": "Yes/No buttons" },
+            { "enum": ["Combobox"], "description": "Combo box" }
           ],
           "default": "Checkboxes"
         },
@@ -448,7 +448,7 @@
     "NumericQuestion": {
       "type": "object",
       "properties": {
-        "Type": { "const": "NumericQuestion" },
+        "Type": { "enum": ["NumericQuestion"] },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -474,7 +474,7 @@
     "QRBarcodeQuestion": {
       "type": "object",
       "properties": {
-        "Type": { "const": "QRBarcodeQuestion" },
+        "Type": { "enum": ["QRBarcodeQuestion"] },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -504,7 +504,7 @@
     "SingleQuestion": {
       "type": "object",
       "properties": {
-        "Type": { "const": "SingleQuestion" },
+        "Type": { "enum": ["SingleQuestion"] },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -520,9 +520,9 @@
         "DisplayMode": {
           "type": "string",
           "oneOf": [
-            { "const": "Radio", "description": "Radio button list" },
-            { "const": "Combobox", "description": "Combo box" },
-            { "const": "Cascading", "description": "Cascading combo box" }
+            { "enum": ["Radio"], "description": "Radio button list" },
+            { "enum": ["Combobox"], "description": "Combo box" },
+            { "enum": ["Cascading"], "description": "Cascading combo box" }
           ],
           "default": "Radio"
         },
@@ -560,7 +560,7 @@
     "StaticText": {
       "type": "object",
       "properties": {
-        "Type": { "const": "StaticText" },
+        "Type": { "enum": ["StaticText"] },
         "VariableName": { "$ref": "#/definitions/VariableName" },
         "Text": { "type": "string" },
         "AttachmentName": { "type": "string" },
@@ -576,7 +576,7 @@
     "TextListQuestion": {
       "type": "object",
       "properties": {
-        "Type": {"const": "TextListQuestion"},
+        "Type": {"enum": ["TextListQuestion"]},
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -598,7 +598,7 @@
     "TextQuestion": {
       "type": "object",
       "properties": {
-        "Type": { "const" : "TextQuestion" },
+        "Type": { "enum": ["TextQuestion"] },
         "ConditionExpression": { "type": "string" },
         "HideIfDisabled": { "type": "boolean", "default": false },
         "Instructions": { "type": "string" },
@@ -652,8 +652,8 @@
         "Severity": {
           "type": "string",
           "oneOf": [
-            { "const": "Error", "description": "Error" },
-            { "const": "Warning", "description": "Warning" }
+            { "enum": ["Error"], "description": "Error" },
+            { "enum": ["Warning"], "description": "Warning" }
           ],
           "default": "Error"
         }
@@ -669,11 +669,11 @@
         "VariableType": {
           "type": "string",
           "oneOf": [
-            { "const": "LongInteger", "description": "Long Integer" },
-            { "const": "Double", "description": "Double" },
-            { "const": "Boolean", "description": "Boolean" },
-            { "const": "DateTime", "description": "Date/Time" },
-            { "const": "String", "description": "String" }
+            { "enum": ["LongInteger"], "description": "Long Integer" },
+            { "enum": ["Double"], "description": "Double" },
+            { "enum": ["Boolean"], "description": "Boolean" },
+            { "enum": ["DateTime"], "description": "Date/Time" },
+            { "enum": ["String"], "description": "String" }
           ],
           "default": "Boolean"
         },
@@ -697,30 +697,30 @@
         "StudyType": {
           "type": "string",
           "oneOf": [
-            { "const": "AdministrativeRecords", "description": "Administrative Records" },
-            { "const": "AgriculturalCensus", "description": "Agricultural Census" },
-            { "const": "AgriculturalSurvey", "description": "Agricu lturalSurvey" },
-            { "const": "ChildLaborSurvey", "description": "Child Labor Survey" },
-            { "const": "CoreWelfareIndicatorsQuestionnaire", "description": "Core Welfare Indicators Questionnaire" },
-            { "const": "DemographicAndHealthSurvey", "description": "Demographic And Health Survey" },
-            { "const": "EnterpriseSurvey", "description": "Enterprise Survey" },
-            { "const": "EnterpriseCensus", "description": "Enterprise Census" },
-            { "const": "InformalSectorSurvey", "description": "Informal Sector Survey" },
-            { "const": "IntegratedSurvey", "description": "Integrated Survey" },
-            { "const": "MultipleIndicatorClusterSurvey", "description": "Multiple Indicator Cluster Survey" },
-            { "const": "LaborForceSurvey", "description": "Labor Force Survey" },
-            { "const": "LivingStandardsMeasurementStudy", "description": "Living Standards Measurement Study" },
-            { "const": "HouseholdHealthSurvey", "description": "Household Health Survey" },
-            { "const": "HouseholdSurvey", "description": "Household Survey" },
-            { "const": "PriceSurvey", "description": "Price Survey" },
-            { "const": "PrioritySurvey", "description": "Priority Survey" },
-            { "const": "PopulationAndHousingCensus", "description": "Population And Housing Census" },
-            { "const": "SampleFrame", "description": "Sample Frame" },
-            { "const": "ServiceProvisionAssessments", "description": "Service Provision Assessments" },
-            { "const": "SocioEconomicMonitoringSurvey", "description": "SocioE conomic Monitoring Survey" },
-            { "const": "StatisticalInfoAndMonitoringProg", "description": "Statistical Info And Monitoring Prog" },
-            { "const": "WorldFertilitySurvey", "description": "World Fertility Survey" },
-            { "const": "WorldHealthSurvey", "description": "World Health Survey" }
+            { "enum": ["AdministrativeRecords"], "description": "Administrative Records" },
+            { "enum": ["AgriculturalCensus"], "description": "Agricultural Census" },
+            { "enum": ["AgriculturalSurvey"], "description": "Agricu lturalSurvey" },
+            { "enum": ["ChildLaborSurvey"], "description": "Child Labor Survey" },
+            { "enum": ["CoreWelfareIndicatorsQuestionnaire"], "description": "Core Welfare Indicators Questionnaire" },
+            { "enum": ["DemographicAndHealthSurvey"], "description": "Demographic And Health Survey" },
+            { "enum": ["EnterpriseSurvey"], "description": "Enterprise Survey" },
+            { "enum": ["EnterpriseCensus"], "description": "Enterprise Census" },
+            { "enum": ["InformalSectorSurvey"], "description": "Informal Sector Survey" },
+            { "enum": ["IntegratedSurvey"], "description": "Integrated Survey" },
+            { "enum": ["MultipleIndicatorClusterSurvey"], "description": "Multiple Indicator Cluster Survey" },
+            { "enum": ["LaborForceSurvey"], "description": "Labor Force Survey" },
+            { "enum": ["LivingStandardsMeasurementStudy"], "description": "Living Standards Measurement Study" },
+            { "enum": ["HouseholdHealthSurvey"], "description": "Household Health Survey" },
+            { "enum": ["HouseholdSurvey"], "description": "Household Survey" },
+            { "enum": ["PriceSurvey"], "description": "Price Survey" },
+            { "enum": ["PrioritySurvey"], "description": "Priority Survey" },
+            { "enum": ["PopulationAndHousingCensus"], "description": "Population And Housing Census" },
+            { "enum": ["SampleFrame"], "description": "Sample Frame" },
+            { "enum": ["ServiceProvisionAssessments"], "description": "Service Provision Assessments" },
+            { "enum": ["SocioEconomicMonitoringSurvey"], "description": "SocioE conomic Monitoring Survey" },
+            { "enum": ["StatisticalInfoAndMonitoringProg"], "description": "Statistical Info And Monitoring Prog" },
+            { "enum": ["WorldFertilitySurvey"], "description": "World Fertility Survey" },
+            { "enum": ["WorldHealthSurvey"], "description": "World Health Survey" }
           ],
           "default": "AdministrativeRecords"
         }, 
@@ -739,13 +739,13 @@
         "ModeOfDataCollection": {
           "type": "string",
           "oneOf": [
-            { "const": "Capi", "description": "Capi" },
-            { "const": "Cati", "description": "Cati" },
-            { "const": "FaceToFace", "description": "Face To Face" },
-            { "const": "Mail", "description": "Mail" },
-            { "const": "FocusGroup", "description": "Focus Group" },
-            { "const": "Internet", "description": "Internet" },
-            { "const": "Other", "description": "Other" }
+            { "enum": ["Capi"], "description": "Capi" },
+            { "enum": ["Cati"], "description": "Cati" },
+            { "enum": ["FaceToFace"], "description": "Face To Face" },
+            { "enum": ["Mail"], "description": "Mail" },
+            { "enum": ["FocusGroup"], "description": "Focus Group" },
+            { "enum": ["Internet"], "description": "Internet" },
+            { "enum": ["Other"], "description": "Other" }
           ],
           "default": "Error"
         },
