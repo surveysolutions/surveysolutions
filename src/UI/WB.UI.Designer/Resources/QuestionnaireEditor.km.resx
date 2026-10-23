@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -970,8 +970,8 @@
     <data name="HelpRosterDisplayMode" xml:space="preserve">
         <value>ផ្នែករង - សំណួរនៃបញ្ជីឈ្មោះត្រូវបានបង្ហាញនៅពីក្រោយប៊ូតុងដែលត្រូវគ្នាទៅនឹងករណីបញ្ជីឈ្មោះ។
 ផ្ទះល្វែង - សំណួរនៃបញ្ជីឈ្មោះត្រូវបានបង្ហាញក្នុងកម្រិតដូចគ្នាដែលបំបែកដោយបឋមកថាដែលត្រូវគ្នានឹងករណីបញ្ជីឈ្មោះ។
-តារាង - សំណួរនៃបញ្ជីឈ្មោះត្រូវបានបង្ហាញក្នុងកម្រិតដូចគ្នាទៅនឹងជួរ និងជួរនៃតារាង។ 
-ម៉ាទ្រីស - សំណួរជាក្រុមនៃបញ្ជីឈ្មោះត្រូវបានបង្ហាញជាម៉ាទ្រីស។ 
+តារាង - សំណួរនៃបញ្ជីឈ្មោះត្រូវបានបង្ហាញក្នុងកម្រិតដូចគ្នាទៅនឹងជួរ និងជួរនៃតារាង។
+ម៉ាទ្រីស - សំណួរជាក្រុមនៃបញ្ជីឈ្មោះត្រូវបានបង្ហាញជាម៉ាទ្រីស។
 ទិដ្ឋភាពតារាង និងម៉ាទ្រីសត្រូវបានគាំទ្រតែនៅក្នុងការស្ទង់មតិលើបណ្តាញ ថេប្លេតត្រឡប់ទៅរបៀប 'ផ្នែករង' វិញ។</value>
     </data>
     <data name="HelpHideInstructions" xml:space="preserve">
@@ -1621,5 +1621,11 @@
     </data>
     <data name="AIAssistant" xml:space="preserve">
         <value>អាយ</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>កែសម្រួល</value>
+    </data>
+    <data name="Stick" xml:space="preserve">
+        <value>ភ្ជាប់</value>
     </data>
 </root>

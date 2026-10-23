@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using Main.Core.Documents;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.DataAccess;
@@ -30,8 +31,9 @@ namespace WB.UI.Designer.Services.Restore
         private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IImportExportQuestionnaireMapper importExportQuestionnaireMapper;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly ITransactionalMemoryCacheInvalidation cacheInvalidation;
 
-        public QuestionnaireRestoreService(ILogger<QuestionnaireRestoreService> logger, ISerializer serializer, ICommandService commandService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITranslationsService translationsService, DesignerDbContext dbContext, IReusableCategoriesService reusableCategoriesService, IImportExportQuestionnaireMapper importExportQuestionnaireMapper, IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
+        public QuestionnaireRestoreService(ILogger<QuestionnaireRestoreService> logger, ISerializer serializer, ICommandService commandService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITranslationsService translationsService, DesignerDbContext dbContext, IReusableCategoriesService reusableCategoriesService, IImportExportQuestionnaireMapper importExportQuestionnaireMapper, IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage, ITransactionalMemoryCacheInvalidation cacheInvalidation)
         {
             this.logger = logger;
             this.serializer = serializer;
@@ -43,29 +45,74 @@ namespace WB.UI.Designer.Services.Restore
             this.reusableCategoriesService = reusableCategoriesService;
             this.importExportQuestionnaireMapper = importExportQuestionnaireMapper;
             this.questionnaireStorage = questionnaireStorage;
+            this.cacheInvalidation = cacheInvalidation;
         }
 
         public Guid RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, bool createNew)
         {
-            using var zipStream = new ZipArchive(archive);
+            if (dbContext.Database.CurrentTransaction != null)
+                throw new InvalidOperationException("Questionnaire restore cannot run inside an externally owned transaction.");
 
-            var questionnaire = RestoreQuestionnaireFromZipFileOrThrow(zipStream, responsibleId, state, createNew);
+            var committed = false;
+            var hadException = false;
 
-            foreach (var zipEntry in zipStream.Entries)
-            {            
-                this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state, questionnaire);
-            }
-
-            state.Error = "";
-            foreach (Guid attachmentId in state.GetPendingAttachments())
+            try
             {
-                state.Error += $"Attachment '{attachmentId.FormatGuid()}' was not restored because there are not enough data for it in it's folder." + Environment.NewLine;
+                using var transaction = dbContext.Database.BeginTransaction();
+                using var zipStream = new ZipArchive(archive);
+
+                var questionnaire = RestoreQuestionnaireFromZipFileOrThrow(zipStream, responsibleId, state, createNew);
+
+                foreach (var zipEntry in zipStream.Entries)
+                {
+                    this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state, questionnaire);
+                }
+
+                // An attachment with no folder in the archive never becomes pending, yet the restored document still
+                // references it, so both cases have to fail the restore.
+                var unrestoredAttachments = questionnaire.Attachments
+                    .Select(attachment => attachment.AttachmentId)
+                    .Where(attachmentId => !state.IsAttachmentRestored(attachmentId))
+                    .Union(state.GetPendingAttachments())
+                    .ToList();
+
+                foreach (Guid attachmentId in unrestoredAttachments)
+                {
+                    state.MarkFailed();
+                    state.Error += $"Attachment '{attachmentId.FormatGuid()}' was not restored because there are not enough data for it in it's folder." + Environment.NewLine;
+                }
+
+                if (state.HasFailures)
+                {
+                    transaction.Rollback();
+                    return questionnaire.PublicKey;
+                }
+
+                questionnaireStorage.Store(questionnaire, questionnaire.Id);
+                dbContext.SaveChanges();
+                transaction.Commit();
+                committed = true;
+
+                return questionnaire.PublicKey;
             }
+            catch
+            {
+                hadException = true;
+                throw;
+            }
+            finally
+            {
+                if (!committed)
+                    dbContext.ChangeTracker.Clear();
 
-            questionnaireStorage.Store(questionnaire, questionnaire.Id);
-            dbContext.SaveChanges();
-
-            return questionnaire.PublicKey;
+                try
+                {
+                    cacheInvalidation.Flush();
+                }
+                catch when (hadException)
+                {
+                }
+            }
         }
 
         public QuestionnaireDocument RestoreQuestionnaireFromZipFileOrThrow(ZipArchive zipStream, Guid responsibleId,
@@ -117,6 +164,7 @@ namespace WB.UI.Designer.Services.Restore
                 {
                         this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FullName}' during questionnaire restore from backup.");
                         state.Error = $"Error processing zip file entry '{zipEntry.FullName}'.{Environment.NewLine}{exception}";
+                        state.MarkFailed();
                         logger.LogError(state.Error);
                 }
             }
@@ -188,7 +236,7 @@ namespace WB.UI.Designer.Services.Restore
                         this.attachmentService.SaveContent(attachmentContentId, attachment.ContentType!, attachment.BinaryContent!);
                         this.attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, attachment.FileName!);
 
-                        state.RemoveAttachment(attachmentId);
+                        state.MarkAttachmentRestored(attachmentId);
 
                         state.Success.AppendLine($"    Restored attachment '{attachmentId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}' using file '{attachment.FileName}' and content-type '{attachment.ContentType}'.");
                         state.RestoredEntitiesCount++;
@@ -247,6 +295,7 @@ namespace WB.UI.Designer.Services.Restore
             {
                 this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FullName}' during questionnaire restore from backup.");
                 state.Error = $"Error processing zip file entry '{zipEntry.FullName}'.{Environment.NewLine}{exception}";
+                state.MarkFailed();
                 logger.LogError(state.Error);
             }
         }
