@@ -1262,6 +1262,9 @@
     <data name="MapDetails_MapTitle" xml:space="preserve">
         <value>Peta</value>
     </data>
+    <data name="MapPreview" xml:space="preserve">
+        <value>Pratinjau peta</value>
+    </data>
     <data name="MapDetails_ImportedOn" xml:space="preserve">
         <value>Diimpor</value>
     </data>
@@ -1727,4 +1730,10 @@
     <data name="Observer_Memo2" xml:space="preserve">
         <value>Klik akun dan pilih 'Lihat sebagai pengguna ini dalam mode hanya baca' untuk memulai. Gunakan tautan kuning di bagian atas untuk kembali ke akun Anda.</value>
     </data>
+    <data name="Successful" xml:space="preserve">
+      <value>Berhasil</value>
+  </data>
+    <data name="Failed" xml:space="preserve">
+      <value>Gagal</value>
+  </data>
 </root>

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
 using ClosedXML.Graphics;
-using SixLabors.Fonts;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Infrastructure.Native.Utils;
@@ -67,7 +66,7 @@ namespace WB.Infrastructure.Native.Questionnaire
         private CategoriesItem GetRowValues(IXLWorksheet worksheet, CategoriesHeaderMap headers, int rowNumber)
         {
             var id = worksheet.Cell($"{headers.IdIndex}{rowNumber}").GetString();
-            var parentId = worksheet.Cell($"{headers.ParentIdIndex}{rowNumber}").GetString();
+            var parentId = GetCell(worksheet, headers.ParentIdIndex, rowNumber)?.GetString();
 
             if (string.IsNullOrEmpty(id))
                 return null;
@@ -77,9 +76,13 @@ namespace WB.Infrastructure.Native.Questionnaire
                 Id = int.Parse(id),
                 Text = worksheet.Cell($"{headers.TextIndex}{rowNumber}").GetString(),
                 ParentId = string.IsNullOrEmpty(parentId) ? (int?)null : int.Parse(parentId),
-                AttachmentName = worksheet.Cell($"{headers.AttachmentNameIndex}{rowNumber}").GetString(),
+                AttachmentName = GetCell(worksheet, headers.AttachmentNameIndex, rowNumber)?.GetString() ?? string.Empty,
             };
         }
+
+        // header map has no index for an optional column that is absent in the sheet
+        private static IXLCell GetCell(IXLWorksheet worksheet, string columnIndex, int rowNumber)
+            => columnIndex == null ? null : worksheet.Cell($"{columnIndex}{rowNumber}");
 
         internal class CategoriesHeaderMap
         {

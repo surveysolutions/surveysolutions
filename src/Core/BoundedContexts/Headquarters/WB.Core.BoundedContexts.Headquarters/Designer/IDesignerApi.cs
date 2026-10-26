@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         [Post("/api/hq/v3/questionnaires/{id}/revision/{rev}/metadata")]
         Task UpdateRevisionMetadata(Guid id, int rev, [Body] QuestionnaireRevisionMetadataModel model);
 
-        [Get("/api/hq/v3/questionnaires/{id}")]
+        [Post("/api/hq/v3/questionnaires/{id}")]
         Task<QuestionnaireCommunicationPackage> GetQuestionnaire(
             Guid id,
             int clientQuestionnaireContentVersion,
