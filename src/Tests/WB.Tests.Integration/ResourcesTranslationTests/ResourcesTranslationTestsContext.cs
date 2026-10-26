@@ -168,7 +168,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                         if (sdk != null)
                         {
                             Console.WriteLine("Detected new csproj format.");
-                            results.AddRange(Directory.EnumerateFiles(fi.Directory.FullName, "*.resx", SearchOption.AllDirectories));
+                            results.AddRange(EnumerateFilesWithoutBuildArtifacts(fi.Directory.FullName, "*.resx"));
                             break;
                         }
                     }
@@ -199,6 +199,37 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             }
 
             return distinct;
+        }
+
+        private static IEnumerable<string> EnumerateFilesWithoutBuildArtifacts(string rootDirectory, string mask)
+        {
+            if (string.IsNullOrEmpty(rootDirectory) || !Directory.Exists(rootDirectory))
+                return Enumerable.Empty<string>();
+
+            var stack = new Stack<string>();
+            stack.Push(rootDirectory);
+
+            var files = new List<string>();
+            while (stack.Count > 0)
+            {
+                var directory = stack.Pop();
+
+                foreach (var childDirectory in Directory.EnumerateDirectories(directory))
+                {
+                    var childDirectoryName = Path.GetFileName(childDirectory);
+                    if (string.Equals(childDirectoryName, "bin", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(childDirectoryName, "obj", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(childDirectoryName, ".git", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(childDirectoryName, ".vs", StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    stack.Push(childDirectory);
+                }
+
+                files.AddRange(Directory.EnumerateFiles(directory, mask, SearchOption.TopDirectoryOnly));
+            }
+
+            return files;
         }
     }
 }
