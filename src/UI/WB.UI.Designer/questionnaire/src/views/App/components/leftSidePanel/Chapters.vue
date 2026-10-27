@@ -63,8 +63,9 @@
                 </Draggable>
             </ul>
             <div class="button-holder">
-                <button type="button" class="btn lighter-hover" @click="addNewChapter()" v-if="!isReadOnlyForUser">{{
-                    $t('QuestionnaireEditor.AddNewSection')
+                <button type="button" id="add-new-chapter" class="btn lighter-hover" @click="addNewChapter()"
+                    v-if="!isReadOnlyForUser">{{
+                        $t('QuestionnaireEditor.AddNewSection')
                     }}</button>
             </div>
         </perfect-scrollbar>
