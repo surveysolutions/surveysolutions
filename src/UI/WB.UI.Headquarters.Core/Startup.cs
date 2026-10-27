@@ -279,7 +279,7 @@ namespace WB.UI.Headquarters
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
 				options.ForwardLimit = 2;
-                options.KnownNetworks.Clear();
+                options.KnownIPNetworks.Clear();
                 options.KnownProxies.Clear();
             });
 
