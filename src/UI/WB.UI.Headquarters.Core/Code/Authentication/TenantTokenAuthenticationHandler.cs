@@ -21,8 +21,7 @@ namespace WB.UI.Headquarters.Code.Authentication
         public TenantTokenAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, 
             ILoggerFactory logger,
             UrlEncoder encoder,
-            ISystemClock clock,
-            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings) : base(options, logger, encoder, clock)
+            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings) : base(options, logger, encoder)
         {
             this.exportServiceSettings = exportServiceSettings;
         }

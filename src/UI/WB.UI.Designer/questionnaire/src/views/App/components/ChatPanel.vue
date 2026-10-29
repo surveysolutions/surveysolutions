@@ -85,7 +85,7 @@
         <!-- Input Area -->
         <v-card-actions class="pa-4">
             <div class="editor pseudo-form-control">
-                <v-textarea v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage')" variant="plain"
+                <v-textarea ref="messageInput" v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage')" variant="plain"
                     density="comfortable" hide-details @keydown.enter="handleEnter" :disabled="isLoading"
                     class="flex-grow-1" maxlength="2000" rows="3">
                     <template #append>
@@ -136,6 +136,7 @@ export default {
         const currentMessage = ref('');
         const isLoading = ref(false);
         const messagesContainer = ref(null);
+        const messageInput = ref(null);
 
         const conversationId = ref(null);
 
@@ -485,7 +486,23 @@ export default {
                 if (abortController.value === controller) {
                     abortController.value = null;
                     isLoading.value = false;
+                    await focusMessageInput();
                 }
+            }
+        };
+
+        const focusMessageInput = async () => {
+            await nextTick();
+            const inputEl = messageInput.value?.$el || messageInput.value;
+            const textarea = inputEl?.querySelector?.('textarea');
+            if (!textarea || textarea.disabled) return;
+
+            // The textarea is disabled while the request is in flight, so the browser drops its focus.
+            // Restore it unless the user has meanwhile moved focus somewhere outside the chat panel.
+            const active = document.activeElement;
+            const chatContainer = inputEl.closest?.('.chat-container');
+            if (!active || active === document.body || chatContainer?.contains(active)) {
+                textarea.focus();
             }
         };
 
@@ -569,20 +586,9 @@ export default {
         };
 
         const callAssistant = async (userMessage, questionnaireId, entityId, area, signal) => {
-            const conversationHistory = [];
-
-            // Add previous messages from the current conversation (exclude error messages)
-            messages.value.forEach(msg => {
-                if (!msg.isError) {
-                    conversationHistory.push({
-                        role: msg.role,
-                        content: msg.content
-                    });
-                }
-            });
-
-            // Call Assistant API with userMessage as a separate parameter
-            return await sendToAssistant(userMessage, conversationHistory, {
+            // The server rebuilds the dialog history from the stored conversation,
+            // so only the new prompt is sent.
+            return await sendToAssistant(userMessage, {
                 questionnaireId: questionnaireId,
                 entityId: entityId,
                 area: area,
@@ -597,6 +603,7 @@ export default {
             currentMessage,
             isLoading,
             messagesContainer,
+            messageInput,
             disclaimerRef,
             close,
             sendMessage,

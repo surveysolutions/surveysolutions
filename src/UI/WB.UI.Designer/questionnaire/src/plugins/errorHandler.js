@@ -3,6 +3,8 @@ import {
     getOnlineVersion,
     getCurrentVersion
 } from '../services/designerService';
+import { isDynamicImportError } from '../helpers/dynamicImportRecovery';
+import { getRejectionMessage } from '../helpers/rejectionMessage.js';
 import { i18n } from './localization';
 
 const api = mande('/error/report');
@@ -98,7 +100,7 @@ export function setupErrorHandler(app) {
         }
 
         var errorDetails = {
-            message: message,
+            message: getRejectionMessage(e.reason),
 
             additionalData: {
                 source: 'unhandledrejection event',
@@ -119,6 +121,10 @@ export function setupErrorHandler(app) {
     });
 
     window.addEventListener('vite:preloadError', event => {
+        if (isDynamicImportError(event.payload)) {
+            return;
+        }
+
         checkIsNeedUpdate();
     });
 
