@@ -1,9 +1,7 @@
 using System;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
+using MigraDoc.DocumentObjectModel;
 using Moq;
 using NUnit.Framework;
-using SixLabors.ImageSharp.PixelFormats;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -19,8 +17,6 @@ public class AttachmentPdfWriterTests
     [Test]
     public void when_attachment_image_format_is_not_supported_should_not_throw()
     {
-        ImageSource.ImageSourceImpl = new ImageSharpSource<Rgba32>();
-
         var attachmentInfo = Create.Entity.Attachment("content-id");
         var interview = Mock.Of<IStatefulInterview>();
         var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetAttachmentById(attachmentInfo.AttachmentId) == attachmentInfo);
