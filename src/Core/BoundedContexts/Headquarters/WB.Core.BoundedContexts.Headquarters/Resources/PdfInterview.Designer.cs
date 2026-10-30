@@ -123,6 +123,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Coordinates.
+        /// </summary>
+        public static string AreaQestion_Coordinates {
+            get {
+                return ResourceManager.GetString("AreaQestion_Coordinates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Latitude.
+        /// </summary>
+        public static string AreaQestion_Latitude {
+            get {
+                return ResourceManager.GetString("AreaQestion_Latitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Longitude.
+        /// </summary>
+        public static string AreaQestion_Longitude {
+            get {
+                return ResourceManager.GetString("AreaQestion_Longitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments.
         /// </summary>
         public static string Comments {
