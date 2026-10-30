@@ -88,10 +88,14 @@ public class PdfInterviewGeneratorTests
         Assert.Multiple(() =>
         {
             // Latitude (parts[1]) shown before longitude (parts[0]), 6 decimal places, no comma between them
-            Assert.That(ddl, Does.Contain("20.654321"), "Latitude of first point should appear");
-            Assert.That(ddl, Does.Contain("10.123456"), "Longitude of first point should appear");
-            Assert.That(ddl, Does.Contain("21.444555"), "Latitude of second point should appear");
-            Assert.That(ddl, Does.Contain("11.222333"), "Longitude of second point should appear");
+            var firstLatitudeIndex = ddl.IndexOf("20.654321", StringComparison.Ordinal);
+            var firstLongitudeIndex = ddl.IndexOf("10.123456", StringComparison.Ordinal);
+            var secondLatitudeIndex = ddl.IndexOf("21.444555", StringComparison.Ordinal);
+            var secondLongitudeIndex = ddl.IndexOf("11.222333", StringComparison.Ordinal);
+            Assert.That(firstLatitudeIndex, Is.GreaterThanOrEqualTo(0), "Latitude of first point should appear");
+            Assert.That(firstLongitudeIndex, Is.GreaterThan(firstLatitudeIndex), "Latitude should precede longitude for first point");
+            Assert.That(secondLatitudeIndex, Is.GreaterThanOrEqualTo(0), "Latitude of second point should appear");
+            Assert.That(secondLongitudeIndex, Is.GreaterThan(secondLatitudeIndex), "Latitude should precede longitude for second point");
             Assert.That(ddl, Does.Not.Contain("20.654321, 10.123456"), "Comma-separated lat,lon format should not be used");
             // Area and length with 3 decimal places (values < 1000 avoid thousands-separator formatting)
             Assert.That(ddl, Does.Contain("123.456"), "Area should use 3 decimal places");
