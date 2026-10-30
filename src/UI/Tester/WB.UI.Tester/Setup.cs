@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Features.ResolveAnything;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
-using MvvmCross.Plugin;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
@@ -23,13 +18,11 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Autofac.MvvmCross;
 using WB.UI.Shared.Enumerator.Services.Logging;
-using WB.UI.Shared.Enumerator.Utils;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
 using WB.UI.Tester.Infrastructure;
@@ -52,7 +45,7 @@ namespace WB.UI.Tester
         {
             base.InitializeApp(app);
             
-            string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
+            string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key_300);
             if (!string.IsNullOrEmpty(arcgisruntimeKey))
             {
                 ServiceLocator.Current.GetInstance<IMapInteractionService>().SetLicenseKey(arcgisruntimeKey);
