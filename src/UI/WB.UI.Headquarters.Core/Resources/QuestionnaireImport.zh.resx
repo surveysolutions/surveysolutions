@@ -180,6 +180,9 @@
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>升级任务</value>
   </data>
+  <data name="CopyWebInterviewSettings" xml:space="preserve">
+    <value>从上一版本复制 Web Interview 设置（包括电子邮件模板和屏幕文本）</value>
+  </data>
 
 
   <data name="Importing" xml:space="preserve">
