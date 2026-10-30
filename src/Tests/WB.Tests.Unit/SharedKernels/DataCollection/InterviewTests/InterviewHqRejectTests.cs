@@ -134,5 +134,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.AssertThatContainsEvent<InterviewRejected>();
             eventContext.AssertThatContainsEvent<InterviewStatusChanged>();
             eventContext.AssertThatContainsEvent<InterviewerAssigned>(e => e.InterviewerId == null);
+        }
     }
 }
