@@ -4,9 +4,9 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
-
-namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.QuestionnaireTests
 {
     [TestFixture]
     internal class AddGroupTests : QuestionnaireTestsContext
@@ -53,22 +53,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).GetParent().PublicKey, Is.EqualTo(parentRegularGroupId));
         }
 
+        [Test]
         public void NewAddGroup_When_User_Doesnot_Have_Permissions_For_Edit_Questionnaire_Then_DomainException_should_be_thrown()
         {
             // arrange
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
 
             // act
-            TestDelegate act =
-                () =>
-                    questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: Guid.NewGuid(), title: "Title", variableName: null, rosterSizeQuestionId: null,
+            void Act() => questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: Guid.NewGuid(), title: "Title", variableName: null, rosterSizeQuestionId: null,
                         description: null, condition: null, hideIfDisabled: false, parentGroupId: null, isRoster: false,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
             // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(Act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
 
+        
+        [Test]
+        [Ignore("Fix is required")]
         public void NewAddGroup_When_User_In_Readonly_mode_Questionnaire_Then_DomainException_should_be_thrown()
         {
             // arrange
@@ -77,13 +79,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var readOnlyUser = Guid.NewGuid();
             questionnaire.AddSharedPerson(readOnlyUser, null, ShareType.View, responsibleId);
             // act
-            TestDelegate act =
-                () =>
-                    questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: readOnlyUser, title: "Title", variableName: null, rosterSizeQuestionId: null,
+            void Act() => questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: readOnlyUser, title: "Title", variableName: null, rosterSizeQuestionId: null,
                         description: null, condition: null, hideIfDisabled: false, parentGroupId: null, isRoster: false,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
             // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(Act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
 
@@ -94,7 +94,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Guid groupId = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
             string aliasForExistingQuestion = "q2";
-            string expression = string.Format("[{0}] > 0", aliasForExistingQuestion);
+            string expression = $"[{aliasForExistingQuestion}] > 0";
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.GetIdentifiersUsedInExpression(expression) == new[] { aliasForExistingQuestion });
@@ -105,16 +105,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, aliasForExistingQuestion);
 
             // act
-            TestDelegate act =
-                () =>
-                    questionnaire.AddGroupAndMoveIfNeeded(
+            void Act() => questionnaire.AddGroupAndMoveIfNeeded(
                         groupId: Guid.NewGuid(),
                         responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, 
                         condition: expression, hideIfDisabled: false,
                         parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
-            Assert.DoesNotThrow(act);
+            Assert.DoesNotThrow(Act);
         }
 
         [Test]
@@ -125,7 +123,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Guid questionId = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
 
-            string expression = string.Format("[{0}] > 0", questionId);
+            string expression = $"[{questionId}] > 0";
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.GetIdentifiersUsedInExpression(expression) == new[] { questionId.ToString() });
@@ -136,16 +134,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             AddQuestion(questionnaire, questionId, groupId, responsibleId, QuestionType.Text, "q1");
 
             // act
-            TestDelegate act =
-                () =>
-                    questionnaire.AddGroupAndMoveIfNeeded(
-                        groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, 
-                        condition: expression, hideIfDisabled: false,
-                        parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
+            void Act() => questionnaire.AddGroupAndMoveIfNeeded(groupId: Guid.NewGuid(), responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression, hideIfDisabled: false, parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
-            Assert.DoesNotThrow(act);
+            Assert.DoesNotThrow(Act);
         }
     }
 }
