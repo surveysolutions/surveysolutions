@@ -663,7 +663,8 @@ namespace WB.Tests.Abc.TestFactories
             string questionText = null,
             IEnumerable<ValidationCondition> validationConditions = null, 
             Guid? linkedToRosterId = null,
-            IEnumerable<Answer> specialValues = null)
+            IEnumerable<Answer> specialValues = null,
+            bool isNonNegative = false)
             => new NumericQuestion
             {
                 QuestionText = questionText ?? "text",
@@ -678,7 +679,8 @@ namespace WB.Tests.Abc.TestFactories
                 UseFormatting = useFormatting,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
-                Answers = new List<Answer>(specialValues ?? new Answer[] { })
+                Answers = new List<Answer>(specialValues ?? new Answer[] { }),
+                IsNonNegative = isNonNegative
             };
 
         public NumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -705,7 +707,8 @@ namespace WB.Tests.Abc.TestFactories
             IEnumerable<ValidationCondition> validationConditions = null,
             int? countOfDecimalPlaces = null,
             IEnumerable<Answer> specialValues = null, 
-            bool preFilled = false)
+            bool preFilled = false,
+            bool isNonNegative = false)
             => new NumericQuestion
             {
                 PublicKey = id ?? Guid.NewGuid(),
@@ -718,6 +721,7 @@ namespace WB.Tests.Abc.TestFactories
                 CountOfDecimalPlaces = countOfDecimalPlaces,
                 Answers = new List<Answer>(specialValues ?? new Answer[] { }),
                 Featured = preFilled,
+                IsNonNegative = isNonNegative,
             };
 
         public Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
@@ -1619,6 +1623,10 @@ namespace WB.Tests.Abc.TestFactories
             => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
                     .NumericIntegerAnswer.FromInt(i);
 
+        public NumericRealAnswer NumericRealAnswer(double d)
+            => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
+                    .NumericRealAnswer.FromDouble(d);
+
         public YesNoAnswer YesNoAnswer(IEnumerable<AnsweredYesNoOption> answer)
             => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
                     .YesNoAnswer.FromAnsweredYesNoOptions(answer);
@@ -2113,6 +2121,7 @@ namespace WB.Tests.Abc.TestFactories
             AssignmentEmail assignmentEmail = null,
             AssignmentPassword assignmentPassword = null,
             AssignmentWebMode assignmentWebMode = null,
+            AssignmentTargetArea targetArea = null,
             params BaseAssignmentValue[] answers) => new PreloadingAssignmentRow
         {
             FileName = fileName,
@@ -2124,7 +2133,8 @@ namespace WB.Tests.Abc.TestFactories
             Answers = answers,
             Email = assignmentEmail,
             Password = assignmentPassword,
-            WebMode = assignmentWebMode
+            WebMode = assignmentWebMode,
+            TargetArea = targetArea
             };
 
         public AssignmentResponsible AssignmentResponsible(string responsibleName, UserToVerify userInfo = null) => new AssignmentResponsible
@@ -2138,6 +2148,12 @@ namespace WB.Tests.Abc.TestFactories
         {
             Value = email,
             Column = ServiceColumns.EmailColumnName
+        };
+
+        public AssignmentTargetArea AssignmentTargetArea(string targetArea) => new AssignmentTargetArea
+        {
+            Value = targetArea,
+            Column = ServiceColumns.TargetAreaColumnName
         };
 
         public AssignmentWebMode AssignmentWebMode(bool? webMode) => new AssignmentWebMode

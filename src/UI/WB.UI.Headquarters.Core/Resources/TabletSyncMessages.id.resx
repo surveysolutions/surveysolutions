@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="InvalidDeviceIdentifier" xml:space="preserve">
+        <value>Pengenal perangkat tidak valid. Sesuatu telah terjadi dengan instalasi aplikasi klien, silakan kirim informasi tablet.</value>
+    </data>
+    <data name="InvalidUserFormat" xml:space="preserve">
+        <value>Sinkronisasi gagal. Pengguna tidak berwenang. Silakan periksa login/kata sandi Anda untuk {0}.</value>
+    </data>
+    <data name="NoClientIdentifier" xml:space="preserve">
+        <value>Sinkronisasi gagal. Silakan instal ulang aplikasi. Pengidentifikasi instalasi tidak ada. Silakan hubungi pengembang.</value>
+    </data>
+    <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
+        <value>Sinkronisasi gagal. Aplikasi Anda tidak kompatibel, harap perbarui aplikasi Pewawancara Anda.</value>
+    </data>
+    <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
+        <value>Sinkronisasi gagal. Aplikasi Anda tidak kompatibel. Copot pemasangan aplikasi Anda dan unduh aplikasi Pewawancara versi baru</value>
+    </data>
+    <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+        <value>Sinkronisasi gagal. ID perangkat Android tidak diberikan. Silakan hubungi pengembang.</value>
+    </data>
+    <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+        <value>Sinkronisasi gagal. ID perangkat Android yang diberikan salah. Silakan hubungi pengembang.</value>
+    </data>
+    <data name="ServerError" xml:space="preserve">
+        <value>Sinkronisasi gagal. Terjadi kesalahan server internal. Silakan hubungi pengembang.</value>
+    </data>
+    <data name="FileWasNotFound" xml:space="preserve">
+        <value>Sinkronisasi gagal. File dengan versi terbaru tidak ditemukan. Silakan hubungi pengembang.</value>
+    </data>
+    <data name="IncorrectFilesCount" xml:space="preserve">
+        <value>Sinkronisasi gagal. Jumlah file yang salah dihitung. Silakan hubungi pengembang.</value>
+    </data>
+    <data name="IncorrectMediaType" xml:space="preserve">
+        <value>Sinkronisasi gagal. Jenis media salah. Silakan hubungi pengembang.</value>
+    </data>
+    <data name="InvalidSequenceIdentifier" xml:space="preserve">
+        <value>Sinkronisasi gagal. Pengidentifikasi urutan tidak valid. Sesuatu telah terjadi dengan instalasi aplikasi klien, tekan tombol "Kirim informasi tablet".</value>
+    </data>
+    <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
+        <value>Sinkronisasi gagal.  Paket sinkronisasi dengan id '{0}' tidak ditemukan di server. Silakan hubungi pengembang.</value>
+    </data>
+    <data name="InvalidUserRole" xml:space="preserve">
+        <value>Akun Anda tidak memiliki peran yang mengizinkan operasi ini.</value>
+    </data>
+    <data name="Maintenance" xml:space="preserve">
+        <value>Server sedang dalam mode pemeliharaan sekarang. Maaf atas ketidaknyamanan ini. Silakan coba lagi nanti.</value>
+    </data>
+    <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
+        <value>Sinkronisasi gagal sebagian. Wawancara yang telah selesai dikirim ke server, tetapi Anda tidak akan menerima tugas baru. Silakan navigasikan ke pengaturan android -&gt; Aplikasi -&gt; Pewawancara dan tekan tombol Hapus Data. Kemudian sinkronkan dari awal.</value>
+    </data>
+</root>

@@ -13,7 +13,7 @@ namespace WB.Services.Export.Tests.Services.Interview
     [TestOf(typeof(InterviewQueryBuilder))]
     [UseApprovalSubdirectory("approved")]
     [IgnoreLineEndings(true)]
-    [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(NUnit4Reporter))]
     public class InterviewQueryBuilderTests
     {
         [Test]

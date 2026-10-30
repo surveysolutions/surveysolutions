@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Levels" xml:space="preserve"><value>កម្រិត</value></data>
+  <data name="MapLoadingInvalidFilesError" xml:space="preserve"><value>បានកើតកំហុស។ ឯកសារខាងក្រោមត្រូវបានមិនអើពើ:</value></data>
+  <data name="MapLoadingNotZipError" xml:space="preserve"><value>បានកើតកំហុស។ ឯកសារមិនមែន .zip</value></data>
+  <data name="MapsLoadingError" xml:space="preserve"><value>បានកើតកំហុសក្នុងការផ្ទុកផែនទី</value></data>
+  <data name="MaxScale" xml:space="preserve"><value>ទំហំធំបំផុត</value></data>
+  <data name="MinScale" xml:space="preserve"><value>ទំហំតូចបំផុត</value></data>
+  <data name="Name" xml:space="preserve"><value>ឈ្មោះ</value></data>
+  <data name="Size" xml:space="preserve"><value>ទំហំ (MB)</value></data>
+  <data name="UpdateDate" xml:space="preserve"><value>បាននាំចូលនៅ</value></data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve"><value>{0} ផែនទីត្រូវបានដំណើរការ ជាមួយឯកសារផែនទីមិនត្រឹមត្រូវ {1}</value></data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve"><value>ធាតុផ្នែកផែនទីមិនត្រូវបានចាប់ផ្តើម។ ទំនាក់ទំនងអ្នកគ្រប់គ្រងប្រព័ន្ធ</value></data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve"><value>តំណភ្ជាប់សម្រាប់ {0} ផែនទីត្រូវបានដំណើរការ ជាមួយ {1} មិនត្រឹមត្រូវ</value></data>
+  <data name="FileLoadingNotTsvError" xml:space="preserve"><value>បានកើតកំហុស។ ឯកសារមិនមែន .tab</value></data>
+  <data name="MappingsLoadingError" xml:space="preserve"><value>បានកើតកំហុសក្នុងការផ្ទុកតំណភ្ជាប់ផែនទី</value></data>
+  <data name="MapOverlapsWith" xml:space="preserve"><value>ត្រួតគ្នាជាមួយ:</value></data>
+  <data name="MapOverlapsWithOther" xml:space="preserve"><value>និង {0} ផ្សេងទៀត</value></data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve"><value>បានកើតកំហុស។ ឯកសារសង្ខេបមិនមានឯកសារផែនទី</value></data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve"><value>បានកើតកំហុស។ ឯកសារសង្ខេបមានឯកសារដែលមិនមែនផែនទី</value></data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve"><value>ឯកសារ '{0}' មានទិន្នន័យដែលប្រព័ន្ធមិនអាចដំណើរការ។ កំហុស: {1}</value></data>
+  <data name="ShpIsMissingInArchive" xml:space="preserve"><value>ឯកសារ {0}.shp បាត់សម្រាប់ {0}</value></data>
+  <data name="ShxIsMissingInArchive" xml:space="preserve"><value>ឯកសារ {0}.shx បាត់សម្រាប់ {0}.shp</value></data>
+  <data name="DbfIsMissingInArchive" xml:space="preserve"><value>ឯកសារ {0}.dbf បាត់សម្រាប់ {0}.shp</value></data>
+  <data name="MapFileSizeLimit" xml:space="preserve"><value>ទំហំឯកសារ {0} ធំជាងដែនកំណត់ {1}</value></data>
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve"><value>ឈ្មោះឯកសារ {0} មានអក្សរ non-UTF-8</value></data>
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve"><value>ឈ្មោះឯកសារ {0} មានអក្សរមិនត្រឹមត្រូវ</value></data>
+  <data name="MapFileNameTooLong" xml:space="preserve"><value>ឈ្មោះឯកសារ '{0}' វែងលើសប្រវែងអតិបរមាដែលអនុញ្ញាត {1} តួអក្សរ។</value></data>
+</root>

@@ -149,9 +149,11 @@ export default {
     expose: ['open', 'close'],
     mounted() {
         this.$emitter.on('openMacrosList', this.openLeftPanel);
+        this.$emitter.on('openCriticalRules', this.openLeftPanel);
     },
     unmounted() {
         this.$emitter.off('openMacrosList', this.openLeftPanel);
+        this.$emitter.off('openCriticalRules', this.openLeftPanel);
     },
     methods: {
         close() {
@@ -199,25 +201,7 @@ export default {
 
             const reference = this.foundReferences[this.indexOfCurrentReference];
 
-            const name = reference.type.toLowerCase();
-            if (name === "macro") {
-                this.$emitter.emit("openMacrosList", { focusOn: reference.itemId });
-            }
-            else {
-                this.$router.push({
-                    name: name,
-                    params: {
-                        chapterId: reference.chapterId,
-                        entityId: reference.itemId,
-                    },
-                    force: true,
-                    state: {
-                        indexOfEntityInProperty: reference.indexOfEntityInProperty,
-                        property: reference.property
-                    }
-                });
-            }
-
+            this.navigateTo(reference);
         },
         navigatePrev() {
             this.indexOfCurrentReference--;
@@ -226,12 +210,15 @@ export default {
             }
 
             const reference = this.foundReferences[this.indexOfCurrentReference];
+            this.navigateTo(reference);
+        },
+        navigateTo(reference) {
             const name = reference.type.toLowerCase();
-
             if (name === "macro") {
                 this.$emitter.emit("openMacrosList", { focusOn: reference.itemId });
-            }
-            else {
+            } else if (name === "criticalrule") {
+                this.$emitter.emit("openCriticalRules", { focusOn: reference.itemId });
+            } else {
                 this.$router.push({
                     name: name,
                     params: {
@@ -245,7 +232,6 @@ export default {
                     }
                 });
             }
-
         },
 
         async findAll() {

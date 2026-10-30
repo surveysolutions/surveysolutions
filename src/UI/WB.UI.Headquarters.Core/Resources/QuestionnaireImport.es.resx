@@ -186,4 +186,7 @@
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>Actualizar asignaciones</value>
   </data>
+  <data name="CopyWebInterviewSettings" xml:space="preserve">
+    <value>Copiar la configuración de Web Interview de la versión anterior (incluidas las plantillas de correo electrónico y los textos de pantalla)</value>
+  </data>
 </root>

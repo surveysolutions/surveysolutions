@@ -277,6 +277,9 @@
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>វាយលេខ មិនអាចដកឃ្លាពីលេខគត់</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>មិនអនុញ្ញាតឱ្យមានតម្លៃអវិជ្ជមានសម្រាប់សំណួរនេះ</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>ចំលើយ'{0}' មិនត្រឹមត្រូវ ពីព្រោះ ចំលើយធំជាង បញ្ជីរាយនាម តំឡើង '{1}'។​  </value>
   </data>
@@ -670,6 +673,9 @@
     <value>ជ្រើសរើសជម្រើស</value>
   </data>
 
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>មិនអាចដំណើរការរូបថតបានទេ ព្រោះទម្រង់របស់វាមិនត្រូវបានគាំទ្រ។ សូមថតរូបម្តងទៀត។</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>ថតរូប</value>
   </data>

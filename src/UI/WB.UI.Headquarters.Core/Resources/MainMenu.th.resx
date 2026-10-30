@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ApiUsers" xml:space="preserve"><value>ผู้ใช้ API</value></data>
+  <data name="Assignments" xml:space="preserve"><value>งานที่มอบหมาย</value></data>
+  <data name="AuditLog" xml:space="preserve"><value>บันทึกการตรวจสอบ</value></data>
+  <data name="CumulativeChart" xml:space="preserve"><value>แผนภูมิการสัมภาษณ์สะสม</value></data>
+  <data name="DataExport" xml:space="preserve"><value>ส่งออกข้อมูล</value></data>
+  <data name="DeviceLogs" xml:space="preserve"><value>บันทึกอุปกรณ์</value></data>
+  <data name="Diagnostics" xml:space="preserve"><value>การวินิจฉัย</value></data>
+  <data name="Headquarters" xml:space="preserve"><value>สำนักงานใหญ่</value></data>
+  <data name="Help" xml:space="preserve"><value>ความช่วยเหลือ</value></data>
+  <data name="Interviewers" xml:space="preserve"><value>ผู้สัมภาษณ์</value></data>
+  <data name="InterviewPackages" xml:space="preserve"><value>แพ็กเกจการสัมภาษณ์</value></data>
+  <data name="Interviews" xml:space="preserve"><value>การสัมภาษณ์</value></data>
+  <data name="MapReport" xml:space="preserve"><value>รายงานแผนที่</value></data>
+  <data name="Observers" xml:space="preserve"><value>ผู้สังเกตการณ์</value></data>
+  <data name="Settings" xml:space="preserve"><value>การตั้งค่า</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>การตั้งค่าพื้นที่ทำงาน</value></data>
+  <data name="EmailProviders" xml:space="preserve"><value>ผู้ให้บริการอีเมล</value></data>
+  <data name="Quantity" xml:space="preserve"><value>จำนวน</value></data>
+  <data name="SurveySetup" xml:space="preserve"><value>การตั้งค่าการสำรวจ</value></data>
+  <data name="Maps" xml:space="preserve"><value>แผนที่</value></data>
+  <data name="QueueSizeTitle" xml:space="preserve"><value>จำนวนการสัมภาษณ์ที่ซิงค์แล้วแต่ยังไม่ได้ประมวลผล</value></data>
+  <data name="Reports" xml:space="preserve"><value>รายงาน</value></data>
+  <data name="Speed" xml:space="preserve"><value>ความเร็ว</value></data>
+  <data name="SurveyStatistics" xml:space="preserve"><value>สถิติการสำรวจ</value></data>
+  <data name="StatusDuration" xml:space="preserve"><value>ระยะเวลาสถานะ</value></data>
+  <data name="Supervisors" xml:space="preserve"><value>หัวหน้างาน</value></data>
+  <data name="CreateNew" xml:space="preserve"><value>สร้างใหม่</value></data>
+  <data name="Started" xml:space="preserve"><value>เริ่มต้นแล้ว</value></data>
+  <data name="Completed" xml:space="preserve"><value>เสร็จสมบูรณ์</value></data>
+  <data name="Rejected" xml:space="preserve"><value>ถูกปฏิเสธ</value></data>
+  <data name="MapDashboard" xml:space="preserve"><value>แดชบอร์ดแผนที่</value></data>
+  <data name="SurveysAndStatuses" xml:space="preserve"><value>การสำรวจและสถานะ</value></data>
+  <data name="TabletInfos" xml:space="preserve"><value>ข้อมูลแท็บเล็ต</value></data>
+  <data name="TeamAndRoles" xml:space="preserve"><value>ทีมและบทบาท</value></data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve"><value>สมาชิกทีมและสถานะ</value></data>
+  <data name="TeamsAndRoles" xml:space="preserve"><value>ทีมและบทบาท</value></data>
+  <data name="TeamsAndStatuses" xml:space="preserve"><value>ทีมและสถานะ</value></data>
+  <data name="DevicesInterviewers" xml:space="preserve"><value>อุปกรณ์/ผู้สัมภาษณ์</value></data>
+  <data name="Troubleshooting" xml:space="preserve"><value>การแก้ไขปัญหา</value></data>
+  <data name="UserBatchUpload" xml:space="preserve"><value>อัปโหลดผู้ใช้เป็นชุด</value></data>
+  <data name="Users" xml:space="preserve"><value>ผู้ใช้</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>แบบสอบถาม</value></data>
+  <data name="Administration" xml:space="preserve"><value>การบริหาร</value></data>
+  <data name="Workspaces" xml:space="preserve"><value>พื้นที่ทำงาน</value></data>
+  <data name="ServerAdministration" xml:space="preserve"><value>การบริหารระบบ</value></data>
+</root>

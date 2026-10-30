@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 {
     [UseApprovalSubdirectory("QuestionnaireExportServiceTests-approved")]
     [IgnoreLineEndings(true)]
-    [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(NUnit4Reporter))]
     [TestOf(typeof(QuestionnaireExportService))]
     public class QuestionnaireExportServiceTests
     {
