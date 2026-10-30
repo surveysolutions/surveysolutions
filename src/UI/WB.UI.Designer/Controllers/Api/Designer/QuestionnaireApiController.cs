@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer;
-using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -19,7 +17,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Services;
 
@@ -93,8 +90,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("chapter/{id}")]
-        public IActionResult Chapter(QuestionnaireRevision id, string chapterId)
+        public IActionResult Chapter(QuestionnaireRevision? id, string chapterId)
         {
+            if (id == null || !Guid.TryParse(chapterId, out _))
+            {
+                return NotFound();
+            }
+
             var chapterInfoView = this.chapterInfoViewFactory.Load(id, chapterId: chapterId);
 
             if (chapterInfoView == null)
@@ -107,8 +109,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("EditVariable/{id}")]
-        public IActionResult EditVariable(QuestionnaireRevision id, Guid variableId)
+        public IActionResult EditVariable(QuestionnaireRevision? id, Guid variableId)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             var variableView = this.questionnaireInfoFactory.GetVariableEditView(id, variableId);
 
             if (variableView == null) return NotFound(string.Format(ExceptionMessages.VariableWithIdWasNotFound, variableId, id));
@@ -130,8 +136,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("EditQuestion/{id}")]
-        public IActionResult EditQuestion(QuestionnaireRevision id, Guid questionId)
+        public IActionResult EditQuestion(QuestionnaireRevision? id, Guid questionId)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
             if (editQuestionView == null)
@@ -151,8 +161,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("EditGroup/{id}")]
-        public IActionResult EditGroup(QuestionnaireRevision id, Guid groupId)
+        public IActionResult EditGroup(QuestionnaireRevision? id, Guid groupId)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             var editGroupView = this.questionnaireInfoFactory.GetGroupEditView(id, groupId);
 
             if (editGroupView == null)
@@ -165,8 +179,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("EditRoster/{id}")]
-        public IActionResult EditRoster(QuestionnaireRevision id, Guid rosterId)
+        public IActionResult EditRoster(QuestionnaireRevision? id, Guid rosterId)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             var editRosterView = this.questionnaireInfoFactory.GetRosterEditView(id, rosterId);
             if (editRosterView == null)
             {
@@ -178,8 +196,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("EditStaticText/{id}")]
-        public IActionResult EditStaticText(QuestionnaireRevision id, Guid staticTextId)
+        public IActionResult EditStaticText(QuestionnaireRevision? id, Guid staticTextId)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             var staticTextEditView = this.questionnaireInfoFactory.GetStaticTextEditView(id, staticTextId);
 
             if (staticTextEditView == null)
@@ -192,8 +214,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("Verify/{id}")]
-        public IActionResult Verify(QuestionnaireRevision id)
+        public IActionResult Verify(QuestionnaireRevision? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             var questionnaireView = this.questionnaireViewFactory.Load(id);
 
             if (questionnaireView == null)

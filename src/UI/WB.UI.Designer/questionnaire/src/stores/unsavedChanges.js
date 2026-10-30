@@ -7,6 +7,7 @@ import { useVariableStore } from './variable';
 import { useQuestionnaireStore } from './questionnaire';
 import { i18n } from '../plugins/localization';
 import { useRoute } from 'vue-router';
+import { hasUnsavedQuestionnaireChanges } from '../helpers/dynamicImportRecovery';
 
 export const useUnsavedChanges = () => {
     const route = useRoute();
@@ -46,7 +47,7 @@ export const useUnsavedChanges = () => {
         const isReadOnlyForUser = questionnaireStore.info.isReadOnlyForUser;
         if (isReadOnlyForUser) return;
 
-        const isDirty = getUnsavedChanges(route.name);
+        const isDirty = getUnsavedChanges(route.name) || hasUnsavedQuestionnaireChanges();
         if (isDirty && !confirmLeave()) {
             event.preventDefault();
             event.returnValue = ''; //for chrome
