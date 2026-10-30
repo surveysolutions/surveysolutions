@@ -1,10 +1,11 @@
 ﻿@page
 @using Microsoft.Extensions.Options
 @using reCAPTCHA.AspNetCore
+@using reCAPTCHA.AspNetCore.Versions
 @using WB.UI.Designer.Models
 @using WB.UI.Shared.Web.Services
 @model RegisterModel
-@inject IOptions<RecaptchaSettings> CaptchaConfig;
+@inject IOptions<RecaptchaSettings> CaptchaRecaptchaSettings;
 @{
     ViewData["Title"] = AccountResources.Register;
 }
@@ -51,7 +52,13 @@
     @if (Model.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha)
     {
         <div class="recaptcha">
-            @Html.Recaptcha(CaptchaConfig.Value)
+            @(Html.Recaptcha<RecaptchaV2Checkbox>(CaptchaRecaptchaSettings.Value, new RecaptchaV2Checkbox()))
+        </div>
+    }
+    else if (Model.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.RecaptchaV3)
+    {
+        <div class="recaptcha">
+            @(Html.Recaptcha<RecaptchaV3HiddenInput>(CaptchaRecaptchaSettings.Value, new RecaptchaV3HiddenInput { Action = "register" }))
         </div>
     }
 

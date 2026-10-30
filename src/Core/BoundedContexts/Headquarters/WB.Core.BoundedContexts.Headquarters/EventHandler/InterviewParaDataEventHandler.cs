@@ -75,6 +75,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, TranslationSwitched>,
         IUpdateHandler<InterviewHistoryView, InterviewModeChanged>
     {
+        private const string GpsProviderParameterName = "gps_provider";
+        private const string GpsModeParameterName = "gps_mode";
+        private const string GpsMockModeValue = "mock";
+        private const string GpsDeviceModeValue = "device";
+
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IUserViewFactory userReader;
 
@@ -323,12 +328,21 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
+            var parameters = this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(
+                    new GeoPosition(@event.Payload.Latitude, @event.Payload.Longitude, @event.Payload.Accuracy,
+                        @event.Payload.Altitude, @event.Payload.Timestamp)),
+                @event.Payload.RosterVector);
+
+            if (!string.IsNullOrEmpty(@event.Payload.GpsProvider))
+            {
+                parameters.Add(GpsProviderParameterName, @event.Payload.GpsProvider);
+                parameters.Add(GpsModeParameterName, @event.Payload.IsFromMockProvider ? GpsMockModeValue : GpsDeviceModeValue);
+            }
+
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
                 @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
-          this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(new GeoPosition(@event.Payload.Latitude, @event.Payload.Longitude, @event.Payload.Accuracy, @event.Payload.Altitude,
-                        @event.Payload.Timestamp)),
-              @event.Payload.RosterVector));
+                parameters);
 
             return view;
         }
@@ -530,6 +544,21 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                                 if (parameters.TryGetValue("conditions", out var conditions))
                                 {
                                     newParameters["conditions"] = conditions;
+                                }
+
+                                if (action == InterviewHistoricalAction.AnswerSet)
+                                {
+                                    // Only GeoLocation answers carry these keys; other answer types never set them,
+                                    // so the lookups are no-ops for them and no key collisions are possible.
+                                    if (parameters.TryGetValue(GpsProviderParameterName, out var gpsProvider))
+                                    {
+                                        newParameters[GpsProviderParameterName] = gpsProvider;
+                                    }
+
+                                    if (parameters.TryGetValue(GpsModeParameterName, out var gpsMode))
+                                    {
+                                        newParameters[GpsModeParameterName] = gpsMode;
+                                    }
                                 }
                             }
                         }

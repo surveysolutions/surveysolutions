@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 {
     [UseApprovalSubdirectory("CategoriesImportExportService-approved")]
     [IgnoreLineEndings(true)]
-    [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(NUnit4Reporter))]
     [TestOf(typeof(CategoriesImportExportService))]
     public class CategoriesImportExportServiceTests
     {

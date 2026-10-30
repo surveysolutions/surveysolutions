@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -22,6 +25,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers.Api
@@ -32,6 +36,10 @@ namespace WB.UI.Headquarters.Controllers.Api
     [ResponseCache(NoStore = true)]
     public class DataExportApiController : ControllerBase
     {
+        private const string ExternalStorageStateCachePrefix = "DataExportExternalStorageState";
+        private static readonly TimeSpan ExternalStorageStateLifetime = TimeSpan.FromMinutes(10);
+        private static readonly object ExternalStorageStateCacheLock = new object();
+
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IExportFileNameService exportFileNameService;
@@ -41,6 +49,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly ISystemLog auditLog;
         private readonly ISerializer serializer;
         private readonly ExternalStoragesSettings externalStoragesSettings;
+        private readonly IDataProtector externalStorageStateProtector;
+        private readonly IMemoryCache memoryCache;
         private readonly ILogger<DataExportApiController> logger;
 
         public DataExportApiController(
@@ -53,6 +63,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             IExportServiceApi exportServiceApi,
             ISystemLog auditLog, 
             ExternalStoragesSettings externalStoragesSettings,
+            IDataProtectionProvider dataProtectionProvider,
+            IMemoryCache memoryCache,
             ILogger<DataExportApiController> logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -64,6 +76,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.auditLog = auditLog;
             this.externalStoragesSettings = externalStoragesSettings;
             this.serializer = serializer;
+            this.externalStorageStateProtector = dataProtectionProvider.CreateProtector("DataExport.ExternalStorageState");
+            this.memoryCache = memoryCache;
             this.logger = logger;
         }
 
@@ -293,25 +307,63 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [EnableCors("export")]
-        [AllowAnonymous]
-        public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
+        [ObservingNotAllowed]
+        [ValidateAntiForgeryToken]
+        public ActionResult<string> CreateExternalStorageState([FromBody] ExternalStorageStateModel state)
         {
-            var state = this.serializer.DeserializeWithoutTypes<ExternalStorageStateModel>(model.State);
             if (state == null)
                 return BadRequest("Export parameters not found");
 
+            var requesterUserId = this.User?.UserId();
+            if (requesterUserId == null)
+                return Unauthorized();
+
+            var payload = new ExternalStorageProtectedStateModel
+            {
+                ExpiresAtUtc = DateTime.UtcNow.Add(ExternalStorageStateLifetime),
+                Nonce = Guid.NewGuid().ToString("N"),
+                RequesterUserId = requesterUserId.Value,
+                ExportState = state
+            };
+
+            this.memoryCache.Set(GetExternalStorageStateCacheKey(payload.Nonce), requesterUserId.Value, payload.ExpiresAtUtc);
+
+            var protectedState = this.externalStorageStateProtector.Protect(this.serializer.Serialize(payload));
+            return Ok(protectedState);
+        }        
+
+        [HttpPost]
+        [EnableCors("export")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
+        {
+            logger.LogInformation($"Export to external storage requested");
+            
+
+            var state = this.TryRestoreExternalStorageState(model?.State);
+            var authorizationCode = model?.Code;
+            if (state == null || string.IsNullOrWhiteSpace(authorizationCode))
+                return BadRequest("Export parameters not found");
+            
+            logger.LogInformation($"Export to external storage for {state.Type}");
+            
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(state.QuestionnaireIdentity);
             if (questionnaireBrowseItem == null || questionnaireBrowseItem.IsDeleted)
                 return NotFound("@Questionnaire not found");
 
             try
             {
-                var response = await GetExternalStorageAuthTokenAsync(state, model.Code);
+                var response = await GetExternalStorageAuthTokenAsync(state, authorizationCode);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    logger.LogError($"Not successful attempt of tokens retrieving for {state.Type}. Status: {response.StatusCode}");
-                    logger.LogError($"Reason: {response.ReasonPhrase}");
+                    logger.LogError(
+                        "Token retrieval failed for {ExternalStorageType} at {TokenUri}. Status: {StatusCode}; Reason: {ReasonPhrase}; Provider response: {ProviderResponse}",
+                        state.Type,
+                        this.GetExternalStorageSettings(state.Type).GetTokenEndpointUri(),
+                        response.StatusCode,
+                        response.ReasonPhrase,
+                        response.Error?.Content);
                     return BadRequest($"Could not get tokens for {state.Type} by code. Result is empty.");
                 }
 
@@ -331,13 +383,52 @@ namespace WB.UI.Headquarters.Controllers.Api
                     state.Type,
                     translation: state.TranslationId);
 
-                return Ok();
+                return Ok("Export Requested");
             }
-            catch (ApiException)
+            catch (ApiException exception)
             {
+                logger.LogError(exception,
+                    "Could not get access token for {ExternalStorageType} at {TokenUri} by code",
+                    state.Type,
+                    this.GetExternalStorageSettings(state.Type).GetTokenEndpointUri());
                 return BadRequest($"Could not get access token for {state.Type} by code");
             }
         }
+
+        private ExternalStorageStateModel TryRestoreExternalStorageState(string protectedState)
+        {
+            if (string.IsNullOrWhiteSpace(protectedState))
+                return null;
+
+            ExternalStorageProtectedStateModel payload;
+            try
+            {
+                var stateJson = this.externalStorageStateProtector.Unprotect(protectedState);
+                payload = this.serializer.DeserializeWithoutTypes<ExternalStorageProtectedStateModel>(stateJson);
+            }
+            catch (CryptographicException)
+            {
+                return null;
+            }
+
+            if (payload == null
+                || payload.ExportState == null
+                || payload.ExpiresAtUtc < DateTime.UtcNow)
+                return null;
+
+            var cacheKey = GetExternalStorageStateCacheKey(payload.Nonce);
+            lock (ExternalStorageStateCacheLock)
+            {
+                if (!this.memoryCache.TryGetValue(cacheKey, out _))
+                    return null;
+
+                this.memoryCache.Remove(cacheKey);
+                return payload.ExportState;
+            }
+        }
+
+        private static string GetExternalStorageStateCacheKey(string nonce) =>
+            $"{ExternalStorageStateCachePrefix}:{nonce}";
 
         private Task<ApiResponse<ExternalStorageTokenResponse>> GetExternalStorageAuthTokenAsync(ExternalStorageStateModel state, string code)
         {
@@ -345,7 +436,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var client =  RestService.For<IOAuth2Api>(
                 new HttpClient()
                 {
-                    BaseAddress = new Uri(storageSettings.TokenUri)
+                    BaseAddress = storageSettings.GetTokenEndpointUri()
                 },
                 new RefitSettings
                 {
@@ -357,7 +448,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 ClientId = storageSettings.ClientId,
                 ClientSecret = storageSettings.ClientSecret,
                 RedirectUri = this.externalStoragesSettings.OAuth2.RedirectUri,
-                GrantType = "authorization_code"
+                GrantType = "authorization_code",
+                Scope = storageSettings.Scope
             };
             
             return client.GetTokensByAuthorizationCodeAsync(request);
@@ -400,6 +492,14 @@ namespace WB.UI.Headquarters.Controllers.Api
             public DateTime? ToDate { get; set; }
             public DataExportFormat? Format { get; set; }
             public Guid? TranslationId { get; set; }
+        }
+
+        public class ExternalStorageProtectedStateModel
+        {
+            public DateTime ExpiresAtUtc { get; set; }
+            public string Nonce { get; set; }
+            public Guid RequesterUserId { get; set; }
+            public ExternalStorageStateModel ExportState { get; set; }
         }
     }
 

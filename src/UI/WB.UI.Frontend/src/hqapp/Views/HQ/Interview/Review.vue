@@ -2,7 +2,13 @@
     <main class="web-interview web-interview-for-supervisor" :class="classes">
         <div class="container-fluid">
             <div class="row">
-                <DetailsInfo />
+                <DetailsInfo
+                    :audioAuditPanelOpen="audioAuditPanelOpen"
+                    @toggleAudioPanel="toggleAudioPanel" />
+                <AudioAuditPanel
+                    v-if="audioAuditPanelOpen"
+                    :interviewId="interviewId"
+                    @close="audioAuditPanelOpen = false" />
                 <Facets />
                 <SearchResults />
                 <Sidebar :showComplete="false" :show-foldback-button-as-hamburger="false" />
@@ -21,6 +27,7 @@ import Facets from './Facets'
 import SearchResults from './SearchResults'
 import Sidebar from '~/webinterview/components/Sidebar'
 import DetailsInfo from './DetailsInfo.vue'
+import AudioAuditPanel from './AudioAuditPanel.vue'
 import { ensureQuestionGlobalComponents } from '~/webinterview/componentsQuestionRegistry'
 import { nextTick } from 'vue'
 import http from '~/webinterview/api/http'
@@ -34,6 +41,12 @@ import '@/assets/css/markup-interview-review.scss'
 export default {
     async beforeCreate() {
         ensureQuestionGlobalComponents(this.$.appContext.app)
+    },
+
+    data() {
+        return {
+            audioAuditPanelOpen: false,
+        }
     },
 
     watch: {
@@ -71,6 +84,10 @@ export default {
             this.$store.dispatch('screenWidthChanged', screenWidth)
         },
 
+        toggleAudioPanel() {
+            this.audioAuditPanelOpen = !this.audioAuditPanelOpen
+        },
+
         connected() {
             this.$store.dispatch('getLanguageInfo')
             this.$store.dispatch('loadInterview')
@@ -104,6 +121,7 @@ export default {
         SearchResults,
         Sidebar,
         DetailsInfo,
+        AudioAuditPanel,
         Interview: defineAsyncComponent(() => import('~/webinterview/components/Interview.vue')),
     },
 
