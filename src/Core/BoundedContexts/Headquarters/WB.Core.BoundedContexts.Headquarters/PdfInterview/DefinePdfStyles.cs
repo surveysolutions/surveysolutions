@@ -1,6 +1,6 @@
 ﻿#nullable enable
 
-using MigraDocCore.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel;
 
 namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 {
@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         public void Define(Document document)
         {
-            var defaultPdf = document.Styles[StyleNames.Normal];
+            var defaultPdf = document.Styles[StyleNames.Normal]!;
             defaultPdf.Font.Name = DefaultFonts;
 
             var defaultStyle = document.Styles.AddStyle(PdfStyles.Default, StyleNames.DefaultParagraphFont);
