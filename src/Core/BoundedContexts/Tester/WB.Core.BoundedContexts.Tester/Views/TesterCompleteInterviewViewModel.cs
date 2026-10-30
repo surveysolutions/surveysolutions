@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -29,14 +30,19 @@ public class TesterCompleteInterviewViewModel : CompleteInterviewViewModel
     public override void Configure(string interviewUid, NavigationState navigationState)
     {
         RunConfiguration(interviewUid, navigationState);
-        
-        if (!this.HasCriticalFeature(interviewUid))
+        // IsLoading stays true; OnTabDataLoadedAsync handles criticality and clears it.
+    }
+
+    protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, int loadVersion, CancellationToken cancellationToken)
+    {
+        if (!this.HasCriticalFeature(interviewId))
         {
-            IsCompletionAllowed = true;
-            IsLoading = false;
+            await base.OnTabDataLoadedAsync(interviewId, navigationState, loadVersion, cancellationToken);
         }
         else
-            Task.Run(() => CollectCriticalityInfo(interviewUid, navigationState));
+        {
+            await CollectCriticalityInfo(interviewId, navigationState, loadVersion, cancellationToken);
+        }
     }
     
     protected override bool CalculateIsCompletionAllowed()

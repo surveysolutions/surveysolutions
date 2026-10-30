@@ -43,6 +43,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 recyclerView.OverScrollMode = OverScrollMode.Never;
             }
 
+            SubscribeToViewModel();
             SetupTabsIfNeeded();
             RegisterPageChangeCallback();
             viewPager.Post(RecalculateRecyclerViewHeight);
@@ -194,6 +195,62 @@ namespace WB.UI.Shared.Enumerator.Activities
                 return;
 
             TrySetupTabs();
+        }
+
+        private void SubscribeToViewModel()
+        {
+            if (observedViewModel == ViewModel)
+                return;
+
+            if (observedViewModel != null)
+                observedViewModel.PropertyChanged -= ViewModelOnPropertyChanged;
+
+            observedViewModel = ViewModel;
+            if (observedViewModel != null)
+                observedViewModel.PropertyChanged += ViewModelOnPropertyChanged;
+        }
+
+        private void ViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == nameof(CompleteInterviewViewModel.Tabs))
+            {
+                viewPager?.Post(() =>
+                {
+                    if (View == null || IsDetached || !ReferenceEquals(sender, ViewModel))
+                        return;
+
+                    CleanupTabPagerResources();
+                    TrySetupTabs();
+                    RecalculateRecyclerViewHeight();
+                });
+            }
+            else if (args.PropertyName == nameof(CompleteInterviewViewModel.IsLoading)
+                     && sender is CompleteInterviewViewModel viewModel
+                     && !viewModel.IsLoading)
+            {
+                viewPager?.Post(SelectPopulatedTabAfterLoad);
+            }
+        }
+
+        private void SelectPopulatedTabAfterLoad()
+        {
+            if (View == null || IsDetached || viewPager == null || ViewModel?.IsLoading != false)
+                return;
+
+            var tabs = ViewModel.Tabs;
+            if (tabs.Count == 0)
+                return;
+
+            var currentItem = viewPager.CurrentItem;
+            if (currentItem >= tabs.Count || !tabs[currentItem].IsEnabled)
+            {
+                var firstEnabledIndex = tabs.FindIndex(tab => tab.IsEnabled);
+                if (firstEnabledIndex >= 0)
+                    viewPager.SetCurrentItem(firstEnabledIndex, false);
+            }
+
+            UpdateTabIndicator();
+            RecalculateRecyclerViewHeight();
         }
 
         private bool TrySetupTabs()
@@ -379,8 +436,13 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void CleanupViewResources()
         {
-            if (viewPager != null)
-                viewPager.Adapter = null;
+            if (observedViewModel != null)
+            {
+                observedViewModel.PropertyChanged -= ViewModelOnPropertyChanged;
+                observedViewModel = null;
+            }
+
+            CleanupTabPagerResources();
 
             if (viewPager != null && pageChangeCallback != null)
             {
@@ -388,6 +450,12 @@ namespace WB.UI.Shared.Enumerator.Activities
                 pageChangeCallback.Dispose();
                 pageChangeCallback = null;
             }
+        }
+
+        private void CleanupTabPagerResources()
+        {
+            if (viewPager != null)
+                viewPager.Adapter = null;
 
             tabLayoutMediator?.Dispose();
             tabLayoutMediator = null;
@@ -395,5 +463,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             tabConfigurationStrategy?.Dispose();
             tabConfigurationStrategy = null;
         }
+
+        private CompleteInterviewViewModel observedViewModel;
     }
 }
