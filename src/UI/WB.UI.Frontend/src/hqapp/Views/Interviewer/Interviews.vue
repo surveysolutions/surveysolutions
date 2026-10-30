@@ -85,10 +85,10 @@
 
 <script>
 import { DateFormats, convertToLocal } from '~/shared/helpers'
-import moment from 'moment-timezone'
+import moment from 'moment'
 import { updateCalendarEvent, addInterviewCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
-import { map, join, toNumber, filter, escape } from 'lodash'
-import gql from 'graphql-tag'
+import { map, join, toNumber, filter, escape } from 'lodash-es'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 import { config } from '~/shared/config'
 import DOMPurify from 'dompurify'
 const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
@@ -227,12 +227,8 @@ export default {
                         variables.where = where
                     }
 
-                    self.$apollo.query({
-                        query,
-                        variables: variables,
-                        fetchPolicy: 'network-only',
-                    }).then(response => {
-                        const data = response.data.interviews
+                    gqlRequest(query, variables).then(response => {
+                        const data = response.interviews
 
                         callback({
                             recordsTotal: data.totalCount,
@@ -284,7 +280,7 @@ export default {
         },
         questionnaires() {
             return config.model.questionnaires
-        }
+        },
     },
 
     methods: {
@@ -307,7 +303,7 @@ export default {
             this.calendarAssinmentId = assignmentId
             this.calendarEventId = calendarEvent?.publicKey
             this.editCalendarComment = calendarEvent?.comment
-            this.newCalendarStart = calendarEvent?.startUtc ?? moment().add(1, 'days').hours(10).startOf('hour').format(DateFormats.dateTime)
+            this.newCalendarStart = calendarEvent?.startUtc ?? moment().add(1, 'days').hour(10).startOf('hour').format(DateFormats.dateTime)
             this.newCalendarStarTimezone = calendarEvent?.startTimezone
             this.$refs.editCalendarModal.modal({ keyboard: false })
         },
@@ -328,18 +324,18 @@ export default {
 
             if (self.calendarEventId != null) {
                 variables.publicKey = self.calendarEventId.replaceAll('-', ''),
-                    updateCalendarEvent(self.$apollo, variables, self.reload)
+                    updateCalendarEvent(variables, self.reload)
             }
             else {
                 variables.interviewId = self.calendarInterviewId,
-                    addInterviewCalendarEvent(self.$apollo, variables, self.reload)
+                    addInterviewCalendarEvent(variables, self.reload)
             }
         },
         deleteCalendarEvent() {
             const self = this
             this.$refs.editCalendarModal.hide()
 
-            deleteCalendarEvent(self.$apollo, {
+            deleteCalendarEvent({
                 'publicKey': self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-', ''),
                 workspace: self.$store.getters.workspace,
             }, self.reload)

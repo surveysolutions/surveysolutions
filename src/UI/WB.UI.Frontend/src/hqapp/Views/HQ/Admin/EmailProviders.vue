@@ -12,7 +12,7 @@
                                 {{ $t('Settings.EmailProvider_SenderAddress') }}
                             </label>
                             <div class="field" :class="{ answered: senderAddress }">
-                                <Field label="Email address" :rules="{
+                                <Field :label="$t('Settings.EmailProvider_SenderAddress')" :rules="{
                                     required: provider == 'amazon' || provider == 'sendgrid' || provider == 'smtp',
                                     email: true
                                 }" name="senderAddress" id="senderAddress" v-model="senderAddress" type="text"
@@ -34,9 +34,9 @@
                                 {{ $t('Settings.EmailProvider_ReplyAddress') }}
                             </label>
                             <div class="field" :class="{ answered: replyAddress }">
-                                <Field label="Reply email address" rules="email" name="replyAddress" id="replyAddress"
-                                    v-model="replyAddress" type="text" class="form-control with-clear-btn"
-                                    maxlength="200" />
+                                <Field :label="$t('Settings.EmailProvider_ReplyAddress')" rules="email"
+                                    name="replyAddress" id="replyAddress" v-model="replyAddress" type="text"
+                                    class="form-control with-clear-btn" maxlength="200" />
                                 <button type="button" @click="replyAddress = null" class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
@@ -55,7 +55,7 @@
                             {{ $t('Settings.EmailProvider_SenderName') }}
                         </label>
                         <div class="field" :class="{ answered: senderName }">
-                            <Field label="Sender name"
+                            <Field :label="$t('Settings.EmailProvider_SenderName')"
                                 :rules="{ required: provider == 'amazon' || provider == 'sendgrid' || provider == 'smtp' }"
                                 name="senderName" id="senderName" v-model="senderName" type="text"
                                 class="form-control with-clear-btn" maxlength="200" />
@@ -75,7 +75,7 @@
                             {{ $t('Settings.EmailProvider_Address') }}
                         </label>
                         <div class="field" :class="{ answered: address }">
-                            <Field label="Address"
+                            <Field :label="$t('Settings.EmailProvider_Address')"
                                 :rules="{ required: provider == 'amazon' || provider == 'sendgrid' || provider == 'smtp' }"
                                 name="address" id="address" v-model="address" type="text"
                                 class="form-control with-clear-btn" maxlength="200" />
@@ -133,7 +133,7 @@
                                             )
                                         }}</label>
                                         <div class="field" :class="{ answered: awsAccessKeyId }">
-                                            <Field label="AWS access key id" rules="required"
+                                            <Field :label="$t('Settings.EmailProvider_AwsAccessKeyId')" rules="required"
                                                 class="form-control with-clear-btn" name="awsAccessKeyId"
                                                 id="awsAccessKeyId" type="text" v-model="awsAccessKeyId"
                                                 maxlength="200" />
@@ -161,7 +161,8 @@
                                         <div class="field" :class="{
                                             answered: awsSecretAccessKey,
                                         }">
-                                            <Field rules="required" label="AWS secret access key"
+                                            <Field rules="required"
+                                                :label="$t('Settings.EmailProvider_AwsSecretAccessKey')"
                                                 name="awsSecretAccessKey" id="awsSecretAccessKey"
                                                 v-model="awsSecretAccessKey" class="form-control with-clear-btn"
                                                 type="text" maxlength="200" />
@@ -186,8 +187,9 @@
                                             {{ $t('Settings.EmailProvider_AwsRegion') }}
                                         </label>
                                         <div class="field" :class="{ answered: awsRegion }">
-                                            <select rules="required" label="AWS region" name="awsRegion" id="awsRegion"
-                                                v-model="awsRegion" class="form-control">
+                                            <select rules="required" :label="$t('Settings.EmailProvider_AwsRegion')"
+                                                name="awsRegion" id="awsRegion" v-model="awsRegion"
+                                                class="form-control">
                                                 <option :key="awsRegion.key" :value="awsRegion.key" v-for="awsRegion in $config
                                                     .model.awsRegions" v-dompurify-html="awsRegion.value" />
                                             </select>
@@ -224,9 +226,10 @@
                                             {{ $t('Settings.EmailProvider_SendGridApiKey') }}
                                         </label>
                                         <div class="field" :class="{ answered: sendGridApiKey }">
-                                            <Field rules="required" label="API key" name="sendGridApiKey"
-                                                class="form-control with-clear-btn" id="sendGridApiKey" type="text"
-                                                v-model="sendGridApiKey" maxlength="200" />
+                                            <Field rules="required" :label="$t('Settings.EmailProvider_SendGridApiKey')"
+                                                name="sendGridApiKey" class="form-control with-clear-btn"
+                                                id="sendGridApiKey" type="text" v-model="sendGridApiKey"
+                                                maxlength="200" />
                                             <button @click="sendGridApiKey = null" type="button"
                                                 class="btn btn-link btn-clear">
                                                 <span></span>
@@ -259,9 +262,11 @@
                                     </p>
 
                                     <div class="form-group" :class="{ 'has-error': errors.smtpHost }">
-                                        <label class="h5">{{ $t('Settings.EmailProvider_SmtpHost',) }}</label>
+                                        <label class="h5">
+                                            {{ $t('Settings.EmailProvider_SmtpHost',) }}
+                                        </label>
                                         <div class="field" :class="{ answered: smtpHost, }">
-                                            <Field label="SMTP host" rules="required"
+                                            <Field :label="$t('Settings.EmailProvider_SmtpHost')" rules="required"
                                                 class="form-control with-clear-btn" name="smtpHost" id="smtpHost"
                                                 type="text" v-model="smtpHost" maxlength="200" />
                                             <button @click="smtpHost = null" type="button"
@@ -283,14 +288,17 @@
                                         </div>
                                     </div>
                                     <div class="form-group" :class="{ 'has-error': errors.smtpPort }">
-                                        <label class="h5">{{ $t('Settings.EmailProvider_SmtpPort',) }}</label>
+                                        <label class="h5">
+                                            {{ $t('Settings.EmailProvider_SmtpPort',) }}
+                                        </label>
                                         <div class="field" :class="{ answered: smtpPort, }">
                                             <Field :rules="{
                                                 integer: true,
                                                 required: true,
                                                 min_value: 1,
                                                 max_value: 65535,
-                                            }" label="SMTP port" name="smtpPort" id="smtpPort" v-model="smtpPort"
+                                            }" :label="$t('Settings.EmailProvider_SmtpPort')" name="smtpPort"
+                                                id="smtpPort" v-model="smtpPort"
                                                 class="form-control number with-clear-btn" type="number" />
                                             <button @click="smtpPort = null" type="button"
                                                 class="btn btn-link btn-clear">
@@ -313,9 +321,9 @@
 
                                                 <input v-bind="field" type="checkbox" style="margin-right: 5px"
                                                     class="form-control checkbox-filter single-checkbox"
-                                                    label="Use TLS encryption" name="smtpTlsEncryption"
-                                                    id="smtpTlsEncryption" v-model="smtpTlsEncryption"
-                                                    v-validate="''" />
+                                                    :label="$t('Settings.EmailProvider_SmtpTlsEncryption')"
+                                                    name="smtpTlsEncryption" id="smtpTlsEncryption"
+                                                    v-model="smtpTlsEncryption" v-validate="''" />
                                             </Field>
                                             <label for="smtpTlsEncryption" style="font-weight: bold">
                                                 <span class="tick"></span>{{
@@ -342,9 +350,9 @@
 
                                                 <input v-bind="field" type="checkbox" style="margin-right: 5px"
                                                     class="form-control checkbox-filter single-checkbox"
-                                                    label="Use authentication" name="smtpAuthentication"
-                                                    id="smtpAuthentication" v-model="smtpAuthentication"
-                                                    v-validate="''" />
+                                                    :label="$t('Settings.EmailProvider_SmtpAuthentication')"
+                                                    name="smtpAuthentication" id="smtpAuthentication"
+                                                    v-model="smtpAuthentication" v-validate="''" />
                                             </Field>
                                             <label for="smtpAuthentication" style="font-weight: bold">
                                                 <span class="tick"></span>{{
@@ -361,11 +369,14 @@
 
                                     <div class="form-group"
                                         :class="{ 'has-error': smtpAuthentication && errors.smtpUsername }">
-                                        <label class="h5">{{ $t('Settings.EmailProvider_SmtpUsername',) }}</label>
+                                        <label class="h5">
+                                            {{ $t('Settings.EmailProvider_SmtpUsername',) }}
+                                        </label>
                                         <div class="field" :class="{ answered: smtpUsername, }">
-                                            <Field label="SMTP username" name="smtpUsername" id="smtpUsername"
-                                                v-model="smtpUsername" class="form-control with-clear-btn" type="text"
-                                                maxlength="200" :disabled="!smtpAuthentication"
+                                            <Field :label="$t('Settings.EmailProvider_SmtpUsername')"
+                                                name="smtpUsername" id="smtpUsername" v-model="smtpUsername"
+                                                class="form-control with-clear-btn" type="text" maxlength="200"
+                                                :disabled="!smtpAuthentication"
                                                 :rules="{ required: smtpAuthentication }" />
                                             <button @click="smtpUsername = null" type="button" v-if="smtpAuthentication"
                                                 class="btn btn-link btn-clear">
@@ -382,11 +393,14 @@
 
                                     <div class="form-group"
                                         :class="{ 'has-error': smtpAuthentication && errors.smtpPassword }">
-                                        <label class="h5">{{ $t('Settings.EmailProvider_SmtpPassword',) }}</label>
+                                        <label class="h5">
+                                            {{ $t('Settings.EmailProvider_SmtpPassword',) }}
+                                        </label>
                                         <div class="field" :class="{ answered: smtpPassword, }">
-                                            <Field label="SMTP password" name="smtpPassword" id="smtpPassword"
-                                                v-model="smtpPassword" class="form-control with-clear-btn"
-                                                type="password" maxlength="200" :disabled="!smtpAuthentication"
+                                            <Field :label="$t('Settings.EmailProvider_SmtpPassword')"
+                                                name="smtpPassword" id="smtpPassword" v-model="smtpPassword"
+                                                class="form-control with-clear-btn" type="password" maxlength="200"
+                                                :disabled="!smtpAuthentication"
                                                 :rules="{ required: smtpAuthentication }" />
                                             <button @click="smtpPassword = null;" type="button"
                                                 v-if="smtpAuthentication" class="btn btn-link btn-clear">
@@ -430,7 +444,8 @@
                                 {{ $t('Settings.EmailProvider_TestEmailAddress') }}
                             </label>
                             <div class="field" :class="{ answered: testEmailAddress }">
-                                <Field label="email" :rules="{ required: true, email: true }" name="testEmailAddress"
+                                <Field :label="$t('Settings.EmailProvider_TestEmailAddress')"
+                                    :rules="{ required: true, email: true }" name="testEmailAddress"
                                     class="form-control with-clear-btn" id="testEmailAddress" type="text"
                                     v-model="testEmailAddress" maxlength="200" />
                                 <button @click="testEmailAddress = null" type="button" class="btn btn-link btn-clear">
@@ -466,7 +481,7 @@
 <script>
 
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash-es'
 import { getCsrfCookie } from '../../../api/index'
 
 export default {
@@ -535,11 +550,11 @@ export default {
     computed: {
         isFormDirty() {
             const settigsForm = this.$refs.settigsForm
-            return settigsForm ? settigsForm.meta.dirty : false;
+            return settigsForm ? settigsForm.meta.dirty : false
         },
         isEmailFormDirty() {
             const testEmailForm = this.$refs.testEmailForm
-            return testEmailForm ? testEmailForm.meta.dirty : false;
+            return testEmailForm ? testEmailForm.meta.dirty : false
         },
         sendGridIsSetUp() {
             return (
@@ -570,7 +585,7 @@ export default {
         },
         showSendTestEmail() {
             return (this.sendGridIsSetUp || this.awsIsSetUp || this.smtpIsSetUp) && !this.isFormDirty
-        }
+        },
     },
     watch: {
         /*isFormDirty(val) {
@@ -612,7 +627,7 @@ export default {
                             headers: {
                                 'X-CSRF-TOKEN': getCsrfCookie(),
                             },
-                        },
+                        }
                     )
                     .then(function (response) {
                         //self.$refs.testEmailForm.resetForm()
@@ -635,7 +650,7 @@ export default {
                                 ? data.errors
                                 : [
                                     self.$t(
-                                        'Settings.EmailProvider_GeneralError',
+                                        'Settings.EmailProvider_GeneralError'
                                     ),
                                 ]
                         self.$errorHandler(error, self)
@@ -679,10 +694,10 @@ export default {
                         self.$refs.settigsForm.resetForm({ values: self.$refs.settigsForm.values })
 
                         self.providerSettingsResult = self.$t(
-                            'Settings.EmailProvider_SettingsSavedSuccessfully',
+                            'Settings.EmailProvider_SettingsSavedSuccessfully'
                         )
                         if (settings.provider != 'none') {
-                            self.providerSettingsResult += ' ' + self.$t('Settings.EmailProvider_SendTestEmailMessage',)
+                            self.providerSettingsResult += ' ' + self.$t('Settings.EmailProvider_SendTestEmailMessage')
                         }
                     })
                     .catch(function (error) {
@@ -699,12 +714,12 @@ export default {
             }
         },
         isNumeric(num) {
-            return (typeof (num) === 'number' || typeof (num) === "string" && num.trim() !== '') && !isNaN(num);
+            return (typeof (num) === 'number' || typeof (num) === 'string' && num.trim() !== '') && !isNaN(num)
         },
         clearResultMessages() {
-            this.providerSettingsResult = null;
+            this.providerSettingsResult = null
             this.sendEmailResult = null
-        }
+        },
     },
 }
 </script>

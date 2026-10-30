@@ -4,8 +4,11 @@ const api = mande('/api/questionnaire' /*, globalOptions*/)
 
 class WebTesterApi{
 
-  async run(questionnaireId, scenarioId) {
-      var webTesterWindow = window.open("about:blank", '_blank');
+  openWindow() {
+      return window.open("about:blank", '_blank');
+  }
+
+  async run(questionnaireId, scenarioId, webTesterWindow = this.openWindow()) {
 
       // Designer returns the full redirect URL with ?code=<one-time-code> already embedded.
       // JWT never appears in the browser — code is exchanged server-to-server by WebTester.

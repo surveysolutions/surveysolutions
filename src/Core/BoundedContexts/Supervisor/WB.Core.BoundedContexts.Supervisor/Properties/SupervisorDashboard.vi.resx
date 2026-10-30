@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CollectedInterviews" xml:space="preserve"><value>Các cuộc phỏng vấn đã thu thập</value></data>
+  <data name="Outbox" xml:space="preserve"><value>Hộp thư đi</value></data>
+  <data name="OutboxSubtitle" xml:space="preserve"><value>Các cuộc phỏng vấn và nhiệm vụ sẽ được gửi từ thiết bị của bạn trong lần đồng bộ tiếp theo</value></data>
+  <data name="SentToInterviewer" xml:space="preserve"><value>Đã gửi cho phỏng vấn viên</value></data>
+  <data name="SentToInterviewerSubtitle" xml:space="preserve"><value>Các nhiệm vụ và cuộc phỏng vấn đang trên thiết bị của phỏng vấn viên</value></data>
+  <data name="ToBeAssigned" xml:space="preserve"><value>Nhiệm vụ cần phân công</value></data>
+  <data name="ToBeAssignedListSubtitle" xml:space="preserve"><value>Các nhiệm vụ cần được phân công cho thành viên trong nhóm của bạn</value></data>
+  <data name="WaitingForAction" xml:space="preserve"><value>Đang chờ hành động của bạn</value></data>
+  <data name="WaitingForSupervisorActionSubtitle" xml:space="preserve"><value>Các cuộc phỏng vấn cần hành động của bạn để giải quyết</value></data>
+  <data name="YourTeam" xml:space="preserve"><value>Nhóm của bạn</value></data>
+</root>

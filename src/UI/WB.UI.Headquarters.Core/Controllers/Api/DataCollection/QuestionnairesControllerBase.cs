@@ -18,7 +18,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public abstract class QuestionnairesControllerBase : ControllerBase
+    public abstract class QuestionnairesControllerBase : DataCollectionControllerBase
     {
         protected readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireAssemblyAccessor assemblyAccessor;

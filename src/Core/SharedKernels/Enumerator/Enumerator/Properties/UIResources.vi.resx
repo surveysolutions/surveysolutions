@@ -285,6 +285,9 @@
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
       <value>Câu trả lời '{0}' không chính xác vì câu hỏi là câu hỏi nguồn của danh sách và câu trả lời được chỉ định là số âm</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Không cho phép giá trị âm cho câu hỏi này</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
       <value>Câu trả lời '{0}' không chính xác vì câu trả lời lớn hơn giới hạn trên của danh sách '{1}'.</value>
   </data>
@@ -511,7 +514,7 @@
     <value>Ứng dụng cần có quyền sử dụng micro. Thử lại hành động cuối cùng và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng micro.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>Ứng dụng cần có quyền sử dụng bộ nhớ. Thử lại hành động cuối cùng và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng bộ nhớ.</value>
+    <value>Để lưu bản đồ trên thiết bị di động, Survey Solutions cần quyền truy cập vào tệp. Nếu không cấp quyền này, ứng dụng sẽ không thể lưu bất kỳ bản đồ nào để sử dụng ngoại tuyến.</value>
   </data>
   <data name="MissingPermission" xml:space="preserve">
     <value>Ứng dụng không có đủ quyền để thực hiện hành động yêu cầu</value>
@@ -524,6 +527,9 @@
   </data>
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Chọn một tùy chọn</value>
+  </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Không thể xử lý ảnh vì định dạng của ảnh không được hỗ trợ. Vui lòng chụp lại ảnh.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Chụp ảnh</value>
@@ -959,5 +965,8 @@ nghiêm trọng</value>
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
 <value>Câu hỏi
 chưa trả lời</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Cần có quyền truy cập micro để tiến hành cuộc phỏng vấn này. Không thể bắt đầu cuộc phỏng vấn cho đến khi được cấp quyền.</value>
   </data>
 </root>

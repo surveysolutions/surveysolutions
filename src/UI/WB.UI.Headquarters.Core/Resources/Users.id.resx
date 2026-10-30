@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AddAPIUser" xml:space="preserve"><value>Tambah Pengguna API</value></data>
+  <data name="AddHeadquarters" xml:space="preserve"><value>Tambah Kantor Pusat</value></data>
+  <data name="AddSupervisor" xml:space="preserve"><value>Tambah Supervisor</value></data>
+  <data name="APIUsers" xml:space="preserve"><value>Pengguna API</value></data>
+  <data name="CreateAPIUser" xml:space="preserve"><value>Buat Pengguna API</value></data>
+  <data name="CreateHeadquarters" xml:space="preserve"><value>Buat Kantor Pusat</value></data>
+  <data name="CreateObserver" xml:space="preserve"><value>Buat pengamat</value></data>
+  <data name="CreateSupervisor" xml:space="preserve"><value>Buat supervisor</value></data>
+  <data name="CreateAdministrator" xml:space="preserve"><value>Buat administrator</value></data>
+  <data name="ArchivedSupervisors" xml:space="preserve"><value>Supervisor yang diarsipkan</value></data>
+  <data name="ClickToReturn" xml:space="preserve"><value>Klik untuk kembali ke akun Anda.</value></data>
+  <data name="CreateAdmin" xml:space="preserve"><value>Untuk menyelesaikan instalasi, harap buat pengguna Administrator baru</value></data>
+  <data name="FinishInstallation" xml:space="preserve"><value>Selesaikan instalasi</value></data>
+  <data name="Headquarters" xml:space="preserve"><value>Kantor Pusat</value></data>
+  <data name="ImpersonateAsUser" xml:space="preserve"><value>Lihat sebagai pengguna ini dalam mode baca saja</value></data>
+  <data name="Remove" xml:space="preserve"><value>Hapus</value></data>
+  <data name="Observer" xml:space="preserve"><value>Pengamat</value></data>
+  <data name="ObserverDisclaimerFormat" xml:space="preserve"><value>Ini adalah konten yang dilihat oleh &lt;b&gt;{0}&lt;/b&gt;.</value></data>
+  <data name="Observers" xml:space="preserve"><value>Pengamat</value></data>
+  <data name="Supervisor" xml:space="preserve"><value>Supervisor</value></data>
+  <data name="Supervisors" xml:space="preserve"><value>Supervisor</value></data>
+  <data name="SupervisorsCountDescription" xml:space="preserve"><value>Supervisor ({{count}})</value></data>
+  <data name="InterviewersCountDescription" xml:space="preserve"><value>Pewawancara ({{count}})</value></data>
+  <data name="ApiUsersCountDescription" xml:space="preserve"><value>Pengguna API ({{count}})</value></data>
+  <data name="HeadquartersCountDescription" xml:space="preserve"><value>Kantor Pusat ({{count}})</value></data>
+  <data name="ObserversCountDescription" xml:space="preserve"><value>Pengamat ({{count}})</value></data>
+  <data name="Supervisors_Edit" xml:space="preserve"><value>Edit Supervisor</value></data>
+  <data name="SupervisorsInTeam" xml:space="preserve"><value>supervisor dalam tim Anda</value></data>
+  <data name="Admin" xml:space="preserve"><value>Admin</value></data>
+  <data name="CreateAndTryLogin" xml:space="preserve"><value>Buat dan coba masuk</value></data>
+  <data name="CreationDate" xml:space="preserve"><value>Akun dibuat pada</value></data>
+  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="EditFormat" xml:space="preserve"><value>Edit: {0}</value></data>
+  <data name="Email" xml:space="preserve"><value>Email</value></data>
+  <data name="Interviewer" xml:space="preserve"><value>Pewawancara</value></data>
+  <data name="Interviewers" xml:space="preserve"><value>Pewawancara</value></data>
+  <data name="Locked" xml:space="preserve"><value>Dikunci</value></data>
+  <data name="NotLinkedToDevice" xml:space="preserve"><value>Tidak terhubung ke perangkat</value></data>
+  <data name="TotalInterviewers" xml:space="preserve"><value>Total Pewawancara</value></data>
+  <data name="UserName" xml:space="preserve"><value>Nama login</value></data>
+  <data name="AddObserver" xml:space="preserve"><value>Tambah pengamat</value></data>
+  <data name="TryLater" xml:space="preserve"><value>Silakan coba lagi nanti</value></data>
+  <data name="HeadquarterAccountCreationDate" xml:space="preserve"><value>Tanggal pembuatan akun kantor pusat</value></data>
+  <data name="SupervisorAccountCreationDate" xml:space="preserve"><value>Tanggal pembuatan akun supervisor</value></data>
+  <data name="NotLinkedToDeviceTitle" xml:space="preserve"><value>Jumlah pewawancara yang belum sinkronisasi tablet mereka</value></data>
+  <data name="NumberOfInterviewersInTeam" xml:space="preserve"><value>Jumlah pewawancara dalam tim</value></data>
+  <data name="AccountCreationDateTooltip" xml:space="preserve"><value>Tanggal pembuatan akun</value></data>
+  <data name="ObserversEmail" xml:space="preserve"><value>Email pengamat</value></data>
+  <data name="SupervisorEmail" xml:space="preserve"><value>Email supervisor</value></data>
+  <data name="HeadquartersEmail" xml:space="preserve"><value>Email kantor pusat</value></data>
+  <data name="AddInterviewer" xml:space="preserve"><value>Tambah pewawancara</value></data>
+  <data name="ArchivingStatusTitle" xml:space="preserve"><value>Status Pengarsipan</value></data>
+  <data name="InterviewerIssues" xml:space="preserve"><value>Masalah pewawancara</value></data>
+  <data name="ResetPassword" xml:space="preserve"><value>Reset Kata Sandi</value></data>
+  <data name="ResetPasswordTitle" xml:space="preserve"><value>Reset kata sandi pengguna</value></data>
+  <data name="UserNotFound" xml:space="preserve"><value>Pengguna tidak ditemukan</value></data>
+  <data name="PasswordChanged" xml:space="preserve"><value>Kata sandi untuk pengguna {0} diubah</value></data>
+  <data name="Filter_AllUsers" xml:space="preserve"><value>Semua pengguna</value></data>
+  <data name="Filter_WithMissingWorkspace" xml:space="preserve"><value>Ruang kerja hilang</value></data>
+  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve"><value>Dengan ruang kerja yang dinonaktifkan saja</value></data>
+  <data name="Filter_Locked" xml:space="preserve"><value>Pengguna yang dikunci</value></data>
+  <data name="Filter_Archived" xml:space="preserve"><value>Pengguna yang diarsipkan</value></data>
+  <data name="UsersTitle" xml:space="preserve"><value>Pengguna</value></data>
+  <data name="AddUser" xml:space="preserve"><value>Tambah Pengguna</value></data>
+  <data name="UploadUsers" xml:space="preserve"><value>Unggah Pengguna</value></data>
+  <data name="ApiTokenTitle" xml:space="preserve"><value>Token API Pengguna</value></data>
+</root>

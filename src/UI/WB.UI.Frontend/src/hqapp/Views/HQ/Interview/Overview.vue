@@ -1,6 +1,9 @@
 <template>
     <div>
-        <OverviewItem v-for="item in items" :key="item.id" :item="item" @mount="registerItemToStick" />
+        <OverviewItem v-for="item in items"
+            :key="item.id"
+            :item="item"
+            @mount="registerItemToStick" />
 
         <div ref="sentinel"></div>
     </div>
@@ -8,7 +11,7 @@
 
 <script>
 import OverviewItem from './components/OverviewItem'
-import { slice, sortedIndexBy } from 'lodash'
+import { slice, sortedIndexBy } from 'lodash-es'
 
 export default {
     components: { OverviewItem },

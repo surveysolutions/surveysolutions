@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,7 +15,6 @@ using NetTopologySuite.IO;
 using NetTopologySuite.IO.Esri;
 using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Simplify;
-using Newtonsoft.Json;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -31,13 +29,15 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Utils;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     public class MapFileStorageService : IMapStorageService
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
+        private readonly IPlainStorageAccessor<MapFileDeletionRequest> mapFileDeletionRequests;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
@@ -47,10 +47,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ILogger<MapFileStorageService> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
         private const int WGS84Wkid = 4326; //https://epsg.io/4326
         private const string MapsFolderName = "MapsData";
         private const string LabelFieldName = "label";
+        private const int MapFileLockClass = 601321;
 
         private readonly string mapsFolderPath;
 
@@ -59,17 +62,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IOptions<FileStorageConfig> fileStorageConfig,
             IArchiveUtils archiveUtils,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
+            IPlainStorageAccessor<MapFileDeletionRequest> mapFileDeletionRequests,
             IPlainStorageAccessor<UserMap> userMapsStorage,
             ISerializer serializer,
             IUserRepository userStorage,
             IExternalFileStorage externalFileStorage,
             IOptions<GeospatialConfig> geospatialConfig,
             IAuthorizedUser authorizedUser,
-            ILogger<MapFileStorageService> logger)
+            ILogger<MapFileStorageService> logger,
+            IUnitOfWork unitOfWork,
+            IWorkspaceContextAccessor workspaceContextAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
+            this.mapFileDeletionRequests = mapFileDeletionRequests;
             this.userMapsStorage = userMapsStorage;
             this.serializer = serializer;
             this.userStorage = userStorage;
@@ -77,13 +84,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.authorizedUser = authorizedUser;
             this.logger = logger;
             this.geospatialConfig = geospatialConfig;
+            this.unitOfWork = unitOfWork;
+            this.workspaceContextAccessor = workspaceContextAccessor;
 
             this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
                 fileSystemAccessor.CreateDirectory(this.mapsFolderPath);
         }
 
-        public string GetExternalStoragePath(string name) => $"maps/" + name;
+        public string GetExternalStoragePath(string name) => IsWorkspaceGenerationStorageKey(name)
+            ? $"{GetWorkspaceStoragePathPrefix()}{name}"
+            : $"maps/{name}";
 
         public async Task<MapBrowseItem> SaveOrUpdateMapAsync(MapFiles mapFiles, string mapsDirectory)
         {
@@ -105,21 +116,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Files.First().Name);
                 }
 
-                var mapName = mapFiles.IsShapeFile ? mapFiles.Name + ".shp" : mapFiles.Name; 
+                var mapName = mapFiles.IsShapeFile ? mapFiles.Name + ".shp" : mapFiles.Name;
+                mapItem.StorageKey = CreateStorageKey();
+                await AcquireMapFileLockAsync(mapName).ConfigureAwait(false);
+                await AcquireMapFileLockAsync(mapItem.StorageKey).ConfigureAwait(false);
+                var previousMap = await mapPlainStorageAccessor.GetByIdAsync(mapName).ConfigureAwait(false);
+                var previousStorageKey = previousMap == null ? null : GetStorageKey(previousMap);
                 if (externalFileStorage.IsEnabled())
                 {
                     await using FileStream file = File.OpenRead(tempFile);
-                    var name = this.fileSystemAccessor.GetFileName(mapName);
-                    await this.externalFileStorage.StoreAsync(GetExternalStoragePath(name), file, "application/zip")
+                    await this.externalFileStorage.StoreAsync(GetExternalStoragePath(mapItem.StorageKey), file, "application/zip")
                         .ConfigureAwait(false);
                 }
                 else
                 {
-                    var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
+                    var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapItem.StorageKey);
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
                 }
                 
+                if (previousMap != null)
+                {
+                    previousMap.UpdateFrom(mapItem);
+                    mapItem = previousMap;
+                }
+
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
+                if (previousMap != null)
+                {
+                    mapFileDeletionRequests.Store(new MapFileDeletionRequest
+                    {
+                        Id = previousStorageKey,
+                        FileName = previousMap.FileName,
+                        StorageKey = previousStorageKey
+                    }, previousStorageKey);
+                }
                 
                 return mapItem;
             }
@@ -239,45 +269,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var tempFile = Path.Combine(mapsDirectory, mapFile.Name);
                         var fullPath = Path.GetFullPath(tempFile);
 
-                        bool isReaded = TryReadGdalInfomation(fullPath, out var deserialized);
-
-                        if (isReaded)
+                        if (GeoTiffInfoReader.TryReadGeoTiffBounds(fullPath,
+                            out double geoXMin, out double geoYMin, out double geoXMax, out double geoYMax))
                         {
-                            if (deserialized?.Wgs84Extent != null)
-                            {
-                                double xMin = double.MaxValue;
-                                double xMax = double.MinValue;
-                                double yMin = double.MaxValue;
-                                double yMax = double.MinValue;
-
-                                foreach (double[][] poli in deserialized.Wgs84Extent.Coordinates)
-                                {
-                                    foreach (double[] coord in poli)
-                                    {
-                                        xMin = Math.Min(xMin, coord[0]);
-                                        xMax = Math.Max(xMax, coord[0]);
-
-                                        yMin = Math.Min(yMin, coord[1]);
-                                        yMax = Math.Max(yMax, coord[1]);
-                                    }
-                                }
-
-                                item.XMinVal = xMin;
-                                item.YMinVal = yMin;
-
-                                item.XMaxVal = xMax;
-                                item.YMaxVal = yMax;
-
-                                item.Wkid = WGS84Wkid; //geographic coordinates Wgs84
-                            }
-                            else
-                                throw new InvalidOperationException(".tif file is not recognized as map");
+                            item.XMinVal = geoXMin;
+                            item.YMinVal = geoYMin;
+                            item.XMaxVal = geoXMax;
+                            item.YMaxVal = geoYMax;
+                            item.Wkid = WGS84Wkid;
+                        }
+                        else if (GeoTiffInfoReader.IsValidTiff(fullPath))
+                        {
+                            // The TIFF is valid but carries no readable georeferencing. Accept it as a
+                            // map without coordinates rather than rejecting an otherwise valid file.
+                            logger.LogWarning(
+                                "Map '{MapName}': could not read GeoTIFF coordinates, importing without bounds.",
+                                mapFile.Name);
                         }
                         else
                         {
-                            var isGeoTiff = GeoTiffInfoReader.IsGeoTIFF(fullPath);
-                            if (!isGeoTiff)
-                                throw new InvalidOperationException(".tif file is not recognized as map");    
+                            throw new InvalidOperationException(".tif file is not recognized as map");
                         }
                     }
                     break;
@@ -399,49 +410,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return item;
         }
 
-        private bool TryReadGdalInfomation(string fullPath, out GdalInfoOuput gdalInfo)
-        {
-            gdalInfo = null;
-            
-            var valueGdalHome = this.geospatialConfig.Value.GdalHome;
-
-            if (string.IsNullOrWhiteSpace(valueGdalHome))
-                return false;
-                
-            try
-            {
-                this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
-                    fullPath, valueGdalHome);
-            
-                var startInfo = ConsoleCommand.Read(Path.Combine(valueGdalHome, "gdalinfo"), $"\"{fullPath}\" -json");
-                gdalInfo = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
-
-                return true;
-            }
-            catch (Win32Exception e)
-            {
-                if (e.NativeErrorCode == 2)
-                {
-                    //throw new InvalidOperationException("gdalinfo utility not found. Please install gdal library and add to PATH variable", e);
-                    return false;
-                }
-            }
-            catch (NonZeroExitCodeException e)
-            {
-                if(!string.IsNullOrEmpty(e.ErrorOutput))
-                    logger.LogError(e.ErrorOutput);
-                
-                if (e.ProcessExitCode == 4)
-                {
-                    throw new InvalidOperationException(".tif file is not recognized as map", e);
-                }
-
-                throw;
-            }
-            
-            return false;
-        }
-
         private Geometry Transform(Geometry geometry, CoordinateTransformationFilter coordinateTransformation)
         {
             if (coordinateTransformation == null)
@@ -465,38 +433,163 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public async Task<MapBrowseItem> DeleteMap(string mapName)
         {
             var fileName = fileSystemAccessor.GetFileName(mapName);
+            await AcquireMapFileLockAsync(fileName).ConfigureAwait(false);
             var map = await this.mapPlainStorageAccessor.GetByIdAsync(fileName);
             if (map == null)
                 throw new Exception("Map was not found.");
 
+            var storageKey = GetStorageKey(map);
+            await AcquireMapFileLockAsync(storageKey).ConfigureAwait(false);
             this.mapPlainStorageAccessor.Remove(map.FileName);
+            this.mapFileDeletionRequests.Store(new MapFileDeletionRequest
+            {
+                Id = storageKey,
+                FileName = map.FileName,
+                StorageKey = storageKey
+            }, storageKey);
+
+            return map;
+        }
+
+        public async Task RemoveMapFileAsync(string fileName)
+        {
+            if (externalFileStorage.IsEnabled())
+            {
+                this.logger.LogWarning("Deleting map: '{map}' from external storage", fileName);
+                await externalFileStorage.RemoveAsync(GetExternalStoragePath(fileName));
+                return;
+            }
+
+            this.logger.LogWarning("Deleting map: '{map}' from {folder}", fileName, this.mapsFolderPath);
+            var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, fileName);
+
+            if (this.fileSystemAccessor.IsFileExists(filePath))
+                fileSystemAccessor.DeleteFile(filePath);
+        }
+
+        public async Task<bool> RemoveMapFileIfNotInUseAsync(string fileName, string storageKey = null)
+        {
+            storageKey ??= fileName;
+            await AcquireMapFileLockAsync(storageKey).ConfigureAwait(false);
+            var inUse = mapPlainStorageAccessor.Query(query => query.Any(map =>
+                map.StorageKey == storageKey || (map.StorageKey == null && map.FileName == storageKey)));
+            if (inUse)
+                return false;
+
+            await RemoveMapFileAsync(storageKey).ConfigureAwait(false);
+            return true;
+        }
+
+        private static string GetStorageKey(MapBrowseItem map) => map.StorageKey ?? map.FileName;
+
+        public async Task CleanupOrphanedMapFilesAsync()
+        {
+            var referencedStorageKeys = mapPlainStorageAccessor
+                .Query(query => query.Select(map => map.StorageKey ?? map.FileName).ToList())
+                .ToHashSet(StringComparer.Ordinal);
 
             if (externalFileStorage.IsEnabled())
             {
-                this.logger.LogWarning("Deleting map: '{map}' from external storage", map.FileName);
-                await this.externalFileStorage.RemoveAsync(GetExternalStoragePath(map.FileName));
+                var files = await externalFileStorage.ListAsync(GetWorkspaceStoragePathPrefix()).ConfigureAwait(false);
+                foreach (var file in files ?? new List<FileObject>())
+                    await CleanupOrphanedMapFileAsync(fileSystemAccessor.GetFileName(file.Path), referencedStorageKeys).ConfigureAwait(false);
+                return;
             }
-            else
+
+            foreach (var path in fileSystemAccessor.GetFilesInDirectory(mapsFolderPath))
+                await CleanupOrphanedMapFileAsync(fileSystemAccessor.GetFileName(path), referencedStorageKeys).ConfigureAwait(false);
+        }
+
+        private async Task CleanupOrphanedMapFileAsync(string storageKey, HashSet<string> referencedStorageKeys)
+        {
+            if (!IsWorkspaceGenerationStorageKey(storageKey) || referencedStorageKeys.Contains(storageKey))
+                return;
+
+            try
             {
-                this.logger.LogWarning("Deleting map: '{map}' from {folder}", map.FileName, this.mapsFolderPath);
-                var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, map.FileName);
-
-                if (this.fileSystemAccessor.IsFileExists(filePath))
-                    fileSystemAccessor.DeleteFile(filePath);
+                await RemoveMapFileIfNotInUseAsync(null, storageKey).ConfigureAwait(false);
             }
+            catch (Exception exception)
+            {
+                logger.LogError(exception, "Failed to clean up unreferenced map file {StorageKey}", storageKey);
+            }
+        }
 
-            return map;
+        private bool IsWorkspaceGenerationStorageKey(string storageKey)
+        {
+            var prefix = GetWorkspaceStorageKeyPrefix();
+            return storageKey != null
+                   && storageKey.StartsWith(prefix, StringComparison.Ordinal)
+                   && Guid.TryParseExact(storageKey[prefix.Length..], "N", out _);
+        }
+
+        private string CreateStorageKey()
+        {
+            var workspaceName = workspaceContextAccessor.CurrentWorkspace()?.Name ?? WorkspaceConstants.SchemaName;
+            var encodedName = Convert.ToBase64String(Encoding.UTF8.GetBytes(workspaceName))
+                .TrimEnd('=').Replace('+', '-').Replace('/', '_');
+            return $"g_{encodedName}_{Guid.NewGuid():N}";
+        }
+
+        private string GetWorkspaceStorageKeyPrefix()
+        {
+            return $"g_{GetWorkspaceNameEncoded()}_";
+        }
+
+        private string GetWorkspaceStoragePathPrefix() => $"maps/{GetWorkspaceNameEncoded()}/";
+
+        private string GetWorkspaceNameEncoded()
+        {
+            var workspaceName = workspaceContextAccessor.CurrentWorkspace()?.Name ?? WorkspaceConstants.SchemaName;
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(workspaceName))
+                .TrimEnd('=').Replace('+', '-').Replace('/', '_');
+        }
+
+        private async Task AcquireMapFileLockAsync(string fileName)
+        {
+            await unitOfWork.Session
+                .CreateSQLQuery("select pg_advisory_xact_lock(:lockClass, hashtext(:fileName))")
+                .SetInt32("lockClass", MapFileLockClass)
+                .SetString("fileName", fileName)
+                .ExecuteUpdateAsync()
+                .ConfigureAwait(false);
         }
 
         public async Task DeleteAllMaps()
         {
             this.logger.LogWarning("Deleting all maps execution started");
             var maps = await this.mapPlainStorageAccessor.Query(m => m.ToListAsync());
-            
+            var pendingDeletions = await this.mapFileDeletionRequests.Query(m => m.ToListAsync());
+            var externalStorageEnabled = externalFileStorage.IsEnabled();
+            var localGenerationKeys = fileSystemAccessor.GetFilesInDirectory(mapsFolderPath)
+                .Select(fileSystemAccessor.GetFileName)
+                .Where(IsWorkspaceGenerationStorageKey)
+                .ToArray();
+            var fileNames = maps.Select(GetStorageKey)
+                .Concat(pendingDeletions.Select(request => request.StorageKey ?? request.FileName))
+                .Concat(externalStorageEnabled ? Array.Empty<string>() : localGenerationKeys)
+                .Distinct()
+                .ToArray();
+
+            foreach (var fileName in fileNames)
+                await RemoveMapFileAsync(fileName);
+
+            if (externalStorageEnabled)
+            {
+                foreach (var fileName in localGenerationKeys)
+                {
+                    var filePath = fileSystemAccessor.CombinePath(mapsFolderPath, fileName);
+                    if (fileSystemAccessor.IsFileExists(filePath))
+                        fileSystemAccessor.DeleteFile(filePath);
+                }
+            }
+
             foreach (var map in maps)
             {
-                await this.DeleteMap(map.FileName);
+                this.mapPlainStorageAccessor.Remove(map.Id);
             }
+
+            this.mapFileDeletionRequests.Remove(pendingDeletions);
         }
 
         public MapBrowseItem DeleteMapUserLink(string mapName, string user)
@@ -622,7 +715,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var interviewerNames = this.userStorage.Users
                 .Where(x => (supervisorId == x.WorkspaceProfile.SupervisorId || supervisorId == x.Id) && x.IsArchived == false)
                 .Select(x => x.UserName)
-                .ToArray();
+                .ToList();
 
             return userMapsStorage.Query(q =>
             {
@@ -701,7 +794,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     var userNames = this.userStorage.Users
                         .Where(x => (supervisorId == x.WorkspaceProfile.SupervisorId || supervisorId == x.Id) && x.IsArchived == false)
                         .Select(x => x.UserName)
-                        .ToArray();
+                        .ToList();
 
                     query = query.Where(x => x.Users.Any(u => userNames.Contains(u.UserName)));
                 }
@@ -735,10 +828,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (externalFileStorage.IsEnabled())
             {
-                return await this.externalFileStorage.GetBinaryAsync(GetExternalStoragePath(map.FileName));
+                return await this.externalFileStorage.GetBinaryAsync(GetExternalStoragePath(GetStorageKey(map)));
             }
 
-            var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, map.FileName);
+            var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, GetStorageKey(map));
             if (!this.fileSystemAccessor.IsFileExists(filePath))
                 return null;
 

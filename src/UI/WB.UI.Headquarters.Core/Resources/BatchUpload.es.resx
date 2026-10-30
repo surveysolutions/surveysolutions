@@ -589,6 +589,7 @@
 &lt;b&gt;_password&lt;/b&gt; - contraseña para iniciar una entrevista (solo para entrevistas web);&lt;br/&gt;
 &lt;b&gt;_webmode&lt;/b&gt; - modo de asignación (1 para CAWI, 0 o en blanco para CAPI);&lt;br/&gt;
 &lt;b&gt;_record_audio&lt;/b&gt; - la grabación de audio está habilitada para entrevistas (1 - habilitado, 0 - deshabilitado, en blanco - obtenga este valor del cuestionario);&lt;br/&gt;
+&lt;b&gt;_aascope&lt;/b&gt; - nombres de variables (separados por comas) de secciones, grupos o rosters para grabar audio cuando _record_audio está desactivado (alcance selectivo de auditoría de audio);&lt;br/&gt;
 &lt;b&gt;_comment&lt;/b&gt; - comentarios para la asignación;&lt;br/&gt;
 &lt;b&gt;_target_area&lt;/b&gt; - área objetivo para la asignación</value>
         <comment>No traduzca _responsible, _quantity, _email, _webmode, _record_audio. Mantenga los nombres en inglés</comment>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClientVersionIsNotSupported" xml:space="preserve">
+        <value>Gagal membuka kuesioner. Versi Anda adalah {0}. Harap perbarui.</value>
+    </data>
+    <data name="TemplateNotFound" xml:space="preserve">
+        <value>Kuesioner dengan id={0} tidak dapat ditemukan. Silakan periksa daftar kuesioner yang tersedia, atau hubungi rekan yang membagikan link kuesioner kepada Anda.</value>
+    </data>
+    <data name="Questionnaire_verification_failed" xml:space="preserve">
+        <value>Kuesioner Anda memiliki kesalahan. Harap verifikasi kuesioner di Designer.</value>
+    </data>
+    <data name="User_Not_authorized" xml:space="preserve">
+        <value>Pengguna tidak berwenang. Silakan periksa login dan kata sandi Anda.</value>
+    </data>
+    <data name="OldClientPleaseUpdate" xml:space="preserve">
+        <value>Anda memiliki versi aplikasi Markas Besar yang sudah usang. Silakan hubungi administrator server Anda untuk meminta pembaruan.</value>
+    </data>
+    <data name="VersionParameterIsIncorrect" xml:space="preserve">
+        <value>Ada masalah dengan versi kuesioner Anda. Silakan hubungi support@mysurvey.solutions.</value>
+    </data>
+    <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+        <value>Gagal mengimpor kuesioner. Kuesioner Anda "{0}" memiliki versi {1}. Aplikasi kantor pusat hanya mendukung hingga versi {2}.</value>
+    </data>
+    <data name="UserLockedOut" xml:space="preserve">
+        <value>Akun Anda terkunci. Silakan hubungi support@mysurvey.solutions untuk membukanya.</value>
+    </data>
+    <data name="ApplicationUpdateRequired" xml:space="preserve">
+        <value>Pembaruan aplikasi diperlukan.</value>
+    </data>
+    <data name="ServerError" xml:space="preserve">
+        <value>Terjadi kesalahan server. Silakan hubungi support@mysurvey.solutions.</value>
+    </data>
+    <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+        <value>Nama pengguna atau kata sandi yang diberikan salah. Silakan masuk kembali.</value>
+    </data>
+    <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+        <value>Kata verifikasi salah. Silakan coba lagi.</value>
+    </data>
+    <data name="EmptyUserNameOrPassword" xml:space="preserve">
+        <value>Nama pengguna atau kata sandi kosong.</value>
+    </data>
+    <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+        <value>Login atau kata sandi salah. Silakan coba lagi.</value>
+    </data>
+    <data name="AccountBlocked" xml:space="preserve">
+        <value>Akun Anda diblokir. Hubungi administrator untuk membuka blokir akun Anda.</value>
+    </data>
+    <data name="PasswordResetNotAllowed" xml:space="preserve">
+        <value>Penyetelan ulang kata sandi tidak diperbolehkan</value>
+    </data>
+    <data name="ConfirmAccount" xml:space="preserve">
+        <value>Mohon konfirmasi akun Anda terlebih dahulu. Kami telah mengirimkan link konfirmasi ke {0}. Tidak mengerti?</value>
+    </data>
+    <data name="RequestAnotherEmail" xml:space="preserve">
+        <value>Minta yang lain.</value>
+    </data>
+    <data name="Your_email_is_verified" xml:space="preserve">
+        <value>Desainer berhasil memverifikasi email Anda.</value>
+    </data>
+    <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+        <value>Terjadi kesalahan yang tidak terduga. Silakan coba mengakses Designer lagi nanti.</value>
+    </data>
+    <data name="User_does_not_exist" xml:space="preserve">
+        <value>Pengguna {0} tidak ada. Silakan masukkan nama pengguna atau email yang valid.</value>
+    </data>
+    <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+        <value>Kombinasi kata sandi saat ini/baru tidak valid, silakan masukkan kembali.</value>
+    </data>
+    <data name="User_already_confirmed_in_system" xml:space="preserve">
+        <value>Pengguna {0} sudah dikonfirmasi di sistem. Silakan masukkan login dan kata sandi Anda untuk mulai menggunakan Designer.</value>
+    </data>
+    <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+        <value>Pengguna {0} tidak ada. Silakan masukkan nama pengguna atau email yang valid.</value>
+    </data>
+    <data name="Your_password_successfully_changed" xml:space="preserve">
+        <value>Anda telah berhasil mengubah kata sandi Anda.</value>
+    </data>
+    <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+        <value>Kata sandi dan kata sandi konfirmasi tidak cocok.</value>
+    </data>
+    <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+        <value>Kata sandi minimal harus berisi {2} karakter.</value>
+    </data>
+    <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+        <value>Kata sandi harus mengandung setidaknya satu angka, satu karakter huruf besar dan satu karakter huruf kecil.</value>
+    </data>
+    <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
+        <value>Nama login harus terdiri dari 3 hingga 15 karakter, dan hanya boleh berisi huruf, angka, dan simbol garis bawah. Huruf harus dari alfabet Latin (Inggris) saja: 'A'..'Z' atau 'a'..'z'. Huruf lain (Sirilik, Arab, dll.) tidak valid untuk digunakan dalam nama login.</value>
+    </data>
+    <data name="Maintenance" xml:space="preserve">
+        <value>Server sedang dalam mode pemeliharaan sekarang. Maaf atas ketidaknyamanan ini. Silakan coba lagi nanti.</value>
+    </data>
+    <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+        <value>Kuesioner Anda "{0}" berisi fungsi baru: {1}. Fitur baru tidak didukung oleh instalasi Anda. Harap perbarui.</value>
+    </data>
+    <data name="UserNotApproved" xml:space="preserve">
+        <value>Akun Anda tidak disetujui. Mohon konfirmasi akun Anda terlebih dahulu. Kami telah mengirimkan link konfirmasi ke {0}.</value>
+    </data>
+    <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
+        <value>Sebuah pesan telah dikirim ke akun email Anda. Silakan ikuti instruksi di email untuk memulihkan kata sandi.</value>
+    </data>
+    <data name="EmptyTranslationFile" xml:space="preserve">
+        <value>File terjemahan yang dipilih kosong</value>
+    </data>
+    <data name="NoAccessToQuestionnaire" xml:space="preserve">
+        <value>Pengguna tidak memiliki izin untuk mengakses kuesioner yang diminta.</value>
+    </data>
+    <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+        <value>Anda tidak berwenang untuk melakukan tindakan ini. Silakan hubungi dukungan. IP:{0}</value>
+    </data>
+    <data name="Email_required" xml:space="preserve">
+        <value>Email diperlukan</value>
+    </data>
+    <data name="EmailOrLogin_required" xml:space="preserve">
+        <value>Login atau Email diperlukan</value>
+    </data>
+    <data name="InvalidEmailAddress" xml:space="preserve">
+        <value>Bukan alamat email yang valid</value>
+    </data>
+    <data name="OldPassword_required" xml:space="preserve">
+        <value>Kata sandi saat ini diperlukan</value>
+    </data>
+    <data name="Password_required" xml:space="preserve">
+        <value>Kata sandi diperlukan</value>
+    </data>
+    <data name="UserName_required" xml:space="preserve">
+        <value>Diperlukan login</value>
+    </data>
+    <data name="QuestionnaireTitle_required" xml:space="preserve">
+        <value>Judul kuesioner wajib diisi</value>
+    </data>
+    <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+        <value>Id kuesioner tidak diberikan untuk memvalidasi izin</value>
+    </data>
+    <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+        <value>Tidak dapat memperbarui informasi pengguna. Silakan coba lagi nanti.</value>
+    </data>
+    <data name="FullNameMaxLengthError" xml:space="preserve">
+        <value>Nama lengkap tidak boleh berisi lebih dari karakter {1}</value>
+    </data>
+    <data name="QuestionnaireVariable_required" xml:space="preserve">
+        <value>Variabel kuesioner wajib diisi</value>
+    </data>
+    <data name="QuestionnaireVariable_rules" xml:space="preserve">
+        <value>Variabel kuisioner digunakan sebagai awalan dalam membentuk nama file ekspor. Nama variabel dan ID roster hanya boleh berisi karakter berikut: a-z, A-Z, _, atau 0-9. Karakter pertama tidak boleh 0-9 atau _ dan karakter terakhir tidak boleh _.</value>
+    </data>
+    <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+        <value>Nama variabel dan ID daftar nama dapat terdiri dari 1 hingga {1} karakter</value>
+    </data>
+    <data name="QuestionnaireTitle_rules" xml:space="preserve">
+        <value>Hanya karakter berikut yang boleh digunakan dalam judul kuesioner: A..Z a..z 0..9 ( ) \ / _ - dan spasi, dan tidak boleh memiliki dua atau lebih karakter garis bawah yang berurutan.</value>
+    </data>
+    <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+        <value>Judul kuesioner tidak boleh lebih dari simbol {1}.</value>
+    </data>
+    <data name="InvalidLoginAttempt" xml:space="preserve">
+        <value>Upaya login tidak valid</value>
+    </data>
+</root>

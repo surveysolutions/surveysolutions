@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using SkiaSharp;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 {
@@ -26,25 +28,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
-            using (var transaction = dbContext.Database.BeginTransaction())
+            var questionnaireAttachments = this.dbContext.AttachmentMetas.Where(meta => meta.QuestionnaireId == questionnaireId).ToList();
+            foreach (var questionnaireAttachment in questionnaireAttachments)
             {
-                var questionnaireAttachments = this.dbContext.AttachmentMetas.Where(meta => meta.QuestionnaireId == questionnaireId).ToList();
-                foreach (var questionnaireAttachment in questionnaireAttachments)
+                this.dbContext.AttachmentMetas.Remove(questionnaireAttachment);
+                this.dbContext.SaveChanges();
+                var countOfAttachmentContentReferences = this.dbContext.AttachmentMetas.Count(meta => meta.ContentId == questionnaireAttachment.ContentId);
+                if (countOfAttachmentContentReferences == 0)
                 {
-                    this.dbContext.AttachmentMetas.Remove(questionnaireAttachment);
-                    this.dbContext.SaveChanges();
-                    var countOfAttachmentContentReferences = this.dbContext.AttachmentMetas.Count(meta => meta.ContentId == questionnaireAttachment.ContentId);
-                    if (countOfAttachmentContentReferences == 0)
+                    var content = this.dbContext.AttachmentContents.Find(questionnaireAttachment.ContentId);
+                    if (content != null)
                     {
-                        var content = this.dbContext.AttachmentContents.Find(questionnaireAttachment.ContentId);
-                        if (content != null)
-                        {
-                            this.dbContext.AttachmentContents.Remove(content);
-                        }
+                        this.dbContext.AttachmentContents.Remove(content);
                     }
-                    this.dbContext.SaveChanges();
                 }
-                transaction.Commit();
+                this.dbContext.SaveChanges();
             }
         }
 
@@ -206,27 +204,37 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         private static AttachmentDetails GetImageAttachmentDetails(byte[] binaryContent)
         {
-            AttachmentDetails details;
+            SKImageInfo info;
             try
             {
-                using var image = SixLabors.ImageSharp.Image.Load(binaryContent);
-                details = new AttachmentDetails
-                {
-                    Height = image.Height,
-                    Width = image.Width
-                };
+                info = SkiaImageDecoder.ReadInfo(binaryContent, out _);
             }
             catch (Exception e)
             {
                 throw new FormatException(ExceptionMessages.Attachments_uploaded_file_is_not_image, e);
             }
-            
-            if (details.Height > maxImageDimension || details.Width > maxImageDimension)
+
+            // size is declared in the header, it is checked before any memory is allocated for the decoded image
+            if (info.Height > maxImageDimension || info.Width > maxImageDimension)
             {
                 throw new FormatException(ExceptionMessages.Attachments_uploaded_file_image_is_too_big);
             }
 
-            return details;
+            try
+            {
+                // decoding makes sure that the content is not corrupted
+                using var bitmap = SkiaImageDecoder.Decode(binaryContent, out _, (long)maxImageDimension * maxImageDimension);
+            }
+            catch (Exception e)
+            {
+                throw new FormatException(ExceptionMessages.Attachments_uploaded_file_is_not_image, e);
+            }
+
+            return new AttachmentDetails
+            {
+                Height = info.Height,
+                Width = info.Width
+            };
         }
     }
 }

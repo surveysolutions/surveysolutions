@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Action" xml:space="preserve">
+        <value>Tindakan</value>
+    </data>
+    <data name="BackToList" xml:space="preserve">
+        <value>Kembali ke Daftar</value>
+    </data>
+    <data name="Backup" xml:space="preserve">
+        <value>Cadangan</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Membatalkan</value>
+    </data>
+    <data name="Assign" xml:space="preserve">
+        <value>Menetapkan</value>
+    </data>
+    <data name="Assigning" xml:space="preserve">
+        <value>Menugaskan</value>
+    </data>
+    <data name="CancelSearch" xml:space="preserve">
+        <value>Batalkan pencarian</value>
+    </data>
+    <data name="Close" xml:space="preserve">
+        <value>Menutup</value>
+    </data>
+    <data name="Confirmation" xml:space="preserve">
+        <value>konfirmasi</value>
+    </data>
+    <data name="Copy" xml:space="preserve">
+        <value>Menyalin</value>
+    </data>
+    <data name="CopyQuestionnaire" xml:space="preserve">
+        <value>Salin Kuesioner</value>
+    </data>
+    <data name="Create" xml:space="preserve">
+        <value>Membuat</value>
+    </data>
+    <data name="CreatedBy" xml:space="preserve">
+        <value>Dibuat Oleh</value>
+    </data>
+    <data name="CreatedDate" xml:space="preserve">
+        <value>Dibuat pada</value>
+    </data>
+    <data name="CreateNew" xml:space="preserve">
+        <value>Buat Baru</value>
+    </data>
+    <data name="NewFolder" xml:space="preserve">
+        <value>Folder Baru</value>
+    </data>
+    <data name="CreateNewQuestionnaire" xml:space="preserve">
+        <value>Buat Kuesioner Baru</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>Menghapus</value>
+    </data>
+    <data name="DeleteFolderConfirmation" xml:space="preserve">
+        <value>Apakah Anda yakin ingin menghapus folder {0}?</value>
+    </data>
+    <data name="CreateSubFolder" xml:space="preserve">
+        <value>Buat SubFolder</value>
+    </data>
+    <data name="Rename" xml:space="preserve">
+        <value>Ganti nama</value>
+    </data>
+    <data name="AssignFolder" xml:space="preserve">
+        <value>Tetapkan Folder</value>
+    </data>
+    <data name="DeleteConfirmationText" xml:space="preserve">
+        <value>Apakah Anda benar-benar ingin menghapus kuesioner "{0}"?</value>
+    </data>
+    <data name="AssignFolderText" xml:space="preserve">
+        <value>Silakan tentukan folder untuk kuesioner "{0}".</value>
+    </data>
+    <data name="Deleting" xml:space="preserve">
+        <value>Menghapus</value>
+    </data>
+    <data name="Designer" xml:space="preserve">
+        <value>Perancang</value>
+    </data>
+    <data name="DownloadPdf" xml:space="preserve">
+        <value>Unduh PDF</value>
+    </data>
+    <data name="EmptyList" xml:space="preserve">
+        <value>Daftar ini tidak berisi catatan apa pun</value>
+    </data>
+    <data name="Location" xml:space="preserve">
+        <value>Lokasi:</value>
+    </data>
+    <data name="Error" xml:space="preserve">
+        <value>Kesalahan</value>
+    </data>
+    <data name="ErrorDescription" xml:space="preserve">
+        <value>Terjadi kesalahan saat memproses permintaan Anda</value>
+    </data>
+    <data name="ExportAsPDF" xml:space="preserve">
+        <value>Ekspor sebagai PDF</value>
+    </data>
+    <data name="ExportAsHtml" xml:space="preserve">
+        <value>Ekspor sebagai Html</value>
+    </data>
+    <data name="Forbidden" xml:space="preserve">
+        <value>Anda tidak memiliki izin untuk mengedit kuesioner ini</value>
+    </data>
+    <data name="ForbiddenDelete" xml:space="preserve">
+        <value>Anda tidak memiliki izin untuk menghapus kuesioner ini.</value>
+    </data>
+    <data name="ForbiddenRevert" xml:space="preserve">
+        <value>Anda tidak memiliki izin untuk memulihkan pengoperasian kuesioner ini.</value>
+    </data>
+    <data name="GeneratingPdf" xml:space="preserve">
+        <value>Menghasilkan pdf untuk "{0}"</value>
+    </data>
+    <data name="CreatingHtml" xml:space="preserve">
+        <value>Membuat Html untuk "{0}"</value>
+    </data>
+    <data name="GeneratePdf" xml:space="preserve">
+        <value>Hasilkan pdf</value>
+    </data>
+    <data name="GetHtml" xml:space="preserve">
+        <value>Ekspor HTML</value>
+    </data>
+    <data name="ChooseLanguageTitle" xml:space="preserve">
+        <value>Silakan pilih terjemahan</value>
+    </data>
+    <data name="ChooseLanguage" xml:space="preserve">
+        <value>Pilih terjemahan</value>
+    </data>
+    <data name="Initializing" xml:space="preserve">
+        <value>Inisialisasi</value>
+    </data>
+    <data name="LastModified" xml:space="preserve">
+        <value>Dimodifikasi pada</value>
+    </data>
+    <data name="ManageUsers" xml:space="preserve">
+        <value>Kelola pengguna</value>
+    </data>
+    <data name="MyQuestionnaires" xml:space="preserve">
+        <value>Kuesioner Saya</value>
+    </data>
+    <data name="ControlPanel" xml:space="preserve">
+        <value>Panel kontrol</value>
+    </data>
+    <data name="Hello" xml:space="preserve">
+        <value>Hai, {0}</value>
+    </data>
+    <data name="Open" xml:space="preserve">
+        <value>Membuka</value>
+    </data>
+    <data name="PublicQuestionnaires" xml:space="preserve">
+        <value>Kuesioner Publik</value>
+    </data>
+    <data name="QuestionnaireTreeFolders" xml:space="preserve">
+        <value>Folder</value>
+    </data>
+    <data name="FoldersManagement" xml:space="preserve">
+        <value>Manajemen Folder</value>
+    </data>
+    <data name="FoldersDescription" xml:space="preserve">
+        <value>Anda dapat mengkonfigurasi struktur folder untuk halaman kuesioner publik. Untuk ini klik pada folder dengan tombol kanan dan kemudian gunakan salah satu operasi:
+&lt;br/&gt;- "Buat SubFolder" digunakan untuk membuat subfolder 
+&lt;br/&gt;- "Ganti nama" untuk mengganti nama folder
+&lt;br/&gt;- "Hapus" untuk menghapus folder dengan subfolder</value>
+    </data>
+    <data name="QuestionnaireTitle" xml:space="preserve">
+        <value>Judul kuesioner</value>
+    </data>
+    <data name="RestoreQuestionnaire" xml:space="preserve">
+        <value>Kembalikan kuesioner</value>
+    </data>
+    <data name="RestoreQuestionnaireDocument" xml:space="preserve">
+        <value>Kembalikan dokumen kuesioner (lama)</value>
+    </data>
+    <data name="RetryExportPDF" xml:space="preserve">
+        <value>Coba lagi ekspor sebagai PDF</value>
+    </data>
+    <data name="SelectTabFile" xml:space="preserve">
+        <value>Silakan pilih file nilai yang dipisahkan tab untuk diunggah</value>
+    </data>
+    <data name="SuccessDeleteMessage" xml:space="preserve">
+        <value>Kuesioner "{0}" berhasil dihapus</value>
+    </data>
+    <data name="TabFilesOnly" xml:space="preserve">
+        <value>Hanya file nilai yang dipisahkan tab yang diterima</value>
+    </data>
+    <data name="ExcelOrTabFilesOnly" xml:space="preserve">
+        <value>Hanya file Excel atau nilai yang dipisahkan tab yang diterima</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>Judul</value>
+    </data>
+    <data name="You" xml:space="preserve">
+        <value>Anda</value>
+    </data>
+    <data name="Untitled" xml:space="preserve">
+        <value>Tanpa judul</value>
+    </data>
+    <data name="SharedQuestionnaires" xml:space="preserve">
+        <value>Kuesioner dibagikan kepada saya</value>
+    </data>
+    <data name="NotSupportedBrowserUsed" xml:space="preserve">
+        <value>Peramban internet tidak didukung. Silakan gunakan browser lain.</value>
+    </data>
+    <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
+        <value>Anda menggunakan browser Internet Explorer yang tidak didukung. Beberapa fitur mungkin tidak berfungsi dengan baik.</value>
+    </data>
+    <data name="Classifications" xml:space="preserve">
+        <value>Klasifikasi</value>
+    </data>
+    <data name="SaveAs" xml:space="preserve">
+        <value>Simpan sebagai</value>
+    </data>
+    <data name="CloneDeletedWarning" xml:space="preserve">
+        <value>Anda sedang membuat salinan kuesioner yang dihapus. Beberapa bagian mungkin hilang.</value>
+    </data>
+    <data name="IncludeScenarios" xml:space="preserve">
+        <value>Sertakan skenario</value>
+    </data>
+</root>
