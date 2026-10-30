@@ -13,6 +13,13 @@ namespace WB.Enumerator.Native.WebInterview
     public class WebInterview : Hub
     {
         private const string SectionId = "sectionId";
+        private static readonly object WorkspaceContextKey = new object();
+        private readonly IServiceProvider serviceProvider;
+
+        public WebInterview(IServiceProvider serviceProvider)
+        {
+            this.serviceProvider = serviceProvider;
+        }
         
         private string CallerInterviewId
         {
@@ -35,13 +42,24 @@ namespace WB.Enumerator.Native.WebInterview
         public override async Task OnConnectedAsync()
         {
             var ctx = this.Context.GetHttpContext();
-            var hubPipelineModules = ctx.RequestServices.GetServices<IPipelineModule>();
+            // Hub instances are transient; retain the workspace for the disconnect callback.
+            var workspace = ctx.RequestServices
+                .GetService<IWorkspaceContextAccessor>()?.CurrentWorkspace();
+            this.Context.Items[WorkspaceContextKey] = workspace;
 
             await RegisterClient();
 
-            foreach (var pipelineModule in hubPipelineModules)
+            // Do NOT resolve services from ctx.RequestServices here: for WebSocket/SSE/long-polling transports
+            // that scope lives as long as the client connection (hours). Any DB access through it opens an
+            // NHibernate session + transaction that holds a DB connection until the client disconnects.
+            using (var scope = this.serviceProvider.CreateWorkspaceScope(workspace))
             {
-                await pipelineModule.OnConnected(this);
+                var hubPipelineModules = scope.ServiceProvider.GetServices<IPipelineModule>();
+
+                foreach (var pipelineModule in hubPipelineModules)
+                {
+                    await pipelineModule.OnConnected(this);
+                }
             }
 
             await base.OnConnectedAsync();
@@ -49,8 +67,10 @@ namespace WB.Enumerator.Native.WebInterview
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            var ctx = this.Context.GetHttpContext();
-            var hubPipelineModules = ctx.RequestServices.GetServices<IPipelineModule>();
+            // The transport's HTTP request scope may already have been disposed.
+            this.Context.Items.TryGetValue(WorkspaceContextKey, out var workspace);
+            using var scope = this.serviceProvider.CreateWorkspaceScope(workspace as WorkspaceContext);
+            var hubPipelineModules = scope.ServiceProvider.GetServices<IPipelineModule>();
 
             foreach (var pipelineModule in hubPipelineModules)
             {

@@ -25,5 +25,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 
             return availableVersions.Max() + 1;
         }
+
+        public long? GetPreviousVersion(Guid id, long version)
+        {
+            var availableVersions =
+                this.questionnaireBrowseItemStorage.Query(
+                    _ => _.Where(q => q.QuestionnaireId == id && q.Version < version && !q.IsDeleted)
+                        .Select(q => q.Version)
+                        .ToList());
+
+            return availableVersions.Count == 0 ? null : availableVersions.Max();
+        }
     }
 }

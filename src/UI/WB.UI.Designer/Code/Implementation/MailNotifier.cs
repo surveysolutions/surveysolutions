@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Routing;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Services;
@@ -23,16 +24,19 @@ namespace WB.UI.Designer.Code.Implementation
         private readonly IViewRenderService renderingService;
         private readonly IHttpContextAccessor contextAccessor;
         private readonly IUrlHelperFactory urlHelperFactory;
+        private readonly IPostCommitActions postCommitActions;
 
         public MailNotifier(IEmailSender mailer,
             IViewRenderService renderingService,
             IHttpContextAccessor contextAccessor,
-            IUrlHelperFactory urlHelperFactory)
+            IUrlHelperFactory urlHelperFactory,
+            IPostCommitActions postCommitActions)
         {
             this.mailer = mailer;
             this.renderingService = renderingService;
             this.contextAccessor = contextAccessor;
             this.urlHelperFactory = urlHelperFactory;
+            this.postCommitActions = postCommitActions;
         }
 
         public void NotifyTargetPersonAboutShareChange(ShareChangeType shareChangeType,
@@ -66,13 +70,12 @@ namespace WB.UI.Designer.Code.Implementation
                 QuestionnaireLink = urlHelper.Action("Details", "Q", new { id = questionnaireId }, "https")
             };
 
-            var message = this.GetShareChangeNotificationEmail(sharingNotificationModel);
-
-            message.ContinueWith(s =>
+            this.postCommitActions.Enqueue(async () =>
             {
-                this.mailer.SendEmailAsync(email,
+                var message = await this.GetShareChangeNotificationEmail(sharingNotificationModel);
+                await this.mailer.SendEmailAsync(email,
                     NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
-                    message.Result);
+                    message);
             });
         }
 
@@ -96,13 +99,12 @@ namespace WB.UI.Designer.Code.Implementation
                 SharedWithPersonEmail = String.IsNullOrWhiteSpace(sharedWithPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : sharedWithPersonEmail,
                 QuestionnaireLink = urlHelper.Action("Details", "Q", new { id = questionnaireId }, "https")
             };
-            var message = this.GetOwnerShareChangeNotificationEmail(sharingNotificationModel);
-
-            message.ContinueWith((state) =>
+            this.postCommitActions.Enqueue(async () =>
             {
-                this.mailer.SendEmailAsync(email,
+                var message = await this.GetOwnerShareChangeNotificationEmail(sharingNotificationModel);
+                await this.mailer.SendEmailAsync(email,
                     NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
-                    message.Result);
+                    message);
             });
         }
 

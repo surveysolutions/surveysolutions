@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using SkiaSharp;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -15,6 +16,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 
             Assert.Throws<FormatException>(() =>
                 attachmentService.SaveContent(attachmentContentId, contentType, fileContent));
+        }
+
+        [NUnit.Framework.Test]
+        public void when_saving_incomplete_image_should_throw_format_exception()
+        {
+            using var bitmap = new SKBitmap(200, 200);
+            bitmap.Erase(SKColors.Red);
+            using var image = SKImage.FromBitmap(bitmap);
+            using var data = image.Encode(SKEncodedImageFormat.Jpeg, 90);
+
+            attachmentService = Create.AttachmentService();
+
+            Assert.Throws<FormatException>(() =>
+                attachmentService.SaveContent(attachmentContentId, "image/jpeg", data.ToArray()[..^2]));
         }
 
         private static AttachmentService attachmentService;
