@@ -1,12 +1,13 @@
-import Layout from './Layout'
-import Upload from './Upload'
-import UploadVerification from './UploadVerification'
-import UploadProgress from './UploadProgress'
-import UploadComplete from './UploadComplete'
 import upload from './store'
 import axios from 'axios'
 
 import config from '~/shared/config'
+
+const Layout = () => import('./Layout')
+const Upload = () => import('./Upload')
+const UploadVerification = () => import('./UploadVerification')
+const UploadProgress = () => import('./UploadProgress')
+const UploadComplete = () => import('./UploadComplete')
 
 export default class UploadComponent {
     constructor(rootStore) {

@@ -271,4 +271,7 @@
   <data name="CloneDeletedWarning" xml:space="preserve">
       <value>أنت تقوم بإنشاء نسخة من استبيان محذوف. قد يتم فقدان بعض الأجزاء.</value>
   </data>
+  <data name="IncludeScenarios" xml:space="preserve">
+      <value>تضمين السيناريوهات</value>
+  </data>
 </root>

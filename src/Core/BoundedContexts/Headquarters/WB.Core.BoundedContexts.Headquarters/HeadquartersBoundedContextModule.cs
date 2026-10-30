@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Headquarters.Interview.Postprocessors;
 using WB.Core.BoundedContexts.Headquarters.Interview.Preprocessors;
 using WB.Core.BoundedContexts.Headquarters.Interview.Validators;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -309,6 +310,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
             registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
             registry.Bind<ICompletedEmailsQueue , CompletedEmailsQueue >();
+            registry.Bind<IInterviewCompletedEmailBuilder, InterviewCompletedEmailBuilder>();
 
             registry.Bind<ICalendarEventService, CalendarEventService>();
             
@@ -386,6 +388,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<DeleteWorkspaceSchemaJob>();
             registry.Bind<ExportDataRetentionJob>();
             registry.Bind<ExportDataRetentionTask>();
+            registry.Bind<MapFileCleanupJob>();
+            registry.Bind<MapFileCleanupTask>();
             
             registry.BindScheduledJob<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>();
             registry.BindScheduledJob<DeleteQuestionnaireJob, DeleteQuestionnaireRequest>();
@@ -432,7 +436,10 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<UpdateAssignmentQuantity>(aggregate => aggregate.UpdateAssignmentQuantity)
                 .Handles<UpdateAssignmentTargetArea>(aggregate => aggregate.UpdateAssignmentTargetArea)
                 .Handles<UpgradeAssignmentCommand>(aggregate => aggregate.UpgradeAssignment)
-                .Handles<UpdateAssignmentWebMode>(aggregate => aggregate.UpdateAssignmentWebMode);
+                .Handles<UpdateAssignmentWebMode>(aggregate => aggregate.UpdateAssignmentWebMode)
+                .Handles<CompleteAssignment>(aggregate => aggregate.CompleteAssignment)
+                .Handles<CloseAssignment>(aggregate => aggregate.CloseAssignment)
+                .Handles<ReopenAssignment>(aggregate => aggregate.ReopenAssignment);
 
             CommandRegistry.Configure<AssignmentAggregateRoot, AssignmentCommand>(configuration => configuration
                 .ValidatedBy<QuestionnaireStateForAssignmentValidator>()
@@ -447,7 +454,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .StatelessHandles<HardDeleteInterview>(command => command.InterviewId, (command, aggregate) => aggregate.HardDelete(command.UserId, command.OriginDate))
 
                 .Handles<AnswerDateTimeQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerDateTimeQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Answer))
-                .Handles<AnswerGeoLocationQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerGeoLocationQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Latitude, command.Longitude, command.Accuracy, command.Altitude, command.Timestamp))
+                .Handles<AnswerGeoLocationQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerGeoLocationQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Latitude, command.Longitude, command.Accuracy, command.Altitude, command.Timestamp, command.GpsProvider, command.IsFromMockProvider))
                 .Handles<AnswerMultipleOptionsLinkedQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsLinkedQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.SelectedRosterVectors))
                 .Handles<AnswerMultipleOptionsQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.SelectedValues))
                 .Handles<AnswerYesNoQuestion>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerYesNoQuestion(command))

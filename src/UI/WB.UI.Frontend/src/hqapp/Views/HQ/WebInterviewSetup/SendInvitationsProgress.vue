@@ -1,5 +1,7 @@
 <template>
-    <HqLayout :hasRow="false" :fixedWidth="true" :title="$t('WebInterviewSetup.WebInterviewSetup_Title')">
+    <HqLayout :hasRow="false"
+        :fixedWidth="true"
+        :title="$t('WebInterviewSetup.WebInterviewSetup_Title')">
         <template v-slot:headers>
             <div>
                 <ol class="breadcrumb">
@@ -27,44 +29,60 @@
         <div class="row">
             <div class="col-sm-7 col-xs-12">
                 <div class="import-progress">
-                    <p v-if="isQueued" class="default-text">{{ $t('DataExport.Preparing') }}</p>
+                    <p v-if="isQueued"
+                        class="default-text">{{ $t('DataExport.Preparing') }}</p>
                     <p v-if="isInProgress">{{ $t('WebInterviewSettings.Sending') }}</p>
                     <p v-if="isDone">{{ $t('BatchUpload.Finished') }}</p>
-                    <p v-if="isFailed" class="error-text">{{ $t('WebInterviewSettings.SendingFailed') }} </p>
-                    <p v-if="isCanceled" class="error-text">{{ $t('WebInterviewSettings.ProcessCancelled') }}</p>
+                    <p v-if="isFailed"
+                        class="error-text">{{ $t('WebInterviewSettings.SendingFailed') }} </p>
+                    <p v-if="isCanceled"
+                        class="error-text">{{ $t('WebInterviewSettings.ProcessCancelled') }}</p>
                     <p v-if="isInProgress || isQueued">{{ $t('WebInterviewSettings.TotalSent', {
                         totalCount: totalCount
                     })
-                        }}
+                    }}
                     </p>
-                    <p v-if="processedCount == 0" class="default-text">{{ $t('WebInterviewSettings.NothingWasSent') }}
+                    <p v-if="processedCount == 0"
+                        class="default-text">{{ $t('WebInterviewSettings.NothingWasSent') }}
                     </p>
-                    <p v-else class="success-text">
+                    <p v-else
+                        class="success-text">
                         {{ $t('WebInterviewSettings.TotalProcessed', { processedCount: processedCount }) }}
                     </p>
-                    <p v-if="withErrorsCount == 0" class="default-text">
+                    <p v-if="withErrorsCount == 0"
+                        class="default-text">
                         {{ $t('WebInterviewSettings.NoErrors') }}
                     </p>
-                    <p v-else class="error-text">
+                    <p v-else
+                        class="error-text">
                         {{ $t('WebInterviewSettings.TotalWithErrors', { withErrorsCount: withErrorsCount }) }}
                     </p>
                     <p v-if="isStopped && withErrorsCount > 0">
-                        <a :href="exportErrorsLink" target="_blank">{{ $t('WebInterviewSettings.DownloadErrors') }}</a>
+                        <a :href="exportErrorsLink"
+                            target="_blank">{{ $t('WebInterviewSettings.DownloadErrors') }}</a>
                     </p>
                 </div>
-                <div class="cancelable-progress" v-if="isInProgress">
+                <div class="cancelable-progress"
+                    v-if="isInProgress">
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                            aria-valuemax="100" v-bind:style="{ width: overallProgressPercent + '%' }">
+                        <div class="progress-bar"
+                            role="progressbar"
+                            aria-valuenow="60"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            v-bind:style="{ width: overallProgressPercent + '%' }">
                             <span class="sr-only">{{ overallProgressPercent }}%</span>
                         </div>
                     </div>
-                    <button class="btn  btn-link" type="button" @click="cancel">
+                    <button class="btn  btn-link"
+                        type="button"
+                        @click="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
                 <div class="action-buttons">
-                    <a :href="$config.model.api.surveySetupUrl" class="back-link">
+                    <a :href="$config.model.api.surveySetupUrl"
+                        class="back-link">
                         {{ $t('WebInterviewSetup.BackToQuestionnaires') }}
                     </a>
                 </div>

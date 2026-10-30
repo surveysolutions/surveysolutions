@@ -157,7 +157,7 @@
     <value>Statut: {{ name }}</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire: {{ name }}</value>
+    <value>Questionnaire : {{ name }}</value>
   </data>
   <data name="Duration" xml:space="preserve">
     <value>Durée</value>

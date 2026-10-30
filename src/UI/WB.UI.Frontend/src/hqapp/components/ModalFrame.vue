@@ -1,11 +1,12 @@
 <template>
     <teleport to="body">
-        <div v-if="isOpen" class="modal" :class="class" :id="id" ref="modal" tabindex="-1" role="dialog"
+        <div v-if="isOpen" class="modal" :class="$props.class" :id="id" ref="modal" tabindex="-1" role="dialog"
             :aria-labelledby="titleId">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button v-if="canClose" type="button" class="close" @click="hide" aria-label="Close">
+                        <button v-if="canClose" type="button" class="close" @click="hide"
+                            :aria-label="$t('Pages.CloseLabel')">
                             <span aria-hidden="true"></span>
                         </button>
                         <slot name="title">
@@ -30,7 +31,7 @@
 
 <script>
 import { nextTick } from 'vue'
-import { Modal } from 'bootstrap'
+import Modal from 'bootstrap/js/dist/modal'
 
 export default {
     props: {
@@ -38,7 +39,7 @@ export default {
         title: String,
         useHtmlInTitle: { type: Boolean, required: false, default: false },
         canClose: { type: Boolean, default: true },
-        class: String
+        class: String,
     },
 
     data() {
@@ -53,22 +54,25 @@ export default {
             return this.id + 'lbl'
         },
     },
+    emits: ['hidden'],
     expose: ['hide', 'modal'],
     methods: {
         hide() {
-            nextTick(() => {
-                this.modalInstance?.hide()
-                this.modalInstance?.dispose()
-            })
-            this.isOpen = false
+            this.modalInstance?.hide()
         },
         modal(params) {
             this.isOpen = true
             nextTick(() => {
                 this.modalInstance = new Modal(this.$refs.modal, params || {})
+                this.$refs.modal.addEventListener('hidden.bs.modal', () => {
+                    this.modalInstance?.dispose()
+                    this.modalInstance = null
+                    this.isOpen = false
+                    this.$emit('hidden')
+                }, { once: true })
                 this.modalInstance.show()
             })
-        }
-    }
+        },
+    },
 }
 </script>

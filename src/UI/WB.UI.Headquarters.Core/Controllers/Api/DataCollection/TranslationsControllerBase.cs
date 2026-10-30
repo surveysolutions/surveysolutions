@@ -7,7 +7,7 @@ using WB.Enumerator.Native.Questionnaire;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public abstract class TranslationsControllerBase : ControllerBase
+    public abstract class TranslationsControllerBase : DataCollectionControllerBase
     {
         private readonly ITranslationManagementService translations;
 

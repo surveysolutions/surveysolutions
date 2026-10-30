@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Complete" xml:space="preserve"><value>Kompletoni</value></data>
+  <data name="FinishInterviewText" xml:space="preserve"><value>Kjo intervistë është kompletuar</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>Nuk mund të modifikohet intervista e marrë nga pajisja</value></data>
+  <data name="InvitationText" xml:space="preserve"><value>Jeni ftuar të merrni pjesë në anketën e mëposhtme: "%QUESTIONNAIRE%"</value></data>
+  <data name="NoteForSupervisor" xml:space="preserve"><value>Koment</value></data>
+  <data name="Resume_InvitationText" xml:space="preserve"><value>Mund të navigoni tek intervista në anketën e mëposhtme: "%QUESTIONNAIRE%"</value></data>
+  <data name="Resume_WelcomeText" xml:space="preserve"><value>Mirë se vini në Anketën Web të Survey Solutions</value></data>
+  <data name="SurveyFormatText" xml:space="preserve"><value>Anketa: "%QUESTIONNAIRE%"</value></data>
+  <data name="WebSurvey" xml:space="preserve"><value>Anketa Web e Survey Solutions</value></data>
+  <data name="WelcomeText" xml:space="preserve"><value>Mirë se vini në Anketën Web të Survey Solutions</value></data>
+  <data name="StartNewInterview" xml:space="preserve"><value>Filloni intervistën e re</value></data>
+  <data name="ResumeInterview" xml:space="preserve"><value>Vazhdoni intervistën</value></data>
+  <data name="LinkInvitation" xml:space="preserve"><value>Jeni ftuar të merrni pjesë në anketën e mëposhtme: "%QUESTIONNAIRE%". Intervista juaj nuk është ende gati.</value></data>
+  <data name="LinkToInterviewPage" xml:space="preserve"><value>Intervistë Web</value></data>
+  <data name="LinkWelcome" xml:space="preserve"><value>Mirë se vini në Anketën Web të Survey Solutions</value></data>
+</root>

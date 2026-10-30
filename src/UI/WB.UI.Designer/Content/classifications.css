@@ -106,6 +106,7 @@
 
 .categories-holder textarea.form-control {
     font-family: monospace;
+    max-height: none;
 }
 
 .classifications-block .form-control:focus,

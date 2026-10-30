@@ -14,6 +14,7 @@ type Assignment {
   receivedByTabletAtUtc: DateTime
   responsibleId: UUID!
   webMode: Boolean!
+  status: AssignmentStatus!
   "Active Calendar Event associated with assignment"
   calendarEvent: CalendarEvent @cost(weight: "10")
 }
@@ -246,6 +247,7 @@ type Questionnaire {
   id: ID
   title: String!
   defaultLanguageName: String @cost(weight: "10")
+  defaultTranslationId: UUID @cost(weight: "10")
   translations: [Translation!]! @cost(weight: "10")
 }
 
@@ -303,6 +305,13 @@ type Viewer {
   workspaces: [String!]!
 }
 
+input AssignmentStatusOperationFilterInput {
+  eq: AssignmentStatus @cost(weight: "10")
+  neq: AssignmentStatus @cost(weight: "10")
+  in: [AssignmentStatus!] @cost(weight: "10")
+  nin: [AssignmentStatus!] @cost(weight: "10")
+}
+
 input AssignmentsFilter {
   and: [AssignmentsFilter!]
   or: [AssignmentsFilter!]
@@ -313,6 +322,7 @@ input AssignmentsFilter {
   webMode: BooleanOperationFilterInput
   receivedByTabletAtUtc: DateTimeOperationFilterInput
   targetArea: StringOperationFilterInput
+  status: AssignmentStatusOperationFilterInput
 }
 
 input BooleanOperationFilterInput {
@@ -639,6 +649,12 @@ enum ApplyPolicy {
   AFTER_RESOLVER
   "The policy is applied in the validation step before the execution."
   VALIDATION
+}
+
+enum AssignmentStatus {
+  OPEN
+  COMPLETED
+  CLOSED
 }
 
 enum EntityType {

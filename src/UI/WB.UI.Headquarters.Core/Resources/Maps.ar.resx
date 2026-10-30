@@ -133,4 +133,7 @@
 <data name="MapFileNameHasInvalidChars" xml:space="preserve">
   <value>اسم الملف {0} يتضمن أحرف غير صالحة.</value>
 </data>
+<data name="MapFileNameTooLong" xml:space="preserve">
+  <value>اسم الملف '{0}' يتجاوز الحد الأقصى المسموح به وهو {1} حرف.</value>
+</data>
 </root>

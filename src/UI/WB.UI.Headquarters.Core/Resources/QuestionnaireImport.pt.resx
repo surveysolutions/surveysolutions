@@ -186,4 +186,7 @@
   <data name="Prepare" xml:space="preserve">
     <value>Recebendo dados do questionário</value>
   </data>
+  <data name="CopyWebInterviewSettings" xml:space="preserve">
+    <value>Copiar as configurações do Web Interview da versão anterior (incluindo modelos de email e textos das telas)</value>
+  </data>
 </root>

@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Tests.Abc;
 
@@ -78,6 +82,198 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             // Assert
             var quantity = assignmentFromResponse.Assignments[0].Quantity;
             Assert.That(quantity, Is.Null);
+        }
+
+        [Test]
+        public async Task GetAssignments_should_include_status_and_comment_for_open_assignments()
+        {
+            var interviewerId = Id.g1;
+
+            var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
+                questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
+                .WithResponsible(interviewerId).Build();
+            assignment.Status = AssignmentStatus.Open;
+            assignment.StatusComment = "Reopened by supervisor";
+
+            var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignments.Store(assignment);
+            var handler = Create.Service.SupervisorAssignmentsHandler(assignments);
+
+            // Act
+            var response = await handler.GetAssignments(new GetAssignmentsRequest { UserId = interviewerId });
+
+            // Assert: open assignment with comment is returned
+            response.Assignments[0].Status.Should().Be(AssignmentStatus.Open);
+            response.Assignments[0].StatusComment.Should().Be("Reopened by supervisor");
+        }
+
+        [Test]
+        public async Task ChangeAssignmentStatus_when_open_applies_interviewer_complete()
+        {
+            var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
+                questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
+                .Build();
+            assignment.Status = AssignmentStatus.Open;
+
+            var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignments.Store(assignment);
+            var handler = Create.Service.SupervisorAssignmentsHandler(assignments);
+
+            // Act
+            await handler.ChangeAssignmentStatus(new ChangeAssignmentStatusRequest
+            {
+                Id = 1,
+                StatusChange = new AssignmentStatusChangeApiView
+                {
+                    Status = AssignmentStatus.Completed,
+                    Comment = "No more units"
+                }
+            });
+
+            // Assert
+            var updated = assignments.GetById(1);
+            updated.Status.Should().Be(AssignmentStatus.Completed);
+            updated.StatusComment.Should().Be("No more units");
+            updated.StatusChangedAtUtc.Should().NotBeNull();
+        }
+
+        [Test]
+        public async Task ChangeAssignmentStatus_when_supervisor_already_closed_ignores_interviewer_complete()
+        {
+            var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
+                questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
+                .Build();
+            assignment.Status = AssignmentStatus.Closed; // supervisor already completed
+
+            var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignments.Store(assignment);
+            var handler = Create.Service.SupervisorAssignmentsHandler(assignments);
+
+            // Act: interviewer tries to Complete, but supervisor has already Closed
+            await handler.ChangeAssignmentStatus(new ChangeAssignmentStatusRequest
+            {
+                Id = 1,
+                StatusChange = new AssignmentStatusChangeApiView
+                {
+                    Status = AssignmentStatus.Completed,
+                    Comment = "I think I'm done"
+                }
+            });
+
+            // Assert: supervisor's Closed status is preserved
+            var updated = assignments.GetById(1);
+            updated.Status.Should().Be(AssignmentStatus.Closed, "supervisor overrides interviewer");
+        }
+
+        [Test]
+        public async Task ChangeAssignmentStatus_when_assignment_not_found_returns_ok_without_crash()
+        {
+            var handler = Create.Service.SupervisorAssignmentsHandler();
+
+            // Act: request for non-existent assignment - should not throw
+            Func<Task> act = () => handler.ChangeAssignmentStatus(new ChangeAssignmentStatusRequest
+            {
+                Id = 999,
+                StatusChange = new AssignmentStatusChangeApiView
+                {
+                    Status = AssignmentStatus.Completed
+                }
+            });
+
+            // Assert: completes without throwing
+            await act.Should().NotThrowAsync();
+        }
+
+        [Test]
+        public async Task ChangeAssignmentStatus_when_already_completed_ignores_interviewer_reopen()
+        {
+            var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
+                questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
+                .Build();
+            assignment.Status = AssignmentStatus.Completed;
+            assignment.StatusComment = "Field completed";
+
+            var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignments.Store(assignment);
+            var handler = Create.Service.SupervisorAssignmentsHandler(assignments);
+
+            // Act: interviewer tries to Reopen, but assignment is already Completed on supervisor side
+            await handler.ChangeAssignmentStatus(new ChangeAssignmentStatusRequest
+            {
+                Id = 1,
+                StatusChange = new AssignmentStatusChangeApiView
+                {
+                    Status = AssignmentStatus.Open,
+                    Comment = "Oops, need to redo"
+                }
+            });
+
+            // Assert: Completed status preserved; supervisor change takes precedence
+            var updated = assignments.GetById(1);
+            updated.Status.Should().Be(AssignmentStatus.Completed, "supervisor's Completed status is not overridden by interviewer");
+            updated.StatusComment.Should().Be("Field completed", "comment is not changed by ignored request");
+        }
+
+        [Test]
+        public async Task ChangeAssignmentStatus_when_status_change_is_null_defaults_to_open_and_applies_when_open()
+        {
+            var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
+                questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
+                .Build();
+            assignment.Status = AssignmentStatus.Open;
+
+            var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignments.Store(assignment);
+            var handler = Create.Service.SupervisorAssignmentsHandler(assignments);
+
+            // Act: send request with null StatusChange
+            await handler.ChangeAssignmentStatus(new ChangeAssignmentStatusRequest
+            {
+                Id = 1,
+                StatusChange = null
+            });
+
+            // Assert: status defaults to Open, assignment remains Open
+            var updated = assignments.GetById(1);
+            updated.Status.Should().Be(AssignmentStatus.Open);
+        }
+
+        [Test]
+        public async Task GetAssignments_should_return_only_open_assignments_to_interviewer()
+        {
+            var interviewerId = Id.g1;
+
+            var openDoc = Create.Entity.AssignmentDocument(1, quantity: 1, interviewsCount: 0,
+                questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
+                .WithResponsible(interviewerId).Build();
+            openDoc.Status = AssignmentStatus.Open;
+
+            var completedDoc = Create.Entity.AssignmentDocument(2, quantity: 1, interviewsCount: 0,
+                questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
+                .WithResponsible(interviewerId).Build();
+            completedDoc.Status = AssignmentStatus.Completed;
+            completedDoc.StatusComment = "Done";
+
+            var approvedDoc = Create.Entity.AssignmentDocument(3, quantity: 1, interviewsCount: 0,
+                questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
+                .WithResponsible(interviewerId).Build();
+            approvedDoc.Status = AssignmentStatus.Closed;
+            approvedDoc.StatusComment = "All good";
+
+            var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignments.Store(openDoc);
+            assignments.Store(completedDoc);
+            assignments.Store(approvedDoc);
+            var handler = Create.Service.SupervisorAssignmentsHandler(assignments);
+
+            // Act
+            var response = await handler.GetAssignments(new GetAssignmentsRequest { UserId = interviewerId });
+
+            // Assert: only Open assignment is sent to interviewer; Completed and Closed stay on supervisor
+            response.Assignments.Should().HaveCount(1);
+            response.Assignments.Should().Contain(a => a.Status == AssignmentStatus.Open && a.Id == 1);
+            response.Assignments.Should().NotContain(a => a.Id == 2, "Completed assignments are not forwarded to interviewers");
+            response.Assignments.Should().NotContain(a => a.Id == 3, "Closed assignments are not forwarded to interviewers");
         }
     }
 }

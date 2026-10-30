@@ -139,9 +139,9 @@
     <value>Supervizori</value>
   </data>
   <data name="UnknownRole" xml:space="preserve">
-    <value>&lt;UNKNOWN ROLE&gt;</value>
+    <value>&lt;ROL I PANJOHUR&gt;</value>
   </data>
   <data name="UnknownUser" xml:space="preserve">
-    <value>&lt;UNKNOWN USER&gt;</value>
+    <value>&lt;PËRDORUES I PANJOHUR&gt;</value>
   </data>
 </root>

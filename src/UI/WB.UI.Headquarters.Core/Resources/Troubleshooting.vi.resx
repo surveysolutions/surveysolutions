@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Title" xml:space="preserve">
+        <value>Khắc phục sự cố</value>
+        </data>
+    <data name="InterviewDataIsMissingDescription" xml:space="preserve">
+        <value>Chỉ định khóa phỏng vấn hoặc id phỏng vấn để tìm kiếm.</value>
+        </data>
+    <data name="InterviewDataIsMissingTitle" xml:space="preserve">
+        <value>Người phỏng vấn cho biết cuộc phỏng vấn đã được hoàn thành và đồng bộ hóa nhưng tôi không thấy dữ liệu nào về cuộc phỏng vấn đó trên máy chủ</value>
+        </data>
+    <data name="MissingCensusInterviewsDescription" xml:space="preserve">
+        <value>Cung cấp tên đăng nhập của người phỏng vấn, tên của bảng câu hỏi và phạm vi ngày</value>
+        </data>
+    <data name="MissingCensusInterviewsTitle" xml:space="preserve">
+        <value>Tôi cần tìm nơi phỏng vấn</value>
+        </data>
+    <data name="SupportSite" xml:space="preserve">
+        <value>Nhấp vào liên kết của vấn đề bạn muốn giải quyết. Đối với các vấn đề không được liệt kê bên dưới, hãy truy cập &lt;a href="{0}" target="_blank"&gt;trang web hỗ trợ&lt;/a&gt; của Giải pháp khảo sát.</value>
+        </data>
+    <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
+        <value>Điều kiện lọc</value>
+        </data>
+    <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
+        <value>Tìm kiếm các cuộc phỏng vấn được đồng bộ hóa giữa hai ngày</value>
+        </data>
+    <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
+        <value>Chọn ngày</value>
+        </data>
+    <data name="MissingCensusInterviews_Filters_Interviewer" xml:space="preserve">
+        <value>Người phỏng vấn</value>
+        </data>
+    <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
+        <value>Chọn người phỏng vấn</value>
+        </data>
+    <data name="MissingCensusInterviews_Filters_Questionnaire" xml:space="preserve">
+        <value>Bảng câu hỏi</value>
+        </data>
+    <data name="MissingCensusInterviews_Filters_QuestionnairePlaceholder" xml:space="preserve">
+        <value>Chọn bảng câu hỏi</value>
+        </data>
+    <data name="MissingCensusInterviews_Filters_Search" xml:space="preserve">
+        <value>Tìm kiếm</value>
+        </data>
+    <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
+        <value>Để xác định vị trí cuộc phỏng vấn, vui lòng cung cấp tên của bảng câu hỏi.&lt;br/&gt;
+Chọn người phỏng vấn và khung thời gian để thu hẹp kết quả tìm kiếm của bạn</value>
+        </data>
+    <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
+        <value>{0} phỏng vấn thỏa mãn điều kiện lọc</value>
+        </data>
+    <data name="MissingCensusInterviews_NothingFound_Message" xml:space="preserve">
+        <value>Không có cuộc phỏng vấn nào thỏa mãn điều kiện lọc</value>
+        </data>
+    <data name="MissingCensusInterviews_OneInterviewFound_Message" xml:space="preserve">
+        <value>Một cuộc phỏng vấn thỏa mãn điều kiện lọc</value>
+        </data>
+    <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
+        <value>Xác định vị trí phỏng vấn cụ thể</value>
+        </data>
+    <data name="TableTitle_Enumerator" xml:space="preserve">
+        <value>điều tra viên</value>
+        </data>
+    <data name="TableTitle_InterviewId" xml:space="preserve">
+        <value>Id cuộc phỏng vấn</value>
+        </data>
+    <data name="TableTitle_LastUpdate" xml:space="preserve">
+        <value>Cập nhật lần cuối</value>
+        </data>
+    <data name="TableTitle_Status" xml:space="preserve">
+        <value>Trạng thái</value>
+        </data>
+    <data name="NoData_Description" xml:space="preserve">
+        <value>Chỉ định khóa phỏng vấn (XX-XX-XX-XX) hoặc id phỏng vấn để tìm kiếm.</value>
+        </data>
+    <data name="NoData_Filters_InterviewKey" xml:space="preserve">
+        <value>Khóa phỏng vấn hoặc id phỏng vấn</value>
+        </data>
+    <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
+        <value>Nhập mã hoặc id cuộc phỏng vấn</value>
+        </data>
+    <data name="NoData_Title" xml:space="preserve">
+        <value>Tôi không thấy dữ liệu nào cho cuộc phỏng vấn được đồng bộ hóa trên máy chủ</value>
+        </data>
+</root>

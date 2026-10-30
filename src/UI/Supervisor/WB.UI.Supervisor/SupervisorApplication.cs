@@ -1,6 +1,5 @@
-﻿using System;
-using Android.App;
-using Android.Runtime;
+﻿using Android.Runtime;
+using AndroidX.Work;
 using MvvmCross.Platforms.Android.Views;
 
 namespace WB.UI.Supervisor
@@ -10,6 +9,18 @@ namespace WB.UI.Supervisor
     {
         public SupervisorApplication(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {
+        }
+
+        public override void OnCreate()
+        {
+            base.OnCreate();
+
+            if (!WorkManager.IsInitialized)
+            {
+                var config = new Configuration.Builder()
+                    .Build();
+                WorkManager.Initialize(this, config);
+            }
         }
     }
 }

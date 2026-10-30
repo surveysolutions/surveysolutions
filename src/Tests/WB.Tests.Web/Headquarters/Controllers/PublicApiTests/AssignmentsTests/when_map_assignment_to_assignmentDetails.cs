@@ -6,11 +6,12 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using It = Moq.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
-    public class when_map_assignment_to_assignmentDetails : AssignmentsPublicApiMapProfileSpecification
+    public class when_map_assignment_to_assignmentDetails : AssignmentsPublicApiMapperSpecification
     {
         protected Assignment Assignment { get; set; }
         protected AssignmentDetails AssignmentDetails { get; set; }
@@ -23,7 +24,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 {
                     new InterviewSummary(),
                     new InterviewSummary()
-                });
+                },
+                audioAuditScope: new List<string> { "section1", "roster2" });
 
             this.Assignment.IdentifyingData = new List<IdentifyingAnswer>
             {
@@ -40,7 +42,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
         public override void Because()
         {
-            this.AssignmentDetails = this.mapper.Map<AssignmentDetails>(this.Assignment);
+            this.AssignmentDetails = AssignmentsPublicApiMapper.ToAssignmentDetails(this.Assignment);
         }
 
         [Test]
@@ -91,5 +93,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_map_IdentifyingAnswer_Variable_name_from_questionnaire() =>
             Assert.That(this.AssignmentDetails.IdentifyingData[0].Variable, Is.EqualTo("test2"));
+
+        [Test]
+        public void should_map_AudioAuditScope() =>
+            Assert.That(this.AssignmentDetails.AudioAuditScope, Is.EqualTo(this.Assignment.AudioAuditScope));
     }
 }

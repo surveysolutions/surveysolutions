@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Classifications;
@@ -17,8 +16,10 @@ using WB.UI.Designer.Areas.Pdf.Services;
 using WB.UI.Designer.Areas.Pdf.Utils;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers.Api.WebTester;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Services;
 using WB.UI.Designer.Services.AttachmentPreview;
+using WB.UI.Shared.Web.Services;
 using ILoggerProvider = Microsoft.Extensions.Logging.ILoggerProvider;
 
 namespace WB.UI.Designer.Modules
@@ -31,6 +32,7 @@ namespace WB.UI.Designer.Modules
         public void Load(IDependencyRegistry registry)
         {
             registry.BindAsScoped<LocalOrDevelopmentAccessOnlyAttribute, LocalOrDevelopmentAccessOnlyAttribute>();
+            registry.BindAsScoped<IPostCommitActions, PostCommitActions>();
 
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
 
@@ -44,20 +46,17 @@ namespace WB.UI.Designer.Modules
             
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
             registry.Bind<IClassificationsStorage, ClassificationsStorage>();
-            registry.BindAsSingleton<IWebTesterService, WebTesterService>();          
+            registry.BindAsSingleton<IOneTimeCodeStore, InMemoryOneTimeCodeStore>();
+            registry.Bind<IDelegatedTokenService, DelegatedTokenService>();
+            registry.Bind<IWebTesterService, WebTesterService>();
             registry.BindAsSingleton<ILoggerProvider, SerilogLoggerProvider>();   
             
             registry.Bind<IImportExportQuestionnaireMapper, ImportExportQuestionnaireMapper>();   
             registry.Bind<IQuestionnaireSerializer, QuestionnaireSerializer>();   
             registry.Bind<ITranslationImportExportService, TranslationImportExportService>();   
             registry.Bind<ICategoriesImportExportService, CategoriesImportExportService>();   
-            registry.BindAsSingleton<IAttachmentPreviewHelper, AttachmentPreviewHelper>();   
-            
-            registry.BindToConstant<IMapper>(context => new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-                cfg.ConstructServicesUsing(context.GetService);
-            }).CreateMapper());
+            registry.BindAsSingleton<IAttachmentPreviewHelper, AttachmentPreviewHelper>();
+            registry.BindAsSingleton<IImageProcessingService, ImageProcessingService>();   
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

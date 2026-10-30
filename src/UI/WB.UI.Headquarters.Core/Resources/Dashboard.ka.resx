@@ -189,4 +189,98 @@
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>საიტის ინტერვიუს დაყენება</value>
   </data>
+
+
+  <data name="Maps" xml:space="preserve">
+    <value>რუკები</value>
+  </data>
+
+  <data name="MapDashboard" xml:space="preserve">
+    <value>რუკის დაფა</value>
+  </data>
+
+  <data name="ExportQuestionnaire" xml:space="preserve">
+    <value>კითხვარის ექსპორტი</value>
+  </data>
+
+  <data name="SaveQuestionnaire" xml:space="preserve">
+    <value>კითხვარის დოკუმენტის შენახვა</value>
+  </data>
+
+  <data name="RecordAudio" xml:space="preserve">
+    <value>აუდიოს ჩაწერა</value>
+  </data>
+
+  <data name="QuestionnairePreview" xml:space="preserve">
+    <value>კითხვარის წინასწარი ნახვა</value>
+  </data>
+
+  <data name="DeleteMap" xml:space="preserve">
+    <value>რუკის წაშლა</value>
+  </data>
+
+  <data name="DeleteMapUser" xml:space="preserve">
+    <value>რუკის მომხმარებლის წაშლა</value>
+  </data>
+
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>დავალებების განახლება</value>
+  </data>
+
+  <data name="RecordAudioTitle" xml:space="preserve">
+    <value>აუდიო აუდიტის ჩართვისას Interviewer აპლიკაცია ინტერვიუს აუდიოს ჩაიწერს. გაითვალისწინეთ, რომ სინქრონიზაციის მონაცემების მოცულობა მნიშვნელოვნად გაიზრდება.</value>
+  </data>
+
+  <data name="SendInvitations" xml:space="preserve">
+    <value>მოწვევების გაგზავნა</value>
+  </data>
+
+  <data name="DownloadLinks" xml:space="preserve">
+    <value>ვებბმულების ჩამოტვირთვა</value>
+  </data>
+
+  <data name="WebMode" xml:space="preserve">
+    <value>რეჟიმი</value>
+  </data>
+
+  <data name="Details" xml:space="preserve">
+    <value>დეტალები</value>
+    <comment>Questionnaire details</comment>
+  </data>
+
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>Designer-ში ჩვენება</value>
+  </data>
+
+  <data name="ImportedBy" xml:space="preserve">
+    <value>დააიმპორტა</value>
+  </data>
+
+  <data name="ImportedByText" xml:space="preserve">
+    <value>{{role}} მომხმარებელი {{name}}</value>
+  </data>
+
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve">
+    <value>ინტერვიუერებისა და სუპერვაიზერების მიერ ოფლაინ რეჟიმში მუშაობისას მიღებულია {{receivedInterviews}} ინტერვიუ და ახალი ინტერვიუებისთვის {{receivedAssignments}} დავალება. კვლევის წაშლის დადასტურების შემდეგ სერვერი ამ ინტერვიუებზე ან დავალებებზე დაფუძნებულ ინფორმაციას აღარ მიიღებს და ისინი შემდეგი სინქრონიზაციისას გაქრება აღდგენის შესაძლებლობის გარეშე, მაშინაც კი, თუ შეიცავს ახლად შეყვანილ ან შეცვლილ ინფორმაციას. თქვენი პასუხისმგებლობაა გააფრთხილოთ ან აცნობოთ ინტერვიუერებს, რომ აღარ შეავსონ ეს ინტერვიუები ან დავალებები, რადგან ისინი ავტომატურად არ მიიღებენ შეტყობინებას. გსურთ გაგრძელება?</value>
+  </data>
+
+  <data name="TypeQuestionnaireName" xml:space="preserve">
+    <value>დადასტურებისთვის აკრიფეთ '{{questionnaireTitle}}'</value>
+  </data>
+
+  <data name="UsersManagement" xml:space="preserve">
+      <value>მომხმარებლების მართვა</value>
+  </data>
+
+  <data name="CreateUser" xml:space="preserve">
+      <value>მომხმარებლის შექმნა</value>
+  </data>
+
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>გამოტანილი ცვლადები</value>
+  </data>
+
+  <data name="Edit" xml:space="preserve">
+    <value>რედაქტირება</value>
+  </data>
 </root>

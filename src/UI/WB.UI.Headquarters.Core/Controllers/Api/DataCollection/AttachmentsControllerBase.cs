@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public abstract class AttachmentsControllerBase : ControllerBase
+    public abstract class AttachmentsControllerBase : DataCollectionControllerBase
     {
         private readonly IAttachmentContentService attachmentContentService;
 

@@ -231,6 +231,9 @@
     <data name="Login_Error_EmptyName" xml:space="preserve">
       <value>يرجى إدخال تسجيل دخول صحيح</value>
     </data>
+    <data name="TesterLoginAccountHintText" xml:space="preserve">
+      <value>سجّل الدخول إلى هذا التطبيق باستخدام بيانات الاعتماد التي أنشأتها على https://designer.mysurvey.solutions. لتسجيل حساب جديد، قم بزيارة نفس الموقع.</value>
+    </data>
     <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
       <value>استبيانات مجهولة</value>
     </data>

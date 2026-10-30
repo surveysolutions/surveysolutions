@@ -1,5 +1,4 @@
 ﻿using System.Net.Http;
-using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -99,7 +98,6 @@ namespace WB.Tests.Web.TestFactories
         public AssignmentsController AssignmentsPublicApiController(
             IAssignmentViewFactory assignmentViewFactory = null,
             IAssignmentsService assignmentsService = null,
-            IMapper mapper = null,
             IUserRepository userManager = null,
             IQuestionnaireStorage questionnaireStorage = null,
             ISystemLog auditLog = null,
@@ -117,7 +115,6 @@ namespace WB.Tests.Web.TestFactories
             var result = new AssignmentsController(
                 assignmentViewFactory,
                 assignmentsService,
-                mapper,
                 userManager,
                 questionnaireStorage,
                 auditLog,
@@ -130,7 +127,8 @@ namespace WB.Tests.Web.TestFactories
                 serializer ?? Mock.Of<ISerializer>(),
                 Mock.Of<IInvitationService>(),
                 Mock.Of<IWebInterviewLinkProvider>(),
-                scopeExecutor);
+                scopeExecutor,
+                Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>());
 
             return result;
         }

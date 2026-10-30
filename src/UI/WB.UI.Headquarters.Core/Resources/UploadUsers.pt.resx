@@ -133,7 +133,7 @@
     <value>Baixar modelo .tab para upload de usuário</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value>Nome completo</value>
@@ -172,7 +172,7 @@
     <value>Carregar arquivo .tab</value>
   </data>
   <data name="UserName" xml:space="preserve">
-    <value>Login</value>
+    <value>Nome de usuário</value>
   </data>
   <data name="UserNameDescription" xml:space="preserve">
     <value>nome de usuário, deve ter entre 3 e 15 caracteres e conter apenas letras, dígitos e símbolo de sublinhado</value>

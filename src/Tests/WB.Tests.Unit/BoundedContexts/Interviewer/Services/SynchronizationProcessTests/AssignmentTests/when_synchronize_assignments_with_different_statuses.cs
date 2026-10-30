@@ -1,0 +1,445 @@
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
+using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
+
+namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests.AssignmentTests
+{
+    [TestFixture]
+    public class when_synchronize_assignments_with_different_statuses
+    {
+        [Test]
+        public async Task server_returns_only_Open_assignment_completed_is_removed_from_tablet()
+        {
+            // Arrange: interviewer has Open assignment locally; server (after interviewer completed it) returns
+            // only Open assignments — the completed one is gone from the list → it should be deleted locally.
+            var openLocal = Create.Entity
+                .AssignmentDocument(1, 5, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            openLocal.Status = AssignmentStatus.Open;
+
+            var completedLocal = Create.Entity
+                .AssignmentDocument(2, 3, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            completedLocal.Status = AssignmentStatus.Completed;
+            completedLocal.StatusComment = "Field done";
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { openLocal, completedLocal });
+
+            // Server only returns the still-Open assignment (Completed is kept on server, not sent back)
+            var remoteOpen = new AssignmentApiView
+            {
+                Id = 1, Quantity = 5, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
+                Status = AssignmentStatus.Open
+            };
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<AssignmentApiView> { remoteOpen });
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo
+            );
+
+            // Act
+            await synchronizer.SynchronizeAssignmentsAsync(
+                Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
+
+            // Assert: Open assignment stays, Completed is removed
+            assignmentsRepo.GetById(1).Should().NotBeNull();
+            assignmentsRepo.GetById(2).Should().BeNull("Completed assignment no longer returned by server should be removed");
+        }
+
+        [Test]
+        public async Task server_reopens_Closed_assignment_local_becomes_Open()
+        {
+            // Arrange: local assignment is Closed (supervisor closed, offline), server now says Open (supervisor reopened)
+            var local = Create.Entity
+                .AssignmentDocument(10, 5, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Closed;
+            local.StatusComment = "Was closed";
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            var remote = new AssignmentApiView
+            {
+                Id = 10, Quantity = 5, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
+                Status = AssignmentStatus.Open, StatusComment = "Reopened by HQ"
+            };
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<AssignmentApiView> { remote });
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo
+            );
+
+            // Act
+            await synchronizer.SynchronizeAssignmentsAsync(
+                Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
+
+            // Assert: server's Open status wins
+            var updated = assignmentsRepo.GetById(10);
+            updated.Status.Should().Be(AssignmentStatus.Open);
+            updated.StatusComment.Should().Be("Reopened by HQ");
+            updated.StatusChangedAtUtc.Should().BeNull("pending flag cleared after server override");
+        }
+
+        [Test]
+        public async Task server_closes_Completed_assignment_local_becomes_Closed()
+        {
+            // Arrange: interviewer completed assignment (Completed), supervisor closed it on server
+            var local = Create.Entity
+                .AssignmentDocument(20, 8, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Completed;
+            local.StatusComment = "Interviewer done";
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            var remote = new AssignmentApiView
+            {
+                Id = 20, Quantity = 8, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
+                Status = AssignmentStatus.Closed, StatusComment = "Supervisor closed"
+            };
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<AssignmentApiView> { remote });
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo
+            );
+
+            // Act
+            await synchronizer.SynchronizeAssignmentsAsync(
+                Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
+
+            // Assert
+            var updated = assignmentsRepo.GetById(20);
+            updated.Status.Should().Be(AssignmentStatus.Closed);
+            updated.StatusComment.Should().Be("Supervisor closed");
+        }
+
+        [Test]
+        public async Task pending_local_Completed_upload_and_server_already_Closed_are_both_handled()
+        {
+            // Arrange: local has Completed pending upload, but server already shows Closed
+            // (supervisor closed on web before device synced — conflict)
+            var local = Create.Entity
+                .AssignmentDocument(30, 4, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Completed;
+            local.StatusComment = "Done by me";
+            local.StatusChangedAtUtc = DateTime.UtcNow.AddMinutes(-5); // pending upload
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            // Server already shows Closed — the upload will succeed (server can handle it gracefully),
+            // and then the next GetAssignments returns Closed
+            var remoteAfterUpload = new AssignmentApiView
+            {
+                Id = 30, Quantity = 4, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
+                Status = AssignmentStatus.Closed, StatusComment = "Already closed"
+            };
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<AssignmentApiView> { remoteAfterUpload });
+            syncService.Setup(s => s.ChangeAssignmentStatusAsync(30, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo
+            );
+
+            // Act: upload step runs first, then download/sync step
+            await synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
+            await synchronizer.SynchronizeAssignmentsAsync(
+                Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
+
+            // Assert: local status change was uploaded
+            syncService.Verify(s => s.ChangeAssignmentStatusAsync(30, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);
+
+            // After sync, server's Closed status overrides local Completed
+            var updated = assignmentsRepo.GetById(30);
+            updated.Status.Should().Be(AssignmentStatus.Closed);
+            updated.StatusComment.Should().Be("Already closed");
+            updated.StatusChangedAtUtc.Should().BeNull("pending flag is cleared");
+        }
+
+        [Test]
+        public async Task multiple_pending_uploads_for_different_assignments_all_uploaded()
+        {
+            // Arrange: two assignments both have pending local status changes
+            var local1 = Create.Entity
+                .AssignmentDocument(41, 5, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local1.Status = AssignmentStatus.Completed;
+            local1.StatusComment = "Done A";
+            local1.StatusChangedAtUtc = DateTime.UtcNow;
+
+            var local2 = Create.Entity
+                .AssignmentDocument(42, 3, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local2.Status = AssignmentStatus.Open;
+            local2.StatusComment = "Need more work";
+            local2.StatusChangedAtUtc = DateTime.UtcNow;
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local1, local2 });
+
+            var remote1 = new AssignmentApiView
+                { Id = 41, Quantity = 5, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA), Status = AssignmentStatus.Completed };
+            var remote2 = new AssignmentApiView
+                { Id = 42, Quantity = 3, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA), Status = AssignmentStatus.Open };
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<AssignmentApiView> { remote1, remote2 });
+            syncService.Setup(s => s.ChangeAssignmentStatusAsync(It.IsAny<int>(), It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo
+            );
+
+            // Act: upload step runs first, then download/sync step
+            await synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
+            await synchronizer.SynchronizeAssignmentsAsync(
+                Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
+
+            // Assert: both uploads triggered
+            syncService.Verify(s => s.ChangeAssignmentStatusAsync(41, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);
+            syncService.Verify(s => s.ChangeAssignmentStatusAsync(42, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);
+
+            // Pending flags cleared
+            assignmentsRepo.GetById(41).StatusChangedAtUtc.Should().BeNull();
+            assignmentsRepo.GetById(42).StatusChangedAtUtc.Should().BeNull();
+        }
+
+        [Test]
+        public async Task assignment_without_pending_change_and_same_status_preserves_local_comment()
+        {
+            // Arrange: local and server both have Completed, same comment — no upload expected
+            var local = Create.Entity
+                .AssignmentDocument(50, 6, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Completed;
+            local.StatusComment = "Consistent comment";
+            local.StatusChangedAtUtc = null; // no pending change
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            var remote = new AssignmentApiView
+            {
+                Id = 50, Quantity = 6, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
+                Status = AssignmentStatus.Completed, StatusComment = "Consistent comment"
+            };
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<AssignmentApiView> { remote });
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo
+            );
+
+            // Act
+            await synchronizer.SynchronizeAssignmentsAsync(
+                Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
+
+            // Assert: no upload for unchanged assignment
+            syncService.Verify(s => s.ChangeAssignmentStatusAsync(It.IsAny<int>(), It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Never);
+
+            var updated = assignmentsRepo.GetById(50);
+            updated.Status.Should().Be(AssignmentStatus.Completed);
+            updated.StatusComment.Should().Be("Consistent comment");
+        }
+
+        [Test]
+        public async Task upload_conflict_rejected_by_server_clears_pending_flag_and_does_not_fail_sync()
+        {
+            // Arrange: interviewer has Completed assignment with pending upload flag
+            // but server rejects the upload (assignment already Closed by supervisor).
+            var local = Create.Entity
+                .AssignmentDocument(60, 4, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Completed;
+            local.StatusComment = "Done offline";
+            local.StatusChangedAtUtc = DateTime.UtcNow.AddMinutes(-5); // pending upload
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            // Server rejects upload (conflict: assignment is already in a state that doesn't allow Completed)
+            var conflictException = new WB.Core.SharedKernels.Enumerator.Implementation.Services.SynchronizationException(
+                WB.Core.SharedKernels.Enumerator.Implementation.Services.SynchronizationExceptionType.InvalidUrl,
+                "Bad Request: Invalid status transition");
+
+            // After the failed upload, server no longer returns this assignment (it's Closed → filtered out for interviewer)
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<AssignmentApiView>());
+            syncService.Setup(s => s.ChangeAssignmentStatusAsync(60, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(conflictException);
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo
+            );
+
+            // Act: upload step should NOT throw even though upload was rejected
+            Func<Task> uploadAct = () => synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
+            await uploadAct.Should().NotThrowAsync("conflict rejections must not abort the sync");
+
+            // Then sync step removes the assignment (server no longer returns it)
+            await synchronizer.SynchronizeAssignmentsAsync(
+                Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
+
+            // Assert: upload was attempted, pending flag cleared, assignment removed (server didn't return it)
+            syncService.Verify(s => s.ChangeAssignmentStatusAsync(60, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);
+            assignmentsRepo.GetById(60).Should().BeNull("assignment was removed since server no longer returns it");
+        }
+
+        [Test]
+        public async Task transport_level_invalid_url_during_upload_propagates_and_preserves_pending_flag()
+        {
+            // Arrange: assignment has a pending status change
+            var local = Create.Entity
+                .AssignmentDocument(70, 2, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Completed;
+            local.StatusComment = "Done offline";
+            local.StatusChangedAtUtc = DateTime.UtcNow.AddMinutes(-10);
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            // Server cannot be reached because the URL is misconfigured: HTTP client raises InvalidUrl
+            // (not an HTTP 400/404 from the server, but a transport-layer URI error).
+            var transportException = new RestException(
+                "No such host is known", HttpStatusCode.ServiceUnavailable, RestExceptionType.InvalidUrl);
+            var syncException = new SynchronizationException(
+                SynchronizationExceptionType.InvalidUrl, "Invalid endpoint", transportException);
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.ChangeAssignmentStatusAsync(70, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(syncException);
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo);
+
+            // Act: transport-level error must propagate so the sync fails and the change is retried later
+            Func<Task> act = () => synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
+            await act.Should().ThrowAsync<SynchronizationException>(
+                "a transport-level URL error must not silently discard the pending change");
+
+            // Assert: pending flag is still set — the change will be retried on the next sync
+            assignmentsRepo.GetById(70).StatusChangedAtUtc.Should().NotBeNull(
+                "transport-level failure must preserve the pending-upload flag for retry");
+        }
+
+        [Test]
+        public async Task transient_http401_during_upload_propagates_and_preserves_pending_flag()
+        {
+            // Arrange: assignment has a pending status change
+            var local = Create.Entity
+                .AssignmentDocument(80, 2, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Completed;
+            local.StatusComment = "Done offline";
+            local.StatusChangedAtUtc = DateTime.UtcNow.AddMinutes(-5);
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            // Server returns HTTP 401 mid-sync (transient session expiry; credentials were valid at
+            // the authentication step that preceded this upload step).
+            var restEx = new RestException("Unauthorized", HttpStatusCode.Unauthorized, RestExceptionType.Unexpected);
+            var syncEx = new SynchronizationException(SynchronizationExceptionType.Unauthorized, "Unauthorized", restEx);
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.ChangeAssignmentStatusAsync(80, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(syncEx);
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo);
+
+            // Act: transient 401 must propagate so the sync fails and retries next time
+            Func<Task> act = () => synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
+            await act.Should().ThrowAsync<SynchronizationException>(
+                "a transient HTTP 401 during upload must not silently discard the pending change");
+
+            // Assert: pending flag still set — will be retried on next sync
+            assignmentsRepo.GetById(80).StatusChangedAtUtc.Should().NotBeNull(
+                "HTTP 401 is transient; the pending-upload flag must be preserved for retry");
+        }
+
+        [Test]
+        public async Task permanent_http403_during_upload_clears_pending_flag_and_does_not_throw()
+        {
+            // Arrange: assignment has a pending status change
+            var local = Create.Entity
+                .AssignmentDocument(90, 3, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Completed;
+            local.StatusComment = "Done offline";
+            local.StatusChangedAtUtc = DateTime.UtcNow.AddMinutes(-5);
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            // Server returns HTTP 403 Forbidden: this interviewer's role does not permit this
+            // status transition (permanent policy decision, not a session issue).
+            var restEx = new RestException("Forbidden", HttpStatusCode.Forbidden, RestExceptionType.Unexpected);
+            var syncEx = new SynchronizationException(SynchronizationExceptionType.Unauthorized, "Unauthorized", restEx);
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.ChangeAssignmentStatusAsync(90, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(syncEx);
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo);
+
+            // Act: permanent 403 must NOT propagate — sync continues, server state wins on download
+            Func<Task> act = () => synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
+            await act.Should().NotThrowAsync(
+                "a permanent HTTP 403 rejection must not abort the sync; server state will be applied on download");
+
+            // Assert: pending flag cleared — no endless re-upload
+            assignmentsRepo.GetById(90).StatusChangedAtUtc.Should().BeNull(
+                "HTTP 403 is a permanent business rejection; pending flag must be cleared");
+        }
+    }
+}

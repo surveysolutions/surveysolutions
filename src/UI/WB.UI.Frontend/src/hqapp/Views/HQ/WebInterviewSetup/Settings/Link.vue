@@ -12,7 +12,7 @@
                                 <Field as="textarea" v-autosize v-model="webInterviewPageMessages['linkWelcome'].text"
                                     rules="required" name="linkWelcome" data-vv-name="linkWelcome" ref="linkWelcome"
                                     :min-height="77" maxlength="200" class="form-control js-elasticArea font-bold"
-                                    placeholder="Please enter the main text">
+                                    :placeholder="$t('WebInterviewSettings.EnterText')">
                                 </Field>
                                 <button type="button" @click="webInterviewPageMessages['linkWelcome'].text = ''"
                                     class="btn btn-link btn-clear">
@@ -80,17 +80,16 @@
 
 <script>
 import settings from './settingsMixin'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import { Form, Field } from 'vee-validate'
 
 export default {
     components: {
         Form,
         Field,
-        ErrorMessage,
     },
     mixins: [settings],
     mounted() {
         this.$refs.linkPage.resetForm({ values: this.$refs.linkPage.values })
-    }
+    },
 }
 </script>
