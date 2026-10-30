@@ -205,7 +205,7 @@ export default {
         };
 
         const handlePaste = (event) => {
-            const pastedText = event.clipboardData?.getData('text') || '';
+            const pastedText = (event.clipboardData?.getData('text') || '').replace(/\r\n?/g, '\n');
             const textarea = event.target;
             const selStart = typeof textarea.selectionStart === 'number' ? textarea.selectionStart : currentMessage.value.length;
             const selEnd = typeof textarea.selectionEnd === 'number' ? textarea.selectionEnd : currentMessage.value.length;
