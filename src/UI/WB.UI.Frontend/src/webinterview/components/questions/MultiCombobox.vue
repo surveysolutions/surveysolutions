@@ -33,6 +33,7 @@
                             :questionId="$me.id"
                             @input="appendCompboboxItem"
                             :optionsSource="optionsSource"
+                            :optionsCount="20"
                             :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
                     </div>
                 </div>
