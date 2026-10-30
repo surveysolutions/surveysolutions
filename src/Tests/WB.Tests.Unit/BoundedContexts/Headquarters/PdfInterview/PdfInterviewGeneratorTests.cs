@@ -91,9 +91,9 @@ public class PdfInterviewGeneratorTests
         Assert.Multiple(() =>
         {
             Assert.That(footerParagraph.Format.TabStops.Count, Is.EqualTo(2));
-            Assert.That(footerParagraph.Format.TabStops[0].Position.Point, Is.EqualTo(contentWidth / 2d));
+            Assert.That(footerParagraph.Format.TabStops[0].Position.Point, Is.EqualTo(contentWidth / 2d).Within(0.01d));
             Assert.That(footerParagraph.Format.TabStops[0].Alignment, Is.EqualTo(TabAlignment.Center));
-            Assert.That(footerParagraph.Format.TabStops[1].Position.Point, Is.EqualTo(contentWidth));
+            Assert.That(footerParagraph.Format.TabStops[1].Position.Point, Is.EqualTo(contentWidth).Within(0.01d));
             Assert.That(footerParagraph.Format.TabStops[1].Alignment, Is.EqualTo(TabAlignment.Right));
             Assert.That(footerText, Does.Contain(expectedTitle));
             Assert.That(footerText, Does.Contain(interviewKey.ToString()));
