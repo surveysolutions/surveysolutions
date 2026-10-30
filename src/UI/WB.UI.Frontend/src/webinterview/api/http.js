@@ -126,6 +126,7 @@ const httpPlugin = {
                 if (duration)
                     fd.append('duration', duration)
                 dispatch('uploadProgress', { id, now: 0, total: 100 })
+                dispatch('fetchProgress', 1)
 
                 try {
                     await axios.post(url + '/' + interviewId, fd, {
@@ -146,6 +147,7 @@ const httpPlugin = {
                         dispatch('setAnswerAsNotSaved', { id, message: $t('WebInterviewUI.CommunicationError') })
                     }
                 } finally {
+                    dispatch('fetchProgress', -1)
                     if (state.webinterview.entityDetails[id] != undefined) {
                         dispatch('uploadProgress', { id, now: 0, total: 0 })
                     }
