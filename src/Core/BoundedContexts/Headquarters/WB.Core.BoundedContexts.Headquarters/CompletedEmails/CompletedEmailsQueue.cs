@@ -19,24 +19,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public List<Guid> GetInterviewIdsForSend(int batchSize = 100)
         {
             DateTime now = DateTime.UtcNow;
-            var now10Minutes = now.AddMinutes(-10);
-            var now20Minutes = now.AddMinutes(-20);
-            var now30Minutes = now.AddMinutes(-30);
-            var now1Hour = now.AddHours(-1);
-            var now3Hours = now.AddHours(-3);
-            
-            return storage.Query(_ => _
-                .Where(r => r.FailedCount == 0
-                    || (r.FailedCount == 1 && r.RequestTime >= now10Minutes)
-                    || (r.FailedCount == 2 && r.RequestTime >= now20Minutes)
-                    || (r.FailedCount == 3 && r.RequestTime >= now30Minutes)
-                    || (r.FailedCount == 4 && r.RequestTime >= now1Hour)
-                    || (r.FailedCount >= 5 && r.RequestTime >= now3Hours)
-                )
+
+            return storage.Query(records => records
+                .Where(r => r.NextAttemptAt == null || r.NextAttemptAt <= now)
                 .OrderBy(r => r.RequestTime)
-                .Select(r => r.InterviewId))
+                .ThenBy(r => r.InterviewId)
                 .Take(batchSize)
-                .ToList();
+                .Select(r => r.InterviewId)
+                .ToList());
         }
 
         public void Add(Guid interviewId)
@@ -60,7 +50,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public void MarkAsFailedToSend(Guid interviewId)
         {
             var record = storage.GetById(interviewId);
+            if (record == null)
+                return;
             record.FailedCount++;
+            var delay = record.FailedCount switch
+            {
+                1 => TimeSpan.FromMinutes(10),
+                2 => TimeSpan.FromMinutes(20),
+                3 => TimeSpan.FromMinutes(30),
+                4 => TimeSpan.FromHours(1),
+                _ => TimeSpan.FromHours(3)
+            };
+            record.NextAttemptAt = DateTime.UtcNow.Add(delay);
             storage.Store(record, interviewId);
         }
     }

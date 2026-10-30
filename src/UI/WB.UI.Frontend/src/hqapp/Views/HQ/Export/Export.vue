@@ -50,7 +50,8 @@
                                         </h5>
                                         <div class="form-group" :class="{ 'has-error': errors.questionnaireVersion }">
                                             <Field v-slot="{ field }" name="questionnaireVersion"
-                                                label="questionnaire version" :value="questionnaireVersion"
+                                                :label="$t('DataExport.SurveyQuestionnaireVersion')"
+                                                :value="questionnaireVersion"
                                                 :rules="{ required: questionnaireId != null && !$refs.questionnaireVersionControl.isLoading }">
                                                 <Typeahead v-bind="field" noClear control-id="questionnaireVersion"
                                                     ref="questionnaireVersionControl" name="questionnaireVersion"
@@ -783,6 +784,7 @@ export default {
           questionnaires(workspace: $workspace, id: $id, version: $version) {
             nodes {
               defaultLanguageName
+              defaultTranslationId
               translations {
                 id
                 name
@@ -809,6 +811,13 @@ export default {
                         data.defaultLanguageName ||
                         this.$t('WebInterview.Original_Language'),
                 })
+            }
+            if (data.defaultTranslationId) {
+                this.questionnaireTranslation = this.translations.find(
+                    (t) => t.key === data.defaultTranslationId
+                ) || null
+            } else {
+                this.questionnaireTranslation = this.translations.find((t) => t.key === null) || null
             }
         },
         resetDataAvalability() {

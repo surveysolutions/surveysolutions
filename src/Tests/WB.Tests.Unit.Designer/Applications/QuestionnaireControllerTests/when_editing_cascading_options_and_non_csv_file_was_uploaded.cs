@@ -1,5 +1,5 @@
 using System;
-using SixLabors.ImageSharp;
+using SkiaSharp;
 using System.IO;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +19,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             var imageInBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=";
             var imageStream = new MemoryStream(Convert.FromBase64String(imageInBase64));
             
-            Image.Load(imageStream).SaveAsJpeg(stream);
+            using (var bitmap = SKBitmap.Decode(imageStream))
+            using (var image = SKImage.FromBitmap(bitmap))
+            using (var data = image.Encode(SKEncodedImageFormat.Jpeg, 75))
+                data.SaveTo(stream);
             stream.Position = 0;
             postedFile = Mock.Of<IFormFile>(pf => pf.OpenReadStream() == stream);
 
