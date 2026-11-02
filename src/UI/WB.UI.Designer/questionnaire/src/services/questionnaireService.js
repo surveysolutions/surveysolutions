@@ -79,7 +79,7 @@ export async function updateAnonymousQuestionnaireSettings(
             anonymousQuestionnaireId: data.isActive
                 ? data.anonymousQuestionnaireId
                 : null,
-            anonymouslySharedAtUtc: data.anonymouslySharedAtUtc
+            anonymouslySharedAtUtc: data.generatedAtUtc
         });
     });
 }
