@@ -113,6 +113,7 @@ export default {
                 'has-warnings': !this.question.isDisabled && this.question.validity.warnings.length > 0,
                 'not-applicable': this.question.isLocked,
                 'syncing': this.isFetchInProgress,
+                'changed-since-reject': this.question.isChangedSinceReject === true,
             }, 'cell-unit', 'options-group', ' h-100', ' d-flex']
         },
     },

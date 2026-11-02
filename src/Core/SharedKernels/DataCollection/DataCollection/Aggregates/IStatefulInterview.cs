@@ -13,7 +13,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
     {
         DateTimeOffset? StartedDate { get; }
         DateTimeOffset? CompletedDate { get; }
-        DateTimeOffset? RejectDateTime { get; }
         QuestionnaireIdentity QuestionnaireIdentity { get; }
         string QuestionnaireId { get; }
         InterviewStatus Status { get; }
@@ -79,6 +78,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         InterviewTreeAudioQuestion GetAudioQuestion(Identity identity);
 
         InterviewTreeQuestion GetQuestion(Identity identity);
+
+        bool IsQuestionChangedSinceLastRejection(Identity identity);
 
         InterviewTreeStaticText GetStaticText(Identity identity);
 

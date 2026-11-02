@@ -149,6 +149,10 @@
             align-items: center;
             align-content: center;
 
+            &.changed-since-reject {
+                border-left: 4px solid #f0ad4e;
+            }
+
             .cell-content {
                 display: block;
                 width: 100%;

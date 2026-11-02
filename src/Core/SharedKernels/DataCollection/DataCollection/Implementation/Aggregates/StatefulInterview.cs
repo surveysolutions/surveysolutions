@@ -150,10 +150,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
         private InterviewTree sourceInterview;
+        private readonly HashSet<Identity> questionsChangedSinceLastRejection = new HashSet<Identity>();
 
         public DateTimeOffset? StartedDate => this.properties.StartedDate;
         public DateTimeOffset? CompletedDate => this.properties.CompletedDate;
-        public DateTimeOffset? RejectDateTime => this.properties.RejectDateTime;
         public InterviewStatus Status => this.properties.Status;
         public InterviewMode Mode => this.properties.Mode;
 
@@ -175,12 +175,53 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return variable.GetValueAsString();
         }
 
+        public bool IsQuestionChangedSinceLastRejection(Identity identity)
+            => this.questionsChangedSinceLastRejection.Contains(identity);
+
+        public override void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history)
+        {
+            if (history == null)
+                throw new ArgumentNullException(nameof(history));
+
+            var events = history.ToArray();
+            this.questionsChangedSinceLastRejection.Clear();
+            base.InitializeFromHistory(eventSourceId, events);
+
+            foreach (var historicalEvent in events)
+                this.UpdateReviewState(historicalEvent.Payload);
+        }
+
         protected override void OnEventApplied(UncommittedEvent appliedEvent)
         {
             base.OnEventApplied(appliedEvent);
             if (appliedEvent.Payload is QuestionAnswered questionAnswered)
             {
                 this.properties.LastAnswerDate = questionAnswered.OriginDate;
+            }
+
+            this.UpdateReviewState(appliedEvent.Payload);
+        }
+
+        private void UpdateReviewState(object payload)
+        {
+            switch (payload)
+            {
+                case InterviewRejected:
+                case InterviewRejectedByHQ:
+                    this.questionsChangedSinceLastRejection.Clear();
+                    break;
+                case QuestionAnswered questionAnswered:
+                    this.questionsChangedSinceLastRejection.Add(
+                        Identity.Create(questionAnswered.QuestionId, questionAnswered.RosterVector));
+                    break;
+                case AnswerRemoved answerRemoved:
+                    this.questionsChangedSinceLastRejection.Remove(
+                        Identity.Create(answerRemoved.QuestionId, answerRemoved.RosterVector));
+                    break;
+                case AnswersRemoved answersRemoved:
+                    foreach (var identity in answersRemoved.Questions)
+                        this.questionsChangedSinceLastRejection.Remove(identity);
+                    break;
             }
         }
 

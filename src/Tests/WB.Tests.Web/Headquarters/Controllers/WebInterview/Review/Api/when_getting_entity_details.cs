@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using FluentAssertions.Common;
 using Main.Core.Documents;
 using Moq;
+using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -89,7 +91,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         public void should_mark_question_changed_only_when_answered_after_last_reject()
         {
             var t0 = DateTimeOffset.UtcNow.AddHours(-3);
-            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0, "before");
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0.AddHours(3), "before");
             interview.Complete(interviewerId, "", t0.AddMinutes(1), null);
             interview.Reject(supervisorId, "reject", t0.AddMinutes(2));
             var questionnaire = Create.Entity.PlainQuestionnaire(document);
@@ -97,10 +99,75 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             var before = (InterviewTextQuestion)service.GetEntityDetails(commentedQuestionId.FormatGuid(), interview, questionnaire, true);
             Assert.That(before.IsChangedSinceReject, Is.False);
 
-            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0.AddMinutes(3), "after");
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0, "after");
 
             var after = (InterviewTextQuestion)service.GetEntityDetails(commentedQuestionId.FormatGuid(), interview, questionnaire, true);
             Assert.That(after.IsChangedSinceReject, Is.True);
+
+            interview.RemoveAnswer(commentedQuestionId, RosterVector.Empty, interviewerId, t0.AddMinutes(3));
+
+            var unanswered = (InterviewTextQuestion)service.GetEntityDetails(commentedQuestionId.FormatGuid(), interview, questionnaire, true);
+            Assert.That(unanswered.IsChangedSinceReject, Is.False);
+        }
+
+        [Test]
+        public void should_mark_answers_after_HQ_rejection_of_supervisor_approved_interview()
+        {
+            var t0 = DateTimeOffset.UtcNow.AddHours(-3);
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0.AddHours(3), "before");
+            interview.Complete(interviewerId, "", t0, null);
+            interview.Approve(supervisorId, "approved", t0.AddMinutes(1));
+            interview.HqReject(headquartersId, "reject", t0.AddMinutes(2));
+            var questionnaire = Create.Entity.PlainQuestionnaire(document);
+
+            var before = (InterviewTextQuestion)service.GetEntityDetails(commentedQuestionId.FormatGuid(), interview, questionnaire, true);
+            Assert.That(before.IsChangedSinceReject, Is.False);
+
+            var history = interview.GetUnCommittedChanges().Select(e => new CommittedEvent(
+                Guid.Empty, null, e.EventIdentifier, e.EventSourceId, e.EventSequence, e.EventTimeStamp, null, e.Payload)).ToList();
+            var answerEvent = Create.Event.TextQuestionAnswered(
+                questionId: commentedQuestionId,
+                rosterVector: RosterVector.Empty,
+                answer: "after",
+                userId: interviewerId,
+                originDate: t0);
+            var lastEvent = history.Last();
+            history.Add(new CommittedEvent(
+                Guid.Empty,
+                null,
+                Guid.NewGuid(),
+                interview.Id,
+                lastEvent.EventSequence + 1,
+                DateTime.UtcNow,
+                null,
+                answerEvent));
+            var replayedInterview = Create.AggregateRoot.StatefulInterview(questionnaire: document, shouldBeInitialized: false);
+            replayedInterview.InitializeFromHistory(interview.Id, history);
+
+            var after = (InterviewTextQuestion)service.GetEntityDetails(commentedQuestionId.FormatGuid(), replayedInterview, questionnaire, true);
+            Assert.That(after.IsChangedSinceReject, Is.True);
+        }
+
+        [Test]
+        public void should_restore_changed_since_rejection_state_from_event_history()
+        {
+            var t0 = DateTimeOffset.UtcNow.AddHours(-3);
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0.AddHours(3), "before");
+            interview.Complete(interviewerId, "", t0.AddMinutes(1), null);
+            interview.Reject(supervisorId, "reject", t0.AddMinutes(2));
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0, "after");
+
+            var history = interview.GetUnCommittedChanges().Select(e => new CommittedEvent(
+                Guid.Empty, null, e.EventIdentifier, e.EventSourceId, e.EventSequence, e.EventTimeStamp, null, e.Payload)).ToArray();
+            var replayedInterview = Create.AggregateRoot.StatefulInterview(questionnaire: document, shouldBeInitialized: false);
+            replayedInterview.InitializeFromHistory(interview.Id, history);
+
+            var entity = (InterviewTextQuestion)service.GetEntityDetails(
+                commentedQuestionId.FormatGuid(),
+                replayedInterview,
+                Create.Entity.PlainQuestionnaire(document),
+                true);
+            Assert.That(entity.IsChangedSinceReject, Is.True);
         }
 
         protected QuestionnaireDocument GetDocument()
