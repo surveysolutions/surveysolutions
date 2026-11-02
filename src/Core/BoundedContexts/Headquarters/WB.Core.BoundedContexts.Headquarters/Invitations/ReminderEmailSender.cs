@@ -111,6 +111,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 Invitation invitation = invitationService.GetInvitation(invitationId);
                 var password = invitation.Assignment.Password;
                 var address = invitation.Assignment.Email;
+                if (string.IsNullOrWhiteSpace(address))
+                    continue;
 
                 var link = interviewLinkProvider.WebInterviewContinueLink(invitation);
                 var emailContent = new EmailContent(emailTemplate, questionnaireTitle, link, password);

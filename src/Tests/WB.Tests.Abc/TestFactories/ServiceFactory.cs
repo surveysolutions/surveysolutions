@@ -1163,6 +1163,26 @@ namespace WB.Tests.Abc.TestFactories
 
             var webInterviewConfigProvider1 = webInterviewConfigProvider ?? settingsMock.Object;
 
+            var actualEmailService = emailService ?? emailServiceMock.Object;
+            var reminderEmailSender = ReminderEmailSender(invService, actualEmailService,
+                webInterviewConfigProvider1, emailParamsStorage, webInterviewEmailRenderer);
+
+            return new SendRemindersJob(
+                Mock.Of<ILogger<SendRemindersJob>>(),
+                invService,
+                actualEmailService,
+                webInterviewConfigProvider1,
+                reminderEmailSender);
+        }
+
+        public ReminderEmailSender ReminderEmailSender(
+            IInvitationService invitationService = null,
+            IEmailService emailService = null,
+            IWebInterviewConfigProvider webInterviewConfigProvider = null,
+            IPlainKeyValueStorage<EmailParameters> emailParamsStorage = null,
+            IWebInterviewEmailRenderer webInterviewEmailRenderer = null)
+        {
+            var invitationServiceActual = invitationService ?? Mock.Of<IInvitationService>();
             var linkProvider = new WebInterviewLinkProvider(
                 new VirtualPathService(Options.Create(new HeadquartersConfig
                 {
@@ -1170,23 +1190,16 @@ namespace WB.Tests.Abc.TestFactories
                     BaseAppUrl = "http://localhost"
                 }), Mock.Of<IWorkspaceContextAccessor>()));
 
-            var reminderEmailSender = new ReminderEmailSender(
+            return new ReminderEmailSender(
                 Mock.Of<ILogger<ReminderEmailSender>>(),
-                invService,
-                emailService ?? emailServiceMock.Object,
-                webInterviewConfigProvider1,
+                invitationServiceActual,
+                emailService ?? Mock.Of<IEmailService>(),
+                webInterviewConfigProvider ?? Mock.Of<IWebInterviewConfigProvider>(),
                 emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>(),
                 webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>(),
-                Create.Service.InScopeExecutor(Mock.Of<IServiceLocator>(sl => sl.GetInstance<IInvitationService>() ==
-                                                                              invService)),
+                Create.Service.InScopeExecutor(Mock.Of<IServiceLocator>(sl =>
+                    sl.GetInstance<IInvitationService>() == invitationServiceActual)),
                 linkProvider);
-
-            return new SendRemindersJob(
-                Mock.Of<ILogger<SendRemindersJob>>(),
-                invService,
-                emailService ?? emailServiceMock.Object,
-                webInterviewConfigProvider1,
-                reminderEmailSender);
         }
 
         public SendInvitationsJob SendInvitationsJob(

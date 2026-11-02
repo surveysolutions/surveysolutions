@@ -397,6 +397,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindScheduledJob<UpgradeAssignmentJob, AssignmentsUpgradeProcess>();
             registry.BindScheduledJob<UsersImportJob, Unit>();
             registry.BindScheduledJob<UpdateDynamicReportJob, UpdateDynamicReportRequest>();
+            registry.BindScheduledJob<SendRemindersNowJob, SendRemindersNowRequest>();
 
             registry.Bind<CalendarEvent>();
 

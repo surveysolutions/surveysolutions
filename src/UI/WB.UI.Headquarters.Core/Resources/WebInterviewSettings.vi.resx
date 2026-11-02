@@ -10,6 +10,9 @@
   <data name="ExampleResumePage" xml:space="preserve"><value>Trang tiếp tục ví dụ</value></data>
   <data name="ExampleFinishPage" xml:space="preserve"><value>Trang hoàn thành ví dụ</value></data>
   <data name="CustomizeEmailsText" xml:space="preserve"><value>Tùy chỉnh email</value></data>
+  <data name="CustomizeAndSendEmailsText" xml:space="preserve"><value>Customize and send emails text</value></data>
+  <data name="SendNow" xml:space="preserve"><value>SEND NOW</value></data>
+  <data name="SendNowTooltip" xml:space="preserve"><value>{{reminderType}} reminders for all assignments and interviews will be sent right now with no waiting period.</value></data>
   <data name="Invitation" xml:space="preserve"><value>Lời mời</value></data>
   <data name="Reminder" xml:space="preserve"><value>Nhắc nhở</value></data>
   <data name="Reject" xml:space="preserve"><value>Từ chối</value></data>

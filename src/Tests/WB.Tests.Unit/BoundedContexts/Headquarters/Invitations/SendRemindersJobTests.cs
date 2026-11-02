@@ -15,6 +15,34 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 {
+    [TestOf(typeof(ReminderEmailSender))]
+    public class ReminderEmailSenderTests
+    {
+        [TestCase(EmailTextTemplateType.Reminder_NoResponse)]
+        [TestCase(EmailTextTemplateType.Reminder_PartialResponse)]
+        public async Task when_sending_now_and_reminder_is_disabled(EmailTextTemplateType reminderType)
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
+            var invitationService = new Mock<IInvitationService>();
+            invitationService.SetReturnsDefault<IEnumerable<int>>(Enumerable.Empty<int>());
+
+            var config = new WebInterviewConfig { Started = true };
+            var configProvider = new Mock<IWebInterviewConfigProvider>();
+            configProvider.Setup(x => x.Get(questionnaireIdentity)).Returns(config);
+
+            var sender = Create.Service.ReminderEmailSender(
+                invitationService: invitationService.Object,
+                webInterviewConfigProvider: configProvider.Object);
+
+            await sender.SendRemindersAsync(questionnaireIdentity, "Web Survey", reminderType, 0);
+
+            if (reminderType == EmailTextTemplateType.Reminder_NoResponse)
+                invitationService.Verify(x => x.GetNoResponseInvitations(questionnaireIdentity, 0), Times.Once);
+            else
+                invitationService.Verify(x => x.GetPartialResponseInvitations(questionnaireIdentity, 0), Times.Once);
+        }
+    }
+
     [TestOf(typeof(SendRemindersJob))]
     public class SendRemindersJobTests
     {
@@ -215,12 +243,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 Create.Entity.Assignment(email: "some@email.com", password: "AAAAAAAA"),
                 interview: Create.Entity.InterviewSummary(status: InterviewStatus.RejectedBySupervisor), 
                 token: "token");
+            var invitationWithBlankEmail = Create.Entity.Invitation(2,
+                Create.Entity.Assignment(email: "   ", password: "BBBBBBBB"),
+                interview: Create.Entity.InterviewSummary(status: InterviewStatus.RejectedBySupervisor),
+                token: "token2");
             var invitationServiceMock = CreateInvitationService()
                 .WithQuestionnaires(Create.Entity.QuestionnaireBrowseItem(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, title: "Web Survey"))
-                .WithInvitations(invitation);
+                .WithInvitations(invitation, invitationWithBlankEmail);
 
             invitationServiceMock.Setup(x => x.GetInvitationsWithRejectedInterview(questionnaireIdentity))
-                .Returns(invitation.Id.ToEnumerable());
+                .Returns(new[] { invitation.Id, invitationWithBlankEmail.Id });
             
             var emailParameters = new TestInMemoryKeyValueStorage<EmailParameters>();
 
