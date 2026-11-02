@@ -46,6 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
                 { WebInterviewUserMessages.ResumeButton,    WebInterviewResources.ResumeInterview},
                 { WebInterviewUserMessages.LinkWelcome,    WebInterviewResources.LinkWelcome},
                 { WebInterviewUserMessages.LinkInvitation,    WebInterviewResources.LinkInvitation},
+                { WebInterviewUserMessages.CompleteScreenText, string.Empty},
 
             };
 

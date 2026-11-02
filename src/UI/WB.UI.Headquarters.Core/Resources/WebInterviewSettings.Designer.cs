@@ -339,6 +339,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string CompleteScreenText {
+            get {
+                return ResourceManager.GetString("CompleteScreenText", resourceCulture);
+            }
+        }
+        
         public static string NoteToSupervisor {
             get {
                 return ResourceManager.GetString("NoteToSupervisor", resourceCulture);

@@ -5,6 +5,27 @@
                 <div class="costomization-block">
                     <div class="row-element mb-30">
                         <div class="h5">
+                            {{ $t('WebInterviewSettings.CompleteScreenText') }}
+                        </div>
+                        <div class="form-group">
+                            <div class="field"
+                                :class="{ 'answered': webInterviewPageMessages['completeScreenText'].text }">
+                                <Field as="textarea" v-autosize
+                                    v-model="webInterviewPageMessages['completeScreenText'].text"
+                                    name="completeScreenText" data-vv-name="completeScreenText"
+                                    ref="completeScreenText" :min-height="77" maxlength="2000"
+                                    class="form-control js-elasticArea font-bold">
+                                </Field>
+                                <button type="button"
+                                    @click="webInterviewPageMessages['completeScreenText'].text = ''"
+                                    class="btn btn-link btn-clear">
+                                    <span></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-element mb-30">
+                        <div class="h5">
                             {{ $t('WebInterviewSettings.NoteToSupervisor') }}
                         </div>
                         <div class="form-group" :class="{ 'has-error': errors.completeNoteToSupervisor }">
@@ -46,12 +67,12 @@
                     </div>
                     <div class="">
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="savePageTextEditMode($refs.completePage, 'completeButton', 'completeNoteToSupervisor')"
+                            @click="savePageTextEditMode($refs.completePage, 'completeButton', 'completeScreenText', 'completeNoteToSupervisor')"
                             class="btn btn-md btn-success">
                             {{ $t('WebInterviewSettings.Save') }}
                         </button>
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="cancelPageTextEditMode($refs.completePage, 'completeButton', 'completeNoteToSupervisor')"
+                            @click="cancelPageTextEditMode($refs.completePage, 'completeButton', 'completeScreenText', 'completeNoteToSupervisor')"
                             class="btn btn-md btn-link">
                             {{ $t('WebInterviewSettings.Cancel') }}
                         </button>
@@ -65,6 +86,9 @@
                                     <div class="h2">
                                         {{ $t('WebInterviewUI.CompleteReviewSubmit') }}
                                     </div>
+                                </div>
+                                <div class="row-element mb-20" v-if="webInterviewPageMessages['completeScreenText'].text"
+                                    v-dompurify-html="previewHtml(webInterviewPageMessages['completeScreenText'].text)">
                                 </div>
                                 <div class="row-element mb-40">
                                     <div class="h2 info-block gray-uppercase">

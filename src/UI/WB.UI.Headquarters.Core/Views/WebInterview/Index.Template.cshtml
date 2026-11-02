@@ -51,7 +51,8 @@
                          : "null"),
             customTexts: {
                 completeButton: '@Html.ToSafeJavascriptMessage(Model.CustomMessages.GetText(WebInterviewUserMessages.CompleteButton).ToString())',
-                noteToSupervisor: '@Html.ToSafeJavascriptMessage(Model.CustomMessages.GetText(WebInterviewUserMessages.CompleteNoteToSupervisor).ToString())'
+                noteToSupervisor: '@Html.ToSafeJavascriptMessage(Model.CustomMessages.GetText(WebInterviewUserMessages.CompleteNoteToSupervisor).ToString())',
+                completeScreenText: '@Html.ToSafeJavascriptMessage(Model.CustomMessages.GetText(WebInterviewUserMessages.CompleteScreenText).ToString())'
             },
             mayBeSwitchedToWebMode: @(Model.MayBeSwitchedToWebMode ? "true" : "false"),
             webInterviewUrl: '@Model.WebInterviewUrl',
