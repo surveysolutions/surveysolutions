@@ -1,14 +1,14 @@
 import { defineConfig } from 'vite'
 import path from 'path'
 import vue from '@vitejs/plugin-vue'
-import LocalizationPlugin from './tools/vite-plugin-localization'
+import LocalizationPlugin from './tools/vite-plugin-localization.js'
 import fs from 'fs'
 import fg from 'fast-glob'
 import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.js'
 import { normalizePath } from 'vite'
 
 
-const baseDir = path.relative(__dirname, './')
+const baseDir = path.relative(import.meta.dirname, './')
 const join = path.join.bind(path, baseDir)
 const uiFolder = join('..')
 const hqFolder = path.join(uiFolder, 'WB.UI.Headquarters.Core')
@@ -154,12 +154,12 @@ for (var attr in pages) {
 }
 
 //const allTargets = pagesTargets.concat(fileTargets).map(i => { return { src: i.source, dest: i.destination } })
-const allTargets = fileTargets.map(i => { return { src: i.source, dest: path.resolve(__dirname, i.destination) } })
+const allTargets = fileTargets.map(i => { return { src: i.source, dest: path.resolve(import.meta.dirname, i.destination) } })
 
-let clearBeforeBuild = fileTargets.map(i => path.resolve(__dirname, i.destination))
+let clearBeforeBuild = fileTargets.map(i => path.resolve(import.meta.dirname, i.destination))
 //const clearBeforeBuild = []
 //clearBeforeBuild.concat(fileTargets.map(i => path.resolve(__dirname, i.destination)))
-clearBeforeBuild = clearBeforeBuild.concat(resourcesTargets.map(i => path.resolve(__dirname, i.destination)))
+clearBeforeBuild = clearBeforeBuild.concat(resourcesTargets.map(i => path.resolve(import.meta.dirname, i.destination)))
 clearBeforeBuild.push('./dist')
 
 function copyTargets(targets) {
@@ -172,7 +172,7 @@ function copyTargets(targets) {
         const srcBase = target.src.split(/[*{]/)[0].replace(/[/\\]$/, '')
 
         for (const src of sources) {
-            const destDir = path.resolve(__dirname, target.dest)
+            const destDir = path.resolve(import.meta.dirname, target.dest)
 
             let destFile
             if (target.flatten === false) {
@@ -219,7 +219,7 @@ export default defineConfig(({ mode, command }) => {
             preprocessorOptions: {
                 scss: {
                     //...silenceSomeSassDeprecationWarnings,
-                    silenceDeprecations: ['import', 'mixed-decls'],
+                    silenceDeprecations: ['import'],
                 },
                 /*sass: {
                     ...silenceSomeSassDeprecationWarnings,
@@ -230,11 +230,11 @@ export default defineConfig(({ mode, command }) => {
             alias: [
                 {
                     find: '@',
-                    replacement: path.resolve(__dirname, 'src'),
+                    replacement: path.resolve(import.meta.dirname, 'src'),
                 },
                 {
                     find: '~',
-                    replacement: path.resolve(__dirname, 'src'),
+                    replacement: path.resolve(import.meta.dirname, 'src'),
                 },
                 {
                     find: 'vue',
@@ -242,7 +242,7 @@ export default defineConfig(({ mode, command }) => {
                 },
                 {
                     find: 'moment',
-                    replacement: path.resolve(__dirname, 'src/shared/momentCompat.js'),
+                    replacement: path.resolve(import.meta.dirname, 'src/shared/momentCompat.js'),
                 },
                 {
                     find: 'lodash',
@@ -305,7 +305,7 @@ export default defineConfig(({ mode, command }) => {
                     // copy page templates and locale resources
                     const targets = pagesSources.concat(resourcesTargets).map(i => ({
                         src: i.source,
-                        dest: path.resolve(__dirname, i.destination),
+                        dest: path.resolve(import.meta.dirname, i.destination),
                         ...(i.name ? { rename: i.name } : {}),
                         ...(typeof i.isFlat === 'boolean' ? { flatten: i.isFlat } : {}),
                     }))
@@ -320,7 +320,7 @@ export default defineConfig(({ mode, command }) => {
                 writeBundle() {
                     const targets = resourcesTargets.map(i => ({
                         src: i.source,
-                        dest: path.resolve(__dirname, i.destination),
+                        dest: path.resolve(import.meta.dirname, i.destination),
                         ...(typeof i.isFlat === 'boolean' ? { flatten: i.isFlat } : {}),
                     }))
                     //console.log(`=========copy writeBundle, targets:`, targets);
@@ -335,7 +335,7 @@ export default defineConfig(({ mode, command }) => {
                     if (isServe) return
                     const targets = pagesTargets.concat(fileTargets).map(i => ({
                         src: i.source,
-                        dest: path.resolve(__dirname, i.destination),
+                        dest: path.resolve(import.meta.dirname, i.destination),
                         ...(i.name ? { rename: i.name } : {}),
                         ...(i.isFlat === false ? { flatten: false } : {}),
                     }))
