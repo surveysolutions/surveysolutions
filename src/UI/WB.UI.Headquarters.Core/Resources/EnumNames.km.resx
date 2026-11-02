@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve"><value>បានអនុម័តដោយទីស្នាក់ការ</value></data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve"><value>បានអនុម័តដោយអ្នកត្រួតពិនិត្យ</value></data>
+  <data name="InterviewStatus_Completed" xml:space="preserve"><value>បានបញ្ចប់</value></data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve"><value>អ្នកសំភាសន៍ត្រូវបានចាត់ចែង</value></data>
+  <data name="UserRoles_Administrator" xml:space="preserve"><value>អ្នកគ្រប់គ្រង</value></data>
+  <data name="UserRoles_Supervisor" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ</value></data>
+  <data name="UserRoles_Interviewer" xml:space="preserve"><value>អ្នកសំភាសន៍</value></data>
+  <data name="UserRoles_Headquarter" xml:space="preserve"><value>ទីស្នាក់ការ</value></data>
+  <data name="UserRoles_Observer" xml:space="preserve"><value>អ្នកសង្កេតការណ៍</value></data>
+  <data name="UserRoles_ApiUser" xml:space="preserve"><value>អ្នកប្រើប្រាស់API</value></data>
+  <data name="MenuItem_Completed" xml:space="preserve"><value>បានបញ្ចប់</value></data>
+  <data name="MenuItem_Rejected" xml:space="preserve"><value>បានបដិសេធ</value></data>
+  <data name="MenuItem_Started" xml:space="preserve"><value>បានចាប់ផ្តើម</value></data>
+  <data name="MenuItem_Profile" xml:space="preserve"><value>ប្រវត្តិរូប</value></data>
+  <data name="InterviewerFacet_None" xml:space="preserve"><value>គ្មាន</value></data>
+  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve"><value>អត្ថបទបញ្ចប់</value></data>
+  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve"><value>ការអញ្ជើញស្វាគមន៍</value></data>
+  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve"><value>បន្តការអញ្ជើញ</value></data>
+  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve"><value>ចំណងជើងការបន្ត</value></data>
+  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve"><value>ឈ្មោះការស្ទង់មតិ</value></data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve"><value>ចំណងជើងបញ្ចប់</value></data>
+  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve"><value>ចំណងជើងស្វាគមន៍</value></data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve"><value>កំណត់ចំណាំសម្រាប់អ្នកត្រួតពិនិត្យ</value></data>
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve"><value>បញ្ចប់</value></data>
+  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve"><value>ចាប់ផ្តើមការសំភាសន៍ថ្មី</value></data>
+  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve"><value>បន្ត</value></data>
+  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve"><value>ការអញ្ជើញ</value></data>
+  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve"><value>ចំណងជើងស្វាគមន៍</value></data>
+</root>

@@ -139,12 +139,12 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewHardDeleted InterviewHardDeleted(Guid? userId = null, DateTimeOffset? originDate = null)
             => new InterviewHardDeleted(userId: userId ?? Guid.NewGuid(), originDate: originDate ?? DateTimeOffset.Now);
 
-        public InterviewOnClientCreated InterviewOnClientCreated(Guid? questionnaireId = null, long? questionnaireVersion = null, DateTimeOffset? originDate = null)
+        public InterviewOnClientCreated InterviewOnClientCreated(Guid? questionnaireId = null, long? questionnaireVersion = null, DateTimeOffset? originDate = null, int? assignmentId = null)
             => new InterviewOnClientCreated(
                 Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 1, 
-                null,
+                assignmentId,
                 originDate ?? DateTimeOffset.Now);
 
         public InterviewReceivedByInterviewer InterviewReceivedByInterviewer(string deviceId = null, 

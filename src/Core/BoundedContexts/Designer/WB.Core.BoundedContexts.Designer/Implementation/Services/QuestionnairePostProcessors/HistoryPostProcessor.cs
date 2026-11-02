@@ -930,6 +930,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 }
             }
             questionnaireStateTrackerStorage.Store(questionnaireStateTracker, questionnaireId.FormatGuid());
+            this.dbContext.SaveChanges();
         }
 
         private void DeleteItemFromStateAndUpdateHistory(Guid questionnaireId,

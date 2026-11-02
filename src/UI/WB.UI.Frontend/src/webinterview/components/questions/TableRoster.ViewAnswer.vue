@@ -1,9 +1,13 @@
 <template>
-    <div :class="questionStyle" :id="`tr_view_${questionId}`">
-        <popover trigger="hover-focus" append-to="body"
+    <div :class="questionStyle"
+        :id="`tr_view_${questionId}`">
+        <popover trigger="hover-focus"
+            append-to="body"
             :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)"
             v-if="!question.isDisabled">
-            <a class="cell-content has-tooltip" type="primary" data-role="trigger">
+            <a class="cell-content has-tooltip"
+                type="primary"
+                data-role="trigger">
                 <span v-if="(questionType == 'Integer' || questionType == 'Double') && question.useFormatting">
                     {{ formattedAnswer }}
                 </span>
@@ -11,18 +15,25 @@
             </a>
 
             <template v-slot:popover>
-                <div class="error-tooltip" v-if="!question.validity.isValid || question.validity.errorMessage">
-                    <h6 style="text-transform:uppercase;" v-if="question.validity.errorMessage">
+                <div class="error-tooltip"
+                    v-if="!question.validity.isValid || question.validity.errorMessage">
+                    <h6 style="text-transform:uppercase;"
+                        v-if="question.validity.errorMessage">
                         {{ $t("WebInterviewUI.AnswerWasNotSaved") + (question.validity.notSavedAnswerValue ? ': "' +
                             question.validity.notSavedAnswerValue + '"' : '') }}
                     </h6>
-                    <template v-for="message in question.validity.messages" :key="message">
-                        <div v-dateTimeFormatting v-dompurify-html="message"></div>
+                    <template v-for="message in question.validity.messages"
+                        :key="message">
+                        <div v-dateTimeFormatting
+                            v-dompurify-html="message"></div>
                     </template>
                 </div>
-                <div class="warning-tooltip" v-else-if="question.validity.warnings.length > 0">
-                    <template v-for="message in question.validity.warnings" :key="message">
-                        <div v-dateTimeFormatting v-dompurify-html="message"></div>
+                <div class="warning-tooltip"
+                    v-else-if="question.validity.warnings.length > 0">
+                    <template v-for="message in question.validity.warnings"
+                        :key="message">
+                        <div v-dateTimeFormatting
+                            v-dompurify-html="message"></div>
                     </template>
                 </div>
             </template>
@@ -80,7 +91,7 @@ export default {
             if (this.question)
                 return this.formatNumber(this.question.answer)
             return ''
-        }
+        },
     },
     methods: {
         cacheQuestionData() {

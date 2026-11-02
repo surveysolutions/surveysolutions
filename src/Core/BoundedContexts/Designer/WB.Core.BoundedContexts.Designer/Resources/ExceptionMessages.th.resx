@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="LookupTableAlreadyExist" xml:space="preserve">
+        <value>มีตารางค้นหาที่มีรหัสดังกล่าวอยู่แล้ว</value>
+    </data>
+    <data name="LookupTableIsAbsent" xml:space="preserve">
+        <value>ไม่มีตารางค้นหาที่มีรหัสดังกล่าว</value>
+    </data>
+    <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+        <value>ไม่สามารถโหลดไฟล์ที่ไม่มีข้อมูลได้</value>
+    </data>
+    <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+        <value>ไม่สามารถแยกวิเคราะห์ค่า {0} เป็นเลขทศนิยมได้ คอลัมน์ {1} แถว {2}</value>
+    </data>
+    <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+        <value>ไม่อนุญาตให้ใช้ส่วนหัวที่ว่างเปล่าหรือไม่ถูกต้อง</value>
+    </data>
+    <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+        <value>คอลัมน์รหัสแถวบังคับหายไป</value>
+    </data>
+    <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+        <value>ค่า Rowcode ต้องไม่ซ้ำกัน</value>
+    </data>
+    <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+        <value>ไม่สามารถแยกวิเคราะห์ค่า {0} เป็นจำนวนเต็มยาวได้ คอลัมน์ {1} แถว {2}</value>
+    </data>
+    <data name="LookupTables_too_many_columns" xml:space="preserve">
+        <value>มีคอลัมน์มากเกินไปในไฟล์ที่อัปโหลด จำนวนคอลัมน์สูงสุดคือ {0}</value>
+    </data>
+    <data name="LookupTables_too_many_rows" xml:space="preserve">
+        <value>ตารางค้นหามีแถว {1} ซึ่งเกินขีดจำกัดจำนวนแถวในตารางการค้นหา (แถว {0})</value>
+    </data>
+    <data name="MacroAlreadyExist" xml:space="preserve">
+        <value>มีมาโครอยู่แล้ว</value>
+    </data>
+    <data name="MacroIsAbsent" xml:space="preserve">
+        <value>มาโครหายไป</value>
+    </data>
+    <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+        <value>มีกฎสำคัญอยู่แล้ว</value>
+    </data>
+    <data name="CriticalRuleIsAbsent" xml:space="preserve">
+        <value>กฎที่สำคัญหายไป</value>
+    </data>
+    <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+        <value>ไม่อนุญาตให้ใช้ส่วนหัวที่มีชื่อเดียวกัน</value>
+    </data>
+    <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+        <value>ไฟล์ที่อัปโหลดไม่ใช่รูปภาพ</value>
+    </data>
+    <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+        <value>ขนาดรูปภาพใหญ่เกินไป</value>
+    </data>
+    <data name="Attachments_Unsupported_content" xml:space="preserve">
+        <value>ไม่รองรับเนื้อหาที่อัปโหลด</value>
+    </data>
+    <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+        <value>คุณไม่สามารถย้ายไปยังส่วนย่อย {0} ได้เนื่องจากตำแหน่ง {1} อยู่ในตำแหน่งที่ไม่ยอมรับ</value>
+    </data>
+    <data name="ComboboxCannotBeFound" xml:space="preserve">
+        <value>ไม่พบคำถามกล่องคำสั่งผสมที่มีรหัสสาธารณะ {0}</value>
+    </data>
+    <data name="ItemWithIdExistsAlready" xml:space="preserve">
+        <value>มีรายการแบบสอบถามอย่างน้อยหนึ่งรายการที่มี ID เดียวกัน {0} อยู่แล้ว</value>
+    </data>
+    <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+        <value>มีส่วนย่อยตั้งแต่หนึ่งส่วนขึ้นไปที่มี ID เดียวกัน {0} อยู่แล้ว:{1}{2}</value>
+    </data>
+    <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+        <value>คุณไม่มีสิทธิ์ในการเปลี่ยนแปลงแบบสอบถามนี้</value>
+    </data>
+    <data name="TranslationIsNotFull" xml:space="preserve">
+        <value>การแปลไม่สมบูรณ์และไม่มีข้อความที่จำเป็นทั้งหมดสำหรับทุกองค์ประกอบ</value>
+    </data>
+    <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+        <value>การแปลหมวดหมู่ "{0}" ไม่สมบูรณ์และไม่มีข้อความตัวเลือกทั้งหมด</value>
+    </data>
+    <data name="QuestionCannotBeFound" xml:space="preserve">
+        <value>ไม่พบคำถามเกี่ยวกับรหัสสาธารณะ {0}</value>
+    </data>
+    <data name="QuestionIsNotCombobox" xml:space="preserve">
+        <value>คำถาม {0} ไม่ใช่กล่องคำสั่งผสม</value>
+    </data>
+    <data name="QuestionnaireCantBeFound" xml:space="preserve">
+        <value>ไม่พบรายการแบบสอบถามที่มีรหัส {0}</value>
+    </data>
+    <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+        <value>ชื่อแบบสอบถามต้องไม่เว้นว่างหรือมีเฉพาะช่องว่าง</value>
+    </data>
+    <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+        <value>แบบสอบถามรองรับหน้าปกแล้ว</value>
+    </data>
+    <data name="SubSectionCantBeFound" xml:space="preserve">
+        <value>ไม่พบส่วนย่อยที่มีคีย์สาธารณะ {0}</value>
+    </data>
+    <data name="SubSectionDepthLimit" xml:space="preserve">
+        <value>ความลึกของส่วนย่อยหรือบัญชีรายชื่อต้องไม่สูงกว่า {0}</value>
+    </data>
+    <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+        <value>ส่วนไม่สามารถมีรายการย่อยมากกว่า {0}</value>
+    </data>
+    <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+        <value>ส่วนหรือส่วนย่อยไม่สามารถมีรายการย่อยโดยตรงมากกว่า {0}</value>
+    </data>
+    <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+        <value>มีคำถามอย่างน้อย 1 ข้อที่มี ID เดียวกัน {0} อยู่แล้ว: {1}{2}</value>
+    </data>
+    <data name="CantPasteQuestion" xml:space="preserve">
+        <value>ไม่สามารถวางคำถามที่นี่</value>
+    </data>
+    <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+        <value>ไม่สามารถลบส่วนที่มีอยู่ล่าสุดออกจากแบบสอบถามได้</value>
+    </data>
+    <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+        <value>ไม่สามารถลบส่วนปกออกจากแบบสอบถามได้</value>
+    </data>
+    <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+        <value>หัวข้อหน้าปกต้องเป็นหัวข้อแรกของแบบสอบถาม</value>
+    </data>
+    <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+        <value>หน้าปกประกอบด้วยคำถาม ข้อความคงที่ และตัวแปรเท่านั้น</value>
+    </data>
+    <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+        <value>เป็นส่วนปกแบบอ่านอย่างเดียว คุณไม่สามารถแก้ไขหรือเรียงลำดับคำถามใหม่ได้</value>
+    </data>
+    <data name="CantRemoveUserFromTheList" xml:space="preserve">
+        <value>ไม่สามารถลบผู้ใช้ได้ เนื่องจากไม่มีอยู่ในรายการแชร์</value>
+    </data>
+    <data name="FailedToAddGroup" xml:space="preserve">
+        <value>ความพยายามล้มเหลวในการเพิ่มกลุ่ม {0} ลงในกลุ่ม {1} แต่ไม่มีกลุ่ม {1} ในเอกสาร {2}</value>
+    </data>
+    <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+        <value>กำลังพยายามนำเข้าเทมเพลตของแบบสอบถามที่ถูกลบ</value>
+    </data>
+    <data name="InvalidFixedTitle" xml:space="preserve">
+        <value>รายการชื่อเรื่องไม่ถูกต้อง</value>
+    </data>
+    <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+        <value>จำเป็นต้องมีค่าที่ไม่เว้นว่างสำหรับชื่อบัญชีรายชื่อคงที่</value>
+    </data>
+    <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+        <value>ขณะนี้รองรับเฉพาะ QuestionnaireDocuments เท่านั้น</value>
+    </data>
+    <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+        <value>ไม่พบแบบสอบถาม {0} ของเวอร์ชัน {1}</value>
+    </data>
+    <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+        <value>ไม่รองรับประเภทคำถาม: {0}</value>
+    </data>
+    <data name="RosterCantBePaste" xml:space="preserve">
+        <value>ไม่สามารถวางบัญชีรายชื่อที่นี่</value>
+    </data>
+    <data name="StaticTextCantBePaste" xml:space="preserve">
+        <value>ไม่สามารถวางข้อความแบบคงที่ได้ที่นี่</value>
+    </data>
+    <data name="UnknownTypeCantBePaste" xml:space="preserve">
+        <value>ประเภทรายการที่ไม่รู้จัก วางไม่สำเร็จ</value>
+    </data>
+    <data name="UserIsInTheList" xml:space="preserve">
+        <value>ผู้ใช้ {0} มีอยู่แล้วในรายการที่แชร์</value>
+    </data>
+    <data name="InvalidUserInfo" xml:space="preserve">
+        <value>ข้อมูลผู้ใช้ไม่ถูกต้อง</value>
+    </data>
+    <data name="UserIsOwner" xml:space="preserve">
+        <value>ผู้ใช้ {0} เป็นเจ้าของแบบสอบถามนี้ กรุณากรอกอีเมล์อื่น</value>
+    </data>
+    <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+        <value>ค่าบัญชีรายชื่อชุดคงที่ควรมีเฉพาะอักขระตัวเลขเท่านั้น</value>
+    </data>
+    <data name="VariableCantBePaste" xml:space="preserve">
+        <value>ไม่สามารถวางตัวแปรที่นี่</value>
+    </data>
+    <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+        <value>หมวดหมู่ในคำถามแบบเรียงซ้อนต้องไม่มีคอลัมน์ ParentValue ที่ว่างเปล่า</value>
+    </data>
+    <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+        <value>หมวดหมู่ในคำถามแบบเรียงซ้อนต้องไม่มีค่าตัวเลขในคอลัมน์ ParentValue</value>
+    </data>
+    <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+        <value>มีคู่ "Title" และ "Parent Value" อย่างน้อย 1 คู่ รายการไม่ควรมีรายการที่ซ้ำกัน</value>
+    </data>
+    <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+        <value>ค่าหมวดหมู่ควรมีเฉพาะอักขระตัวเลขเท่านั้น</value>
+    </data>
+    <data name="AttachmentIdIsMissing" xml:space="preserve">
+        <value>ไม่มีไฟล์แนบที่มีรหัส {0}</value>
+    </data>
+    <data name="LookupTableHasEmptyContent" xml:space="preserve">
+        <value>ตารางการค้นหาที่มี ID {0} ไม่มีเนื้อหา</value>
+    </data>
+    <data name="LookupTableIsMissing" xml:space="preserve">
+        <value>ตารางการค้นหาที่มี ID {0} หายไป</value>
+    </data>
+    <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+        <value>รหัสไฟล์แนบเก่าว่างเปล่าและไม่มีไฟล์สำหรับไฟล์แนบ {0} ในแบบสอบถาม {1}</value>
+    </data>
+    <data name="ProvidedFileHasErrors" xml:space="preserve">
+        <value>พบข้อผิดพลาดในไฟล์ที่ให้มา</value>
+    </data>
+    <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+        <value>พบข้อผิดพลาดในไฟล์ Excel</value>
+    </data>
+    <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+        <value>{0} มีดัชนีที่ไม่ถูกต้องที่ [{1}]</value>
+    </data>
+    <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+        <value>{0} มีประเภทที่ไม่ถูกต้อง [{1}]</value>
+    </data>
+    <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+        <value>{0} มีรหัสไม่ถูกต้องที่ [{1}]</value>
+    </data>
+    <data name="TranslationFileIsEmpty" xml:space="preserve">
+        <value>ไฟล์ Excel ว่างเปล่า - ไม่มีแผ่นงาน</value>
+    </data>
+    <data name="TranslationsCantBeExtracted" xml:space="preserve">
+        <value>แยกคำแปลจากไฟล์ที่อัปโหลดไม่สำเร็จ</value>
+    </data>
+    <data name="CategoriesCantBeExtracted" xml:space="preserve">
+        <value>ไม่สามารถแยกหมวดหมู่จากไฟล์ที่อัปโหลด</value>
+    </data>
+    <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+        <value>ไม่พบแผ่นงานที่มีคำแปล</value>
+    </data>
+    <data name="VariableWithIdWasNotFound" xml:space="preserve">
+        <value>ไม่พบตัวแปรที่มีรหัส {0} ในแบบสอบถาม {1}</value>
+    </data>
+    <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+        <value>ไม่พบส่วนหัว {0} ในไฟล์ Excel</value>
+    </data>
+    <data name="HeaderWasNotFound" xml:space="preserve">
+        <value>ไม่พบส่วนหัวในไฟล์</value>
+    </data>
+    <data name="NoParentCascadingOptions" xml:space="preserve">
+        <value>ไม่พบหมวดหมู่สำหรับคำถามเรียงซ้อนหลัก '{0}'</value>
+    </data>
+    <data name="Column" xml:space="preserve">
+        <value>คอลัมน์</value>
+    </data>
+    <data name="Row" xml:space="preserve">
+        <value>แถว</value>
+    </data>
+    <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+        <value>บางคอลัมน์หายไป ตรวจสอบให้แน่ใจว่าคุณอัปโหลดไฟล์ที่มีคอลัมน์ที่จำเป็น</value>
+    </data>
+    <data name="ImportOptions_EmptyValue" xml:space="preserve">
+        <value>ค่าว่าง</value>
+    </data>
+    <data name="ImportOptions_NotNumber" xml:space="preserve">
+        <value>ค่าจำนวนเต็ม 32 บิตไม่ถูกต้อง '{0}' ค่าควรอยู่ระหว่าง -2147483647 ถึง 2147483647</value>
+    </data>
+    <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+        <value>คำถามผู้ปกครองไม่มีหมวดหมู่ที่มีค่า '{0}'</value>
+    </data>
+    <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+        <value>หมวดหมู่ที่ซ้ำกัน '{0}' ที่มีค่าพาเรนต์ '{1}'</value>
+    </data>
+    <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+        <value>คำถามผู้ปกครอง '{0}' มีหมวดหมู่ {1} ที่มีค่า '{2}'</value>
+    </data>
+    <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+        <value>ชื่อเรื่องยาวเกินไป ความยาวของชื่อเรื่องควรน้อยกว่า {0}</value>
+    </data>
+    <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+        <value>ชื่อไฟล์แนบยาวเกินไป ชื่อไฟล์แนบควรน้อยกว่า {0}</value>
+    </data>
+    <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+        <value>หมวดหมู่ที่ซ้ำกัน '{0}' ที่มีค่า '{1}'</value>
+    </data>
+    <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+        <value>[{0}] ค่าตัวเลขไม่ถูกต้อง</value>
+    </data>
+    <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+        <value>[{0}] หัวข้อว่างเปล่า</value>
+    </data>
+    <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+        <value>[{0}] ค่าว่าง</value>
+    </data>
+    <data name="Excel_Categories_Duplicated" xml:space="preserve">
+        <value>หมวดหมู่ที่ซ้ำกันในแถว: {0}</value>
+    </data>
+    <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+        <value>บางหมวดหมู่ไม่มีรหัสผู้ปกครอง</value>
+    </data>
+    <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+        <value>ชุดหมวดหมู่มีหมวดหมู่มากกว่า {0}</value>
+    </data>
+    <data name="Excel_NoCategories" xml:space="preserve">
+        <value>ไม่มีหมวดหมู่ในไฟล์</value>
+    </data>
+    <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+        <value>หมวดหมู่ที่กำหนดควรมีอย่างน้อย 2 หมวดหมู่</value>
+    </data>
+    <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+        <value>[{0}] ข้อความในหมวดหมู่ควรมีความยาวน้อยกว่า 250 อักขระ</value>
+    </data>
+    <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+        <value>ยอมรับเฉพาะไฟล์ที่คั่นด้วยแท็บ (*.tab, *.txt, *.tsv) หรือ excel (*.xslx, *.xls, *.ods) เท่านั้น</value>
+    </data>
+    <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+        <value>แบบสอบถามรองรับปกแล้ว</value>
+    </data>
+    <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+        <value>ไม่พบหมวดหมู่</value>
+    </data>
+</root>

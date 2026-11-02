@@ -1,7 +1,13 @@
 <template>
-    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
-        :userName="userInfo.userName" :canChangePassword="userInfo.canChangePassword" :userId="userInfo.userId"
-        :currentTab="currentTab" :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
+    <ProfileLayout ref="profile"
+        :role="userInfo.role"
+        :isOwnProfile="userInfo.isOwnProfile"
+        :userName="userInfo.userName"
+        :canChangePassword="userInfo.canChangePassword"
+        :userId="userInfo.userId"
+        :currentTab="currentTab"
+        :canGenerateToken="userInfo.canGetApiToken"
+        :isRestricted="userInfo.isRestricted">
         <div>
             <div>
                 <h2>{{ $t('Strings.HQ_Views_EnableAuthenticator_Title') }}</h2>
@@ -35,14 +41,17 @@
                         <form>
                             <form-group :label="$t('FieldsAndValidations.VerificationCodeFieldName')"
                                 :error="modelState['VerificationCode']">
-                                <TextInput id="VerificationCode" v-model.trim="verificationCode"
+                                <TextInput id="VerificationCode"
+                                    v-model.trim="verificationCode"
                                     :haserror="modelState['VerificationCode'] !== undefined" />
                             </form-group>
                             <div class="block-filter">
-                                <button type="submit" class="btn btn-success" id="btnVerify"
+                                <button type="submit"
+                                    class="btn btn-success"
+                                    id="btnVerify"
                                     v-bind:disabled="userInfo.isObserving || userInfo.isRestricted || isVerifying"
                                     @click="verify">{{
-                                        $t('Pages.Verify') }}</button>
+                                    $t('Pages.Verify') }}</button>
                             </div>
                         </form>
                     </li>
@@ -53,7 +62,7 @@
 </template>
 
 <script>
-import { each } from 'lodash'
+import { each } from 'lodash-es'
 import QRCode from 'qrcode'
 
 export default {
@@ -62,7 +71,7 @@ export default {
             modelState: {},
             personName: null,
             verificationCode: null,
-            isVerifying: false
+            isVerifying: false,
         }
     },
     computed: {

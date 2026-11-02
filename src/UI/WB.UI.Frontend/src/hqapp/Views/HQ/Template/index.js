@@ -1,6 +1,6 @@
-import LoginToDesigner from './LoginToDesigner'
-import Import from './Import'
-import ImportMode from './ImportMode'
+const LoginToDesigner = () => import('./LoginToDesigner')
+const Import = () => import('./Import')
+const ImportMode = () => import('./ImportMode')
 
 export default class Template {
     get routes() {

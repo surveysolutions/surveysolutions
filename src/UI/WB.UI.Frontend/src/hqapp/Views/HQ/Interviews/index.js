@@ -1,4 +1,4 @@
-import Interviews from './HqInterviews'
+const Interviews = () => import('./HqInterviews')
 
 export default class InterviewsComponent {
     constructor(rootStore) {

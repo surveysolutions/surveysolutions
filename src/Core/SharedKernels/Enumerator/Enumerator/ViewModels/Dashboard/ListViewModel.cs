@@ -8,8 +8,10 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public abstract class ListViewModel : InterviewTabPanel //, IDisposable
+    public abstract class ListViewModel : InterviewTabPanel
     {
+        private bool isDisposed;
+
         public bool IsItemsLoaded { get; protected set; }
         public event EventHandler OnItemsLoaded;
         protected abstract IEnumerable<IDashboardItem> GetUiItems();
@@ -89,16 +91,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     .ForEach(i => i?.RefreshDataTime());
         }
 
-        /*public void Dispose()
+        public override void Dispose()
         {
-            this.UiItems.ToList()
-                .Select(i => i as IDashboardItemWithEvents)
-                .Where(i => i != null)
-                .ForEach(i =>
-                {
-                    i.OnItemUpdated -= ListViewModel_OnItemUpdated;
-                    i.DisposeIfDisposable();
-                });
-        }*/
+            if (isDisposed) return;
+            isDisposed = true;
+
+            this.UiItems.ToList().ForEach(uiItem =>
+            {
+                if (uiItem is IDashboardItemWithEvents withEvents)
+                    withEvents.OnItemUpdated -= ListViewModel_OnItemUpdated;
+                uiItem.DisposeIfDisposable();
+            });
+
+            base.Dispose();
+        }
     }
 }

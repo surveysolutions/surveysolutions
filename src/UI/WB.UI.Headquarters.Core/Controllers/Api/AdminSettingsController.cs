@@ -23,6 +23,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
@@ -47,6 +48,10 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool PartialSynchronizationEnabled { get; set; }
             public bool AllowSupervisorChangeAssignmentStatus { get; set; }
             public bool AllowInterviewerChangeAssignmentStatus { get; set; }
+            public AudioRecordingQuality? AudioRecordingQuality { get; set; }
+            [EnumDataType(typeof(AcceptableGpsLocationSource))]
+            public AcceptableGpsLocationSource? AcceptableGpsLocationSource { get; set; }
+            public bool AllowSupervisorAudioAuditPlayback { get; set; }
         }
 
         public class InterviewerGeographyQuestionAccuracyInMetersModel
@@ -159,7 +164,10 @@ namespace WB.UI.Headquarters.Controllers.Api
                     exportSettings.GetGeographyExportFormat()),
 
                 AllowSupervisorChangeAssignmentStatus = interviewerSettings.IsAllowSupervisorChangeAssignmentStatus(),
-                AllowInterviewerChangeAssignmentStatus = interviewerSettings.IsAllowInterviewerChangeAssignmentStatus()
+                AllowInterviewerChangeAssignmentStatus = interviewerSettings.IsAllowInterviewerChangeAssignmentStatus(),
+                AudioRecordingQuality = interviewerSettings.GetAudioRecordingQuality(),
+                AllowSupervisorAudioAuditPlayback = interviewerSettings.IsAllowSupervisorAudioAuditPlayback(),
+                AcceptableGpsLocationSource = interviewerSettings.GetAcceptableGpsLocationSource()
             };
         }
 
@@ -180,6 +188,11 @@ namespace WB.UI.Headquarters.Controllers.Api
                 settings.AllowInterviewerChangeAssignmentStatus = message.AllowSupervisorChangeAssignmentStatus
                     ? message.AllowInterviewerChangeAssignmentStatus
                     : false;
+                settings.AllowSupervisorAudioAuditPlayback = message.AllowSupervisorAudioAuditPlayback;
+                if (message.AudioRecordingQuality.HasValue)
+                    settings.AudioRecordingQuality = message.AudioRecordingQuality.Value;
+                if (message.AcceptableGpsLocationSource.HasValue)
+                    settings.AcceptableGpsLocationSource = message.AcceptableGpsLocationSource.Value;
             });
 
             return Ok(new {success = true});

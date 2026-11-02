@@ -1,5 +1,6 @@
 <template>
-    <HqLayout :hasFilter="true" :title="title">
+    <HqLayout :hasFilter="true"
+        :title="title">
 
         <template v-slot:subtitle>
             <div>
@@ -13,45 +14,81 @@
 
         <template v-slot:filters>
             <Filters>
-                <FilterBlock v-if="model.showSupervisorColumn" :title="$t('Pages.Interviewers_SupervisorTitle')">
-                    <Typeahead ref="supervisorControl" control-id="supervisor" data-vv-name="supervisor"
-                        data-vv-as="supervisor" :placeholder="$t('Common.AllSupervisors')" :value="supervisor"
-                        :fetch-url="$config.model.supervisorsUrl" :selectedValue="query.supervisor"
+                <FilterBlock v-if="model.showSupervisorColumn"
+                    :title="$t('Pages.Interviewers_SupervisorTitle')">
+                    <Typeahead ref="supervisorControl"
+                        control-id="supervisor"
+                        data-vv-name="supervisor"
+                        data-vv-as="supervisor"
+                        :placeholder="$t('Common.AllSupervisors')"
+                        :value="supervisor"
+                        :fetch-url="$config.model.supervisorsUrl"
+                        :selectedValue="query.supervisor"
                         v-on:selected="supervisorSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Users.InterviewerIssues')">
-                    <Typeahead ref="facetControl" control-id="facet" no-clear data-vv-name="facet" data-vv-as="facet"
-                        :value="facet" :values="$config.model.interviewerIssues" :selectedKey="this.query.facet"
-                        :selectFirst="true" v-on:selected="facetSelected" />
+                    <Typeahead ref="facetControl"
+                        control-id="facet"
+                        no-clear
+                        data-vv-name="facet"
+                        data-vv-as="facet"
+                        :value="facet"
+                        :values="$config.model.interviewerIssues"
+                        :selectedKey="this.query.facet"
+                        :selectFirst="true"
+                        v-on:selected="facetSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
-                    <Typeahead ref="archiveStatusControl" control-id="archiveStatus" no-clear :noPaging="false"
-                        data-vv-name="archiveStatus" data-vv-as="archiveStatus" :value="archiveStatus"
-                        :values="$config.model.archiveStatuses" :selectedKey="this.query.archive" :selectFirst="true"
+                    <Typeahead ref="archiveStatusControl"
+                        control-id="archiveStatus"
+                        no-clear
+                        :noPaging="false"
+                        data-vv-name="archiveStatus"
+                        data-vv-as="archiveStatus"
+                        :value="archiveStatus"
+                        :values="$config.model.archiveStatuses"
+                        :selectedKey="this.query.archive"
+                        :selectFirst="true"
                         v-on:selected="archiveStatusSelected" />
                 </FilterBlock>
             </Filters>
         </template>
 
-        <DataTables ref="table" :tableOptions="tableOptions" @ajaxComplete="onTableReload" exportable mutliRowSelect
-            :selectableId="'userId'" @selectedRowsChanged="rows => selectedInterviewers = rows"
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            @ajaxComplete="onTableReload"
+            exportable
+            mutliRowSelect
+            :selectableId="'userId'"
+            @selectedRowsChanged="rows => selectedInterviewers = rows"
             :addParamsToRequest="addParamsToRequest">
-            <div class="panel panel-table" v-if="selectedInterviewers.length">
+            <div class="panel panel-table"
+                v-if="selectedInterviewers.length">
                 <div class="panel-body">
-                    <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled" />
+                    <input class="double-checkbox-white"
+                        id="q1az"
+                        type="checkbox"
+                        checked
+                        disabled="disabled" />
                     <label for="q1az">
                         <span class="tick"></span>
                         {{ selectedInterviewers.length + " " + $t("Pages.Interviewers_Selected") }}
                     </label>
-                    <button type="button" v-if="isVisibleArchive" class="btn btn-default btn-danger"
+                    <button type="button"
+                        v-if="isVisibleArchive"
+                        class="btn btn-default btn-danger"
                         @click="archiveInterviewers">{{ $t("Pages.Interviewers_Archive") }}</button>
-                    <button type="button" v-if="isVisibleUnarchive" class="btn btn-default btn-success"
+                    <button type="button"
+                        v-if="isVisibleUnarchive"
+                        class="btn btn-default btn-success"
                         @click="unarchiveInterviewers">{{ $t("Pages.Interviewers_Unarchive") }}</button>
-                    <button type="button" class="btn btn-default btn-warning last-btn"
-                        v-if="selectedInterviewers.length" @click="moveToAnotherTeam">{{
-        $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
+                    <button type="button"
+                        class="btn btn-default btn-warning last-btn"
+                        v-if="selectedInterviewers.length"
+                        @click="moveToAnotherTeam">{{
+                        $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
                 </div>
             </div>
         </DataTables>
@@ -62,7 +99,7 @@
 import moment from 'moment'
 import { formatNumber } from './formatNumber'
 import routeSync from '~/shared/routeSync'
-import { map, find } from 'lodash'
+import { map, find } from 'lodash-es'
 import { DateFormats } from '~/shared/helpers'
 
 export default {

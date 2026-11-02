@@ -45,8 +45,9 @@
       <RegistrySearch Id="NetCoreHostVersion" Type="raw" Win64="yes" Root="HKLM" Key="SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedhost" Name="Version" />
     </Property>
 
-    <Condition Message="This setup requires .NET Core 5.0 or higher">
-      <![CDATA[Installed OR (NETCOREHOSTVERSION >= "5.0.0")]]>
+    <Condition Message="This setup requires .NET Core 10.0 or higher">
+      <!-- MSI compares versions as strings, so match the major version by prefix -->
+      <![CDATA[Installed OR NETCOREHOSTVERSION << "10."]]>
     </Condition>
 
     <Property Id="SITEPORT" Value="9700"></Property>
@@ -138,7 +139,7 @@
 
     <WixVariable Id="WixUIBannerBmp" Value="img/WixUIBannerBmp.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="img/WixUIDialogBmp.bmp" />
-    <WixVariable Id="WixUIExclamationIco" Value="img/WixUIExclamationIco.bmp" />
+    <WixVariable Id="WixUIExclamationIco" Value="img/WixUIExclamationIco.ico" />
     <WixVariable Id="WixUIInfoIco" Value="img/WixUIInfoIco.ico" />
 
     <!--<Property Id="IISInstallCommandProperty" 

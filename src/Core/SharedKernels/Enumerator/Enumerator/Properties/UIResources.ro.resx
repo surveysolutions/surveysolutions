@@ -446,6 +446,9 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Valoarea introdusă nu poate fi număr întreg</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Valorile negative nu sunt permise pentru această întrebare</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Răspunsul '{0}' este incorect deoarece răspunsul este mai mare decât limita superioară a lui Listei '{1}'.</value>
   </data>
@@ -508,6 +511,9 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   </data>
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Selectați o opțiune</value>
+  </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Fotografia nu poate fi procesată deoarece formatul său nu este acceptat. Vă rugăm să faceți din nou fotografia.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Faceți o fotografie</value>
@@ -717,7 +723,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Aplicația trebuie să aibă permisiunea de a folosi microfonul pentru a răspunde la această întrebare. Reîncercați ultima operație și permiteți accesul microfonului. Dacă nu vedeți apărând fereastra de permisiuni a microfonului mergeți la Setări și permiteți aplicației să folosească microfonul.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>Aplicația trebuie să aibă permisiunea de a folosi spațiul de stocare pentru a răspunde la această întrebare. Reîncercați ultima operație și permiteți accesul la spațiul de stocare. Dacă nu vedeți apărând fereastra de permisiuni a microfonului mergeți la Setări și permiteți aplicației să folosească spațiul de stocare.</value>
+    <value>Pentru a stoca hărți pe dispozitivul mobil, Survey Solutions are nevoie de acces la fișiere. Dacă această permisiune nu este acordată, aplicația nu va putea stoca nicio hartă pentru utilizare offline.</value>
   </data>
   <data name="Notifications_SummaryTitle" xml:space="preserve">
     <value>{0} notificări</value>
@@ -1081,5 +1087,8 @@ critice</value>
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
     <value>Întrebări
 fără răspuns</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Este necesar accesul la microfon pentru a desfășura acest interviu. Interviul nu poate fi început până când accesul nu este acordat.</value>
   </data>
 </root>

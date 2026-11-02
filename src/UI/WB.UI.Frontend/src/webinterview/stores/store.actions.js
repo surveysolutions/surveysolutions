@@ -1,4 +1,4 @@
-import { map, debounce, uniq, forEach } from 'lodash'
+import { map, debounce, uniq, forEach } from 'lodash-es'
 
 import { batchedAction } from '../helpers'
 import { api } from '../api/http'
@@ -176,7 +176,7 @@ export default {
 
     // called by server side. refresh
     refreshEntities({ state, dispatch, getters, rootState }, questions) {
-        
+
         questions.forEach(id => {
             if (state.entityDetails[id]) { // do not fetch entity that is no in the visible list
                 dispatch('fetchEntity', { id, source: 'server' })

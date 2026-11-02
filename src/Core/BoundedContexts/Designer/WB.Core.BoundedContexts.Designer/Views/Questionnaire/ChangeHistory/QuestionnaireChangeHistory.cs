@@ -12,7 +12,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             List<QuestionnaireChangeHistoricalRecord> changeHistory, 
             int pageIndex, 
             int totalCount, 
-            int pageSize)
+            int pageSize,
+            string? search = null,
+            bool searchIdsOnly = false,
+            bool searchWholeWord = false)
         {
             Id = id;
             Title = title;
@@ -20,6 +23,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             PageIndex = pageIndex;
             TotalCount = totalCount;
             PageSize = pageSize;
+            Search = search;
+            SearchIdsOnly = searchIdsOnly;
+            SearchWholeWord = searchWholeWord;
         }
 
         public Guid Id { get;private set; }
@@ -29,5 +35,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public int PageSize { get; private set; }
         public int TotalCount { get; private set; }
         public bool ReadonlyMode { get; set; }
+        public string? Search { get; private set; }
+        public bool SearchIdsOnly { get; }
+        public bool SearchWholeWord { get; }
     }
 }

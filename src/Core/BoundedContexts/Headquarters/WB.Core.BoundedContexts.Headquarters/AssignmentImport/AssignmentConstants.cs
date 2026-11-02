@@ -14,5 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public const int PasswordLength = 6;
 
         public const string PasswordSpecialValue = "?";
+
+        public const int TargetAreaLengthLimit = 64;
     }
 }

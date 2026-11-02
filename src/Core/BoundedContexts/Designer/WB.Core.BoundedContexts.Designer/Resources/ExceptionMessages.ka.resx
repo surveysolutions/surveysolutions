@@ -1,0 +1,364 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="LookupTableAlreadyExist" xml:space="preserve">
+        <value>საძიებო ცხრილი ასეთი ID-ით უკვე არსებობს.</value>
+        </data>
+    <data name="LookupTableIsAbsent" xml:space="preserve">
+        <value>საძიებო ცხრილი ასეთი id-ით არ არის.</value>
+        </data>
+    <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+        <value>ფაილის მონაცემების გარეშე ჩატვირთვა შეუძლებელია</value>
+        </data>
+    <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+        <value>მნიშვნელობა {0} ვერ განიხილება როგორც ათობითი რიცხვი. სვეტი {1}, მწკრივი {2}.</value>
+        </data>
+    <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+        <value>ცარიელი ან არასწორი სათაური დაუშვებელია</value>
+        </data>
+    <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+        <value>მწკრივის კოდის სავალდებულო სვეტი აკლია</value>
+        </data>
+    <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+        <value>მწკრივის კოდის მნიშვნელობები უნიკალური უნდა იყოს</value>
+        </data>
+    <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+        <value>მნიშვნელობა {0} არ შეიძლება გაანალიზდეს, როგორც გრძელი მთელი რიცხვი. სვეტი {1}, მწკრივი {2}.</value>
+        </data>
+    <data name="LookupTables_too_many_columns" xml:space="preserve">
+        <value>ძალიან ბევრი სვეტი ატვირთულ ფაილში. სვეტების მაქსიმალური რაოდენობა არის {0}</value>
+        </data>
+    <data name="LookupTables_too_many_rows" xml:space="preserve">
+        <value>საძიებო ცხრილი შეიცავს {1} რიგებს, რომელიც აჭარბებს საძიებო ცხრილის რიგების რაოდენობის ლიმიტს ({0} რიგები).</value>
+        </data>
+    <data name="MacroAlreadyExist" xml:space="preserve">
+        <value>მაკრო უკვე არსებობს.</value>
+        </data>
+    <data name="MacroIsAbsent" xml:space="preserve">
+        <value>მაკრო არ არის.</value>
+        </data>
+    <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+        <value>კრიტიკული წესი უკვე არსებობს.</value>
+        </data>
+    <data name="CriticalRuleIsAbsent" xml:space="preserve">
+        <value>კრიტიკული წესი არ არსებობს.</value>
+        </data>
+    <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+        <value>ამავე სახელწოდების სათაური დაუშვებელია</value>
+        </data>
+    <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+        <value>ატვირთული ფაილი არ არის სურათი</value>
+        </data>
+    <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+        <value>სურათის ზომები ძალიან დიდია</value>
+        </data>
+    <data name="Attachments_Unsupported_content" xml:space="preserve">
+        <value>ატვირთული კონტენტი არ არის მხარდაჭერილი</value>
+        </data>
+    <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+        <value>თქვენ არ შეგიძლიათ გადახვიდეთ ქვეგანყოფილებაში {0}, რადგან ის პოზიცია {1} მიუღებელია.</value>
+        </data>
+    <data name="ComboboxCannotBeFound" xml:space="preserve">
+        <value>კომბინირებული კითხვა საჯარო გასაღებით {0} ვერ მოიძებნა</value>
+        </data>
+    <data name="ItemWithIdExistsAlready" xml:space="preserve">
+        <value>ერთი ან მეტი კითხვარის პუნქტ(ებ)ი იგივე ID {0} უკვე არსებობს.</value>
+        </data>
+    <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+        <value>ერთი ან მეტი ქვესექცია იგივე ID {0} უკვე არსებობს:{1}{2}.</value>
+        </data>
+    <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+        <value>თქვენ არ გაქვთ ამ კითხვარის შეცვლის უფლება</value>
+        </data>
+    <data name="TranslationIsNotFull" xml:space="preserve">
+        <value>თარგმანი არასრულია და არ შეიცავს ყველა საჭირო ტექსტს ყველა ელემენტისთვის</value>
+        </data>
+    <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+        <value>კატეგორიის თარგმანი "{0}" არასრულია და არ შეიცავს ყველა ვარიანტის ტექსტს</value>
+        </data>
+    <data name="QuestionCannotBeFound" xml:space="preserve">
+        <value>შეკითხვა საჯარო გასაღებით {0} ვერ მოიძებნა.</value>
+        </data>
+    <data name="QuestionIsNotCombobox" xml:space="preserve">
+        <value>კითხვა {0} არ არის კომბინირებული ველი</value>
+        </data>
+    <data name="QuestionnaireCantBeFound" xml:space="preserve">
+        <value>კითხვარის პუნქტი ID {0}-ით ვერ მოიძებნა.</value>
+        </data>
+    <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+        <value>კითხვარის სათაური არ შეიძლება იყოს ცარიელი ან შეიცავდეს მხოლოდ უფსკრული.</value>
+        </data>
+    <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+        <value>კითხვარი უკვე მხარს უჭერს ყდას.</value>
+        </data>
+    <data name="SubSectionCantBeFound" xml:space="preserve">
+        <value>ქვეგანყოფილება საჯარო გასაღებით {0} ვერ მოიძებნა.</value>
+        </data>
+    <data name="SubSectionDepthLimit" xml:space="preserve">
+        <value>ქვეგანყოფილების ან სიის სიღრმე არ შეიძლება იყოს {0}-ზე მეტი.</value>
+        </data>
+    <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+        <value>განყოფილებას არ შეიძლება ჰქონდეს {0}-ზე მეტი საბავშვო ელემენტი</value>
+        </data>
+    <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+        <value>განყოფილებას ან ქვეგანყოფილებას არ შეიძლება ჰქონდეს {0}-ზე მეტი პირდაპირი საბავშვო ელემენტი</value>
+        </data>
+    <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+        <value>ერთი ან მეტი შეკითხვა იგივე ID {0} უკვე არსებობს:{1}{2}.</value>
+        </data>
+    <data name="CantPasteQuestion" xml:space="preserve">
+        <value>შეკითხვის აქ ჩასმა შეუძლებელია.</value>
+        </data>
+    <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+        <value>ბოლო არსებული განყოფილების ამოღება კითხვარიდან შეუძლებელია</value>
+        </data>
+    <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+        <value>ყდა არ შეიძლება ამოღებულ იქნას კითხვარიდან</value>
+        </data>
+    <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+        <value>ყდა განყოფილება უნდა იყოს კითხვარის პირველი ნაწილი</value>
+        </data>
+    <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+        <value>ყდა განყოფილება შეიძლება შეიცავდეს მხოლოდ კითხვებს, სტატიკური ტექსტებს და ცვლადებს</value>
+        </data>
+    <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+        <value>ეს არის მხოლოდ წაკითხვის განყოფილება. თქვენ არ შეგიძლიათ მასში კითხვების რედაქტირება ან ხელახლა შეკვეთა.</value>
+        </data>
+    <data name="CantRemoveUserFromTheList" xml:space="preserve">
+        <value>მომხმარებლის წაშლა ვერ მოხერხდა, რადგან ის არ არსებობს გაზიარების სიაში</value>
+        </data>
+    <data name="FailedToAddGroup" xml:space="preserve">
+        <value>ჯგუფი {0} {1} ჯგუფში დამატების მცდელობა ვერ მოხერხდა. მაგრამ ჯგუფი {1} არ არსებობს დოკუმენტში {2}</value>
+        </data>
+    <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+        <value>ვცდილობთ წაშლილი კითხვარის შაბლონის იმპორტს</value>
+        </data>
+    <data name="InvalidFixedTitle" xml:space="preserve">
+        <value>სათაურის სია არასწორია</value>
+        </data>
+    <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+        <value>საჭიროა ცარიელი მნიშვნელობები ფიქსირებული ჩამონათვალის სათაურებისთვის</value>
+        </data>
+    <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+        <value>ამჟამად მხარდაჭერილია მხოლოდ QuestionnaireDocuments</value>
+        </data>
+    <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+        <value>კითხვარი {0} ვერსიის {1} ვერ მოიძებნა</value>
+        </data>
+    <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+        <value>შეკითხვის ტიპი არ არის მხარდაჭერილი: {0}</value>
+        </data>
+    <data name="RosterCantBePaste" xml:space="preserve">
+        <value>აქ როსტერის ჩასმა არ შეიძლება.</value>
+        </data>
+    <data name="StaticTextCantBePaste" xml:space="preserve">
+        <value>სტატიკური ტექსტის ჩასმა აქ შეუძლებელია.</value>
+        </data>
+    <data name="UnknownTypeCantBePaste" xml:space="preserve">
+        <value>უცნობი ერთეულის ტიპი. ჩასმა ვერ მოხერხდა.</value>
+        </data>
+    <data name="UserIsInTheList" xml:space="preserve">
+        <value>მომხმარებელი {0} უკვე არსებობს გაზიარების სიაში.</value>
+        </data>
+    <data name="InvalidUserInfo" xml:space="preserve">
+        <value>მომხმარებლის ინფორმაცია არასწორია.</value>
+        </data>
+    <data name="UserIsOwner" xml:space="preserve">
+        <value>მომხმარებელი {0} არის ამ კითხვარის მფლობელი. გთხოვთ, შეიყვანოთ სხვა ელფოსტა.</value>
+        </data>
+    <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+        <value>ერთეულების ფიქსირებული ნაკრების მნიშვნელობა უნდა შეიცავდეს მხოლოდ ციფრულ სიმბოლოებს</value>
+        </data>
+    <data name="VariableCantBePaste" xml:space="preserve">
+        <value>ცვლადის აქ ჩასმა შეუძლებელია.</value>
+        </data>
+    <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+        <value>კატეგორიებს კასკადურ კითხვაში არ შეიძლება ჰქონდეს ცარიელი ParentValue სვეტი.</value>
+        </data>
+    <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+        <value>კასკადურ კითხვაში კატეგორიებს არ შეიძლება ჰქონდეს რიცხვითი მნიშვნელობა ParentValue სვეტში.</value>
+        </data>
+    <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+        <value>არსებობს მინიმუმ ერთი დუბლიკატი "სათაური" და "მშობლის ღირებულება" წყვილი. სია არ უნდა შეიცავდეს დუბლიკატებს.</value>
+        </data>
+    <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+        <value>კატეგორიის მნიშვნელობა უნდა შეიცავდეს მხოლოდ ციფრულ სიმბოლოებს</value>
+        </data>
+    <data name="AttachmentIdIsMissing" xml:space="preserve">
+        <value>არ არის დანართი ID {0}-ით</value>
+        </data>
+    <data name="LookupTableHasEmptyContent" xml:space="preserve">
+        <value>საძიებო ცხრილი ID {0}-ით არ აქვს კონტენტი</value>
+        </data>
+    <data name="LookupTableIsMissing" xml:space="preserve">
+        <value>საძიებო ცხრილი ID {0}-ით აკლია</value>
+        </data>
+    <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+        <value>ძველი დანართის ID ცარიელია და ფაილი არ არის დანართისთვის {0} კითხვარში {1}</value>
+        </data>
+    <data name="ProvidedFileHasErrors" xml:space="preserve">
+        <value>ნაპოვნია შეცდომები მოწოდებულ ფაილში</value>
+        </data>
+    <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+        <value>აღმოჩენილია შეცდომები excel ფაილში</value>
+        </data>
+    <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+        <value>{0}-ს აქვს არასწორი ინდექსი [{1}]-ზე</value>
+        </data>
+    <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+        <value>{0}-ს აქვს არასწორი ტიპი [{1}]</value>
+        </data>
+    <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+        <value>{0}-ს აქვს არასწორი ID-ზე [{1}]</value>
+        </data>
+    <data name="TranslationFileIsEmpty" xml:space="preserve">
+        <value>Excel ფაილი ცარიელია - არ შეიცავს სამუშაო ფურცლებს</value>
+        </data>
+    <data name="TranslationsCantBeExtracted" xml:space="preserve">
+        <value>ატვირთული ფაილიდან თარგმანების ამოღება ვერ მოხერხდა</value>
+        </data>
+    <data name="CategoriesCantBeExtracted" xml:space="preserve">
+        <value>ატვირთული ფაილიდან კატეგორიების ამოღება ვერ მოხერხდა</value>
+        </data>
+    <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+        <value>სამუშაო ფურცელი თარგმანებით ვერ მოიძებნა</value>
+        </data>
+    <data name="VariableWithIdWasNotFound" xml:space="preserve">
+        <value>ცვლადი ID {0} არ მოიძებნა კითხვარში {1}</value>
+        </data>
+    <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+        <value>სათაური {0} ვერ მოიძებნა excel ფაილში</value>
+        </data>
+    <data name="HeaderWasNotFound" xml:space="preserve">
+        <value>სათაური ფაილში ვერ მოიძებნა</value>
+        </data>
+    <data name="NoParentCascadingOptions" xml:space="preserve">
+        <value>მშობლის კასკადური კითხვის „{0}“ კატეგორიები ვერ მოიძებნა</value>
+        </data>
+    <data name="Column" xml:space="preserve">
+        <value>სვეტი</value>
+        </data>
+    <data name="Row" xml:space="preserve">
+        <value>რიგი</value>
+        </data>
+    <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+        <value>ზოგიერთი სვეტი აკლია. დარწმუნდით, რომ ატვირთეთ ფაილი საჭირო სვეტებით</value>
+        </data>
+    <data name="ImportOptions_EmptyValue" xml:space="preserve">
+        <value>ცარიელი ღირებულება</value>
+        </data>
+    <data name="ImportOptions_NotNumber" xml:space="preserve">
+        <value>არასწორი 32 ბიტიანი მთელი მნიშვნელობა '{0}'. მნიშვნელობა უნდა იყოს -2147483647 და 2147483647 შორის</value>
+        </data>
+    <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+        <value>მშობლის შეკითხვას არ აქვს კატეგორია „{0}“ მნიშვნელობით</value>
+        </data>
+    <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+        <value>დუბლირებული კატეგორია '{0}' მშობელი მნიშვნელობით '{1}'</value>
+        </data>
+    <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+        <value>მშობლის შეკითხვა '{0}' აქვს {1} კატეგორიას მნიშვნელობით '{2}'</value>
+        </data>
+    <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+        <value>სათაური ძალიან გრძელია. სათაურის სიგრძე უნდა იყოს {0}-ზე ნაკლები</value>
+        </data>
+    <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+        <value>დანართის სახელი ძალიან გრძელია. დანართის სახელი უნდა იყოს {0}-ზე ნაკლები</value>
+        </data>
+    <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+        <value>დუბლირებული კატეგორია '{0}' მნიშვნელობით '{1}'</value>
+        </data>
+    <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+        <value>[{0}] არასწორი რიცხვითი მნიშვნელობა</value>
+        </data>
+    <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+        <value>[{0}] ცარიელი სათაური</value>
+        </data>
+    <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+        <value>[{0}] ცარიელი მნიშვნელობა</value>
+        </data>
+    <data name="Excel_Categories_Duplicated" xml:space="preserve">
+        <value>დუბლირებული კატეგორიები რიგებში: {0}</value>
+        </data>
+    <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+        <value>ზოგიერთ კატეგორიას არ აქვს მშობლის ID</value>
+        </data>
+    <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+        <value>კატეგორიების კომპლექტს აქვს {0}-ზე მეტი კატეგორია</value>
+        </data>
+    <data name="Excel_NoCategories" xml:space="preserve">
+        <value>ფაილში კატეგორიები არ არის</value>
+        </data>
+    <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+        <value>კატეგორიების ნაკრები უნდა შეიცავდეს მინიმუმ 2 კატეგორიას</value>
+        </data>
+    <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+        <value>[{0}] კატეგორიის ტექსტი უნდა იყოს 250 სიმბოლოზე ნაკლები</value>
+        </data>
+    <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+        <value>მიიღება მხოლოდ ჩანართებით გამოყოფილი მნიშვნელობები (*.tab, *.txt, *.tsv) ან Excel (*.xslx, *.xls, *.ods) ფაილები.</value>
+        </data>
+    <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+        <value>კითხვარი უკვე მხარს უჭერს საფარს</value>
+        </data>
+    <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+        <value>კატეგორიები ვერ მოიძებნა</value>
+        </data>
+</root>

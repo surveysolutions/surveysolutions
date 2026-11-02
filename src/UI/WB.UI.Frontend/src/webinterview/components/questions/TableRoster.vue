@@ -1,22 +1,28 @@
 <template>
-    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
-        <ag-grid-vue ref="tableRoster" class="ag-theme-customStyles roster-table" domLayout="autoHeight" rowHeight="40"
-            headerHeight="50" :defaultColDef="defaultColDef" :columnDefs="columnDefs" :rowData="rowData"
-            :grid-options="gridOptions" @grid-ready="onGridReady" @column-resized="autosizeHeaders"
-            :modules="gridModules" @cell-editing-stopped="endCellEditting"></ag-grid-vue>
+    <div class="question table-view scroller"
+        :id="hash"
+        v-if="rowData.length > 0">
+        <ag-grid-vue ref="tableRoster"
+            class="ag-theme-customStyles roster-table"
+            domLayout="autoHeight"
+            :rowHeight="40"
+            :headerHeight="50"
+            :defaultColDef="defaultColDef"
+            :columnDefs="columnDefs"
+            :rowData="rowData"
+            :grid-options="gridOptions"
+            @grid-ready="onGridReady"
+            @column-resized="autosizeHeaders"
+            @cell-editing-stopped="endCellEditting"></ag-grid-vue>
     </div>
 </template>
 
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
 
-import "@ag-grid-community/styles/ag-grid.css";
-import "@ag-grid-community/styles/ag-theme-quartz.css";
-
 import { entityDetails } from '../mixins'
-import { debounce, every, some, map } from 'lodash'
-import { AgGridVue } from '@ag-grid-community/vue3'
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+import { debounce, every, some, map } from 'lodash-es'
+import { AgGridVue, agGridTheme } from './agGrid'
 
 import TableRoster_QuestionEditor from './TableRoster.QuestionEditor'
 import TableRoster_ViewAnswer from './TableRoster.ViewAnswer'
@@ -84,6 +90,7 @@ export default {
     computed: {
         gridOptions() {
             return {
+                theme: agGridTheme,
                 stopEditingWhenCellsLoseFocus: true,
                 suppressMovableColumns: true,
                 singleClickEdit: true,
@@ -92,9 +99,6 @@ export default {
                 },
             }
         },
-        gridModules() {
-            return [ClientSideRowModelModule]
-        }
     },
     methods: {
         initQuestionAsColumns() {
@@ -122,8 +126,10 @@ export default {
                             id: question.id,
                             value: question,
                         },
+                        valueFormatter: () => '',
+                        cellDataType: false,
                     }
-                },
+                }
             )
             columnsFromQuestions.unshift({
                 headerName: this.$me.title,
@@ -138,6 +144,8 @@ export default {
                 cellStyle: { minHeight: '40px' },
                 cellRenderer: 'TableRoster_RosterTitle',
                 cellRendererParams: {},
+                valueFormatter: () => '',
+                cellDataType: false,
             })
             this.columnDefs = columnsFromQuestions
         },
@@ -165,7 +173,7 @@ export default {
                     })
 
                     return instanceAsRow
-                },
+                }
             )
             this.rowData = rosterInstancesWithQuestionsAsRows
         },
@@ -184,7 +192,7 @@ export default {
                 event.api.setGridOption('headerHeight', MIN_HEIGHT)
                 const headerCells =
                     this.$refs.tableRoster.$el.getElementsByClassName(
-                        'ag-header-cell-label',
+                        'ag-header-cell-label'
                     )
                 let minHeight = MIN_HEIGHT
                 for (let index = 0; index < headerCells.length; index++) {
@@ -194,9 +202,6 @@ export default {
 
                 // set header height to calculated height + padding (top: 8px, bottom: 8px)
                 event.api.setGridOption('headerHeight', minHeight)
-
-                // set all rows height to auto
-                event.api.resetRowHeights()
             }
         },
 
@@ -214,7 +219,8 @@ export default {
 
         doScroll: debounce(function () {
             if (this.$store.getters.scrollState == this.id) {
-                window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
+                const navbarHeight = document.querySelector('.navbar-fixed-top')?.offsetHeight || 0
+                window.scroll({ top: this.$el.offsetTop - navbarHeight, behavior: 'smooth' })
                 this.$store.dispatch('resetScroll')
             }
         }, 200),
@@ -225,9 +231,7 @@ export default {
             }
         },
 
-        endCellEditting(event) {
-            event.api.resetRowHeights()
-        },
+        endCellEditting(event) {},
     },
 }
 </script>

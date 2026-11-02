@@ -235,6 +235,50 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
+        public void when_assignment_has_selective_audio_audit_scope_Should_not_migrate_it_and_report_an_error()
+        {
+            var migrateFrom = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var migrateTo = Create.Entity.QuestionnaireIdentity(Id.g2, 2);
+            var migratedAssignmentId = 45;
+
+            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
+            var assignmentToMigrate = Create.Entity.Assignment(id: migratedAssignmentId,
+                publicKey: Id.g7,
+                quantity: 2,
+                questionnaireIdentity: migrateFrom);
+            assignmentToMigrate.AudioAuditScope = new List<string> { "household" };
+
+            assignmentsStorage.Store(assignmentToMigrate, assignmentToMigrate.PublicKey);
+
+            var upgradeServiceMock = new Mock<IAssignmentsUpgradeService>();
+            AssignmentUpgradeProgressDetails lastReported = null;
+            upgradeServiceMock.Setup(x => x.ReportProgress(It.IsAny<Guid>(), It.IsAny<AssignmentUpgradeProgressDetails>()))
+                .Callback<Guid, AssignmentUpgradeProgressDetails>((_, details) => lastReported = details);
+
+            var assignmentsService = Create.Service.AssignmentsService(assignmentsStorage);
+            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsService,
+                upgradeService: upgradeServiceMock.Object);
+
+            // Act
+            service.Upgrade(new AssignmentsUpgradeProcess(new Guid(), Guid.NewGuid(), migrateFrom, migrateTo));
+
+            // Assert
+            Assignment oldAssignment = assignmentsStorage.GetById(Id.g7);
+            Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.Archived)).EqualTo(false));
+            Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.QuestionnaireId)).EqualTo(migrateFrom));
+
+            var newAssignment = assignmentsStorage.Query(_ => _.FirstOrDefault(x => x.Id != migratedAssignmentId));
+            Assert.That(newAssignment, Is.Null, "Assignment with selective audio audit scope must not be migrated");
+
+            Assert.That(lastReported, Is.Not.Null);
+            var errors = lastReported.GetAssignmentUpgradeErrors();
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0].AssignmentId, Is.EqualTo(migratedAssignmentId));
+            Assert.That(errors[0].ErrorMessage, Is.EqualTo(
+                WB.Core.BoundedContexts.Headquarters.Resources.PreloadingVerificationMessages.AssignmentUpgrade_SelectiveAudioAuditNotMigrated));
+        }
+
+        [Test]
         public void should_not_migrate_completed_assignments()
         {
             var migrateFrom = Create.Entity.QuestionnaireIdentity(Id.g1, 1);

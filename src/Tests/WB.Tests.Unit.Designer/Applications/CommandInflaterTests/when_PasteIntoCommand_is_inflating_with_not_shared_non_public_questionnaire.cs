@@ -5,7 +5,8 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.UI.Designer.Code.Implementation;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
@@ -29,13 +30,14 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             dbContext.SaveChanges();
 
             var questionnaire = CreateQuestionnaireDocument(questoinnaireId, questionnaiteTitle, ownerId, false);
-            var documentStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(storage
-                    => storage.GetById(It.IsAny<string>()) == questionnaire);
+            var questionnaireStorage = Mock.Of<IDesignerQuestionnaireStorage>(s =>
+                s.Get(It.IsAny<QuestionnaireRevision>()) == questionnaire &&
+                s.Get(It.IsAny<Guid>()) == questionnaire);
 
 
             command = new PasteInto(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, actionUserId);
 
-            commandInflater = CreateCommandInflater(dbContext: dbContext, storage: documentStorage);
+            commandInflater = CreateCommandInflater(dbContext: dbContext, questionnaireStorage: questionnaireStorage);
 
             Assert.Throws<CommandInflaitingException>(() => commandInflater.PrepareDeserializedCommandForExecution(command));
         }

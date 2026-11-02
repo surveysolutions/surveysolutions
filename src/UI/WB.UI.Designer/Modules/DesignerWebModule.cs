@@ -16,8 +16,10 @@ using WB.UI.Designer.Areas.Pdf.Services;
 using WB.UI.Designer.Areas.Pdf.Utils;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers.Api.WebTester;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Services;
 using WB.UI.Designer.Services.AttachmentPreview;
+using WB.UI.Shared.Web.Services;
 using ILoggerProvider = Microsoft.Extensions.Logging.ILoggerProvider;
 
 namespace WB.UI.Designer.Modules
@@ -30,6 +32,7 @@ namespace WB.UI.Designer.Modules
         public void Load(IDependencyRegistry registry)
         {
             registry.BindAsScoped<LocalOrDevelopmentAccessOnlyAttribute, LocalOrDevelopmentAccessOnlyAttribute>();
+            registry.BindAsScoped<IPostCommitActions, PostCommitActions>();
 
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
 
@@ -52,7 +55,8 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IQuestionnaireSerializer, QuestionnaireSerializer>();   
             registry.Bind<ITranslationImportExportService, TranslationImportExportService>();   
             registry.Bind<ICategoriesImportExportService, CategoriesImportExportService>();   
-            registry.BindAsSingleton<IAttachmentPreviewHelper, AttachmentPreviewHelper>();   
+            registry.BindAsSingleton<IAttachmentPreviewHelper, AttachmentPreviewHelper>();
+            registry.BindAsSingleton<IImageProcessingService, ImageProcessingService>();   
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

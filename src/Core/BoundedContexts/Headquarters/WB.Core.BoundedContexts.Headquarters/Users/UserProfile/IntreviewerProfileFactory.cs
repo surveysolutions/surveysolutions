@@ -397,15 +397,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
 
         private IEnumerable<InterviewerProfileToExport> GetProfilesForInterviewers(Guid[] interviewersIds, int? hqInterviewerVersion)
         {
-            var interviewerProfiles = this.userManager.Users.Where(x => interviewersIds.Contains(x.Id))
+            // NOTE: List<Guid> is used in LINQ expression trees on purpose. For an array the C# compiler
+            // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+            // op_Implicit call into the expression tree that NHibernate cannot evaluate.
+            var interviewersIdsList = interviewersIds.ToList();
+
+            var interviewerProfiles = this.userManager.Users.Where(x => interviewersIdsList.Contains(x.Id))
                 .Fetch(x => x.WorkspaceProfile)
                 .Where(x => x!= null)
                 .ToList();
 
+            // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+            // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+            // into the expression tree that NHibernate cannot translate.
             var supervisorIds = interviewerProfiles
                 .Where(x => x.WorkspaceProfile.SupervisorId.HasValue)
                 .Select(x => x.WorkspaceProfile.SupervisorId.Value)
-                .ToArray();
+                .ToList();
             
             var supervisorsProfiles = this.userManager.Users.Where(x => supervisorIds.Contains(x.Id))
                 .Where(x => x != null)
@@ -489,8 +497,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
 
             profile.LastSuccessfulSync = new InterviewerProfileSyncStatistics
             {
-                SyncDate = lastSuccessDeviceInfo?.SyncDate,
-                HasStatistics = lastSuccessDeviceInfo != null,
+                SyncDate = lastSuccessDeviceInfo?.Statistics != null ? lastSuccessDeviceInfo.SyncDate : (DateTime?)null,
+                HasStatistics = lastSuccessDeviceInfo?.Statistics != null,
                 MobileOperator = lastSuccessDeviceInfo?.MobileOperator,
                 NetworkSubType = lastSuccessDeviceInfo?.NetworkSubType,
                 NetworkType = lastSuccessDeviceInfo?.NetworkType,

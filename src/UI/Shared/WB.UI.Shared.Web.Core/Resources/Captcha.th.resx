@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="EnterText" xml:space="preserve"><value>ป้อนข้อความที่คุณเห็นด้านบน</value></data>
+  <data name="InvalidCaptcha" xml:space="preserve"><value>Captcha ไม่ถูกต้อง</value></data>
+  <data name="Required" xml:space="preserve"><value>เป็นฟิลด์ที่จำเป็น</value></data>
+  <data name="TryAnother" xml:space="preserve"><value>ลองอันอื่น</value></data>
+  <data name="CaptchaError" xml:space="preserve"><value>เกิดข้อผิดพลาดในการสร้าง captcha โปรดติดต่อผู้ดูแลระบบของคุณ</value></data>
+</root>
+

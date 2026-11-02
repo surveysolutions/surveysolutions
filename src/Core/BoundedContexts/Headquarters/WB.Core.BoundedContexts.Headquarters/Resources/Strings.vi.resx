@@ -1,0 +1,241 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Cancel" xml:space="preserve">
+        <value>Hủy bỏ</value>
+        </data>
+    <data name="Total" xml:space="preserve">
+        <value>Tổng cộng</value>
+        </data>
+    <data name="WithErrors" xml:space="preserve">
+        <value>Có lỗi</value>
+        </data>
+    <data name="Average" xml:space="preserve">
+        <value>Trung bình</value>
+        </data>
+    <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
+        <value>Thông tin tài khoản được cập nhật thành công</value>
+        </data>
+    <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+        <value>Thông tin về &lt;b&gt;{0}&lt;/b&gt; được cập nhật thành công</value>
+        </data>
+    <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+        <value>Mật khẩu tài khoản được cập nhật thành công</value>
+        </data>
+    <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+        <value>Mật khẩu tài khoản &lt;b&gt;{0}&lt;/b&gt; đã được cập nhật thành công</value>
+        </data>
+    <data name="HQ_Views_Manage_Title" xml:space="preserve">
+        <value>Quản lý tài khoản</value>
+        </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+        <value>Xác thực hai yếu tố</value>
+        </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+        <value>Xác thực hai yếu tố là một tính năng bảo mật nâng cao khiến hacker khó đăng nhập vào tài khoản của bạn hơn chỉ bằng mật khẩu bị đánh cắp.</value>
+        </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+        <value>đã bật</value>
+        </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+        <value>tàn tật</value>
+        </data>
+    <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+        <value>Thiết lập thiết bị mới để xác thực hai yếu tố. Bạn có thể thiết lập nhiều thiết bị cùng một lúc.</value>
+        </data>
+    <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+        <value>Đặt lại về mã bí mật mới nếu bất kỳ thiết bị nào của bạn được sử dụng để xác thực hai yếu tố bị mất hoặc bị đánh cắp.</value>
+        </data>
+    <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+        <value>Vô hiệu hóa mọi mã khôi phục chưa sử dụng và tạo 10 mã mới.</value>
+        </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+        <value>Tắt xác thực hai yếu tố, chỉ để lại tài khoản được bảo vệ bằng mật khẩu.</value>
+        </data>
+    <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+        <value>Thiết lập ứng dụng xác thực</value>
+        </data>
+    <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+        <value>Đặt lại khóa xác thực</value>
+        </data>
+    <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+        <value>Mã khôi phục</value>
+        </data>
+    <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+        <value>Vô hiệu hóa xác thực hai yếu tố</value>
+        </data>
+    <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+        <value>Đặt lại mã khôi phục</value>
+        </data>
+    <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+        <value>Được trụ sở chính phê duyệt</value>
+        </data>
+    <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+        <value>Được phê duyệt bởi người giám sát</value>
+        </data>
+    <data name="InterviewStatus_Completed" xml:space="preserve">
+        <value>Hoàn thành</value>
+        </data>
+    <data name="InterviewStatus_Created" xml:space="preserve">
+        <value>Tạo</value>
+        </data>
+    <data name="InterviewStatus_Deleted" xml:space="preserve">
+        <value>Đã xóa</value>
+        </data>
+    <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+        <value>Người phỏng vấn được chỉ định</value>
+        </data>
+    <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
+        <value>Sẵn sàng cho cuộc phỏng vấn</value>
+        </data>
+    <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+        <value>Bị từ chối bởi trụ sở chính</value>
+        </data>
+    <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+        <value>Bị từ chối bởi người giám sát</value>
+        </data>
+    <data name="InterviewStatus_Restarted" xml:space="preserve">
+        <value>Đã khởi động lại</value>
+        </data>
+    <data name="InterviewStatus_Restored" xml:space="preserve">
+        <value>Đã khôi phục</value>
+        </data>
+    <data name="InterviewStatus_SentToCapi" xml:space="preserve">
+        <value>Đã gửi tới Capi</value>
+        </data>
+    <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+        <value>Giám sát viên được giao</value>
+        </data>
+    <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
+        <value>Quản lý tài khoản</value>
+        </data>
+    <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+        <value>Thay đổi mật khẩu</value>
+        </data>
+    <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+        <value>Thuộc tính không hợp lệ</value>
+        </data>
+    <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+        <value>Không thể phân tích câu trả lời của câu hỏi</value>
+        </data>
+    <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+        <value>Trạng thái do nhóm hỗ trợ Giải pháp khảo sát đặt ra</value>
+        </data>
+    <data name="ObserverNotAllowed" xml:space="preserve">
+        <value>Người quan sát không được phép thực hiện hành động này</value>
+        </data>
+    <data name="UnexpectedErrorOccurred" xml:space="preserve">
+        <value>Đã xảy ra lỗi không mong muốn</value>
+        </data>
+    <data name="Error" xml:space="preserve">
+        <value>Lỗi</value>
+        </data>
+    <data name="AnyHeadquarters" xml:space="preserve">
+        <value>bất kỳ trụ sở nào</value>
+        </data>
+    <data name="Days" xml:space="preserve">
+        <value>Ngày</value>
+        </data>
+    <data name="Assignments" xml:space="preserve">
+        <value>Bài tập</value>
+        </data>
+    <data name="Interviews" xml:space="preserve">
+        <value>Phỏng vấn</value>
+        </data>
+    <data name="AllTeams" xml:space="preserve">
+        <value>Tất cả các đội</value>
+        </data>
+    <data name="Teams" xml:space="preserve">
+        <value>Đội</value>
+        </data>
+    <data name="AllPeriods" xml:space="preserve">
+        <value>Tất cả các thời kỳ</value>
+        </data>
+    <data name="AllQuestionnaires" xml:space="preserve">
+        <value>Tất cả các câu hỏi</value>
+        </data>
+    <data name="AllInterviewers" xml:space="preserve">
+        <value>Tất cả người phỏng vấn</value>
+        </data>
+    <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+        <value>Chưa được trụ sở phê duyệt</value>
+        </data>
+    <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+        <value>Không được giao cho người phỏng vấn</value>
+        </data>
+    <data name="NoPermissionsToExecute" xml:space="preserve">
+        <value>Người dùng không được phép thực hiện hành động được cung cấp</value>
+        </data>
+    <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
+        <value>Truy cập API</value>
+        </data>
+    <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
+        <value>API token được sử dụng để thực hiện lệnh gọi API tới hệ thống</value>
+        </data>
+    <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
+        <value>đã bật</value>
+        </data>
+    <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
+        <value>tàn tật</value>
+        </data>
+    <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
+        <value>Hãy lưu mã thông báo ngay bây giờ. Bạn sẽ chỉ có thể nhìn thấy nó một lần!</value>
+        </data>
+</root>

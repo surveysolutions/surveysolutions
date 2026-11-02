@@ -17,7 +17,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
-using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
@@ -37,7 +36,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IHeadquartersEventStore eventStore,
             IUserToDeviceService userToDeviceService,
             IWebHostEnvironment webHostEnvironment,
-            IImageProcessingService imageProcessingService,
             IBrokenImageFileStorage brokenImageFileStorage,
             IBrokenAudioFileStorage brokenAudioFileStorage,
             IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage) 
@@ -53,7 +51,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 audioAuditFileStorage,
                 userToDeviceService,
                 webHostEnvironment,
-                imageProcessingService, 
                 brokenImageFileStorage, 
                 brokenAudioFileStorage, 
                 brokenAudioAuditFileStorage)

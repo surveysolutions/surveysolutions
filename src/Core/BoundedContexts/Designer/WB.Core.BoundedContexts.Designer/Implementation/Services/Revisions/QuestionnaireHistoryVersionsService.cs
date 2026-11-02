@@ -28,6 +28,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
 
         private readonly object lockObject = new object();
 
+        // Distinct from MigrationLock (1818/20433) so history locks never collide with it.
+        private const int HistoryLockClass = 20500;
+
         public QuestionnaireHistoryVersionsService(DesignerDbContext dbContext,
             IEntitySerializer<QuestionnaireDocument> entitySerializer,
             IOptions<QuestionnaireHistorySettings> historySettings,
@@ -125,6 +128,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             QuestionnaireChangeReference? reference = null,
             QuestionnaireChangeRecordMetadata? meta = null)
         {
+            this.LockQuestionnaireHistoryForUpdate(questionnaireId);
+
             var sQuestionnaireId = questionnaireId.FormatGuid();
 
             var maxSequenceByQuestionnaire = this.dbContext.QuestionnaireChangeRecords
@@ -181,6 +186,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             // -1 is to take into account newly added change record that is not yet in DB
             this.RemoveOldQuestionnaireHistory(sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
             this.dbContext.SaveChanges();
+        }
+
+        // Transaction-scoped advisory lock: the in-process aggregate lock releases before this request commits, so a
+        // concurrent writer could otherwise read a stale MAX(sequence); a DB lock also serializes across app instances.
+        private void LockQuestionnaireHistoryForUpdate(Guid questionnaireId)
+        {
+            if (!this.dbContext.Database.IsNpgsql() || this.dbContext.Database.CurrentTransaction == null)
+                return;
+
+            var bytes = questionnaireId.ToByteArray();
+            var key = BitConverter.ToInt32(bytes, 0) ^ BitConverter.ToInt32(bytes, 4)
+                    ^ BitConverter.ToInt32(bytes, 8) ^ BitConverter.ToInt32(bytes, 12);
+
+            this.dbContext.Database.ExecuteSqlInterpolated(
+                $"SELECT pg_advisory_xact_lock({HistoryLockClass}, {key})");
         }
 
         public async Task<bool> UpdateRevisionCommentaryAsync(string questionnaireChangeRecordId, string comment)

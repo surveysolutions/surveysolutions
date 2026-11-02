@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -58,6 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             state.Answers = @event.Payload.Answers;
             state.ProtectedVariables = @event.Payload.ProtectedVariables.ToList();
+            state.AudioAuditScope = @event.Payload.AudioAuditScope?.ToList() ?? new List<string>();
             
             var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(state.QuestionnaireId, null);
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToImmutableHashSet();

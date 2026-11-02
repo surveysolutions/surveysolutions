@@ -1,24 +1,40 @@
 <template>
-    <HqLayout :hasFilter="true" :title="$t('Pages.StatusDuration')" :subtitle="$t('Pages.StatusDurationDescription')">
+    <HqLayout :hasFilter="true"
+        :title="$t('Pages.StatusDuration')"
+        :subtitle="$t('Pages.StatusDurationDescription')">
         <template v-slot:filters>
             <Filters>
                 <FilterBlock :title="$t('Common.Questionnaire')">
-                    <Typeahead control-id="questionnaireId" data-vv-name="questionnaireId" data-vv-as="questionnaire"
-                        :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
-                        v-on:selected="selectQuestionnaire" :fetch-url="$config.model.questionnairesUrl" />
+                    <Typeahead control-id="questionnaireId"
+                        data-vv-name="questionnaireId"
+                        data-vv-as="questionnaire"
+                        :placeholder="$t('Common.AllQuestionnaires')"
+                        :value="questionnaireId"
+                        v-on:selected="selectQuestionnaire"
+                        :fetch-url="$config.model.questionnairesUrl" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                    <Typeahead control-id="questionnaireVersion" ref="questionnaireIdControl"
-                        data-vv-name="questionnaireVersion" data-vv-as="questionnaireVersion"
-                        :placeholder="$t('Common.AllVersions')" :value="questionnaireVersion"
-                        v-on:selected="questionnaireVersionSelected" :fetch-url="questionnaireVersionFetchUrl"
+                    <Typeahead control-id="questionnaireVersion"
+                        ref="questionnaireIdControl"
+                        data-vv-name="questionnaireVersion"
+                        data-vv-as="questionnaireVersion"
+                        :placeholder="$t('Common.AllVersions')"
+                        :value="questionnaireVersion"
+                        v-on:selected="questionnaireVersionSelected"
+                        :fetch-url="questionnaireVersionFetchUrl"
                         :disabled="questionnaireVersionFetchUrl == null" />
                 </FilterBlock>
-                <FilterBlock :title="$t('Strings.Teams')" v-if="!$config.model.isSupervisorMode">
-                    <Typeahead control-id="teams" :placeholder="$t('Strings.AllTeams')" :value="supervisorId"
-                        @selected="selectSupervisor" :ajax-params="supervisorsParams" :fetch-url="supervisorsUrl"
-                        data-vv-name="UserId" data-vv-as="UserName" />
+                <FilterBlock :title="$t('Strings.Teams')"
+                    v-if="!$config.model.isSupervisorMode">
+                    <Typeahead control-id="teams"
+                        :placeholder="$t('Strings.AllTeams')"
+                        :value="supervisorId"
+                        @selected="selectSupervisor"
+                        :ajax-params="supervisorsParams"
+                        :fetch-url="supervisorsUrl"
+                        data-vv-name="UserId"
+                        data-vv-as="UserName" />
                 </FilterBlock>
             </Filters>
         </template>
@@ -29,17 +45,24 @@
                         this.questionnaireVersion.value }}</h4>
             </div>
         </div>
-        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" noPaging noSearch
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :addParamsToRequest="addFilteringParams"
+            noPaging
+            noSearch
             exportable>
             <template v-slot:header>
 
-                <th rowspan="1" class="vertical-align-middle text-center">
+                <th rowspan="1"
+                    class="vertical-align-middle text-center">
                     <!-- {{ $t("Strings.Days") }} -->
                 </th>
-                <th colspan="2" class="type-numeric sorting_disabled text-center">
+                <th colspan="2"
+                    class="type-numeric sorting_disabled text-center">
                     {{ $t("Strings.Assignments") }}
                 </th>
-                <th colspan="5" class="type-numeric sorting_disabled text-center">
+                <th colspan="5"
+                    class="type-numeric sorting_disabled text-center">
                     {{ $t("Strings.Interviews") }}
                 </th>
 
@@ -51,7 +74,7 @@
 <script>
 import { formatNumber } from './helpers'
 import routeSync from '~/shared/routeSync'
-import { chain } from 'lodash'
+import { chain } from 'lodash-es'
 
 export default {
     mixins: [routeSync],

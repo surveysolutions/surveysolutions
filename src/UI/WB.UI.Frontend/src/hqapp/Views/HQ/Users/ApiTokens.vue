@@ -1,33 +1,49 @@
 <template>
-    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
-        :forceChangePassword="userInfo.forceChangePassword" :canChangePassword="userInfo.canChangePassword"
-        :userName="userInfo.userName" :userId="userInfo.userId" :currentTab="currentTab"
-        :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
+    <ProfileLayout ref="profile"
+        :role="userInfo.role"
+        :isOwnProfile="userInfo.isOwnProfile"
+        :forceChangePassword="userInfo.forceChangePassword"
+        :canChangePassword="userInfo.canChangePassword"
+        :userName="userInfo.userName"
+        :userId="userInfo.userId"
+        :currentTab="currentTab"
+        :canGenerateToken="userInfo.canGetApiToken"
+        :isRestricted="userInfo.isRestricted">
 
         <div>
             <div class="block-filter">
                 <h3>
                     {{ $t('Pages.AccountManage_StatusApiToken') }}
-                    <span style="color:green;" v-if="tokenWasIssued"> {{ $t('Strings.HQ_Views_Api_Token_Issued') }}
+                    <span style="color:green;"
+                        v-if="tokenWasIssued"> {{ $t('Strings.HQ_Views_Api_Token_Issued') }}
                     </span>
-                    <span style="color:red;" v-if="!tokenWasIssued"> {{ $t('Strings.HQ_Views_Api_Token_Not_Issued') }}
+                    <span style="color:red;"
+                        v-if="!tokenWasIssued"> {{ $t('Strings.HQ_Views_Api_Token_Not_Issued') }}
                     </span>
                 </h3>
             </div>
         </div>
-        <div v-if="apiToken && tokenWasIssued" class="row">
+        <div v-if="apiToken && tokenWasIssued"
+            class="row">
             <div class="col-md-6 col-xs-12">
                 <span style="color:red;">{{ $t('Strings.HQ_Views_Api_Token_Generate_Description') }}</span>
-                <pre v-text="apiToken" style="white-space:normal;"></pre>
+                <pre v-text="apiToken"
+                    style="white-space:normal;"></pre>
             </div>
         </div>
         <div>
             <div class="block-filter">
-                <button v-if="tokenWasIssued" type="submit" class="btn btn-danger" id="btnDelete"
+                <button v-if="tokenWasIssued"
+                    type="submit"
+                    class="btn btn-danger"
+                    id="btnDelete"
                     v-bind:disabled="userInfo.isObserving || !canGenerate || userInfo.isRestricted"
                     @click="deleteToken">{{
                         $t('Common.Disable') }}</button>
-                <button v-if="!tokenWasIssued" type="submit" class="btn btn-success" style="margin-right:5px"
+                <button v-if="!tokenWasIssued"
+                    type="submit"
+                    class="btn btn-success"
+                    style="margin-right:5px"
                     id="btnCreateToken"
                     v-bind:disabled="(userInfo.isObserving || userInfo.isRestricted) && !canGenerate"
                     @click="generateApiKey">{{ $t('Common.Enable') }}</button>
@@ -38,7 +54,7 @@
 </template>
 
 <script>
-import { each } from 'lodash'
+import { each } from 'lodash-es'
 
 export default {
     data() {

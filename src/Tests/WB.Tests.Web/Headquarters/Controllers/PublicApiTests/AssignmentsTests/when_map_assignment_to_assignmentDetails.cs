@@ -24,7 +24,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 {
                     new InterviewSummary(),
                     new InterviewSummary()
-                });
+                },
+                audioAuditScope: new List<string> { "section1", "roster2" });
 
             this.Assignment.IdentifyingData = new List<IdentifyingAnswer>
             {
@@ -92,5 +93,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [Test]
         public void should_map_IdentifyingAnswer_Variable_name_from_questionnaire() =>
             Assert.That(this.AssignmentDetails.IdentifyingData[0].Variable, Is.EqualTo("test2"));
+
+        [Test]
+        public void should_map_AudioAuditScope() =>
+            Assert.That(this.AssignmentDetails.AudioAuditScope, Is.EqualTo(this.Assignment.AudioAuditScope));
     }
 }

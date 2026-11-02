@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -29,7 +30,8 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
         public static void AddWorkspaceAwareHttpClient<TApi, TConfigurator, THandler>(
             this IServiceCollection services,
-            RefitSettings? refitSettings = null)
+            RefitSettings? refitSettings = null,
+            Action<HttpClientHandler, IServiceProvider>? configureHandler = null)
           where TApi : class
           where THandler: DelegatingHandler
           where TConfigurator : class, IHttpClientConfigurator<TApi>
@@ -41,7 +43,9 @@ namespace WB.UI.Headquarters.Code.Workspaces
             {
                 var configurator = s.GetRequiredService<IHttpClientConfigurator<TApi>>();
                 var handler = s.GetRequiredService<THandler>();
-                handler.InnerHandler = new HttpClientHandler();
+                var innerHandler = new HttpClientHandler();
+                configureHandler?.Invoke(innerHandler, s);
+                handler.InnerHandler = innerHandler;
 
                 var hc = new HttpClient(handler, false);
 

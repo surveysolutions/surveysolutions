@@ -191,6 +191,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsQuestionYesNo(Guid questionId);
 
+        bool IsQuestionNonNegative(Guid questionId);
+
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
 
         FixedRosterTitle[] GetFixedRosterTitles(Guid groupId);
@@ -277,6 +279,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         decimal[] GetFixedRosterCodes(Guid rosterId);
         IReadOnlyCollection<string> GetTranslationLanguages();
         string GetDefaultTranslation();
+        Guid? GetDefaultTranslationId();
         bool IsSubSection(Guid groupId);
         bool IsVariable(Guid id);
         bool HasCustomRosterTitle(Guid id);

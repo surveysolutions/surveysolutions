@@ -20,6 +20,7 @@ namespace WB.UI.Designer.Services.Restore
         }
 
         private readonly Dictionary<Guid, Attachment> attachments = new Dictionary<Guid, Attachment>();
+        private readonly HashSet<Guid> restoredAttachments = new HashSet<Guid>();
 
         public int RestoredEntitiesCount { get; set; }
 
@@ -37,13 +38,27 @@ namespace WB.UI.Designer.Services.Restore
         public Attachment GetAttachment(Guid attachmentId)
             => this.attachments[attachmentId];
 
-        public void RemoveAttachment(Guid attachmentId)
-            => this.attachments.Remove(attachmentId);
+        public void MarkAttachmentRestored(Guid attachmentId)
+        {
+            this.attachments.Remove(attachmentId);
+            this.restoredAttachments.Add(attachmentId);
+        }
+
+        public bool IsAttachmentRestored(Guid attachmentId)
+            => this.restoredAttachments.Contains(attachmentId);
 
         public IEnumerable<Guid> GetPendingAttachments()
             => this.attachments.Keys;
 
         public StringBuilder Success { get; } = new StringBuilder();
         public string? Error { get; set; }
+
+        private bool failed;
+
+        // Any reported error means the restore did not complete: some failures are swallowed to keep going, others
+        // (an attachment whose content never arrived) are reported only through Error.
+        public bool HasFailures => this.failed || !string.IsNullOrWhiteSpace(this.Error);
+
+        public void MarkFailed() => this.failed = true;
     }
 }

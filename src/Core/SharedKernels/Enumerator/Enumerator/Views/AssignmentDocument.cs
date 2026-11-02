@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SQLite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
@@ -39,6 +40,24 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         [Ignore]
         public List<AssignmentProtectedVariable> ProtectedVariables { get; set; } = new List<AssignmentProtectedVariable>();
+
+        /// <summary>
+        /// Selective Audio Audit scope (questionnaire section/group/roster variable names) serialized as a
+        /// comma-separated list for SQLite persistence. Use <see cref="AudioAuditScope"/> to access the values.
+        /// </summary>
+        public string AudioAuditScopeSerialized { get; set; }
+
+        [Ignore]
+        public List<string> AudioAuditScope
+        {
+            get => string.IsNullOrEmpty(this.AudioAuditScopeSerialized)
+                ? new List<string>()
+                : this.AudioAuditScopeSerialized.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+            set => this.AudioAuditScopeSerialized = value == null || value.Count == 0
+                ? null
+                : string.Join(",", value);
+        }
 
         public DateTime? ReceivedByInterviewerAt { get; set; }
 

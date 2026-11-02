@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             this.settings = settings;
 
-            this.allowedSymbols = $"0123456789{this.settings.NegativeSign}";
+            this.allowedSymbols = $"0123456789{(this.settings.IsNonNegative ? "" : this.settings.NegativeSign)}";
             if (this.settings.IsDecimal)
             {
                 allowedSymbols += $"{NonLocalizedAndroidDecimalSeparator}{this.settings.DecimalSeparator}";
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
             var enteredText = sourceText.Insert(insertToIndex, addedText);
 
-            var hasTextNegativeSign = enteredText.StartsWith(this.settings.NegativeSign);
+            var hasTextNegativeSign = !this.settings.IsNonNegative && enteredText.StartsWith(this.settings.NegativeSign);
             string textWithoutSign = hasTextNegativeSign ? enteredText.Length == 1 ? "" : enteredText.Substring(1, enteredText.Length - 1) : enteredText;
 
             string[] integerAndFraction = textWithoutSign.Split(this.settings.DecimalSeparator.ToCharArray());

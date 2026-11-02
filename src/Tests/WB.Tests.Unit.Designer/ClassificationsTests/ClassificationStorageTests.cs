@@ -182,6 +182,8 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
                  storage);
 
             await classificationStorage.DeleteClassificationAsync(Id.g2, userId:Id.gA, isAdmin: true);
+            // The storage only stages changes; TransactionFilter flushes them at the transaction boundary.
+            await storage.SaveChangesAsync();
 
             CollectionAssert.AreEqual(new []{ Id.g1, Id.g3, Id.g4}, storage.ClassificationEntities.Select(x => x.Id).ToArray());
         }
@@ -260,6 +262,7 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
                  storage);
 
             await classificationStorage.DeleteClassificationGroup(Id.g1, true);
+            await storage.SaveChangesAsync();
 
             Assert.That(storage.ClassificationEntities.Count(), Is.EqualTo(0));
         }

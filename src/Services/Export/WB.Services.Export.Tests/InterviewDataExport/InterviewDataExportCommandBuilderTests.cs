@@ -13,7 +13,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
 {
     [UseApprovalSubdirectory("InterviewDataExportCommandBuilderTests-approved")]
     [IgnoreLineEndings(true)]
-    [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(NUnit4Reporter))]
     [TestOf(typeof(InterviewDataExportBulkCommandBuilder))]
     public class InterviewDataExportCommandBuilderTests
     {

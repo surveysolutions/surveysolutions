@@ -117,16 +117,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (args.PropertyName != nameof(GeometryEditor.Geometry))
                 return;
 
-            if (this.MapView.GeometryEditor == null) return;
+            var geometryEditor = this.MapView?.GeometryEditor;
+            if (geometryEditor == null) return;
             
-            var geometry = this.MapView.GeometryEditor.Geometry;
+            var geometry = geometryEditor.Geometry;
             try
             {
                 this.UpdateLabels(geometry);
                 await UpdateDrawNeighborsAsync(geometry, this.GeographyNeighbors).ConfigureAwait(false);
 
-                CanUndo = this.MapView.GeometryEditor.CanUndo;
-                CanSave = this.MapView.GeometryEditor.IsStarted
+                CanUndo = geometryEditor.CanUndo;
+                CanSave = geometryEditor.IsStarted
                           && CalculateCanSave(new GeometryByTypeBuilder(geometry).PointCount);
             }
             catch { }
@@ -134,33 +135,43 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private async Task StartEditingGeometry()
         {
+            var mapView = this.MapView;
+            var geometryEditor = mapView?.GeometryEditor;
+            var mapSpatialReference = mapView?.Map?.SpatialReference;
+
+            if (mapView == null || geometryEditor == null || mapSpatialReference == null)
+            {
+                logger.Warn("Unable to start geometry editor because MapView, GeometryEditor, or map SpatialReference is not initialized.");
+                return;
+            }
+
             this.IsEditing = true;
 
             try
             {
-                this.MapView.GeometryEditor.PropertyChanged += GeometryChangedHandler;
+                geometryEditor.PropertyChanged += GeometryChangedHandler;
 
                 if (this.Geometry == null)
                 {
-                    await this.MapView.SetViewpointRotationAsync(0).ConfigureAwait(false); //workaround to fix Map is not prepared Esri error.
+                    await mapView.SetViewpointRotationAsync(0).ConfigureAwait(false); //workaround to fix Map is not prepared Esri error.
                 }
                 else
                 {
-                    if (this.MapView != null && this.MapView.Map?.SpatialReference != null && !this.MapView.Map.SpatialReference.IsEqual(Geometry.SpatialReference))
-                        Geometry = GeometryEngine.Project(Geometry, this.MapView.Map.SpatialReference);
+                    if (!mapSpatialReference.IsEqual(Geometry.SpatialReference))
+                        Geometry = GeometryEngine.Project(Geometry, mapSpatialReference);
 
                     await SetViewpointToGeometry(this.Geometry);
                 }
 
                 await DrawNeighborsAsync(this.Geometry).ConfigureAwait(false);
 
-                var result = await GetGeometry().ConfigureAwait(false);
+                var result = await GetGeometry(geometryEditor).ConfigureAwait(false);
 
-                var position = this.MapView?.LocationDisplay?.Location?.Position;
+                var position = mapView.LocationDisplay?.Location?.Position;
                 double? distanceToEditor = null;
-                if (position != null)
+                if (position != null && result != null)
                 {
-                    var point = GeometryEngine.Project(position, this.MapView.Map.SpatialReference);
+                    var point = GeometryEngine.Project(position, mapSpatialReference);
                     distanceToEditor = GeometryEngine.Distance(result, point);
                 }
 
@@ -390,9 +401,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             UpdateWarningMessage(overlappingTitles);
         }
 
-        private async Task<Geometry> GetGeometry()
+        private async Task<Geometry> GetGeometry(GeometryEditor geometryEditor)
         {
             Geometry geometry = Geometry;
+            
             switch (RequestedGeometryType)
             {
                 case GeometryType.Polyline:
@@ -401,8 +413,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         IsGeometryAreaVisible = false;
                         
                         return geometry == null
-                            ? await this.MapView.GeometryEditor.StartAsync(EsriGeometryType.Polyline)
-                            : await this.MapView.GeometryEditor.StartAsync(geometry);
+                            ? await geometryEditor.StartAsync(EsriGeometryType.Polyline)
+                            : await geometryEditor.StartAsync(geometry);
                     }
                 case GeometryType.Point:
                     {
@@ -410,20 +422,28 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         IsGeometryAreaVisible = false;
 
                         return geometry == null
-                            ? await this.MapView.GeometryEditor.StartAsync(EsriGeometryType.Point)
-                            : await this.MapView.GeometryEditor.StartAsync(geometry);
+                            ? await geometryEditor.StartAsync(EsriGeometryType.Point)
+                            : await geometryEditor.StartAsync(geometry);
                     }
                 case GeometryType.Multipoint:
                     {
                         IsGeometryLengthVisible = false;
                         IsGeometryAreaVisible = false;
 
-                        this.MapView.GeometryEditor.Tool.Style.MidVertexSymbol = null;
-                        this.MapView.GeometryEditor.Tool.Style.LineSymbol = null;
+                        var style = geometryEditor.Tool?.Style;
+                        if (style != null)
+                        {
+                            style.MidVertexSymbol = null;
+                            style.LineSymbol = null;
+                        }
+                        else
+                        {
+                            logger.Warn("Geometry editor style is not initialized for multipoint editing.");
+                        }
 
                         return geometry == null 
-                            ? await this.MapView.GeometryEditor.StartAsync(EsriGeometryType.Multipoint)
-                            : await this.MapView.GeometryEditor.StartAsync(geometry);
+                            ? await geometryEditor.StartAsync(EsriGeometryType.Multipoint)
+                            : await geometryEditor.StartAsync(geometry);
                     }
                 default:
                     {
@@ -431,8 +451,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         IsGeometryAreaVisible = true;
 
                         return geometry == null
-                            ? await this.MapView.GeometryEditor.StartAsync(EsriGeometryType.Polygon)
-                            : await this.MapView.GeometryEditor.StartAsync(geometry);
+                            ? await geometryEditor.StartAsync(EsriGeometryType.Polygon)
+                            : await geometryEditor.StartAsync(geometry);
                     }
             }
         }

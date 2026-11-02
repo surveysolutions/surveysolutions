@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AccessForbidden" xml:space="preserve"><value>ម៉ាស៊ីនមេមិនត្រូវបានចុះឈ្មោះជាមួយ Questionnaire Designer</value></data>
+  <data name="DesignerAppDescription" xml:space="preserve"><value>នេះ​ជា​ឧបករណ៍​ឥត​គិត​ថ្លៃ​សម្រាប់​បង្កើត​កម្រង​សំណួរ</value></data>
+  <data name="InvalidCredentials" xml:space="preserve"><value>អ្នកប្រើប្រាស់មិនត្រូវបានអនុញ្ញាត សូមពិនិត្យការចូលនិងពាក្យសម្ងាត់របស់អ្នក</value></data>
+  <data name="LoginWatermark" xml:space="preserve"><value>ការចូល ឬអ៊ីម៉ែល</value></data>
+  <data name="PageHeader" xml:space="preserve"><value>ប្រើព័ត៌មានសម្ងាត់ Survey Solutions Designer របស់អ្នក</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>កម្រងសំណួរ</value></data>
+  <data name="SessionExpired" xml:space="preserve"><value>វគ្គបានផុតកំណត់ សូមចូលម្ដងទៀត</value></data>
+  <data name="UnableToImportNewQuestionnaire" xml:space="preserve"><value>មិនអាចនាំចូលកម្រងសំណួរថ្មី:</value></data>
+  <data name="UserDesignerCredentials" xml:space="preserve"><value>សូមចូលដោយប្រើព័ត៌មានសម្ងាត់ដែលអ្នកធម្មតាប្រើដើម្បីចូលប្រើកម្រងសំណួររបស់អ្នកនៅ Designer</value></data>
+</root>

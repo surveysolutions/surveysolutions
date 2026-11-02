@@ -2,11 +2,12 @@
     <teleport to="body">
         <div v-if="visible" uib-modal-window="modal-window" class="modal share-window fade ng-scope ng-isolate-scope in"
             role="dialog" index="0" animate="animate" tabindex="-1" uib-modal-animation-class="fade" modal-in-class="in"
-            modal-animation="true" style="z-index: 1050; display: block;" v-dragAndDrop>
+            modal-animation="true" style="z-index: 1050; display: block;" v-dragAndDrop @keydown.esc="close()">
             <div class="modal-dialog ">
                 <div class="modal-content" uib-modal-transclude="">
                     <div class="modal-header blue-strip">
-                        <button type="button" class="close" aria-hidden="true" @click="close()"></button>
+                        <button type="button" class="close" :aria-label="$t('QuestionnaireEditor.Close')"
+                            @click="close()"></button>
                         <h1>
                             {{ $t('QuestionnaireEditor.SettingsTitle') }}
                         </h1>
@@ -190,7 +191,8 @@
                                         </div>
                                     </div>
                                     <hr />
-                                    <div v-if="isQuestionnaireOwner || questionnaire.hasViewerAdminRights">
+                                    <div
+                                        v-if="isQuestionnaireOwner || questionnaire.hasViewerAdminRights || (isQuestionnaireEditor && questionnaire.isAnonymouslyShared)">
                                         <h2>
                                             {{ $t('QuestionnaireEditor.AnonymousQuestionnaireSettings') }}
                                         </h2>
@@ -200,15 +202,15 @@
                                         <br />
                                         <span>
                                             {{ questionnaire.isAnonymouslyShared
-            ? $t('QuestionnaireEditor.SettingsStatusAllowAnonymousAccess')
-            : $t('QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess')
+                                                ? $t('QuestionnaireEditor.SettingsStatusAllowAnonymousAccess')
+                                                : $t('QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess')
                                             }}
                                         </span>
                                         <button v-if="isQuestionnaireOwner" class="btn btn-link answer"
                                             @click="updateAnonymousQuestionnaireSettings()">
                                             {{ questionnaire.isAnonymouslyShared
-            ? $t('QuestionnaireEditor.SettingsTurnOffAnonymousAccess')
-            : $t('QuestionnaireEditor.SettingsTurnOnAnonymousAccess')
+                                                ? $t('QuestionnaireEditor.SettingsTurnOffAnonymousAccess')
+                                                : $t('QuestionnaireEditor.SettingsTurnOnAnonymousAccess')
                                             }}
                                         </button>
                                         <br />
@@ -224,9 +226,9 @@
                                                 <br />
                                                 <div>
                                                     {{ $t('QuestionnaireEditor.AnonymousQuestionnaireGeneratedDate',
-            {
-                datetime: anonymousQuestionnaireShareDate
-            })
+                                                        {
+                                                            datetime: anonymousQuestionnaireShareDate
+                                                    })
                                                     }}
                                                 </div>
                                                 <button class="btn btn-link answer" style="padding-left: 0px;"
@@ -259,14 +261,14 @@
                                         <br />
                                         <span>
                                             {{ questionnaire.isPublic
-            ? $t('QuestionnaireEditor.PublicAccessSettingsStatusOn')
-            : $t('QuestionnaireEditor.PublicAccessSettingsStatusOff')
+                                                ? $t('QuestionnaireEditor.PublicAccessSettingsStatusOn')
+                                                : $t('QuestionnaireEditor.PublicAccessSettingsStatusOff')
                                             }}
                                         </span>
                                         <button class="btn btn-link answer" @click="togglePublicity()">
                                             {{ questionnaire.isPublic
-                                            ? $t('QuestionnaireEditor.PublicAccessSettingsOff')
-                                            : $t('QuestionnaireEditor.PublicAccessSettingsOn')
+                                                ? $t('QuestionnaireEditor.PublicAccessSettingsOff')
+                                                : $t('QuestionnaireEditor.PublicAccessSettingsOn')
                                             }}
                                         </button>
                                     </div>
@@ -359,6 +361,9 @@ export default {
             const userEmail = this.currentUser.email;
             var user = this.questionnaire.sharedPersons.find(item => item.email == userEmail);
             return user && user.isOwner;
+        },
+        isQuestionnaireEditor() {
+            return !this.questionnaire.isReadOnlyForUser && !this.isQuestionnaireOwner && !this.questionnaire.hasViewerAdminRights;
         },
         getAnonymousQuestionnaireLink() {
             return (

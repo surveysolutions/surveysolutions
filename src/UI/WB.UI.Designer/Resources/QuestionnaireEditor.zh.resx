@@ -279,6 +279,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>匹配的行：{{count}}</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>匹配整个词</value>
   </data>
@@ -569,6 +572,9 @@
   </data>
   <data name="QuestionInteger" xml:space="preserve">
     <value>整数</value>
+  </data>
+  <data name="QuestionNonNegative" xml:space="preserve">
+    <value>非负</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>被关联</value>
@@ -1852,5 +1858,11 @@
 
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>切换到将更改问卷的显示语言。翻译必须包含所有元素的文本。</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+      <value>编辑</value>
+  </data>
+  <data name="Stick" xml:space="preserve">
+      <value>附加</value>
   </data>
 </root>

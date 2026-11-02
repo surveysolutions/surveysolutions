@@ -1,5 +1,6 @@
-import Export from './Export'
 import store from './export.store.js'
+
+const Export = () => import('./Export')
 
 export default class ExportComponent {
     constructor(rootStore) {

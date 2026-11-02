@@ -1047,6 +1047,12 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string FindReplaceCurrentMatch {
+            get {
+                return ResourceManager.GetString("FindReplaceCurrentMatch", resourceCulture);
+            }
+        }
+        
         public static string FindReplaceNext {
             get {
                 return ResourceManager.GetString("FindReplaceNext", resourceCulture);
@@ -1569,6 +1575,12 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string QuestionNonNegative {
+            get {
+                return ResourceManager.GetString("QuestionNonNegative", resourceCulture);
+            }
+        }
+        
         public static string QuestionIsLinked {
             get {
                 return ResourceManager.GetString("QuestionIsLinked", resourceCulture);
@@ -2073,6 +2085,12 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string HotkeysTest {
+            get {
+                return ResourceManager.GetString("HotkeysTest", resourceCulture);
+            }
+        }
+        
         public static string MultipleDependencies {
             get {
                 return ResourceManager.GetString("MultipleDependencies", resourceCulture);
@@ -2346,6 +2364,12 @@ namespace WB.UI.Designer.Resources {
         public static string RequestFailedUnexpectedly {
             get {
                 return ResourceManager.GetString("RequestFailedUnexpectedly", resourceCulture);
+            }
+        }
+        
+        public static string ApplicationNotAvailable {
+            get {
+                return ResourceManager.GetString("ApplicationNotAvailable", resourceCulture);
             }
         }
         
@@ -3132,6 +3156,18 @@ namespace WB.UI.Designer.Resources {
         public static string AIAssistant {
             get {
                 return ResourceManager.GetString("AIAssistant", resourceCulture);
+            }
+        }
+        
+        public static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        public static string Stick {
+            get {
+                return ResourceManager.GetString("Stick", resourceCulture);
             }
         }
     }

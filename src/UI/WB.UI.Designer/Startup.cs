@@ -8,6 +8,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -332,19 +333,9 @@ namespace WB.UI.Designer
             {
 		options.Cookie.Name = ".AspNetCore.Identity.Designer";
                 options.Events.OnRedirectToLogin = context =>
-                {
-                    var hasAcceptHeader = context.Request.Headers.TryGetValue(HeaderNames.Accept, out var accept);
-                    if (hasAcceptHeader && accept.ToString().Contains("application/json", StringComparison.OrdinalIgnoreCase) && context.Response.StatusCode == StatusCodes.Status200OK)
-                    {
-                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    }
-                    else
-                    {
-                        context.Response.Redirect(context.RedirectUri);
-                    }
-
-                    return Task.CompletedTask;
-                };
+                    HandleCookieAuthRedirect(context.HttpContext, context.RedirectUri, StatusCodes.Status401Unauthorized);
+                options.Events.OnRedirectToAccessDenied = context =>
+                    HandleCookieAuthRedirect(context.HttpContext, context.RedirectUri, StatusCodes.Status403Forbidden);
             });
 
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
@@ -357,7 +348,11 @@ namespace WB.UI.Designer
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                 })
-                .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new QuestionnaireRevisionBinderProvider()));
+                .AddMvcOptions(options =>
+                {
+                    options.ModelBinderProviders.Insert(0, new QuestionnaireRevisionBinderProvider());
+                    options.Filters.Add<TransactionFilter>();
+                });
 
             services.AddCors(corsOpt =>
             {
@@ -393,10 +388,9 @@ namespace WB.UI.Designer
             services.AddTransient<IBasicAuthenticationService, BasicBasicAuthenticationService>();
 
             services.Configure<CaptchaConfig>(Configuration.GetSection("Captcha"));
-            services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
-            services.AddTransient<IRecaptchaService, RecaptchaService>();
+            services.AddRecaptcha(Configuration.GetSection("Captcha"));
             services.AddTransient<IRecipientNotifier, MailNotifier>();
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<UiConfig>(Configuration.GetSection("UI"));
             services.Configure<IntegrationsConfig>(Configuration.GetSection("Integrations"));
 
@@ -475,6 +469,7 @@ namespace WB.UI.Designer
             }
 
             app.UseResponseCompression();
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -485,7 +480,7 @@ namespace WB.UI.Designer
                     }
                 }
             });
-            
+
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
@@ -511,10 +506,41 @@ namespace WB.UI.Designer
                     new CultureInfo("ro"),
                     new CultureInfo("cs"),
                     new CultureInfo("uk"),
+                    new CultureInfo("ka"),
+                    new CultureInfo("id"),
+                    new CultureInfo("km"),
+                    new CultureInfo("th"),
+                    new CultureInfo("vi")
                 };
             });
 
             app.UseHealthChecks("/.hc");
+
+            // Safety net for handlers that own their transaction ([NoTransaction]) and therefore never reach
+            // TransactionFilter's flush; flushing twice is a no-op.
+            app.Use(async (context, next) =>
+            {
+                ExceptionDispatchInfo? capturedException = null;
+                try
+                {
+                    await next();
+                }
+                catch (Exception exception)
+                {
+                    capturedException = ExceptionDispatchInfo.Capture(exception);
+                }
+
+                try
+                {
+                    context.RequestServices.GetService<ITransactionalMemoryCacheInvalidation>()?.Flush();
+                }
+                catch when (capturedException != null)
+                {
+                    // Keep the original request failure if cache cleanup also faults.
+                }
+
+                capturedException?.Throw();
+            });
 
             app.UseRouting();
             app.UseAuthorization();
@@ -555,6 +581,22 @@ namespace WB.UI.Designer
                 initTask.Wait();
             else
                 initTask.Wait(TimeSpan.FromSeconds(10));
+        }
+
+        private static Task HandleCookieAuthRedirect(HttpContext httpContext, string redirectUri, int statusCode)
+        {
+            var hasAcceptHeader = httpContext.Request.Headers.TryGetValue(HeaderNames.Accept, out var accept);
+            if (hasAcceptHeader && accept.ToString().Contains("application/json", StringComparison.OrdinalIgnoreCase)
+                && httpContext.Response.StatusCode == StatusCodes.Status200OK)
+            {
+                httpContext.Response.StatusCode = statusCode;
+            }
+            else
+            {
+                httpContext.Response.Redirect(redirectUri);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

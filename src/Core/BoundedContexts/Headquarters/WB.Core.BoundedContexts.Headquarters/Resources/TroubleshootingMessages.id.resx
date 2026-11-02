@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="NoData_ContactSupport" xml:space="preserve">
+        <value>Data dari wawancara {0} rusak. Hubungi dukungan untuk memulihkan wawancara itu</value>
+    </data>
+    <data name="NoData_ContactSupportWithMoreDetails" xml:space="preserve">
+        <value>Silakan hubungi dukungan untuk memberikan rincian lebih lanjut</value>
+    </data>
+    <data name="NoData_InterveiwWasNotUploadedYet" xml:space="preserve">
+        <value>Wawancara {0} belum disinkronkan</value>
+    </data>
+    <data name="NoData_InterviewDeleted" xml:space="preserve">
+        <value>Wawancara {0} telah dihapus oleh Kantor Pusat atau Administrator, dan karenanya tidak dapat dipulihkan</value>
+    </data>
+    <data name="NoData_InterviewerChangedDevice" xml:space="preserve">
+        <value>Pewawancara mengganti tablet. Data untuk wawancara {0} mungkin hilang karena data terhapus saat pewawancara berpindah dari satu tablet ke tablet lainnya. Jika hal ini terjadi, wawancara tersebut tidak dapat dipulihkan</value>
+    </data>
+    <data name="NoData_InterviewWasNotReceived" xml:space="preserve">
+        <value>Wawancara {0} belum diterima oleh pewawancara {1}.</value>
+    </data>
+    <data name="NoData_InterviewWasReassigned" xml:space="preserve">
+        <value>Wawancara {0} ditugaskan kembali ke pewawancara yang berbeda. Wawancara saat ini ada di tablet pewawancara yang terakhir.</value>
+    </data>
+    <data name="NoData_NoIssuesInterviewOnServer" xml:space="preserve">
+        <value>Wawancara {0} tidak memiliki masalah yang tercatat di server.&lt;br /&gt;Silakan dapatkan informasi lebih lanjut dari orang yang saat ini bertanggung jawab atas wawancara tersebut.&lt;br /&gt;Jika masalah terus berlanjut, hubungi dukungan untuk memberikan rincian lebih lanjut</value>
+    </data>
+    <data name="NoData_NotFound" xml:space="preserve">
+        <value>Wawancara {0} tidak dapat ditemukan</value>
+    </data>
+    <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
+        <value>Administrator server menghapus kuesioner untuk wawancara {0}. Akibatnya, semua wawancara yang terkait dengan kuesioner ini telah dihapus dan tidak dapat dikembalikan</value>
+    </data>
+    <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+        <value>Jika wawancara yang ingin Anda cari tidak ada dalam daftar, harap instruksikan pewawancara untuk menyelesaikan wawancara dan melakukan sinkronisasi kembali.</value>
+    </data>
+    <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+        <value>Jika wawancara yang ingin Anda cari tidak ada dalam daftar, harap instruksikan pewawancara untuk menyelesaikan wawancara dan melakukan sinkronisasi kembali. Kemudian, cari wawancara lagi. Jika wawancara tidak ditemukan pada pencarian kedua, hubungi tim dukungan.</value>
+    </data>
+</root>

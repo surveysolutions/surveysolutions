@@ -885,7 +885,10 @@
     <value>criação em lote de usuários</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Detalhes das informações pessoais (opcional) &lt;br&gt; serão visíveis apenas para usuários da sede</value>
+    <value>Detalhes das informações pessoais</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(opcional, será visível apenas para usuários autenticados).</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Data em que a conta do entrevistador foi criada</value>
@@ -1318,6 +1321,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Mapa</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>Pré-visualização do mapa</value>
+  </data>
   <data name="MapDetails_ImportedOn" xml:space="preserve">
     <value>Importado em</value>
   </data>
@@ -1659,7 +1665,13 @@
     <value>Entrevista reavaliada com sucesso</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Criar usuário</value>
+    <value>Criar conta de usuário</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Acesso ao espaço de trabalho</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Função do usuário</value>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>Gerar códigos de recuperação</value>
@@ -1677,7 +1689,7 @@
     <value>Todos os espaços de trabalho</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>Supervisor (os entrevistadores serão adicionados à sua equipe)</value>
+    <value>Supervisor</value>
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
     <value>Selecionar supervisor</value>
@@ -1781,4 +1793,10 @@
   <data name="Observer_Memo2" xml:space="preserve">
     <value>Clique em uma conta e selecione "Visualizar como este usuário no modo somente leitura" para começar. Use o link amarelo na parte superior para retornar à sua conta.</value>
 </data>
+  <data name="Successful" xml:space="preserve">
+      <value>Bem-sucedido</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>Falhou</value>
+  </data>
 </root>

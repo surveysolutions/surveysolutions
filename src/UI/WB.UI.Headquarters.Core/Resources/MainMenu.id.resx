@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ApiUsers" xml:space="preserve"><value>Pengguna API</value></data>
+  <data name="Assignments" xml:space="preserve"><value>Tugas</value></data>
+  <data name="AuditLog" xml:space="preserve"><value>Log Audit</value></data>
+  <data name="CumulativeChart" xml:space="preserve"><value>Grafik Wawancara Kumulatif</value></data>
+  <data name="DataExport" xml:space="preserve"><value>Ekspor Data</value></data>
+  <data name="DeviceLogs" xml:space="preserve"><value>Log Perangkat</value></data>
+  <data name="Diagnostics" xml:space="preserve"><value>Diagnostik</value></data>
+  <data name="Headquarters" xml:space="preserve"><value>Kantor Pusat</value></data>
+  <data name="Help" xml:space="preserve"><value>Bantuan</value></data>
+  <data name="Interviewers" xml:space="preserve"><value>Pewawancara</value></data>
+  <data name="InterviewPackages" xml:space="preserve"><value>Paket Wawancara</value></data>
+  <data name="Interviews" xml:space="preserve"><value>Wawancara</value></data>
+  <data name="MapReport" xml:space="preserve"><value>Laporan Peta</value></data>
+  <data name="Observers" xml:space="preserve"><value>Pengamat</value></data>
+  <data name="Settings" xml:space="preserve"><value>Pengaturan</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>Pengaturan Ruang Kerja</value></data>
+  <data name="EmailProviders" xml:space="preserve"><value>Penyedia Email</value></data>
+  <data name="Quantity" xml:space="preserve"><value>Kuantitas</value></data>
+  <data name="SurveySetup" xml:space="preserve"><value>Pengaturan Survei</value></data>
+  <data name="Maps" xml:space="preserve"><value>Peta</value></data>
+  <data name="QueueSizeTitle" xml:space="preserve"><value>Jumlah wawancara yang telah disinkronkan tetapi belum diproses</value></data>
+  <data name="Reports" xml:space="preserve"><value>Laporan</value></data>
+  <data name="Speed" xml:space="preserve"><value>Kecepatan</value></data>
+  <data name="SurveyStatistics" xml:space="preserve"><value>Statistik Survei</value></data>
+  <data name="StatusDuration" xml:space="preserve"><value>Durasi Status</value></data>
+  <data name="Supervisors" xml:space="preserve"><value>Supervisor</value></data>
+  <data name="CreateNew" xml:space="preserve"><value>Buat baru</value></data>
+  <data name="Started" xml:space="preserve"><value>Dimulai</value></data>
+  <data name="Completed" xml:space="preserve"><value>Selesai</value></data>
+  <data name="Rejected" xml:space="preserve"><value>Ditolak</value></data>
+  <data name="MapDashboard" xml:space="preserve"><value>Dasbor Peta</value></data>
+  <data name="SurveysAndStatuses" xml:space="preserve"><value>Survei dan Status</value></data>
+  <data name="TabletInfos" xml:space="preserve"><value>Info Tablet</value></data>
+  <data name="TeamAndRoles" xml:space="preserve"><value>Tim dan Peran</value></data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve"><value>Anggota tim dan Status</value></data>
+  <data name="TeamsAndRoles" xml:space="preserve"><value>Tim dan Peran</value></data>
+  <data name="TeamsAndStatuses" xml:space="preserve"><value>Tim dan Status</value></data>
+  <data name="DevicesInterviewers" xml:space="preserve"><value>Perangkat/Pewawancara</value></data>
+  <data name="Troubleshooting" xml:space="preserve"><value>Pemecahan Masalah</value></data>
+  <data name="UserBatchUpload" xml:space="preserve"><value>Unggah Pengguna Massal</value></data>
+  <data name="Users" xml:space="preserve"><value>Pengguna</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>Kuesioner</value></data>
+  <data name="Administration" xml:space="preserve"><value>Admin</value></data>
+  <data name="Workspaces" xml:space="preserve"><value>Ruang Kerja</value></data>
+  <data name="ServerAdministration" xml:space="preserve"><value>Administrasi</value></data>
+</root>
