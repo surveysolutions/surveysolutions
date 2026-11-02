@@ -19,6 +19,9 @@
             <li v-if="!isLoading && options.length === 0" id="th_NoResults">
                 <a>{{ $t("WebInterviewUI.NoResultsFound") }}</a>
             </li>
+            <li v-if="!isLoading && optionsCount > 0 && options.length >= optionsCount" id="th_TypeToFilter" class="type-to-filter-hint">
+                <a>{{ $t("WebInterviewUI.TypeToFilterForMore", { count: optionsCount }) }}</a>
+            </li>
         </ul>
     </div>
 </template>
@@ -50,6 +53,11 @@ export default {
             required: false,
             type: String,
             default: null,
+        },
+        optionsCount: {
+            required: false,
+            type: Number,
+            default: 0,
         },
     },
     computed: {

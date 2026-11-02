@@ -166,6 +166,9 @@
     <data name="NoResultsFound" xml:space="preserve">
         <value>Không tìm thấy kết quả nào</value>
         </data>
+    <data name="TypeToFilterForMore" xml:space="preserve">
+        <value>Đang hiển thị {{count}} lựa chọn đầu tiên. Hãy nhập để tìm thêm.</value>
+    </data>
     <data name="Done" xml:space="preserve">
         <value>Xong</value>
         </data>
