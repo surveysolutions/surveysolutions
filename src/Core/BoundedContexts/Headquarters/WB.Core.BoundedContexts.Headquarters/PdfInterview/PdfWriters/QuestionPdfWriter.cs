@@ -43,7 +43,9 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
             this.attachmentContentService = attachmentContentService;
         }
 
-        public void Write(Paragraph paragraph)
+        public void Write(Paragraph paragraph) => Write(paragraph, null);
+
+        public void Write(Paragraph paragraph, Func<Paragraph>? addCoordinateParagraph)
         {
             var isPrefilled = interview.IsQuestionPrefilled(question.Identity);
             paragraph.Style = PdfStyles.QuestionTitle;
@@ -147,41 +149,50 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 
                     if (!string.IsNullOrEmpty(areaAnswer.Coordinates))
                     {
-                        paragraph.Format.AddTabStop(Unit.FromPoint(70), TabAlignment.Left);
-                        paragraph.Format.AddTabStop(Unit.FromPoint(150), TabAlignment.Left);
+                        Paragraph GetCoordinateParagraph()
+                        {
+                            var coordinateParagraph = addCoordinateParagraph?.Invoke() ?? paragraph;
+                            coordinateParagraph.Format.AddTabStop(Unit.FromPoint(70), TabAlignment.Left);
+                            coordinateParagraph.Format.AddTabStop(Unit.FromPoint(150), TabAlignment.Left);
+                            return coordinateParagraph;
+                        }
 
-                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Coordinates + ":", PdfStyles.QuestionTitle, textColor);
-                        paragraph.AddLineBreak();
-                        paragraph.AddWrapFormattedText(" ", PdfStyles.QuestionTitle, textColor);
-                        paragraph.AddTab();
-                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Latitude, PdfStyles.QuestionTitle, textColor);
-                        paragraph.AddTab();
-                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Longitude, PdfStyles.QuestionTitle, textColor);
-                        paragraph.AddLineBreak();
+                        var coordinateParagraph = GetCoordinateParagraph();
+                        coordinateParagraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Coordinates + ":", PdfStyles.QuestionTitle, textColor);
+                        coordinateParagraph.AddLineBreak();
+                        coordinateParagraph.AddWrapFormattedText(" ", PdfStyles.QuestionTitle, textColor);
+                        coordinateParagraph.AddTab();
+                        coordinateParagraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Latitude, PdfStyles.QuestionTitle, textColor);
+                        coordinateParagraph.AddTab();
+                        coordinateParagraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Longitude, PdfStyles.QuestionTitle, textColor);
+                        coordinateParagraph.AddLineBreak();
 
                         var coordinatePairs = areaAnswer.Coordinates.Split(';');
                         for (int i = 0; i < coordinatePairs.Length; i++)
                         {
+                            if (addCoordinateParagraph != null)
+                                coordinateParagraph = GetCoordinateParagraph();
+
                             var parts = coordinatePairs[i].Split(',');
                             if (parts.Length >= 2
                                 && double.TryParse(parts[0], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var longitude)
                                 && double.TryParse(parts[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var latitude))
                             {
-                                paragraph.AddWrapFormattedText($"{i + 1}", answerStyle, textColor);
-                                paragraph.AddTab();
-                                paragraph.AddWrapFormattedText(
+                                coordinateParagraph.AddWrapFormattedText($"{i + 1}", answerStyle, textColor);
+                                coordinateParagraph.AddTab();
+                                coordinateParagraph.AddWrapFormattedText(
                                     latitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture),
                                     answerStyle, textColor);
-                                paragraph.AddTab();
-                                paragraph.AddWrapFormattedText(
+                                coordinateParagraph.AddTab();
+                                coordinateParagraph.AddWrapFormattedText(
                                     longitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture),
                                     answerStyle, textColor);
                             }
                             else
                             {
-                                paragraph.AddWrapFormattedText($"  {i + 1}  {coordinatePairs[i]}", answerStyle, textColor);
+                                coordinateParagraph.AddWrapFormattedText($"  {i + 1}  {coordinatePairs[i]}", answerStyle, textColor);
                             }
-                            paragraph.AddLineBreak();
+                            coordinateParagraph.AddLineBreak();
                         }
                     }
                 }

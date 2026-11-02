@@ -208,7 +208,8 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 {
                     if (questionnaire.GetQuestionScope(node.Id) != QuestionScope.Hidden)
                     {
-                        var row = table?.AddRow() ?? throw new ArgumentException("Table should be created before");
+                        var questionsTable = table ?? throw new ArgumentException("Table should be created before");
+                        var row = questionsTable.AddRow();
                         var question = interview.GetQuestion(node);
                         if (question.AnswerTime.HasValue)
                         {
@@ -218,16 +219,21 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                             prevDateTime = question.AnswerTime;
                         }
 
+                        var answerCell = row[2];
                         new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig, attachmentContentService)
-                            .Write(row[2].AddParagraph());
+                            .Write(answerCell.AddParagraph(), () =>
+                            {
+                                answerCell = questionsTable.AddRow()[2];
+                                return answerCell.AddParagraph();
+                            });
 
                         if (question.FailedErrors != null && question.FailedErrors.Any())
-                            new ErrorsPdfWriter(question).Write(row[2].AddParagraph());
+                            new ErrorsPdfWriter(question).Write(answerCell.AddParagraph());
                         if (question.FailedWarnings != null && question.FailedWarnings.Any())
-                            new WarningsPdfWriter(question).Write(row[2].AddParagraph());
+                            new WarningsPdfWriter(question).Write(answerCell.AddParagraph());
                         if (question.AnswerComments != null && question.AnswerComments.Any())
-                            new CommentsPdfWriter(question).Write(row[2].AddParagraph());
-                        row[2].AddParagraph();
+                            new CommentsPdfWriter(question).Write(answerCell.AddParagraph());
+                        answerCell.AddParagraph();
                     }
 
                     continue;

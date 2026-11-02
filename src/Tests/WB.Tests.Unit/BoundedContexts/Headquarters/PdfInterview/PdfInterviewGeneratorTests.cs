@@ -7,6 +7,7 @@ using MigraDoc.DocumentObjectModel.IO;
 using MigraDoc.DocumentObjectModel.Tables;
 using Moq;
 using NUnit.Framework;
+using PdfSharp.Pdf.IO;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
@@ -101,6 +102,42 @@ public class PdfInterviewGeneratorTests
             Assert.That(ddl, Does.Contain("123.456"), "Area should use 3 decimal places");
             Assert.That(ddl, Does.Contain("45.678"), "Length should use 3 decimal places");
         });
+    }
+
+    [Test]
+    public void when_generating_pdf_with_long_polygon_should_continue_coordinates_on_later_pages()
+    {
+        var questionId = Id.g1;
+        var coordinates = string.Join(";", Enumerable.Range(1, 100)
+            .Select(i => $"{i}.123456,{i}.654321"));
+        var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+            id: Id.g2,
+            children: new[] { Create.Entity.GeographyQuestion(id: questionId) });
+        var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+        var interview = SetUp.StatefulInterview(questionnaireDocument);
+        interview.Apply(new InterviewKeyAssigned(new InterviewKey(2895), DateTimeOffset.Now));
+        interview.Apply(new AreaQuestionAnswered(
+            Id.g3, questionId, RosterVector.Empty, DateTimeOffset.Now,
+            "POLYGON(...)", null, 123.456, 45.678, coordinates, null, 100, null, null));
+
+        var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s =>
+            s.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language) == questionnaire);
+        var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(r =>
+            r.Get(Id.g1.FormatGuid()) == interview);
+        var generator = new PdfInterviewGenerator(questionnaireStorage,
+            statefulInterviewRepository,
+            Mock.Of<IImageFileStorage>(),
+            Mock.Of<IAttachmentContentService>(),
+            Mock.Of<IOptions<GoogleMapsConfig>>(),
+            Mock.Of<IOptions<HeadquartersConfig>>(c => c.Value == new HeadquartersConfig()),
+            Mock.Of<IAuthorizedUser>());
+
+        using var pdfStream = generator.Generate(Id.g1, PdfView.Interviewer);
+        Assert.That(pdfStream, Is.Not.Null);
+        pdfStream!.Position = 0;
+        using var pdf = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Import);
+
+        Assert.That(pdf.Pages.Count, Is.GreaterThanOrEqualTo(3));
     }
 
     [Test]
