@@ -362,12 +362,13 @@ export default {
         hubApi.stop()
     },
 
-    changeSection({ commit, rootState }, { to, from }) {
+    changeSection({ commit, dispatch, rootState }, { to, from }) {
         const interviewId = rootState.route.params.interviewId
         commit('CURRENT_SECTION', { interviewId: interviewId, sectionId: to })
         if (to !== from) {
             breadcrumbsRequestGeneration++
             commit('CLEAR_BREADCRUMBS')
+            dispatch('fetchBreadcrumbs')
         }
         return hubApi.changeSection(to, from)
     },
