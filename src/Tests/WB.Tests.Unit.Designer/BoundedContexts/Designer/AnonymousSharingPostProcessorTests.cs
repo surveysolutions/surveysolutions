@@ -45,6 +45,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
+        public void When_enabling_already_enabled_questionnaire_Then_state_should_not_change()
+        {
+            var dbContext = Create.InMemoryDbContext();
+            var anonymousId = Guid.NewGuid();
+            dbContext.AnonymousQuestionnaires.Add(CreateRecord(anonymousId, isActive: true));
+            dbContext.SaveChanges();
+            var postProcessor = new AnonymousSharingPostProcessor(dbContext);
+            var command = new EnableAnonymousSharing(QuestionnaireId, ResponsibleId, false);
+
+            postProcessor.Process(Create.Questionnaire(), command);
+
+            var record = dbContext.AnonymousQuestionnaires.Single(a => a.QuestionnaireId == QuestionnaireId);
+            Assert.That(command.StateChanged, Is.False);
+            Assert.That(record.IsActive, Is.True);
+            Assert.That(record.AnonymousQuestionnaireId, Is.EqualTo(anonymousId));
+        }
+
+        [Test]
         public void When_disabling_Then_record_should_become_inactive_and_keep_its_link()
         {
             var dbContext = Create.InMemoryDbContext();
@@ -56,6 +74,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             postProcessor.Process(Create.Questionnaire(), new DisableAnonymousSharing(QuestionnaireId, ResponsibleId, false));
 
             var record = dbContext.AnonymousQuestionnaires.Single(a => a.QuestionnaireId == QuestionnaireId);
+            Assert.That(record.IsActive, Is.False);
+            Assert.That(record.AnonymousQuestionnaireId, Is.EqualTo(anonymousId));
+        }
+
+        [Test]
+        public void When_disabling_already_disabled_questionnaire_Then_state_should_not_change()
+        {
+            var dbContext = Create.InMemoryDbContext();
+            var anonymousId = Guid.NewGuid();
+            dbContext.AnonymousQuestionnaires.Add(CreateRecord(anonymousId, isActive: false));
+            dbContext.SaveChanges();
+            var postProcessor = new AnonymousSharingPostProcessor(dbContext);
+            var command = new DisableAnonymousSharing(QuestionnaireId, ResponsibleId, false);
+
+            postProcessor.Process(Create.Questionnaire(), command);
+
+            var record = dbContext.AnonymousQuestionnaires.Single(a => a.QuestionnaireId == QuestionnaireId);
+            Assert.That(command.StateChanged, Is.False);
             Assert.That(record.IsActive, Is.False);
             Assert.That(record.AnonymousQuestionnaireId, Is.EqualTo(anonymousId));
         }
@@ -97,4 +133,3 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             };
     }
 }
-

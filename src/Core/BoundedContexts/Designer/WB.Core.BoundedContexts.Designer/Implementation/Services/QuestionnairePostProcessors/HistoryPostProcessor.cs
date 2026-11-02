@@ -236,10 +236,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         #region Anonymous sharing
 
         public void Process(Questionnaire aggregate, EnableAnonymousSharing command)
-            => this.AddAnonymousSharingChangeItem(aggregate, command, QuestionnaireActionType.AnonymousSharingEnabled);
+        {
+            if (command.StateChanged)
+                this.AddAnonymousSharingChangeItem(aggregate, command, QuestionnaireActionType.AnonymousSharingEnabled);
+        }
 
         public void Process(Questionnaire aggregate, DisableAnonymousSharing command)
-            => this.AddAnonymousSharingChangeItem(aggregate, command, QuestionnaireActionType.AnonymousSharingDisabled);
+        {
+            if (command.StateChanged)
+                this.AddAnonymousSharingChangeItem(aggregate, command, QuestionnaireActionType.AnonymousSharingDisabled);
+        }
 
         public void Process(Questionnaire aggregate, RegenerateAnonymousSharingLink command)
             => this.AddAnonymousSharingChangeItem(aggregate, command, QuestionnaireActionType.AnonymousSharingLinkRegenerated);

@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         }
 
         [Test]
-        public async Task when_enabling_already_enabled_questionnaire_should_not_execute_any_command()
+        public async Task when_enabling_already_enabled_questionnaire_should_execute_command_for_locked_state_check()
         {
             var commandService = new Mock<ICommandService>();
             var dbContext = Create.InMemoryDbContext();
@@ -60,7 +60,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             await controller.UpdateAnonymousQuestionnaireSettings(QuestionnaireId,
                 new QuestionnaireController.UpdateAnonymousQuestionnaireSettingsModel { IsActive = true });
 
-            commandService.Verify(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>()), Times.Never);
+            commandService.Verify(x => x.Execute(
+                It.Is<EnableAnonymousSharing>(c => c.QuestionnaireId == QuestionnaireId),
+                It.IsAny<string>()), Times.Once);
         }
 
         [Test]

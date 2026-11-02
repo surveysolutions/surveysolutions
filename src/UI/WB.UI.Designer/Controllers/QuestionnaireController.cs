@@ -488,17 +488,12 @@ namespace WB.UI.Designer.Controllers
         public Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
             bool isActive = postModel.IsActive;
+            if (isActive)
+                this.commandService.Execute(new EnableAnonymousSharing(id, User.GetId(), User.IsAdmin()));
+            else
+                this.commandService.Execute(new DisableAnonymousSharing(id, User.GetId(), User.IsAdmin()));
+
             var anonymousQuestionnaire = this.GetAnonymousQuestionnaire(id);
-
-            if ((anonymousQuestionnaire?.IsActive ?? false) != isActive)
-            {
-                if (isActive)
-                    this.commandService.Execute(new EnableAnonymousSharing(id, User.GetId(), User.IsAdmin()));
-                else
-                    this.commandService.Execute(new DisableAnonymousSharing(id, User.GetId(), User.IsAdmin()));
-
-                anonymousQuestionnaire = this.GetAnonymousQuestionnaire(id);
-            }
 
             if (anonymousQuestionnaire == null)
                 return Task.FromResult<IActionResult>(NotFound());

@@ -1390,6 +1390,34 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(historyItems[1].ActionType, Is.EqualTo(QuestionnaireActionType.AnonymousSharingEnabled));
             Assert.That(historyItems[1].ResultingQuestionnaireDocument, Is.Null);
         }
+
+        [Test]
+        public void When_two_identical_anonymous_sharing_commands_are_processed_Then_history_should_be_recorded_once()
+        {
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.Users.Add(new DesignerIdentityUser { Id = responsibleId, UserName = "responsible" });
+            dbContext.SaveChanges();
+
+            var questionnaireDocument = Create.QuestionnaireDocument(id: questionnaireId, title: "My Questionnaire");
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
+            var anonymousSharingPostProcessor = new AnonymousSharingPostProcessor(dbContext);
+            var historyPostProcessor = Create.HistoryPostProcessor(dbContext,
+                questionnaireHistoryVersionsService: Create.QuestionnireHistoryVersionsService(dbContext));
+
+            var firstCommand = new EnableAnonymousSharing(questionnaireId, responsibleId, false);
+            anonymousSharingPostProcessor.Process(questionnaire, firstCommand);
+            historyPostProcessor.Process(questionnaire, firstCommand);
+
+            var secondCommand = new EnableAnonymousSharing(questionnaireId, responsibleId, false);
+            anonymousSharingPostProcessor.Process(questionnaire, secondCommand);
+            historyPostProcessor.Process(questionnaire, secondCommand);
+
+            Assert.That(firstCommand.StateChanged, Is.True);
+            Assert.That(secondCommand.StateChanged, Is.False);
+            Assert.That(dbContext.QuestionnaireChangeRecords.Count(h => h.QuestionnaireId == questionnaireId.FormatGuid()), Is.EqualTo(1));
+        }
     }
 }
-

@@ -10,6 +10,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
             : base(questionnaireId, responsibleId, isResponsibleAdmin)
         {
         }
+
+        internal bool StateChanged { get; set; } = true;
     }
 }
 

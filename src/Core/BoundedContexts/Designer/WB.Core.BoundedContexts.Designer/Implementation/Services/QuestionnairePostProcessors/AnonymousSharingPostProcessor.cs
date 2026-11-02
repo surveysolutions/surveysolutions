@@ -25,6 +25,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, EnableAnonymousSharing command)
         {
             var anonymousQuestionnaire = this.Find(command.QuestionnaireId);
+
+            if (anonymousQuestionnaire?.IsActive == true)
+            {
+                command.StateChanged = false;
+                return;
+            }
+
             if (anonymousQuestionnaire == null)
                 this.Create(command.QuestionnaireId);
             else
@@ -36,8 +43,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DisableAnonymousSharing command)
         {
             var anonymousQuestionnaire = this.Find(command.QuestionnaireId);
-            if (anonymousQuestionnaire == null)
+
+            if (anonymousQuestionnaire?.IsActive != true)
+            {
+                command.StateChanged = false;
                 return;
+            }
 
             anonymousQuestionnaire.IsActive = false;
             this.dbContext.SaveChanges();
