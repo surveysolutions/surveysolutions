@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using SixLabors.Fonts;
-using WB.Infrastructure.Native.Utils;
+using SkiaSharp;
 using WB.UI.Shared.Web.Captcha;
 
 namespace WB.Tests.Unit;
@@ -14,9 +13,13 @@ public class CaptchaImageGeneratorTests
     public void when_generate_then_should_return_result_without_exception()
     {
         string code = "12345";
-        
+
+        var fontFamily = SKFontManager.Default.GetFontFamilies().FirstOrDefault();
+        if (fontFamily == null)
+            Assert.Ignore("There are no installed fonts");
+
         var captchaImageGenerator = new CaptchaImageGenerator();
-        captchaImageGenerator.SetFonts(FontsHelper.DefaultFontName);
+        captchaImageGenerator.SetFonts(fontFamily!);
 
         var imageContent = captchaImageGenerator.Generate(code);
         

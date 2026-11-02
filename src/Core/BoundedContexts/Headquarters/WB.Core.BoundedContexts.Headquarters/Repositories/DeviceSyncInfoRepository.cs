@@ -41,10 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             var result = this.dbContext.Query(_ => _
                 .OrderByDescending(deviceInfo => deviceInfo.Id)
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId &&
-                                              (deviceInfo.Statistics.DownloadedInterviewsCount > 0
-                                                  || deviceInfo.Statistics.UploadedInterviewsCount > 0
-                                                  || deviceInfo.Statistics.DownloadedQuestionnairesCount > 0
-                                                  || deviceInfo.Statistics.RejectedInterviewsOnDeviceCount > 0)));
+                                              deviceInfo.Statistics != null));
 
             return result ?? this.GetLastByInterviewerId(interviewerId);
         }
