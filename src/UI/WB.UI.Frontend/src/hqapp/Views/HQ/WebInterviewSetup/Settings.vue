@@ -69,8 +69,11 @@
                                 </a>
                             </li>
                             <li role="presentation">
-                                <a href="#complete" @click="setPageActive('completeNoteToSupervisor')"
-                                    aria-controls="complete" role="tab" data-bs-toggle="tab">
+                                <a href="#complete"
+                                    @click="setPageActive('completeNoteToSupervisor', 'completeScreenText')"
+                                    aria-controls="complete"
+                                    role="tab"
+                                    data-bs-toggle="tab">
                                     {{ $t('WebInterviewSettings.CompletePage') }}
                                 </a>
                             </li>

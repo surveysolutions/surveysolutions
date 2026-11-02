@@ -206,4 +206,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
     <value>Kreu i mirëseardhjes</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText" xml:space="preserve">
+    <value>Teksti i ekranit të përfundimit</value>
+  </data>
 </root>

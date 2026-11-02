@@ -268,4 +268,7 @@
     <data name="AllowTranscriptDownloading" xml:space="preserve">
         <value>السماح بتحميل نص المقابلة بعد الإرسال</value>
     </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>النص المعروض على شاشة الإكمال فوق قوائم الأخطاء والأسئلة التي لم تتم الإجابة عنها</value>
+  </data>
 </root>

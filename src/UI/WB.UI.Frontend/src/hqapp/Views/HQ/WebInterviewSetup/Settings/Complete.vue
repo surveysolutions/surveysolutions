@@ -10,11 +10,16 @@
                         <div class="form-group">
                             <div class="field"
                                 :class="{ 'answered': webInterviewPageMessages['completeScreenText'].text }">
-                                <Field as="textarea" v-autosize
-                                    v-model="webInterviewPageMessages['completeScreenText'].text"
-                                    name="completeScreenText" data-vv-name="completeScreenText"
-                                    ref="completeScreenText" :min-height="77" maxlength="2000"
-                                    class="form-control js-elasticArea font-bold">
+                                <Field v-slot="{ field }"
+                                    name="completeScreenText"
+                                    :value="webInterviewPageMessages['completeScreenText'].text">
+                                    <md-editor
+                                        ref="completeScreenText"
+                                        v-bind="field"
+                                        data-vv-name="completeScreenText"
+                                        v-model="webInterviewPageMessages['completeScreenText'].text"
+                                        :aria-label="$t('WebInterviewSettings.CompleteScreenText')">
+                                    </md-editor>
                                 </Field>
                                 <button type="button"
                                     @click="webInterviewPageMessages['completeScreenText'].text = ''"

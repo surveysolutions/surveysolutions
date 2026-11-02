@@ -32,4 +32,7 @@
   <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve"><value>ดำเนินการต่อ</value></data>
   <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve"><value>คำเชิญ</value></data>
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve"><value>ส่วนหัวต้อนรับ</value></data>
+  <data name="WebInterviewUserMessages_CompleteScreenText" xml:space="preserve">
+    <value>ข้อความบนหน้าจอเสร็จสิ้น</value>
+  </data>
 </root>

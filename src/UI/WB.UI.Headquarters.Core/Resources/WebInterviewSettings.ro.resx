@@ -308,4 +308,7 @@
   <data name="AddressDescription" xml:space="preserve">
       <value>Aici va apărea adresa organizației dumneavoastră, așa cum este specificată în contul dumneavoastră de pe serverul de trimitere în masă.</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>Text pe ecranul de finalizare (opțional)</value>
+  </data>
 </root>

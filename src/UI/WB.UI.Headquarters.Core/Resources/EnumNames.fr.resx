@@ -201,4 +201,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
     <value>En-tête de bienvenue</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText" xml:space="preserve">
+    <value>Texte de l’écran de fin</value>
+  </data>
 </root>

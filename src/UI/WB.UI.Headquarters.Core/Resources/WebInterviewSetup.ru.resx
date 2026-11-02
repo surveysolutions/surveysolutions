@@ -268,4 +268,7 @@
   <data name="AllowTranscriptDownloading" xml:space="preserve">
       <value>Разрешить скачивание транскрипта интервью после отправки</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>Текст, отображаемый на экране завершения над списками ошибок и вопросов без ответа</value>
+  </data>
 </root>
