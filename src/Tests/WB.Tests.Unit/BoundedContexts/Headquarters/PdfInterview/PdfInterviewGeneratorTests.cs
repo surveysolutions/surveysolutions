@@ -1,5 +1,9 @@
 using System;
+using System.Linq;
+using System.Text;
 using Microsoft.Extensions.Options;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Tables;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
@@ -79,4 +83,93 @@ public class PdfInterviewGeneratorTests
 
         Assert.That(generate, Is.Not.Null);
     }
+
+    [Test]
+    public void when_shortening_footer_title_should_keep_short_title_as_is()
+    {
+        Assert.That(PdfInterviewGenerator.ShortenFooterTitle(null), Is.EqualTo(string.Empty));
+        Assert.That(PdfInterviewGenerator.ShortenFooterTitle("Household survey"), Is.EqualTo("Household survey"));
+
+        var maxLengthTitle = new string('a', PdfInterviewGenerator.FooterTitleMaxLength);
+        Assert.That(PdfInterviewGenerator.ShortenFooterTitle(maxLengthTitle), Is.EqualTo(maxLengthTitle));
+    }
+
+    [Test]
+    public void when_shortening_long_footer_title_should_cut_it_with_ellipsis()
+    {
+        var title = new string('a', PdfInterviewGenerator.FooterTitleMaxLength + 1);
+
+        var shortened = PdfInterviewGenerator.ShortenFooterTitle(title);
+
+        Assert.That(shortened, Has.Length.EqualTo(PdfInterviewGenerator.FooterTitleMaxLength));
+        Assert.That(shortened, Does.EndWith("a…"));
+    }
+
+    [Test]
+    public void when_shortening_footer_title_should_not_leave_spaces_before_ellipsis()
+    {
+        var title = new string('a', 140) + new string(' ', 20) + "tail";
+
+        Assert.That(PdfInterviewGenerator.ShortenFooterTitle(title), Is.EqualTo(new string('a', 140) + "…"));
+    }
+
+    [Test]
+    public void when_shortening_footer_title_should_not_split_surrogate_pair()
+    {
+        // the cut position is between two chars of the first emoji
+        var title = new string('a', PdfInterviewGenerator.FooterTitleMaxLength - 2) + "😀😀";
+
+        var shortened = PdfInterviewGenerator.ShortenFooterTitle(title);
+
+        Assert.That(shortened, Is.EqualTo(new string('a', PdfInterviewGenerator.FooterTitleMaxLength - 2) + "…"));
+        Assert.DoesNotThrow(() => new UTF8Encoding(false, true).GetBytes(shortened));
+    }
+
+    [Test]
+    public void when_writing_footer_should_use_three_columns_with_fixed_widths_and_aligned_texts()
+    {
+        var section = CreateSection();
+
+        PdfInterviewGenerator.WriteFooter(section, "Household survey", "00-00-28-95");
+
+        var table = section.Footers.Primary.Elements.OfType<Table>().Single();
+        Assert.That(table.Columns.Count, Is.EqualTo(3));
+        Assert.That(table.Columns[0].Width.Point, Is.EqualTo(table.Columns[2].Width.Point));
+        Assert.That(table.Columns[0].Width.Point + table.Columns[1].Width.Point + table.Columns[2].Width.Point,
+            Is.EqualTo(595.276 - 37 - 33).Within(0.01));
+
+        var cells = table.Rows[0].Cells;
+        Assert.That(GetParagraph(cells[0]).Format.Alignment, Is.EqualTo(ParagraphAlignment.Left));
+        Assert.That(GetParagraph(cells[1]).Format.Alignment, Is.EqualTo(ParagraphAlignment.Center));
+        Assert.That(GetParagraph(cells[2]).Format.Alignment, Is.EqualTo(ParagraphAlignment.Right));
+        Assert.That(GetText(cells[1]), Is.EqualTo("Household survey"));
+        Assert.That(GetText(cells[2]), Is.EqualTo("00-00-28-95"));
+    }
+
+    [Test]
+    public void when_writing_footer_with_very_long_title_should_shorten_title_and_keep_interview_key()
+    {
+        var section = CreateSection();
+
+        PdfInterviewGenerator.WriteFooter(section, new string('a', 2000), "00-00-28-95");
+
+        var cells = section.Footers.Primary.Elements.OfType<Table>().Single().Rows[0].Cells;
+        Assert.That(GetText(cells[1]), Has.Length.EqualTo(PdfInterviewGenerator.FooterTitleMaxLength));
+        Assert.That(GetText(cells[1]), Does.EndWith("…"));
+        Assert.That(GetText(cells[2]), Is.EqualTo("00-00-28-95"));
+    }
+
+    private static Section CreateSection()
+    {
+        var document = new Document();
+        var section = document.AddSection();
+        section.PageSetup.PageFormat = PageFormat.A4;
+        section.PageSetup.LeftMargin = 37;
+        section.PageSetup.RightMargin = 33;
+        return section;
+    }
+
+    private static Paragraph GetParagraph(Cell cell) => cell.Elements.OfType<Paragraph>().Single();
+
+    private static string GetText(Cell cell) => string.Concat(GetParagraph(cell).Elements.OfType<Text>().Select(text => text.Content));
 }

@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Headquarters.Interview.Postprocessors;
 using WB.Core.BoundedContexts.Headquarters.Interview.Preprocessors;
 using WB.Core.BoundedContexts.Headquarters.Interview.Validators;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -387,6 +388,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<DeleteWorkspaceSchemaJob>();
             registry.Bind<ExportDataRetentionJob>();
             registry.Bind<ExportDataRetentionTask>();
+            registry.Bind<MapFileCleanupJob>();
+            registry.Bind<MapFileCleanupTask>();
             
             registry.BindScheduledJob<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>();
             registry.BindScheduledJob<DeleteQuestionnaireJob, DeleteQuestionnaireRequest>();
