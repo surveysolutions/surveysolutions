@@ -73,18 +73,17 @@ export default {
     methods: {
         async loadWorkspaces() {
             const allData = await this.$hq.Workspaces.List(null, true)
-            this.allWorkspaces = allData.Workspaces.map(w => {
+            const userData = await this.$hq.Workspaces.List(this.userInfo.userId, true)
+            const userWorkspaces = userData.Workspaces
+            const allWorkspaces = allData.Workspaces.map(w => {
                 return {
                     ...w,
-                    Assigned: false,
+                    Assigned: userWorkspaces.findIndex(uw => uw.Name === w.Name) >= 0,
                 }
             })
 
-            const userData = await this.$hq.Workspaces.List(this.userInfo.userId, true)
-            this.userWorkspaces = userData.Workspaces
-            this.allWorkspaces.forEach(w => {
-                w.Assigned = this.userWorkspaces.findIndex(uw => uw.Name === w.Name) >= 0
-            })
+            this.allWorkspaces = allWorkspaces
+            this.userWorkspaces = userWorkspaces
         },
         async save() {
             this.inProgress = true
