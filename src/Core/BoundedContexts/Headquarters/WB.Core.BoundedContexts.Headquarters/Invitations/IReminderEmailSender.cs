@@ -6,7 +6,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public interface IReminderEmailSender
     {
-        Task SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle, 
+        Task<ReminderEmailSendResult> SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
             EmailTextTemplateType reminderType, int thresholdDays);
+    }
+
+    public class ReminderEmailSendResult
+    {
+        public int SentCount { get; set; }
+        public int FailedCount { get; set; }
     }
 }

@@ -278,7 +278,7 @@
                                                     </button>
                                                     <button v-if="isReminderTemplate(emailTemplate)"
                                                         type="button"
-                                                        :disabled="!started"
+                                                        :disabled="!started || meta.dirty || pendingReminderTypes[emailTemplate.value]"
                                                         @click="sendRemindersNow(emailTemplate)"
                                                         :title="$t('WebInterviewSettings.SendNowTooltip', { reminderType: emailTemplate.buttonTitle })"
                                                         class="btn btn-md btn-warning">
@@ -633,6 +633,7 @@
 import { marked } from 'marked'
 import { map, isNil } from 'lodash-es'
 import { Form, Field } from 'vee-validate'
+import * as toastr from 'toastr'
 import emitter from '~/shared/emitter'
 
 import Welcome from './Settings/Welcome'
@@ -667,6 +668,7 @@ export default {
             logoUrl: '',
             hasLogo: false,
             emailTemplateData: [],
+            pendingReminderTypes: {},
         }
     },
 
@@ -1019,18 +1021,40 @@ export default {
             )
         },
         async sendRemindersNow(emailTemplate) {
-            var self = this
-            self.$store.dispatch('showProgress')
-            await this.$hq.WebInterviewSettings.sendRemindersNow(
-                this.questionnaireId,
-                emailTemplate.value
-            )
-                .catch(function (error) {
-                    self.$errorHandler(error, self)
-                })
-                .then(function () {
-                    self.$store.dispatch('hideProgress')
-                })
+            this.pendingReminderTypes[emailTemplate.value] = true
+            this.$store.dispatch('showProgress')
+            try {
+                const response = await this.$hq.WebInterviewSettings.sendRemindersNow(
+                    this.questionnaireId,
+                    emailTemplate.value
+                )
+                const requestId = response.data.requestId
+                let status = response.data
+                const terminalStates = [2, 3, 4, 'Completed', 'Failed', 'PartiallyFailed']
+
+                while (!terminalStates.includes(status.state)) {
+                    await new Promise(resolve => setTimeout(resolve, 2000))
+                    status = (await this.$hq.WebInterviewSettings.sendRemindersNowStatus(
+                        this.questionnaireId,
+                        requestId
+                    )).data
+                }
+
+                if (status.state === 2 || status.state === 'Completed') {
+                    toastr.success(this.$t('WebInterviewSettings.NoErrors'))
+                } else if (status.state === 4 || status.state === 'PartiallyFailed') {
+                    toastr.warning(this.$t('WebInterviewSettings.TotalWithErrors', {
+                        withErrorsCount: status.failedCount,
+                    }))
+                } else {
+                    toastr.error(this.$t('WebInterviewSettings.SendingFailed'))
+                }
+            } catch (error) {
+                this.$errorHandler(error, this)
+            } finally {
+                this.pendingReminderTypes[emailTemplate.value] = false
+                this.$store.dispatch('hideProgress')
+            }
         },
     },
     computed: {

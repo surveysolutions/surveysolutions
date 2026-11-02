@@ -1,13 +1,20 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Moq;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
@@ -40,6 +47,45 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 invitationService.Verify(x => x.GetNoResponseInvitations(questionnaireIdentity, 0), Times.Once);
             else
                 invitationService.Verify(x => x.GetPartialResponseInvitations(questionnaireIdentity, 0), Times.Once);
+        }
+
+        [Test]
+        public async Task when_email_delivery_fails_then_result_reports_failure()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
+            var invitation = Create.Entity.Invitation(1,
+                Create.Entity.Assignment(email: "respondent@email.com", password: "password"),
+                token: "token");
+            var invitationService = new Mock<IInvitationService>();
+            invitationService.Setup(x => x.GetNoResponseInvitations(questionnaireIdentity, 0))
+                .Returns(new[] { invitation.Id });
+            invitationService.Setup(x => x.GetInvitation(invitation.Id)).Returns(invitation);
+
+            var emailService = new Mock<IEmailService>();
+            emailService.Setup(x => x.GetSenderInfo()).Returns(Mock.Of<ISenderInformation>());
+            emailService.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(),
+                    It.IsAny<string>(), It.IsAny<string>()))
+                .ThrowsAsync(new EmailServiceException("respondent@email.com", HttpStatusCode.BadRequest));
+
+            var configProvider = new Mock<IWebInterviewConfigProvider>();
+            configProvider.Setup(x => x.Get(questionnaireIdentity)).Returns(new WebInterviewConfig { Started = true });
+            var emailRenderer = new Mock<IWebInterviewEmailRenderer>();
+            emailRenderer.Setup(x => x.RenderEmail(It.IsAny<EmailParams>()))
+                .ReturnsAsync(new PersonalizedWebInterviewEmail("subject", "html", "text"));
+
+            var sender = Create.Service.ReminderEmailSender(
+                invitationService: invitationService.Object,
+                emailService: emailService.Object,
+                webInterviewConfigProvider: configProvider.Object,
+                webInterviewEmailRenderer: emailRenderer.Object);
+
+            var result = await sender.SendRemindersAsync(questionnaireIdentity, "Web Survey",
+                EmailTextTemplateType.Reminder_NoResponse, 0);
+
+            Assert.That(result.SentCount, Is.Zero);
+            Assert.That(result.FailedCount, Is.EqualTo(1));
+            invitationService.Verify(x => x.ReminderWasNotSent(invitation.Id, invitation.AssignmentId,
+                "respondent@email.com", It.IsAny<string>()), Times.Once);
         }
     }
 
@@ -300,6 +346,44 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var emailServiceMock = new Mock<IEmailService>();
             emailServiceMock.Setup(x => x.IsConfigured()).Returns(true);
             return emailServiceMock;
+        }
+    }
+
+    [TestOf(typeof(SendRemindersNowJob))]
+    public class SendRemindersNowJobTests
+    {
+        [TestCase(2, 0, SendRemindersNowState.Completed)]
+        [TestCase(0, 2, SendRemindersNowState.Failed)]
+        [TestCase(1, 1, SendRemindersNowState.PartiallyFailed)]
+        public async Task when_email_delivery_result_is_known_then_status_reflects_it(
+            int sentCount, int failedCount, SendRemindersNowState expectedState)
+        {
+            var request = new SendRemindersNowRequest
+            {
+                RequestId = Guid.NewGuid(),
+                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 1),
+                Type = EmailTextTemplateType.Reminder_NoResponse
+            };
+            var statusStorage = new TestInMemoryKeyValueStorage<SendRemindersNowStatus>();
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>())
+                .Returns(statusStorage);
+
+            var sender = new Mock<IReminderEmailSender>();
+            sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type, 0))
+                .ReturnsAsync(new ReminderEmailSendResult { SentCount = sentCount, FailedCount = failedCount });
+
+            var job = new SendRemindersNowJob(
+                sender.Object,
+                new NoScopeInScopeExecutor(serviceLocator.Object),
+                Mock.Of<ILogger<SendRemindersNowJob>>());
+
+            await job.Execute(request, Mock.Of<IJobExecutionContext>());
+
+            var status = statusStorage.GetById(request.StorageKey);
+            Assert.That(status.State, Is.EqualTo(expectedState));
+            Assert.That(status.SentCount, Is.EqualTo(sentCount));
+            Assert.That(status.FailedCount, Is.EqualTo(failedCount));
         }
     }
 }

@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
@@ -22,6 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IWebInterviewEmailRenderer webInterviewEmailRenderer;
         private readonly IInScopeExecutor inScopeExecutor;
         private readonly IWebInterviewLinkProvider interviewLinkProvider;
+        private readonly IUnitOfWork unitOfWork;
 
         public ReminderEmailSender(
             ILogger<ReminderEmailSender> logger,
@@ -31,7 +33,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             IPlainKeyValueStorage<EmailParameters> emailParamsStorage,
             IWebInterviewEmailRenderer webInterviewEmailRenderer,
             IInScopeExecutor inScopeExecutor,
-            IWebInterviewLinkProvider interviewLinkProvider)
+            IWebInterviewLinkProvider interviewLinkProvider,
+            IUnitOfWork unitOfWork)
         {
             this.logger = logger;
             this.invitationService = invitationService;
@@ -41,39 +44,46 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.webInterviewEmailRenderer = webInterviewEmailRenderer;
             this.inScopeExecutor = inScopeExecutor;
             this.interviewLinkProvider = interviewLinkProvider;
+            this.unitOfWork = unitOfWork;
         }
 
-        public async Task SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
+        public async Task<ReminderEmailSendResult> SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
             EmailTextTemplateType reminderType, int thresholdDays)
         {
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
             if (webInterviewConfig == null || !webInterviewConfig.Started)
-                return;
+                return new ReminderEmailSendResult();
+
+            await ReminderEmailSendLock.AcquireAsync(unitOfWork, questionnaireIdentity, reminderType)
+                .ConfigureAwait(false);
 
             ISenderInformation senderInfo = emailService.GetSenderInfo();
+            var result = new ReminderEmailSendResult();
 
             switch (reminderType)
             {
                 case EmailTextTemplateType.Reminder_NoResponse:
                     await SendNoResponseRemindersAsync(questionnaireIdentity, questionnaireTitle,
-                        webInterviewConfig, senderInfo, thresholdDays).ConfigureAwait(false);
+                        webInterviewConfig, senderInfo, thresholdDays, result).ConfigureAwait(false);
                     break;
                 case EmailTextTemplateType.Reminder_PartialResponse:
                     await SendPartialResponseRemindersAsync(questionnaireIdentity, questionnaireTitle,
-                        webInterviewConfig, senderInfo, thresholdDays).ConfigureAwait(false);
+                        webInterviewConfig, senderInfo, thresholdDays, result).ConfigureAwait(false);
                     break;
                 case EmailTextTemplateType.RejectEmail:
                     await SendRejectedInterviewRemindersAsync(questionnaireIdentity, questionnaireTitle,
-                        webInterviewConfig, senderInfo).ConfigureAwait(false);
+                        webInterviewConfig, senderInfo, result).ConfigureAwait(false);
                     break;
                 default:
                     throw new ArgumentException($"Unsupported reminder type: {reminderType}", nameof(reminderType));
             }
+
+            return result;
         }
 
         private async Task SendNoResponseRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
             string questionnaireTitle, WebInterviewConfig webInterviewConfig, ISenderInformation senderInfo,
-            int thresholdDays)
+            int thresholdDays, ReminderEmailSendResult result)
         {
             if (!webInterviewConfig.ReminderAfterDaysIfNoResponse.HasValue && thresholdDays > 0)
                 return;
@@ -82,12 +92,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.Reminder_NoResponse);
 
-            await SendRemindersAsync(questionnaireTitle, invitationIdsToRemind, emailTemplate, senderInfo).ConfigureAwait(false);
+            await SendRemindersAsync(questionnaireTitle, invitationIdsToRemind, emailTemplate, senderInfo, result)
+                .ConfigureAwait(false);
         }
 
         private async Task SendPartialResponseRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
             string questionnaireTitle, WebInterviewConfig webInterviewConfig, ISenderInformation senderInfo,
-            int thresholdDays)
+            int thresholdDays, ReminderEmailSendResult result)
         {
             if (!webInterviewConfig.ReminderAfterDaysIfPartialResponse.HasValue && thresholdDays > 0)
                 return;
@@ -96,11 +107,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.Reminder_PartialResponse);
 
-            await SendRemindersAsync(questionnaireTitle, invitationIdsToRemind, emailTemplate, senderInfo).ConfigureAwait(false);
+            await SendRemindersAsync(questionnaireTitle, invitationIdsToRemind, emailTemplate, senderInfo, result)
+                .ConfigureAwait(false);
         }
 
         private async Task SendRejectedInterviewRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
-            string questionnaireTitle, WebInterviewConfig webInterviewConfig, ISenderInformation senderInfo)
+            string questionnaireTitle, WebInterviewConfig webInterviewConfig, ISenderInformation senderInfo,
+            ReminderEmailSendResult result)
         {
             var invitationIdsToSend = invitationService.GetInvitationsWithRejectedInterview(questionnaireIdentity);
 
@@ -148,9 +161,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                             interviewEmail.MessageText).ConfigureAwait(false);
 
                         invitationServiceLocal.MarkRejectedInterviewReminderSent(invitationId, emailId);
+                        result.SentCount++;
                     }
                     catch (EmailServiceException e)
                     {
+                        result.FailedCount++;
                         invitationServiceLocal.RejectedInterviewReminderWasNotSent(invitation.Id);
                         this.logger.LogError(e, "Rejected email was not sent");
                     }
@@ -159,7 +174,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         }
 
         private async Task SendRemindersAsync(string questionnaireTitle, IEnumerable<int> invitationIdsToRemind,
-            WebInterviewEmailTemplate emailTemplate, ISenderInformation senderInfo)
+            WebInterviewEmailTemplate emailTemplate, ISenderInformation senderInfo, ReminderEmailSendResult result)
         {
             var surveyName = questionnaireTitle;
             foreach (var invitationId in invitationIdsToRemind)
@@ -200,9 +215,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                         .ConfigureAwait(false);
 
                     invitationService.MarkInvitationAsReminded(invitationId, emailId);
+                    result.SentCount++;
                 }
                 catch (EmailServiceException e)
                 {
+                    result.FailedCount++;
                     invitationService.ReminderWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
                     this.logger.LogError(e, $"Interview email was not sent for invitation {invitationId}.");
                 }

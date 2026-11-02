@@ -1180,7 +1180,8 @@ namespace WB.Tests.Abc.TestFactories
             IEmailService emailService = null,
             IWebInterviewConfigProvider webInterviewConfigProvider = null,
             IPlainKeyValueStorage<EmailParameters> emailParamsStorage = null,
-            IWebInterviewEmailRenderer webInterviewEmailRenderer = null)
+            IWebInterviewEmailRenderer webInterviewEmailRenderer = null,
+            IUnitOfWork unitOfWork = null)
         {
             var invitationServiceActual = invitationService ?? Mock.Of<IInvitationService>();
             var linkProvider = new WebInterviewLinkProvider(
@@ -1189,6 +1190,20 @@ namespace WB.Tests.Abc.TestFactories
                     BaseUrl = "http://localhost",
                     BaseAppUrl = "http://localhost"
                 }), Mock.Of<IWorkspaceContextAccessor>()));
+
+            if (unitOfWork == null)
+            {
+                var sqlQuery = new Mock<ISQLQuery>();
+                sqlQuery.Setup(x => x.SetString(It.IsAny<string>(), It.IsAny<string>())).Returns(sqlQuery.Object);
+                sqlQuery.Setup(x => x.ExecuteUpdateAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
+
+                var session = new Mock<ISession>();
+                session.Setup(x => x.CreateSQLQuery(It.IsAny<string>())).Returns(sqlQuery.Object);
+
+                var unitOfWorkMock = new Mock<IUnitOfWork>();
+                unitOfWorkMock.Setup(x => x.Session).Returns(session.Object);
+                unitOfWork = unitOfWorkMock.Object;
+            }
 
             return new ReminderEmailSender(
                 Mock.Of<ILogger<ReminderEmailSender>>(),
@@ -1199,7 +1214,8 @@ namespace WB.Tests.Abc.TestFactories
                 webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>(),
                 Create.Service.InScopeExecutor(Mock.Of<IServiceLocator>(sl =>
                     sl.GetInstance<IInvitationService>() == invitationServiceActual)),
-                linkProvider);
+                linkProvider,
+                unitOfWork);
         }
 
         public SendInvitationsJob SendInvitationsJob(

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Filters;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
@@ -24,6 +26,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private readonly IEmailService emailService;
         private readonly IScheduledTask<SendRemindersNowJob, SendRemindersNowRequest> sendRemindersTask;
         private readonly IPlainKeyValueStorage<SendRemindersNowStatus> sendRemindersStatusStorage;
+        private readonly IUnitOfWork unitOfWork;
 
 
         public WebInterviewSettingsApiController(
@@ -31,13 +34,15 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IEmailService emailService,
             IScheduledTask<SendRemindersNowJob, SendRemindersNowRequest> sendRemindersTask,
-            IPlainKeyValueStorage<SendRemindersNowStatus> sendRemindersStatusStorage)
+            IPlainKeyValueStorage<SendRemindersNowStatus> sendRemindersStatusStorage,
+            IUnitOfWork unitOfWork)
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.emailService = emailService;
             this.sendRemindersTask = sendRemindersTask;
             this.sendRemindersStatusStorage = sendRemindersStatusStorage;
+            this.unitOfWork = unitOfWork;
         }
 
         public class UpdatePageTemplateModel
@@ -241,14 +246,24 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             if (model.Type is not (EmailTextTemplateType.Reminder_NoResponse
                 or EmailTextTemplateType.Reminder_PartialResponse
                 or EmailTextTemplateType.RejectEmail))
-                return BadRequest("Only reminder and rejected-interview templates can be sent now.");
+                return BadRequest(new { error = "Only reminder and rejected-interview templates can be sent now." });
 
             var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
             if (config == null || !config.Started)
-                return BadRequest("Web interview is not started.");
+                return BadRequest(new { error = "Web interview is not started." });
 
             if (!emailService.IsConfigured())
-                return BadRequest("Email sending is not configured.");
+                return BadRequest(new { error = "Email sending is not configured." });
+
+            var type = model.Type.Value;
+            await ReminderEmailSendLock.AcquireAsync(unitOfWork, questionnaireIdentity, type)
+                .ConfigureAwait(false);
+
+            var storageKey = SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, type);
+            var existingStatus = sendRemindersStatusStorage.GetById(storageKey);
+            if (existingStatus?.State is SendRemindersNowState.Queued or SendRemindersNowState.InProgress)
+                return AcceptedAtAction(nameof(SendRemindersNowStatus),
+                    new { id, requestId = existingStatus.RequestId }, existingStatus);
 
             var requestId = System.Guid.NewGuid();
             var request = new SendRemindersNowRequest
@@ -256,7 +271,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
                 RequestId = requestId,
                 QuestionnaireIdentity = questionnaireIdentity,
                 QuestionnaireTitle = questionnaire.Title,
-                Type = model.Type.Value
+                Type = type
             };
             var status = new SendRemindersNowStatus
             {
@@ -279,8 +294,16 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
-            var status = sendRemindersStatusStorage.GetById(requestId.ToString("N"));
-            if (status == null || status.QuestionnaireIdentity != questionnaireIdentity)
+            var status = new[]
+                {
+                    EmailTextTemplateType.Reminder_NoResponse,
+                    EmailTextTemplateType.Reminder_PartialResponse,
+                    EmailTextTemplateType.RejectEmail
+                }
+                .Select(type => sendRemindersStatusStorage.GetById(
+                    SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, type)))
+                .FirstOrDefault(candidate => candidate?.RequestId == requestId);
+            if (status == null)
                 return NotFound();
 
             return Ok(status);
