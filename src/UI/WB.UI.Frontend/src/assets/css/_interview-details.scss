@@ -1,6 +1,11 @@
 @use "sass:color";
 
 .question {
+    &.changed-since-reject {
+        border-left: 4px solid #f0ad4e;
+        padding-left: 6px;
+    }
+
     &.with-flag {
         display: block;
         @include gradient-horizontal($gray-super-light, $gray-super-light);

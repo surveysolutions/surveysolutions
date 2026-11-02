@@ -228,6 +228,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Comment[] Comments { get; set; }
         public int MaxLength => AnswerUtils.TextAnswerMaxLength;
         public bool AllowResolveComments { get; set; }
+        public bool IsChangedSinceReject { get; set; }
     }
 
     public class Validity

@@ -13,6 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
     {
         DateTimeOffset? StartedDate { get; }
         DateTimeOffset? CompletedDate { get; }
+        DateTimeOffset? RejectDateTime { get; }
         QuestionnaireIdentity QuestionnaireIdentity { get; }
         string QuestionnaireId { get; }
         InterviewStatus Status { get; }

@@ -128,6 +128,7 @@ export default {
                 'mark': this.highlight,
                 'disabled-question': this.disabled,
                 'with-flag': this.hasFlag,
+                'changed-since-reject': this.question.isChangedSinceReject === true,
                 'supervisor-question': this.question.isForSupervisor,
             }, this.questionDivCssClassName]
         },

@@ -153,6 +153,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public DateTimeOffset? StartedDate => this.properties.StartedDate;
         public DateTimeOffset? CompletedDate => this.properties.CompletedDate;
+        public DateTimeOffset? RejectDateTime => this.properties.RejectDateTime;
         public InterviewStatus Status => this.properties.Status;
         public InterviewMode Mode => this.properties.Mode;
 

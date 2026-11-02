@@ -85,6 +85,24 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             Assert.That(entity, Has.Property(nameof(InterviewTextQuestion.AllowResolveComments)).False);
         }
 
+        [Test]
+        public void should_mark_question_changed_only_when_answered_after_last_reject()
+        {
+            var t0 = DateTimeOffset.UtcNow.AddHours(-3);
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0, "before");
+            interview.Complete(interviewerId, "", t0.AddMinutes(1), null);
+            interview.Reject(supervisorId, "reject", t0.AddMinutes(2));
+            var questionnaire = Create.Entity.PlainQuestionnaire(document);
+
+            var before = (InterviewTextQuestion)service.GetEntityDetails(commentedQuestionId.FormatGuid(), interview, questionnaire, true);
+            Assert.That(before.IsChangedSinceReject, Is.False);
+
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0.AddMinutes(3), "after");
+
+            var after = (InterviewTextQuestion)service.GetEntityDetails(commentedQuestionId.FormatGuid(), interview, questionnaire, true);
+            Assert.That(after.IsChangedSinceReject, Is.True);
+        }
+
         protected QuestionnaireDocument GetDocument()
         {
             return Create.Entity.QuestionnaireDocumentWithOneChapter(
