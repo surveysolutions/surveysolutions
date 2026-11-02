@@ -280,6 +280,9 @@
     <data name="SideBarScenarioName" xml:space="preserve">
         <value>judul skenario</value>
     </data>
+    <data name="SideBarScenarioRecordNew" xml:space="preserve">
+      <value>Rekam Skenario Baru</value>
+    </data>
     <data name="SideBarSectionsCounter" xml:space="preserve">
         <value>Bagian {{count}}:</value>
     </data>
@@ -1567,6 +1570,9 @@ Silakan periksa koneksi jaringan Anda atau hubungi dukungan TI Anda.</value>
     </data>
     <data name="CommunicationError" xml:space="preserve">
         <value>Kesalahan jaringan</value>
+    </data>
+    <data name="PopupBlocked" xml:space="preserve">
+      <value>Jendela tidak dapat dibuka. Izinkan pop-up di browser Anda, lalu coba lagi.</value>
     </data>
     <data name="SideBarCategoriesAddNew" xml:space="preserve">
         <value>Tambahkan kategori baru</value>

@@ -280,6 +280,9 @@
     <data name="SideBarScenarioName" xml:space="preserve">
         <value>ចំណងជើងសេណារីយ៉ូ</value>
     </data>
+    <data name="SideBarScenarioRecordNew" xml:space="preserve">
+      <value>កត់ត្រាសេណារីយ៉ូថ្មី</value>
+    </data>
     <data name="SideBarSectionsCounter" xml:space="preserve">
         <value>ផ្នែក {{count}}៖</value>
     </data>
@@ -1567,6 +1570,9 @@
     </data>
     <data name="CommunicationError" xml:space="preserve">
         <value>កំហុសបណ្តាញ</value>
+    </data>
+    <data name="PopupBlocked" xml:space="preserve">
+      <value>មិនអាចបើកបង្អួចបានទេ។ សូមអនុញ្ញាតបង្អួចលេចឡើងក្នុងកម្មវិធីរុករករបស់អ្នក ហើយព្យាយាមម្តងទៀត។</value>
     </data>
     <data name="SideBarCategoriesAddNew" xml:space="preserve">
         <value>បន្ថែមប្រភេទថ្មី។</value>

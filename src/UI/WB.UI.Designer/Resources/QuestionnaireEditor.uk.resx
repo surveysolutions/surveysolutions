@@ -249,6 +249,9 @@
   <data name="CommunicationError" xml:space="preserve">
     <value>Помилка мережі</value>
   </data>
+  <data name="PopupBlocked" xml:space="preserve">
+    <value>Не вдалося відкрити вікно. Дозвольте спливаючі вікна у браузері та спробуйте ще раз.</value>
+  </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
     <value>знайдено {{count}} помилку</value>
   </data>
@@ -1386,6 +1389,9 @@
   </data>
   <data name="SideBarScenarioName" xml:space="preserve">
     <value>назва сценарію</value>
+  </data>
+  <data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>Записати новий сценарій</value>
   </data>
   <data name="SideBarScenarioTitle" xml:space="preserve">
     <value>Сценарії</value>

@@ -280,6 +280,9 @@
     <data name="SideBarScenarioName" xml:space="preserve">
         <value>tiêu đề kịch bản</value>
         </data>
+    <data name="SideBarScenarioRecordNew" xml:space="preserve">
+      <value>Ghi lại kịch bản mới</value>
+    </data>
     <data name="SideBarSectionsCounter" xml:space="preserve">
         <value>{{count}} Phần:</value>
         </data>
@@ -1568,6 +1571,9 @@ Vui lòng kiểm tra kết nối mạng của bạn hoặc liên hệ với bộ
     <data name="CommunicationError" xml:space="preserve">
         <value>Lỗi mạng</value>
         </data>
+    <data name="PopupBlocked" xml:space="preserve">
+      <value>Không thể mở cửa sổ. Hãy cho phép cửa sổ bật lên trong trình duyệt rồi thử lại.</value>
+    </data>
     <data name="SideBarCategoriesAddNew" xml:space="preserve">
         <value>Thêm danh mục mới</value>
         </data>

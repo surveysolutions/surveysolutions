@@ -280,6 +280,9 @@
     <data name="SideBarScenarioName" xml:space="preserve">
         <value>სცენარის სათაური</value>
         </data>
+    <data name="SideBarScenarioRecordNew" xml:space="preserve">
+      <value>ახალი სცენარის ჩაწერა</value>
+    </data>
     <data name="SideBarSectionsCounter" xml:space="preserve">
         <value>{{count}} განყოფილება:</value>
         </data>
@@ -1568,6 +1571,9 @@
     <data name="CommunicationError" xml:space="preserve">
         <value>ქსელის შეცდომა</value>
         </data>
+    <data name="PopupBlocked" xml:space="preserve">
+      <value>ფანჯარა ვერ გაიხსნა. დაუშვით ამომხტარი ფანჯრები ბრაუზერში და სცადეთ თავიდან.</value>
+    </data>
     <data name="SideBarCategoriesAddNew" xml:space="preserve">
         <value>დაამატეთ ახალი კატეგორიები</value>
         </data>

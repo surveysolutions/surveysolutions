@@ -281,6 +281,9 @@
   <data name="SideBarScenarioName" xml:space="preserve">
     <value>عنوان السيناريو</value>
   </data>
+<data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>تسجيل سيناريو جديد</value>
+  </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
     <value>{{count}} قسم:</value>
   </data>
@@ -1565,6 +1568,9 @@
   </data>
   <data name="CommunicationError" xml:space="preserve">
       <value>خطأ في الشبكة</value>
+  </data>
+<data name="PopupBlocked" xml:space="preserve">
+      <value>تعذر فتح النافذة. يُرجى السماح بالنوافذ المنبثقة في المتصفح ثم المحاولة مرة أخرى.</value>
   </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
       <value>إضافة فئات جديدة</value>
