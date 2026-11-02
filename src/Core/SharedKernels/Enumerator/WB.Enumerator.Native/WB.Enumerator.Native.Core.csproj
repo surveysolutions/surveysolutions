@@ -31,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="3.0.1" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
   </ItemGroup>
 
   <ItemGroup>
