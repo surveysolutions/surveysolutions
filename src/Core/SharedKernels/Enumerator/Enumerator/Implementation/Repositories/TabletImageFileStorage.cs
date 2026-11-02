@@ -22,10 +22,5 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         {
             return null;
         }
-
-        public Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

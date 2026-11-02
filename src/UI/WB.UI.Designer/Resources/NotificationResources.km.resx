@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
+        <value>ជំរាបសួរ {0} &lt;br&gt; {1} បានឈប់ចែករំលែកជាមួយអ្នកនូវកម្រងសំណួរ៖ {2}</value>
+    </data>
+    <data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
+        <value>ជំរាបសួរ {0} &lt;br&gt; {1} បានអញ្ជើញអ្នកឱ្យ {2} កម្រងសំណួរខាងក្រោម៖</value>
+    </data>
+    <data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
+        <value>ជំរាបសួរ {0} &lt;br&gt; {1} បានដកហូតសិទ្ធិចូលប្រើសម្រាប់ {2} ចំពោះកម្រងសំណួររបស់អ្នក៖ {3}</value>
+    </data>
+    <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
+        <value>ជំរាបសួរ {0} &lt;br&gt; {1} បានអញ្ជើញ {2} ទៅកាន់ {3} កម្រងសំណួររបស់អ្នក៖</value>
+    </data>
+    <data name="ConfirmationEmail" xml:space="preserve">
+        <value>ជំរាបសួរ {0}, &lt;br/&gt;
+&lt;br/&gt; 
+ដើម្បីបញ្ចប់ដំណើរការចុះឈ្មោះសូមចុចលើតំណភ្ជាប់នេះ៖</value>
+    </data>
+    <data name="CompleteRegistration" xml:space="preserve">
+        <value>ការចុះឈ្មោះពេញលេញ</value>
+    </data>
+    <data name="AnonymousSharingEmail" xml:space="preserve">
+        <value>ជំរាបសួរ {0}, &lt;br/&gt;&lt;br/&gt; អ្នកបានបើកការចូលប្រើបានតែអានទៅកម្រងសំណួររបស់អ្នក "{1}" សម្រាប់អ្នកប្រើប្រាស់អនាមិកតាមរយៈតំណខាងក្រោម៖</value>
+    </data>
+    <data name="EmailSendInfo" xml:space="preserve">
+        <value>សារនេះត្រូវបានផ្ញើដោយស្វ័យប្រវត្តិដោយឧបករណ៍ Survey Solutions Designer។</value>
+    </data>
+    <data name="ResetPasswordEmail" xml:space="preserve">
+        <value>ជំរាបសួរ {0}, &lt;br/&gt;&lt;br/&gt; ដើម្បីបញ្ចប់ដំណើរការកំណត់ពាក្យសម្ងាត់ឡើងវិញ សូមចុចលើតំណនេះ៖</value>
+    </data>
+    <data name="ResetPassword" xml:space="preserve">
+        <value>កំណត់ពាក្យសម្ងាត់ឡើងវិញ</value>
+    </data>
+    <data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
+        <value>ទិដ្ឋភាព</value>
+    </data>
+    <data name="MailNotifier_NotifyTargetPersonAboutShareChange_edit" xml:space="preserve">
+        <value>កែសម្រួល</value>
+    </data>
+    <data name="MailNotifier_NotifyTargetPersonAboutShareChange_link" xml:space="preserve">
+        <value>តំណភ្ជាប់</value>
+    </data>
+    <data name="MailNotifier_NotifyTargetPersonAboutShareChange_user" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់</value>
+    </data>
+    <data name="SystemMailer_ConfirmationEmail_Complete_Registration_Process" xml:space="preserve">
+        <value>ដំណើរការចុះឈ្មោះពេញលេញ</value>
+    </data>
+    <data name="SystemMailer_AnonymousSharingEmail_Subject" xml:space="preserve">
+        <value>តំណចែករំលែកអនាមិក</value>
+    </data>
+    <data name="SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification" xml:space="preserve">
+        <value>ការជូនដំណឹងអំពីការចែករំលែកកម្រងសំណួររបស់អ្នក។</value>
+    </data>
+    <data name="SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_notification" xml:space="preserve">
+        <value>កម្រងសំណួររបស់អ្នកឈប់ចែករំលែកការជូនដំណឹង</value>
+    </data>
+    <data name="SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification" xml:space="preserve">
+        <value>ការជូនដំណឹងអំពីការចែករំលែកកម្រងសំណួរ</value>
+    </data>
+    <data name="SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notification" xml:space="preserve">
+        <value>កម្រងសំណួរបញ្ឈប់ការជូនដំណឹងអំពីការចែករំលែក</value>
+    </data>
+    <data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
+        <value>បញ្ចប់ការកំណត់ពាក្យសម្ងាត់ឡើងវិញ</value>
+    </data>
+    <data name="TranfserOwnershipNotification" xml:space="preserve">
+        <value>ជំរាបសួរ {0} &lt;br&gt; {1} បានផ្ទេរកម្មសិទ្ធិនៃកម្រងសំណួរ {2} ទៅកាន់អ្នក</value>
+    </data>
+    <data name="EmailChange" xml:space="preserve">
+        <value>ជំរាបសួរ {0}, &lt;br/&gt; &lt;br/&gt;
+ដើម្បីបញ្ជាក់ការផ្លាស់ប្តូរអ៊ីមែល សូមប្រើតំណខាងក្រោម៖</value>
+    </data>
+    <data name="EmailChangeLink" xml:space="preserve">
+        <value>បញ្ជាក់</value>
+    </data>
+</root>

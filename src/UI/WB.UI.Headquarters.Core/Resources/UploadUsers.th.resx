@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AssignedTo" xml:space="preserve"><value>หัวหน้างาน</value></data>
+  <data name="Description" xml:space="preserve"><value>สร้างชุดผู้ใช้โดยอัปโหลดไฟล์</value></data>
+  <data name="Profile" xml:space="preserve"><value>โปรไฟล์ด้วยตนเอง</value></data>
+  <data name="DownloadTemplateLink" xml:space="preserve"><value>ดาวน์โหลดเทมเพลต .tab สำหรับอัปโหลดผู้ใช้</value></data>
+  <data name="Email" xml:space="preserve"><value>อีเมล</value></data>
+  <data name="FullName" xml:space="preserve"><value>ชื่อเต็ม</value></data>
+  <data name="ManualSupervisorCreateLink" xml:space="preserve"><value>หัวหน้างาน</value></data>
+  <data name="ManualInterviewerCreateLink" xml:space="preserve"><value>ผู้สัมภาษณ์</value></data>
+  <data name="OptionalInformation" xml:space="preserve"><value>ข้อมูลส่วนตัวที่ไม่บังคับ</value></data>
+  <data name="Or" xml:space="preserve"><value>หรือ</value></data>
+  <data name="Password" xml:space="preserve"><value>รหัสผ่าน</value></data>
+  <data name="PasswordDescription" xml:space="preserve"><value>รหัสผ่านต้องมีตัวเลขอย่างน้อยหนึ่งตัว ตัวพิมพ์ใหญ่หนึ่งตัว และตัวพิมพ์เล็กหนึ่งตัว</value></data>
+  <data name="Phone" xml:space="preserve"><value>หมายเลขโทรศัพท์</value></data>
+  <data name="RequiredData" xml:space="preserve"><value>ข้อมูลที่จำเป็นสำหรับการสร้างผู้สัมภาษณ์และหัวหน้างาน</value></data>
+  <data name="Role" xml:space="preserve"><value>บทบาท</value></data>
+  <data name="Title" xml:space="preserve"><value>การสร้างผู้ใช้หลายคนด้วยการอัปโหลดเป็นชุด</value></data>
+  <data name="UploadBtn" xml:space="preserve"><value>อัปโหลดไฟล์ .tab</value></data>
+  <data name="UserName" xml:space="preserve"><value>ชื่อเข้าสู่ระบบ</value></data>
+  <data name="UserNameDescription" xml:space="preserve"><value>ชื่อผู้ใช้ต้องมีความยาว 3 ถึง 15 ตัวอักษร</value></data>
+  <data name="VerificationFailed" xml:space="preserve"><value>การยืนยันล้มเหลว</value></data>
+  <data name="NoCreatedUsers" xml:space="preserve"><value>ไม่มีบัญชีผู้ใช้ถูกสร้าง</value></data>
+  <data name="ImportingUserInfo" xml:space="preserve"><value>กำลังนำเข้าข้อมูลผู้ใช้จาก</value></data>
+  <data name="ReUploadTabFile" xml:space="preserve"><value>อัปโหลดไฟล์ .tab ใหม่</value></data>
+  <data name="BackToImport" xml:space="preserve"><value>กลับไปยังการนำเข้าผู้ใช้</value></data>
+  <data name="Uploading" xml:space="preserve"><value>กำลังนำเข้า {{importedUsersCount}} จาก {{totalUsersToImportCount}}</value></data>
+  <data name="Cancel" xml:space="preserve"><value>ยกเลิก</value></data>
+  <data name="Column" xml:space="preserve"><value>คอลัมน์</value></data>
+  <data name="Line" xml:space="preserve"><value>บรรทัด</value></data>
+  <data name="AllAccountsCreated" xml:space="preserve"><value>สร้างบัญชี {{total}} ทั้งหมดสำเร็จ:</value></data>
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve"><value>หัวหน้างาน {{supervisorsCount}} และผู้สัมภาษณ์ {{interviewersCount}}</value></data>
+  <data name="CompleteDescription" xml:space="preserve"><value>คุณสามารถสร้างงานมอบหมายสำหรับทีมเหล่านี้จากส่วน 'แบบสอบถาม'</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>แบบสอบถาม</value></data>
+  <data name="UploadInProgress" xml:space="preserve"><value>คำเตือน: การอัปโหลดเป็นชุดโดย "{{userName}}" กำลังดำเนินอยู่</value></data>
+  <data name="UploadInProgressDescription" xml:space="preserve"><value>คุณจะสามารถเริ่มต้นได้เมื่อปัจจุบันเสร็จสิ้น</value></data>
+  <data name="EstimatedTime" xml:space="preserve"><value>ประมาณ {{estimatedTime}} ที่เหลือ</value></data>
+  <data name="TimeDetermination" xml:space="preserve"><value>การกำหนดเวลา</value></data>
+  <data name="Workspace" xml:space="preserve"><value>พื้นที่ทำงาน</value></data>
+  <data name="SelectWorkspace" xml:space="preserve"><value>เลือกพื้นที่ทำงาน</value></data>
+  <data name="SelectWorkspaceDescription" xml:space="preserve"><value>ถ้าไม่มีพื้นที่ทำงานที่กำหนดในไฟล์ชุด ใช้พื้นที่ทำงานนี้เป็นค่าเริ่มต้น</value></data>
+    <data name="AssignedToDescription" xml:space="preserve">
+        <value>จำเป็นสำหรับผู้สัมภาษณ์ โดยต้องระบุชื่อผู้ใช้ของหัวหน้างานที่บุคคลนี้จะถูกมอบหมายให้</value>
+    </data>
+</root>

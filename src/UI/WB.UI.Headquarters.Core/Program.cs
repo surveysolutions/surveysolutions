@@ -18,9 +18,19 @@ namespace WB.UI.Headquarters
         public static async Task<int> Main(string[] args)
         {
             IHost host = CreateHostBuilder(args).Build();
-            if (args.Length > 0 && args[0].Equals("manage", StringComparison.OrdinalIgnoreCase))
+            if (args.Length > 0)
             {
-                return await new SupportTool.SupportTool(host).Run(args.Skip(1).ToArray());
+                if (args[0].Equals("manage", StringComparison.OrdinalIgnoreCase))
+                {
+                    return await new SupportTool.SupportTool(host).Run(args.Skip(1).ToArray());
+                }
+
+                if (IsHelpArgument(args[0]))
+                {
+                    // Normalize single-dash -help to double-dash --help for System.CommandLine compatibility
+                    var firstArg = args[0].Equals("-help", StringComparison.OrdinalIgnoreCase) ? "--help" : args[0];
+                    return await new SupportTool.SupportTool(host).Run(new[] { firstArg }.Concat(args.Skip(1)).ToArray());
+                }
             }
 
             // Npgsql.Logging.NpgsqlLogManager.Provider = new Npgsql.Logging.ConsoleLoggingProvider(Npgsql.Logging.NpgsqlLogLevel.Debug);
@@ -34,6 +44,11 @@ namespace WB.UI.Headquarters
             await host.RunAsync();
             return 0;
         }
+
+        private static bool IsHelpArgument(string arg) =>
+            arg.Equals("--help", StringComparison.OrdinalIgnoreCase) ||
+            arg.Equals("-help", StringComparison.OrdinalIgnoreCase) ||
+            arg.Equals("-h", StringComparison.OrdinalIgnoreCase);
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)

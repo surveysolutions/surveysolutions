@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Average" xml:space="preserve">
+        <value>Rata-rata</value>
+    </data>
+    <data name="BackToSupervisors" xml:space="preserve">
+        <value>Kembali ke supervisor</value>
+    </data>
+    <data name="BackToTeams" xml:space="preserve">
+        <value>Kembali ke tim</value>
+    </data>
+    <data name="Day" xml:space="preserve">
+        <value>hari</value>
+    </data>
+    <data name="Month" xml:space="preserve">
+        <value>Bulan</value>
+    </data>
+    <data name="NumberOfCompletedInterviews" xml:space="preserve">
+        <value>Jumlah wawancara yang diselesaikan</value>
+    </data>
+    <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
+        <value>Jumlah wawancara yang disetujui oleh HQ</value>
+    </data>
+    <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
+        <value>Jumlah transaksi wawancara berdasarkan HQ</value>
+    </data>
+    <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
+        <value>Banyaknya transaksi wawancara oleh Supervisor</value>
+    </data>
+    <data name="LastDateToShowLabel" xml:space="preserve">
+        <value>Mulai dari</value>
+    </data>
+    <data name="OverTheLast" xml:space="preserve">
+        <value>Dibandingkan sebelumnya</value>
+    </data>
+    <data name="Period" xml:space="preserve">
+        <value>Periode</value>
+    </data>
+    <data name="PeriodUnit" xml:space="preserve">
+        <value>Satuan periode</value>
+    </data>
+    <data name="PeriodCount" xml:space="preserve">
+        <value>Hitungan periode</value>
+    </data>
+    <data name="Questionnaire" xml:space="preserve">
+        <value>Daftar pertanyaan</value>
+    </data>
+    <data name="Team" xml:space="preserve">
+        <value>Tim</value>
+    </data>
+    <data name="TeamMember" xml:space="preserve">
+        <value>Anggota tim</value>
+    </data>
+    <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
+        <value>Waktu rata-rata penyelesaian wawancara</value>
+    </data>
+    <data name="Total" xml:space="preserve">
+        <value>Total</value>
+    </data>
+    <data name="Type" xml:space="preserve">
+        <value>Jenis</value>
+    </data>
+    <data name="InterviewActions" xml:space="preserve">
+        <value>Tindakan wawancara</value>
+    </data>
+    <data name="Version" xml:space="preserve">
+        <value>ver.</value>
+    </data>
+    <data name="Week" xml:space="preserve">
+        <value>Minggu</value>
+    </data>
+    <data name="AverageCaseAssignmentDuration" xml:space="preserve">
+        <value>Durasi penugasan kasus rata-rata</value>
+    </data>
+    <data name="AverageHQProcessingTime" xml:space="preserve">
+        <value>Waktu pemrosesan markas rata-rata</value>
+    </data>
+    <data name="AverageInterviewDuration" xml:space="preserve">
+        <value>Durasi wawancara rata-rata</value>
+    </data>
+    <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
+        <value>Rata-rata waktu pemrosesan kasus secara keseluruhan</value>
+    </data>
+    <data name="AverageSupervisorProcessingTime" xml:space="preserve">
+        <value>Waktu pemrosesan rata-rata supervisor</value>
+    </data>
+    <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
+        <value>Waktu rata-rata sejak wawancara diberikan kepada pewawancara hingga saat tombol selesai ditekan pada tablet.</value>
+    </data>
+    <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
+        <value>Waktu rata-rata sejak supervisor menyetujui wawancara hingga wawancara tersebut disetujui atau ditolak oleh Kantor Pusat.</value>
+    </data>
+    <data name="AverageInterviewDurationDescription" xml:space="preserve">
+        <value>Rata-rata waktu wawancara ditampilkan di layar pewawancara sebelum selesai per pewawancara.</value>
+    </data>
+    <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+        <value>Rata-rata waktu wawancara ditampilkan di layar pewawancara sebelum selesai per supervisor.</value>
+    </data>
+    <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
+        <value>Waktu rata-rata sejak wawancara pertama kali dilakukan hingga saat Kantor Pusat menyetujui wawancara tersebut.</value>
+    </data>
+    <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
+        <value>Waktu rata-rata sejak pewawancara menekan tombol Selesai hingga supervisor menerima atau menolak wawancara tersebut.</value>
+    </data>
+    <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
+        <value>Jumlah penyelesaian wawancara menurut tim. Wawancara yang ditolak dan kemudian diselesaikan dihitung sebagai peristiwa penyelesaian terpisah.</value>
+    </data>
+    <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
+        <value>Jumlah penyelesaian wawancara oleh pewawancara. Wawancara yang ditolak dan kemudian diselesaikan dihitung sebagai peristiwa penyelesaian terpisah.</value>
+    </data>
+    <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
+        <value>Jumlah wawancara yang dikumpulkan oleh {0} disetujui oleh HQ.</value>
+    </data>
+    <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
+        <value>Jumlah persetujuan dan penolakan oleh HQ atas wawancara yang dikumpulkan oleh {0}.</value>
+    </data>
+    <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
+        <value>Jumlah persetujuan dan penolakan supervisor atas wawancara yang dikumpulkan oleh {0}.</value>
+    </data>
+    <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
+        <value>Jumlah persetujuan dan penolakan supervisor atas wawancara yang dikumpulkan oleh pewawancara</value>
+    </data>
+    <data name="By" xml:space="preserve">
+        <value>Oleh</value>
+    </data>
+    <data name="InThe" xml:space="preserve">
+        <value>di</value>
+    </data>
+    <data name="From" xml:space="preserve">
+        <value>Dari</value>
+    </data>
+    <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+        <value>di tim {0}</value>
+    </data>
+</root>

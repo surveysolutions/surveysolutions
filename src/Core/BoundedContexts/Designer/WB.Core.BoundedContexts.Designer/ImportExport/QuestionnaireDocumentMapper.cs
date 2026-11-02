@@ -320,7 +320,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 IsInteger = q.IsInteger,
                 DecimalPlaces = q.CountOfDecimalPlaces,
                 UseThousandsSeparator = q.Properties?.UseFormatting ?? false,
-                SpecialValues = q.Answers.Select(MapAnswerToSpecialValue).ToList()
+                SpecialValues = q.Answers.Select(MapAnswerToSpecialValue).ToList(),
+                IsNonNegative = q.IsNonNegative
             };
             MapAbstractQuestionToModel(q, dst, idToVarMap);
             return dst;
@@ -654,7 +655,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 IsInteger = src.IsInteger,
                 CountOfDecimalPlaces = src.DecimalPlaces,
                 UseFormatting = src.UseThousandsSeparator,
-                Answers = src.SpecialValues?.Select(MapSpecialValueToAnswer).ToList() ?? new List<Answer>()
+                Answers = src.SpecialValues?.Select(MapSpecialValueToAnswer).ToList() ?? new List<Answer>(),
+                IsNonNegative = src.IsNonNegative
             };
             MapAbstractQuestionFromModel(src, q, varToIdMap);
             q.Properties!.UseFormatting = src.UseThousandsSeparator;

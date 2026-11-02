@@ -1,5 +1,6 @@
 ﻿@page
 @model AccessDeniedModel
+@using WB.UI.Designer.Resources
 @{
     ViewData["Title"] = "Access denied";
 }
@@ -7,7 +8,7 @@
 
 <form>
     <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="note text-danger">You do not have access to this resource.</p>
+    <p class="note text-danger">@ErrorMessages.NoAccessToQuestionnaire</p>
     <div class="form-actions">
         <a class="btn btn-success btn-lg" asp-page="./Login">@AccountResources.BackToLogin</a>
     </div>

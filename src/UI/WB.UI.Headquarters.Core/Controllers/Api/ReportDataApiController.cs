@@ -249,9 +249,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
             }
 
-            var speedByResponsibleReportView = this.speedReport.Load(input);
-            speedByResponsibleReportView.Draw = data.Draw;
-            return new JsonResult(speedByResponsibleReportView);
+            var reportView = ToDataTableResponse(this.speedReport.Load(input));
+            reportView.Draw = data.Draw;
+            return new JsonResult(reportView);
         }
 
         public SpeedDataTableResponse ToDataTableResponse(SpeedByResponsibleReportView reportView)
@@ -293,9 +293,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Supervisors);
             }
 
-            var speedByResponsibleReportView = this.speedReport.Load(input);
-            speedByResponsibleReportView.Draw = filter.Draw;
-            return new JsonResult(speedByResponsibleReportView);
+            var reportView = ToDataTableResponse(this.speedReport.Load(input));
+            reportView.Draw = filter.Draw;
+            return new JsonResult(reportView);
         }
 
         [HttpGet]
@@ -327,9 +327,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return this.CreateReportResponse(exportType, report, Reports.Report_Speed_Between_Statuses_By_Interviewers);
             }
 
-            var speedByResponsibleReportView = this.speedReport.Load(input);
-            speedByResponsibleReportView.Draw = filter.Draw;
-            return new JsonResult(speedByResponsibleReportView);
+            var reportView = ToDataTableResponse(this.speedReport.Load(input));
+            reportView.Draw = filter.Draw;
+            return new JsonResult(reportView);
         }
 
         [HttpGet]
@@ -360,9 +360,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return this.CreateReportResponse(exportType, report, Reports.Report_Average_Interview_Duration);
             }
 
-            var speedByResponsibleReportView = this.speedReport.Load(input);
-            speedByResponsibleReportView.Draw = data.Draw;
-            return new JsonResult(speedByResponsibleReportView);
+            var reportView = ToDataTableResponse(this.speedReport.Load(input));
+            reportView.Draw = data.Draw;
+            return new JsonResult(reportView);
         }
 
         [HttpGet]

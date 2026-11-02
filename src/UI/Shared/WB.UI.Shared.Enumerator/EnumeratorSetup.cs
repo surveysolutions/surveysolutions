@@ -88,14 +88,13 @@ namespace WB.UI.Shared.Enumerator
                 if (ShouldSkipCrashlyticsReport(exception))
                     return;
 
-                // Unwrap JavaProxyThrowable (JNI wrapper) and TargetInvocationException layers
-                // to get the real root cause. Crashlytics only sees the outermost wrapper otherwise,
-                // so the actual inner exception never appears in crash reports.
-                // JavaProxyThrowable is internal so we match by type name.
+                // Unwrap the full InnerException chain (JavaProxyThrowable, TargetInvocationException,
+                // MvxException, etc.) to get the deepest real root cause. Crashlytics only shows the
+                // outermost wrapper's message otherwise, and MvxException's own message is just
+                // "check InnerException for more information" - so we must keep walking past it too,
+                // not stop at the first wrapper type we recognize.
                 var unwrapped = exception;
-                while (unwrapped.InnerException != null &&
-                       (unwrapped.GetType().Name == "JavaProxyThrowable" ||
-                        unwrapped is TargetInvocationException))
+                while (unwrapped.InnerException != null)
                     unwrapped = unwrapped.InnerException;
 
                 if (!ReferenceEquals(unwrapped, exception))
@@ -119,10 +118,9 @@ namespace WB.UI.Shared.Enumerator
         {
             // Use the innermost exception for the signature so that different root causes
             // are not collapsed into a single deduplicated report because they share the
-            // same JavaProxyThrowable / TargetInvocationException outer wrapper.
+            // same JavaProxyThrowable / MvxException / TargetInvocationException outer wrapper(s).
             var root = exception;
-            while (root.InnerException != null &&
-                   (root.GetType().Name == "JavaProxyThrowable" || root is TargetInvocationException))
+            while (root.InnerException != null)
                 root = root.InnerException;
 
             var signature = $"{root.GetType().FullName}|{root.Message}|{root.StackTrace}";

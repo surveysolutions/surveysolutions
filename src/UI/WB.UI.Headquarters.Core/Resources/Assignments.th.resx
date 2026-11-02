@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Active" xml:space="preserve">
+        <value>คล่องแคล่ว</value>
+    </data>
+    <data name="Archive" xml:space="preserve">
+        <value>คลังเก็บเอกสารสำคัญ</value>
+    </data>
+    <data name="Archived" xml:space="preserve">
+        <value>เก็บถาวรแล้ว</value>
+    </data>
+    <data name="AssignmentsHeader" xml:space="preserve">
+        <value>การมอบหมายงาน</value>
+    </data>
+    <data name="AssignmentsSelected" xml:space="preserve">
+        <value>{{count}} เลือกการมอบหมายแล้ว</value>
+    </data>
+    <data name="AssignmentsSelected_other" xml:space="preserve">
+        <value>{{count}} เลือกการมอบหมายแล้ว</value>
+    </data>
+    <data name="ExpectedExplanation" xml:space="preserve">
+        <value>ระบุจำนวนการสัมภาษณ์สูงสุดที่จะสร้างสำหรับงานนั้น ค่าที่อนุญาต: -1 สำหรับการกำหนดแบบไม่จำกัด, 0 สำหรับการกำหนดที่ว่างเปล่า, ตัวเลขสำหรับค่าที่คาดหวังของการกำหนด</value>
+    </data>
+    <data name="ChangeExpectedModalTitle" xml:space="preserve">
+        <value>แก้ไขค่าที่คาดหวังสำหรับการกำหนด {{assignmentId}}</value>
+    </data>
+    <data name="ChangeModeModalTitle" xml:space="preserve">
+        <value>เปลี่ยนโหมดสำหรับการกำหนด {{assignmentId}}</value>
+    </data>
+    <data name="ModeExplanation" xml:space="preserve">
+        <value>โหมด CAWI ช่วยให้สามารถรวบรวมข้อมูลจากผู้ตอบแบบสอบถามได้โดยตรง</value>
+    </data>
+    <data name="CreatedAt" xml:space="preserve">
+        <value>สร้างเมื่อ</value>
+    </data>
+    <data name="IdentifyingQuestions" xml:space="preserve">
+        <value>การระบุคำถาม</value>
+    </data>
+    <data name="Count" xml:space="preserve">
+        <value>รวบรวม</value>
+    </data>
+    <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+        <value>{{count}} การมอบหมายกำลังจะมีการเปลี่ยนแปลง</value>
+    </data>
+    <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
+        <value>{{count}} การมอบหมายกำลังจะมีการเปลี่ยนแปลง</value>
+    </data>
+    <data name="Expected" xml:space="preserve">
+        <value>ที่คาดหวัง</value>
+    </data>
+    <data name="SelectResponsible" xml:space="preserve">
+        <value>เลือกรับผิดชอบ</value>
+    </data>
+    <data name="ResponsibleRequired" xml:space="preserve">
+        <value>ต้องมีความรับผิดชอบ</value>
+    </data>
+    <data name="WebModeNonInterviewer" xml:space="preserve">
+        <value>การมอบหมายงานทั้งหมดสำหรับการสัมภาษณ์ทางเว็บจะต้องทำกับผู้สัมภาษณ์</value>
+    </data>
+    <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+        <value>คุณกำลังมอบหมายงานเว็บใหม่ให้กับผู้ใช้ที่ไม่ใช่ผู้สัมภาษณ์ หากคุณได้ส่งลิงก์สำหรับการมอบหมายนี้ไปแล้ว ผู้ตอบจะไม่สามารถตอบแบบสำรวจของคุณได้จนกว่าการมอบหมายจะถูกส่งกลับไปยังผู้ใช้ในบทบาทผู้สัมภาษณ์</value>
+    </data>
+    <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+        <value>คุณกำลังมอบหมายงานเว็บใหม่ให้กับผู้ใช้ที่ไม่ใช่ผู้สัมภาษณ์ หากคุณได้ส่งลิงก์สำหรับงานเหล่านี้ไปแล้ว ผู้ตอบจะไม่สามารถตอบแบบสำรวจของคุณได้จนกว่างานจะถูกส่งกลับไปยังผู้ใช้ในบทบาทผู้สัมภาษณ์</value>
+    </data>
+    <data name="ShowArchived" xml:space="preserve">
+        <value>สถานะที่เก็บถาวร</value>
+    </data>
+    <data name="Unarchive" xml:space="preserve">
+        <value>ยกเลิกการเก็บถาวร</value>
+    </data>
+    <data name="Unlimited" xml:space="preserve">
+        <value>ไม่จำกัด</value>
+    </data>
+    <data name="InterviewsNeeded" xml:space="preserve">
+        <value>จำเป็นต้องมีการสัมภาษณ์</value>
+    </data>
+    <data name="CreateInterview" xml:space="preserve">
+        <value>เริ่มการสัมภาษณ์ใหม่</value>
+    </data>
+    <data name="UpdatedAt" xml:space="preserve">
+        <value>อัปเดตเมื่อ</value>
+    </data>
+    <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+        <value>กรอกข้อมูลในช่องระบุทั้งหมดหรือบางส่วน</value>
+    </data>
+    <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+        <value>เลือกผู้รับผิดชอบ (สำนักงานใหญ่หรือหัวหน้างานหรือผู้สัมภาษณ์) สำหรับงานนี้</value>
+    </data>
+    <data name="Questionnaire" xml:space="preserve">
+        <value>แบบสอบถาม</value>
+    </data>
+    <data name="AllAssignments" xml:space="preserve">
+        <value>งานทั้งหมด</value>
+    </data>
+    <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+        <value>ตัวบ่งชี้ว่าการมอบหมายนั้นใช้งานอยู่หรือถูกเก็บถาวรแล้ว</value>
+    </data>
+    <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+        <value>เลือกแบบสอบถามเพื่อดูงานที่เกี่ยวข้อง เลือก “แบบสอบถามทั้งหมด” เพื่อดูงานที่เกี่ยวข้องกับแบบสอบถามใดๆ</value>
+    </data>
+    <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+        <value>ผู้ใช้มีความรับผิดชอบ คลิกในช่องเพื่อเลือกชื่อผู้ใช้โดยเลือกโดยตรงหรือพิมพ์เพื่อกรองรายชื่อชื่อผู้ใช้เพิ่มเติม</value>
+    </data>
+    <data name="Tooltip_Table_Count" xml:space="preserve">
+        <value>จำนวนการสัมภาษณ์ที่ส่งในปัจจุบันสำหรับงานนี้ อาจมีการสร้างการสัมภาษณ์เพิ่มเติมแต่ไม่ได้ซิงค์ คลิกที่เซลล์ใดก็ได้เพื่อดูการสัมภาษณ์ที่เกี่ยวข้อง คลิกที่ไอคอนจัดเรียงเพื่อจัดเรียงตามจำนวน</value>
+    </data>
+    <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+        <value>เมื่อเริ่มสร้างงานแล้ว คลิกที่ไอคอนจัดเรียงเพื่อจัดเรียงตามเวลา</value>
+    </data>
+    <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+        <value>ข้อมูลที่ระบุแต่ละงาน นี่คือคำตอบสำหรับคำถามที่ทำเครื่องหมายว่าระบุได้ใน Designer</value>
+    </data>
+    <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+        <value>จำนวนการสัมภาษณ์ที่จำเป็นในการทำงานนี้ให้สำเร็จ</value>
+    </data>
+    <data name="Tooltip_Table_Responsible" xml:space="preserve">
+        <value>ผู้ใช้ที่รับผิดชอบงานในปัจจุบัน คลิกไอคอนเรียงลำดับเพื่อเรียงลำดับชื่อผู้ใช้</value>
+    </data>
+    <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
+        <value>จำนวนการสัมภาษณ์สูงสุดที่อาจดำเนินการสำหรับงานนี้ คลิกที่เซลล์ใดก็ได้เพื่อเปลี่ยนตัวเลขนี้ คลิกที่ไอคอนจัดเรียงเพื่อจัดเรียงตามค่าที่คาดหวัง</value>
+    </data>
+    <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+        <value>เมื่องานได้รับการอัปเดตครั้งล่าสุด คลิกที่ไอคอนจัดเรียงเพื่อจัดเรียงตามเวลา</value>
+    </data>
+    <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+        <value>ตัวบ่งชี้ว่ามีการดาวน์โหลดงานลงในแท็บเล็ตแล้วหรือไม่ คลิกที่ไอคอนจัดเรียงเพื่อจัดเรียงตามเวลาที่ได้รับ</value>
+    </data>
+    <data name="InvalidExpected" xml:space="preserve">
+        <value>ฟิลด์ที่คาดไว้ต้องเป็น -1 หรือมากกว่า</value>
+    </data>
+    <data name="AssignmentExpectedInWebMode" xml:space="preserve">
+        <value>ค่าที่คาดหวังไม่สามารถเปลี่ยนแปลงได้สำหรับการกำหนดโหมดเว็บ</value>
+    </data>
+    <data name="SelectQuestionnaire" xml:space="preserve">
+        <value>เลือกแบบสอบถามที่มีอยู่เพื่ออัปเกรดการมอบหมายงาน</value>
+    </data>
+    <data name="UpgradeDescription" xml:space="preserve">
+        <value>เมื่ออัปเกรดการมอบหมายแล้ว การมอบหมายที่ค้างอยู่ทั้งหมดจะถูกอัปเกรด</value>
+    </data>
+    <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+        <value>เลือกแบบสอบถามที่จะอัปเกรด</value>
+    </data>
+    <data name="UpgradeBtn" xml:space="preserve">
+        <value>อัพเกรด</value>
+    </data>
+    <data name="UpgradeProgressTitle" xml:space="preserve">
+        <value>กำลังอัปเกรดการกำหนดจาก {{from}} เป็น {{to}}</value>
+    </data>
+    <data name="UpgradeProgressNumbers" xml:space="preserve">
+        <value>การอัพเกรด {{processed}} ของ {{totalCount}}</value>
+    </data>
+    <data name="UpgradeProgressErrors" xml:space="preserve">
+        <value>มีข้อผิดพลาด {{errorCount}}</value>
+    </data>
+    <data name="Stop" xml:space="preserve">
+        <value>หยุด</value>
+    </data>
+    <data name="UpgradePreparation" xml:space="preserve">
+        <value>รอให้การอัพเกรดอื่นๆ เสร็จสิ้น</value>
+    </data>
+    <data name="UpgradeCancelled" xml:space="preserve">
+        <value>หยุดการอัพเกรดแล้ว</value>
+    </data>
+    <data name="UpgradeError" xml:space="preserve">
+        <value>เกิดข้อผิดพลาด ลองอีกครั้งในภายหลัง</value>
+    </data>
+    <data name="UpgradeProgressDone" xml:space="preserve">
+        <value>เสร็จแล้ว</value>
+    </data>
+    <data name="UpgradeProgressDoneCount" xml:space="preserve">
+        <value>อัปเกรดสำเร็จแล้ว: {{processed}}</value>
+    </data>
+    <data name="UpgradeProgressErrorCount" xml:space="preserve">
+        <value>ไม่ได้อัปเกรด: {{count}}</value>
+    </data>
+    <data name="UpgradeDownloadFailed" xml:space="preserve">
+        <value>ดาวน์โหลดรายการ</value>
+    </data>
+    <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+        <value>การอัพเกรดจาก {{from}} เป็น {{to}} เสร็จสิ้นแล้ว</value>
+    </data>
+    <data name="ReceivedByTablet_All" xml:space="preserve">
+        <value>แสดงทั้งหมด</value>
+    </data>
+    <data name="ReceivedByTablet_Received" xml:space="preserve">
+        <value>ได้รับจากแท็บเล็ต</value>
+    </data>
+    <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+        <value>ไม่ได้รับทางแท็บเล็ต</value>
+    </data>
+    <data name="Tooltip_Filter_Received" xml:space="preserve">
+        <value>ตัวบ่งชี้ว่าได้รับมอบหมายหรือไม่</value>
+    </data>
+    <data name="ReceivedByTablet" xml:space="preserve">
+        <value>ได้รับจากแท็บเล็ต</value>
+    </data>
+    <data name="CreatingNewAssignment" xml:space="preserve">
+        <value>สร้างงานใหม่สำหรับแบบสอบถาม {{questionnaire}}</value>
+    </data>
+    <data name="AssignTo" xml:space="preserve">
+        <value>มอบหมายให้</value>
+    </data>
+    <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+        <value>เลือกเวอร์ชันแบบสอบถามเพื่อดูการมอบหมายที่เกี่ยวข้อง เลือก "ทุกเวอร์ชัน" เพื่อดูงานที่เกี่ยวข้องกับแบบสอบถามที่เลือกทุกเวอร์ชัน</value>
+    </data>
+    <data name="ErrorToCreateAssignment" xml:space="preserve">
+        <value>ไม่สามารถสร้างการมอบหมายได้</value>
+    </data>
+    <data name="IsAudioRecordingEnabled" xml:space="preserve">
+        <value>การบันทึกเสียง</value>
+    </data>
+    <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+        <value>บันทึกขั้นตอนการสัมภาษณ์</value>
+    </data>
+    <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+        <value>การตั้งค่าการบันทึกเสียงสำหรับการกำหนด {{id}}</value>
+    </data>
+    <data name="AudioRecordingEnable" xml:space="preserve">
+        <value>เปิดใช้งานการบันทึกเสียง</value>
+    </data>
+    <data name="CawiModeEnable" xml:space="preserve">
+        <value>เปิดใช้งานโหมด CAWI</value>
+    </data>
+    <data name="AudioRecordingExplanation" xml:space="preserve">
+        <value>แอปพลิเคชันผู้สัมภาษณ์จะบันทึกเสียงการสัมภาษณ์เมื่อเปิดใช้งานการตรวจสอบเสียง โปรดทราบว่าปริมาณข้อมูลการซิงโครไนซ์จะมีขนาดใหญ่กว่ามาก</value>
+    </data>
+    <data name="NewAssignment" xml:space="preserve">
+        <value>งานมอบหมายใหม่</value>
+    </data>
+    <data name="Email" xml:space="preserve">
+        <value>อีเมล</value>
+    </data>
+    <data name="EmailExplanation" xml:space="preserve">
+        <value>อีเมลจะถูกใช้ในการสื่อสารกับผู้รับมอบหมาย</value>
+    </data>
+    <data name="Password" xml:space="preserve">
+        <value>รหัสผ่าน</value>
+    </data>
+    <data name="PasswordExplanation" xml:space="preserve">
+        <value>รหัสผ่านจะถูกใช้เพื่อป้องกันการมอบหมาย</value>
+    </data>
+    <data name="WebMode" xml:space="preserve">
+        <value>โหมด</value>
+    </data>
+    <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+        <value>งานนี้จะใช้กับโหมดเว็บ</value>
+    </data>
+    <data name="Activated" xml:space="preserve">
+        <value>เปิดใช้งานแล้ว</value>
+    </data>
+    <data name="CawiActivated" xml:space="preserve">
+        <value>CAWI เปิดใช้งานแล้ว</value>
+    </data>
+    <data name="Tooltip_Table_WebMode" xml:space="preserve">
+        <value>โหมดการมอบหมาย</value>
+    </data>
+    <data name="Tooltip_Table_Email" xml:space="preserve">
+        <value>อีเมลสำหรับการแจ้งเตือน</value>
+    </data>
+    <data name="Tooltip_Table_Password" xml:space="preserve">
+        <value>รหัสผ่านเพื่อจำกัดการเข้าถึง</value>
+    </data>
+    <data name="PasswordInstructions" xml:space="preserve">
+        <value>อย่างน้อย 6 ตัวเลขและตัวอักษรตัวพิมพ์ใหญ่หรือสัญลักษณ์ตัวเดียว '?' เพื่อสร้างรหัสผ่าน</value>
+    </data>
+    <data name="EnterPassword" xml:space="preserve">
+        <value>ใส่รหัสผ่าน</value>
+    </data>
+    <data name="EnterEmail" xml:space="preserve">
+        <value>กรอกอีเมล</value>
+    </data>
+    <data name="ExpectedInstructions" xml:space="preserve">
+        <value>ต้องเป็นตัวเลข -1 สำหรับไม่จำกัด และ 1 หากระบุอีเมล</value>
+    </data>
+    <data name="InvalidEmail" xml:space="preserve">
+        <value>อีเมลไม่ถูกต้อง</value>
+    </data>
+    <data name="InvalidPassword" xml:space="preserve">
+        <value>รหัสผ่านไม่ถูกต้อง</value>
+    </data>
+    <data name="InvalidExpectedMessage" xml:space="preserve">
+        <value>ค่าที่คาดหวังไม่ถูกต้อง</value>
+    </data>
+    <data name="InvalidExpectedWithEmail" xml:space="preserve">
+        <value>สำหรับการมอบหมายงานที่อนุญาตให้ใช้อีเมลที่ให้ไว้ ค่าที่คาดหวังคือ 1</value>
+    </data>
+    <data name="ExpectedForWebMode" xml:space="preserve">
+        <value>การมอบหมายที่มีค่าคาดหวัง 1 สำหรับโหมดเว็บควรมีอีเมลหรือรหัสผ่านให้มา</value>
+    </data>
+    <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+        <value>รหัสผ่านตามการกำหนดสำหรับโหมดเว็บที่มีจำนวน 1 จะต้องไม่ซ้ำกัน</value>
+    </data>
+    <data name="QuestionnaireVersion" xml:space="preserve">
+        <value>เวอร์ชั่น {{version}}</value>
+    </data>
+    <data name="AssignmentId" xml:space="preserve">
+        <value>รหัสการมอบหมาย</value>
+    </data>
+    <data name="MultipleAssignmentsClose" xml:space="preserve">
+        <value>การมอบหมายงานที่เลือก {{count}} จะถูกลดขนาดลง ค่าที่คาดหวังจะถูกตั้งค่าเป็นจำนวนการสัมภาษณ์ที่รวบรวมไว้ในปัจจุบัน</value>
+    </data>
+    <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+        <value>มูลค่าที่คาดหวังของงานที่เลือก {{id}} จะเปลี่ยนจาก {{quantity}} เป็น {{collected}} (จำนวนการสัมภาษณ์ที่รวบรวมไว้ในปัจจุบัน)</value>
+    </data>
+    <data name="Close" xml:space="preserve">
+        <value>ปิด</value>
+    </data>
+    <data name="AssignmentCloseWebMode" xml:space="preserve">
+        <value>การมอบหมาย {{id}} ไม่สามารถลดขนาดได้เนื่องจากเปิดใช้งานโหมดเว็บแล้ว</value>
+    </data>
+    <data name="AssignmentInfo" xml:space="preserve">
+        <value>ข้อมูลการมอบหมายโดยละเอียด</value>
+    </data>
+    <data name="Action_Archived" xml:space="preserve">
+        <value>เก็บถาวรแล้ว</value>
+    </data>
+    <data name="DetailsComments" xml:space="preserve">
+        <value>ความคิดเห็น</value>
+    </data>
+    <data name="Comments" xml:space="preserve">
+        <value>ความคิดเห็น</value>
+    </data>
+    <data name="Action_AudioRecordingChanged" xml:space="preserve">
+        <value>การบันทึกเสียงมีการเปลี่ยนแปลง</value>
+    </data>
+    <data name="EnterComments" xml:space="preserve">
+        <value>ป้อนความคิดเห็นของคุณที่นี่</value>
+    </data>
+    <data name="DateFromPast" xml:space="preserve">
+        <value>วันที่เลือกเป็นวันที่ผ่านมาแล้ว</value>
+    </data>
+    <data name="Action_Created" xml:space="preserve">
+        <value>สร้าง</value>
+    </data>
+    <data name="Action_Deleted" xml:space="preserve">
+        <value>ลบแล้ว</value>
+    </data>
+    <data name="Action_ExpectedValueChanged" xml:space="preserve">
+        <value>ค่าที่คาดหวังมีการเปลี่ยนแปลง</value>
+    </data>
+    <data name="Action_ReceivedByTablet" xml:space="preserve">
+        <value>ได้รับจากแท็บเล็ต</value>
+    </data>
+    <data name="Action_UnArchived" xml:space="preserve">
+        <value>ยกเลิกการเก็บถาวร</value>
+    </data>
+    <data name="Action_Reassigned" xml:space="preserve">
+        <value>มอบหมายใหม่แล้ว</value>
+    </data>
+    <data name="Action_WebModeChanged" xml:space="preserve">
+        <value>โหมดเว็บเปลี่ยนไป</value>
+    </data>
+    <data name="Action" xml:space="preserve">
+        <value>การกระทำ</value>
+    </data>
+    <data name="Actor" xml:space="preserve">
+        <value>โดย</value>
+    </data>
+    <data name="Date" xml:space="preserve">
+        <value>วันที่</value>
+    </data>
+    <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+        <value>ปิดการบันทึกเสียงแล้ว</value>
+    </data>
+    <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+        <value>เปิดใช้งานการบันทึกเสียงแล้ว</value>
+    </data>
+    <data name="Action_WebModeChanged_False" xml:space="preserve">
+        <value>ปิดใช้งานโหมดเว็บแล้ว</value>
+    </data>
+    <data name="Action_WebModeChanged_True" xml:space="preserve">
+        <value>เปิดใช้งานโหมดเว็บแล้ว</value>
+    </data>
+    <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+        <value>ค่าที่คาดหวังเปลี่ยนเป็น {{quantity}}</value>
+    </data>
+    <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+        <value>ค่าที่คาดหวังเปลี่ยนเป็นไม่จำกัด</value>
+    </data>
+    <data name="Action_Reassigned_To" xml:space="preserve">
+        <value>มอบหมายใหม่ให้กับ {{newResponsible}}</value>
+    </data>
+    <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+        <value>ความคิดเห็นที่: {{comment}}</value>
+    </data>
+    <data name="AssignmentHistory" xml:space="preserve">
+        <value>ประวัติศาสตร์</value>
+    </data>
+    <data name="Details_Column" xml:space="preserve">
+        <value>รายละเอียด</value>
+    </data>
+    <data name="Action_Created_Comment" xml:space="preserve">
+        <value>ความคิดเห็นที่: {{comment}}</value>
+    </data>
+    <data name="Action_Created_Responsible" xml:space="preserve">
+        <value>กำหนดให้กับ {{responsible}}</value>
+    </data>
+    <data name="StartWebInterview" xml:space="preserve">
+        <value>เริ่มสัมภาษณ์ทางเว็บ</value>
+    </data>
+    <data name="WebModeEnabledWarning" xml:space="preserve">
+        <value>การมอบหมายไม่สามารถเสร็จสิ้นได้ มีการเปิดใช้งานโหมดเว็บ ในขณะที่แบบสอบถามปิดใช้งานโหมดการรวบรวมเว็บ</value>
+    </data>
+    <data name="NoComment" xml:space="preserve">
+        <value>(ไม่มีความคิดเห็น)</value>
+    </data>
+    <data name="LinkToWebInterviewExample" xml:space="preserve">
+        <value>สลับไปยังตัวอย่างลิงก์สัมภาษณ์ทางเว็บ</value>
+    </data>
+    <data name="Action_UpgradedFrom" xml:space="preserve">
+        <value>อัปเกรดจากการกำหนด {{id}}</value>
+    </data>
+    <data name="Property" xml:space="preserve">
+        <value>คุณสมบัติ</value>
+    </data>
+    <data name="Value" xml:space="preserve">
+        <value>ค่า</value>
+    </data>
+    <data name="Action_QuantityChanged" xml:space="preserve">
+        <value>ค่าที่คาดหวังมีการเปลี่ยนแปลง</value>
+    </data>
+    <data name="DetailsTargetAreaa" xml:space="preserve">
+        <value>พื้นที่เป้าหมาย</value>
+    </data>
+    <data name="DetailsGeoTracking" xml:space="preserve">
+        <value>การติดตามทางภูมิศาสตร์</value>
+    </data>
+    <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+        <value>เปลี่ยนพื้นที่เป้าหมายสำหรับการมอบหมาย {{assignmentId}}</value>
+    </data>
+    <data name="Action_TargetAreaChanged" xml:space="preserve">
+        <value>พื้นที่เป้าหมายเปลี่ยนไป</value>
+    </data>
+    <data name="TargetArea" xml:space="preserve">
+        <value>แก้ไขพื้นที่เป้าหมาย</value>
+    </data>
+    <data name="TargetAreaExplanation" xml:space="preserve">
+        <value>ระบุชื่อแผนที่พื้นที่เป้าหมายสำหรับการมอบหมาย</value>
+    </data>
+    <data name="EnterTargetArea" xml:space="preserve">
+        <value>เข้าสู่พื้นที่เป้าหมาย</value>
+    </data>
+    <data name="Filter_ShowAll" xml:space="preserve">
+        <value>แสดงทั้งหมด</value>
+    </data>
+    <data name="Downsize" xml:space="preserve">
+        <value>ลดขนาด</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>สถานะ</value>
+    </data>
+    <data name="StatusChangeComment" xml:space="preserve">
+        <value>ความคิดเห็นสถานะ</value>
+    </data>
+    <data name="StatusOpen" xml:space="preserve">
+        <value>เปิด</value>
+    </data>
+    <data name="StatusCompleted" xml:space="preserve">
+        <value>สมบูรณ์</value>
+    </data>
+    <data name="StatusClosed" xml:space="preserve">
+        <value>ปิด</value>
+    </data>
+    <data name="CompleteAssignmentTitle" xml:space="preserve">
+        <value>เสร็จสิ้นการมอบหมายงาน</value>
+    </data>
+    <data name="CompleteAssignmentMessage" xml:space="preserve">
+        <value>คุณแน่ใจหรือว่าคุณได้แจกแจงหน่วยที่มีสิทธิ์ทั้งหมดแล้ว?</value>
+    </data>
+    <data name="CloseAssignmentTitle" xml:space="preserve">
+        <value>ปิดงาน</value>
+    </data>
+    <data name="CloseAssignmentMessage" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ที่ทำงานแบบออฟไลน์อาจยังคงรวบรวมข้อมูลต่อไปจนกว่าจะมีการซิงโครไนซ์ การสัมภาษณ์ดังกล่าวจะยังคงได้รับการยอมรับ</value>
+    </data>
+    <data name="ReopenAssignmentTitle" xml:space="preserve">
+        <value>เปิดงานอีกครั้ง</value>
+    </data>
+    <data name="ReopenAssignmentMessage" xml:space="preserve">
+        <value>การมอบหมายจะถูกตั้งค่ากลับเป็นสถานะเปิด และผู้สัมภาษณ์จะสามารถสร้างการสัมภาษณ์ใหม่ได้</value>
+    </data>
+    <data name="Complete" xml:space="preserve">
+        <value>สมบูรณ์</value>
+    </data>
+    <data name="Reopen" xml:space="preserve">
+        <value>เปิดใหม่อีกครั้ง</value>
+    </data>
+    <data name="Action_StatusChanged" xml:space="preserve">
+        <value>สถานะเปลี่ยนเป็น {{status}}</value>
+    </data>
+    <data name="Action_StatusChanged_Comment" xml:space="preserve">
+        <value>ความคิดเห็นที่: {{comment}}</value>
+    </data>
+    <data name="Action_Completed" xml:space="preserve">
+        <value>สมบูรณ์</value>
+    </data>
+    <data name="Action_Closed" xml:space="preserve">
+        <value>ปิด</value>
+    </data>
+    <data name="Action_Reopened" xml:space="preserve">
+        <value>เปิดใหม่แล้ว</value>
+    </data>
+    <data name="AudioRecordingSelective" xml:space="preserve">
+        <value>คัดเลือก</value>
+    </data>
+    <data name="AudioAuditScopeLabel" xml:space="preserve">
+        <value>ขอบเขตการตรวจสอบเสียง</value>
+    </data>
+    <data name="AudioRecordingScopeNotice" xml:space="preserve">
+        <value>งานนี้มีขอบเขตการตรวจสอบเสียงแบบเลือกสรร การเปิดใช้งานการบันทึกเสียงแบบเต็มจะบันทึกทุกส่วน การปิดใช้งานจะเปลี่ยนกลับเป็นการบันทึกเฉพาะส่วนที่เลือก</value>
+    </data>
+    <data name="TargetAreaNameTooLong" xml:space="preserve">
+        <value>ชื่อแผนที่พื้นที่เป้าหมายยาวเกินไป ความยาวสูงสุดที่อนุញ่าตคือ {{limit}} ตัวอักษร</value>
+    </data>
+</root>

@@ -292,11 +292,11 @@
   </data>
 
   <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
-    <value>AND</value>
+    <value>并且</value>
   </data>
 
   <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve">
-    <value>OR</value>
+    <value>或者</value>
   </data>
 
   <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">

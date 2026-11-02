@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="NotAllMarkers" xml:space="preserve">
+        <value>មិនមែនសញ្ញាសម្គាល់ទាំងអស់ត្រូវបានផ្ទុកសម្រាប់កម្រិតពង្រីកបច្ចុប្បន្នទេ។ សូមពង្រីក និងផ្ទុកសញ្ញាសម្គាល់ឡើងវិញ។</value>
+    </data>
+    <data name="ViewInterviewContent" xml:space="preserve">
+        <value>មើលព័ត៌មានលម្អិតសម្ភាសន៍</value>
+    </data>
+    <data name="details" xml:space="preserve">
+        <value>ព័ត៌មានលម្អិត</value>
+    </data>
+    <data name="ReloadMarkers" xml:space="preserve">
+        <value>ផ្ទុកសញ្ញាសម្គាល់ឡើងវិញ</value>
+    </data>
+    <data name="MapReportTitle" xml:space="preserve">
+        <value>របាយការណ៍ផែនទី</value>
+    </data>
+    <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
+        <value>មិនមានសំណួរប្រភេទ GPS នៅក្នុងកម្រងសំណួរដែលបានជ្រើសរើសទេ។</value>
+    </data>
+    <data name="Assignment" xml:space="preserve">
+        <value>កិច្ចការ</value>
+    </data>
+    <data name="ReloadGeoTacking" xml:space="preserve">
+        <value>ផ្ទុកបទឡើងវិញ</value>
+    </data>
+</root>

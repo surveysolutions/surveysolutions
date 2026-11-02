@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ApiUsers" xml:space="preserve"><value>Người dùng API</value></data>
+  <data name="Assignments" xml:space="preserve"><value>Nhiệm vụ</value></data>
+  <data name="AuditLog" xml:space="preserve"><value>Nhật ký kiểm tra</value></data>
+  <data name="CumulativeChart" xml:space="preserve"><value>Biểu đồ phỏng vấn tích lũy</value></data>
+  <data name="DataExport" xml:space="preserve"><value>Xuất dữ liệu</value></data>
+  <data name="DeviceLogs" xml:space="preserve"><value>Nhật ký thiết bị</value></data>
+  <data name="Diagnostics" xml:space="preserve"><value>Chẩn đoán</value></data>
+  <data name="Headquarters" xml:space="preserve"><value>Văn phòng trung tâm</value></data>
+  <data name="Help" xml:space="preserve"><value>Trợ giúp</value></data>
+  <data name="Interviewers" xml:space="preserve"><value>Phỏng vấn viên</value></data>
+  <data name="InterviewPackages" xml:space="preserve"><value>Gói phỏng vấn</value></data>
+  <data name="Interviews" xml:space="preserve"><value>Phỏng vấn</value></data>
+  <data name="MapReport" xml:space="preserve"><value>Báo cáo bản đồ</value></data>
+  <data name="Observers" xml:space="preserve"><value>Quan sát viên</value></data>
+  <data name="Settings" xml:space="preserve"><value>Cài đặt</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>Cài đặt không gian làm việc</value></data>
+  <data name="EmailProviders" xml:space="preserve"><value>Nhà cung cấp email</value></data>
+  <data name="Quantity" xml:space="preserve"><value>Số lượng</value></data>
+  <data name="SurveySetup" xml:space="preserve"><value>Thiết lập khảo sát</value></data>
+  <data name="Maps" xml:space="preserve"><value>Bản đồ</value></data>
+  <data name="QueueSizeTitle" xml:space="preserve"><value>Số lượng phỏng vấn đã đồng bộ nhưng chưa được xử lý</value></data>
+  <data name="Reports" xml:space="preserve"><value>Báo cáo</value></data>
+  <data name="Speed" xml:space="preserve"><value>Tốc độ</value></data>
+  <data name="SurveyStatistics" xml:space="preserve"><value>Thống kê khảo sát</value></data>
+  <data name="StatusDuration" xml:space="preserve"><value>Thời gian trạng thái</value></data>
+  <data name="Supervisors" xml:space="preserve"><value>Giám sát viên</value></data>
+  <data name="CreateNew" xml:space="preserve"><value>Tạo mới</value></data>
+  <data name="Started" xml:space="preserve"><value>Đã bắt đầu</value></data>
+  <data name="Completed" xml:space="preserve"><value>Đã hoàn thành</value></data>
+  <data name="Rejected" xml:space="preserve"><value>Bị từ chối</value></data>
+  <data name="MapDashboard" xml:space="preserve"><value>Bảng điều khiển bản đồ</value></data>
+  <data name="SurveysAndStatuses" xml:space="preserve"><value>Khảo sát và trạng thái</value></data>
+  <data name="TabletInfos" xml:space="preserve"><value>Thông tin máy tính bảng</value></data>
+  <data name="TeamAndRoles" xml:space="preserve"><value>Nhóm và vai trò</value></data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve"><value>Thành viên nhóm và trạng thái</value></data>
+  <data name="TeamsAndRoles" xml:space="preserve"><value>Nhóm và vai trò</value></data>
+  <data name="TeamsAndStatuses" xml:space="preserve"><value>Nhóm và trạng thái</value></data>
+  <data name="DevicesInterviewers" xml:space="preserve"><value>Thiết bị/Phỏng vấn viên</value></data>
+  <data name="Troubleshooting" xml:space="preserve"><value>Khắc phục sự cố</value></data>
+  <data name="UserBatchUpload" xml:space="preserve"><value>Tải lên người dùng hàng loạt</value></data>
+  <data name="Users" xml:space="preserve"><value>Người dùng</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>Bảng câu hỏi</value></data>
+  <data name="Administration" xml:space="preserve"><value>Quản trị</value></data>
+  <data name="Workspaces" xml:space="preserve"><value>Không gian làm việc</value></data>
+  <data name="ServerAdministration" xml:space="preserve"><value>Quản trị hệ thống</value></data>
+</root>

@@ -330,4 +330,7 @@
   <data name="CloneDeletedWarning" xml:space="preserve">
       <value>You are creating a copy of deleted questionnaire. Some parts might be lost.</value>
   </data>
+  <data name="IncludeScenarios" xml:space="preserve">
+    <value>Include scenarios</value>
+  </data>
 </root>

@@ -1,13 +1,20 @@
 <template>
-    <input type="text" :id="id" :disabled="disabled" :class="inputClass" :name="name" :placeholder="placeholder"
-        :required="required" v-model="mutableValue" data-input />
+    <input type="text"
+        :id="id"
+        :disabled="disabled"
+        :class="inputClass"
+        :name="name"
+        :placeholder="placeholder"
+        :required="required"
+        v-model="mutableValue"
+        data-input />
 </template>
 
 <script type="text/javascript">
 import Flatpickr from 'flatpickr'
 import { browserLanguage } from '~/shared/helpers'
 import FlatpickrLocale from 'flatpickr/dist/l10n'
-import { assign } from 'lodash'
+import { assign } from 'lodash-es'
 
 Flatpickr.localize(FlatpickrLocale[browserLanguage])
 // You have to import css yourself
@@ -30,7 +37,7 @@ export default {
         // https://chmln.github.io/flatpickr/options/
         config: {
             type: Object,
-            default: () => ({})
+            default: () => ({}),
         },
         disabled: Boolean,
         placeholder: {
@@ -74,7 +81,7 @@ export default {
             this.fp = new Flatpickr(elem, this.mergedConfig)
         }
     },
-    beforeDestroy() {
+    beforeUnmount() {
         // Free up memory
         if (this.fp) {
             this.fp.destroy()

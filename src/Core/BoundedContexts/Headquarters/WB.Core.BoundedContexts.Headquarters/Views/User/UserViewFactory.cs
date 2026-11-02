@@ -121,8 +121,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             var supervisorRoleId = UserRoles.Supervisor.ToUserId();
             var hqRoleId = UserRoles.Headquarter.ToUserId();
 
+            // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+            // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+            // into the expression tree that NHibernate cannot translate.
+            var names = userNames.ToList();
+
             return this.userRepository.Users
-                .Where(x => userNames.Contains(x.UserName) && !x.IsArchived)
+                .Where(x => names.Contains(x.UserName!) && !x.IsArchived)
                 .Select(x => new UserToVerify
                 {
                     IsLocked = x.IsLockedByHeadquaters || x.IsLockedBySupervisor,
@@ -132,9 +137,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 }).ToArray();
         }
 
-        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role, string? workspace = null)
+        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role, string? workspace = null, bool acrossAllWorkspaces = false, IEnumerable<string>? allowedWorkspaces = null)
         {
-            var allUsers = ApplyFilter(this.userRepository.Users, searchBy, QueryFilterRule.Contains, archived, workspace, role)
+            var allUsers = ApplyFilter(this.userRepository.Users, searchBy, QueryFilterRule.Contains, archived, workspace, acrossAllWorkspaces, allowedWorkspaces, role)
                 .Select(x => new InterviewersItem
                 {
                     UserId = x.Id,
@@ -263,8 +268,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 .Skip((pageIndex - 1) * pageSize).Take(pageSize)
                 .ToList();
 
-            var interviewersIds = filteredUsers.Select(x => x.UserId).ToArray();
-            var supervisorIds = filteredUsers.Select(x => x.SupervisorId).ToArray();
+            // NOTE: List<T> is used in LINQ expression trees on purpose. For an array the C# compiler
+            // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+            // op_Implicit call into the expression tree that NHibernate cannot evaluate.
+            var interviewersIds = filteredUsers.Select(x => x.UserId).ToList();
+            var supervisorIds = filteredUsers.Select(x => x.SupervisorId).ToList();
 
             var deviceSyncInfos = this.devicesSyncInfos.Query(_ => _
                 .Where(d => interviewersIds.Contains(d.InterviewerId) && d.Statistics != null)
@@ -461,18 +469,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         }
 
         private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, QueryFilterRule filterRule, bool? archived, params UserRoles[] role)
-            => ApplyFilter(_, searchBy, filterRule, archived, null, role);
+            => ApplyFilter(_, searchBy, filterRule, archived, null, false, null, role);
         
-        private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, QueryFilterRule filterRule, bool? archived, string? workspace = null, params UserRoles[] role)
+        private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, QueryFilterRule filterRule, bool? archived, string? workspace = null, bool acrossAllWorkspaces = false, IEnumerable<string>? allowedWorkspaces = null, params UserRoles[] role)
         {
-            var selectedRoleId = role.Select(x => x.ToUserId()).ToArray();
+            var selectedRoleId = role.Select(x => x.ToUserId()).ToList();
             
-            var currentWorkspace = workspace ??
-                                   workspaceContextAccessor.CurrentWorkspace()?.Name ?? 
-                                   throw new MissingWorkspaceException();
-            
-            var allUsers = _.Where(x => x.Roles.Any(r => selectedRoleId.Contains(r.Id)))
-                .Where(u => u.Workspaces.Any(w => w.Workspace.Name == currentWorkspace));
+            var allUsers = _.Where(x => x.Roles.Any(r => selectedRoleId.Contains(r.Id)));
+
+            if (allowedWorkspaces != null)
+            {
+                var workspaceList = allowedWorkspaces.ToList();
+                allUsers = allUsers.Where(u => u.Workspaces.Any(w => workspaceList.Contains(w.Workspace.Name)));
+            }
+            else if (!acrossAllWorkspaces)
+            {
+                var currentWorkspace = workspace ??
+                                       workspaceContextAccessor.CurrentWorkspace()?.Name ?? 
+                                       throw new MissingWorkspaceException();
+
+                allUsers = allUsers.Where(u => u.Workspaces.Any(w => w.Workspace.Name == currentWorkspace));
+            }
 
             if (archived.HasValue)
                 allUsers = allUsers.Where(x => x.IsArchived == archived.Value);
@@ -485,12 +502,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     allUsers = allUsers.Where(x =>  
                         (x.UserName != null && x.UserName.ToLower().Contains(searchByToLower)) 
+                        || (x.FullName != null && x.FullName.ToLower().Contains(searchByToLower))
                         || (x.Email != null && x.Email.ToLower().Contains(searchByToLower)));
                 }
                 else if (filterRule == QueryFilterRule.Equals)
                 {
                     allUsers = allUsers.Where(x =>  
                         (x.UserName != null && x.UserName.ToLower() == searchByToLower) 
+                        || (x.FullName != null && x.FullName.ToLower() == searchByToLower)
                         || (x.Email != null && x.Email.ToLower() == searchByToLower));
                 }
             }

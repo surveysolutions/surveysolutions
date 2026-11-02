@@ -135,7 +135,7 @@
   <data name="PLU0003Description" xml:space="preserve">
     <value>Uživatel '{0}' je neaktivní a patří jinému týmu</value>
   </data>
-  <data name="PLU0003Recomendation" xml:space="preserve">
+  <data name="PLU0003Recommendation" xml:space="preserve">
     <value>Deaktivovaného uživatele nelze znovu použít, protože patří jinému týmu</value>
   </data>
   <data name="PLU0004" xml:space="preserve">
@@ -144,7 +144,7 @@
   <data name="PLU0004Description" xml:space="preserve">
     <value>Uživatel '{0}' je neaktivní a má jinou roli</value>
   </data>
-  <data name="PLU0004Recomendation" xml:space="preserve">
+  <data name="PLU0004Recommendation" xml:space="preserve">
     <value>Neaktivního uživatele nelze znovu použít, protože existuje v jiné roli</value>
   </data>
   <data name="PLU0005" xml:space="preserve">
@@ -153,7 +153,7 @@
   <data name="PLU0005Description" xml:space="preserve">
     <value>Přihlašovací jméno '{0}' je ve špatném formátu</value>
   </data>
-  <data name="PLU0005Recomendation" xml:space="preserve">
+  <data name="PLU0005Recommendation" xml:space="preserve">
     <value>Přihlašovací jméno musí mít 3 až 15 znaků a může obsahovat pouze písmena, číslice a podtržítko. Písmena musí být pouze z (anglické) abecedy: 'A'..'Z' nebo 'a'..'z'. Jiná písmena (cyrilice, arabština atd.) nejsou platná pro použití v přihlašovacích jménech.</value>
   </data>
   <data name="PLU0006" xml:space="preserve">
@@ -162,7 +162,7 @@
   <data name="PLU0006Description" xml:space="preserve">
     <value>Heslo '{0}' je ve špatném formátu</value>
   </data>
-  <data name="PLU0006Recomendation" xml:space="preserve">
+  <data name="PLU0006Recommendation" xml:space="preserve">
     <value>Musí obsahovat alespoň jedno číslo, jedno velké písmeno a jedno malé písmeno. Délka by měla být mezi 10 a 100 znaky</value>
   </data>
   <data name="PLU0007" xml:space="preserve">
@@ -183,7 +183,7 @@
   <data name="PLU0009Description" xml:space="preserve">
     <value>Role '{0}' je neplatná</value>
   </data>
-  <data name="PLU0009Recomendation" xml:space="preserve">
+  <data name="PLU0009Recommendation" xml:space="preserve">
     <value>Povolen je pouze "garant“ nebo "tazatel“</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
@@ -204,7 +204,7 @@
   <data name="PLU0012Description" xml:space="preserve">
     <value>Celé jméno '{0}' je ve špatném formátu</value>
   </data>
-  <data name="PLU0012Recomendation" xml:space="preserve">
+  <data name="PLU0012Recommendation" xml:space="preserve">
     <value>Nemělo by obsahovat více než 100 znaků</value>
   </data>
   <data name="PLU0013" xml:space="preserve">
@@ -213,7 +213,7 @@
   <data name="PLU0013Description" xml:space="preserve">
     <value>Telefonní číslo '{0}' má nesprávný formát</value>
   </data>
-  <data name="PLU0013Recomendation" xml:space="preserve">
+  <data name="PLU0013Recommendation" xml:space="preserve">
     <value>Nemělo by obsahovat více než 15 znaků</value>
   </data>
   <data name="PLU0014" xml:space="preserve">
@@ -222,7 +222,7 @@
   <data name="PLU0014Description" xml:space="preserve">
     <value>Celé jméno '{0}' obsahuje neplatné znaky</value>
   </data>
-  <data name="PLU0014Recomendation" xml:space="preserve">
+  <data name="PLU0014Recommendation" xml:space="preserve">
     <value>Jsou povolena pouze písmena, tečky, mezery a pomlčky</value>
   </data>
   <data name="PLU0015" xml:space="preserve">
@@ -231,7 +231,7 @@
   <data name="PLU0015Description" xml:space="preserve">
     <value>Heslo '{0}' je příliš krátké</value>
   </data>
-  <data name="PLU0015Recomendation" xml:space="preserve">
+  <data name="PLU0015Recommendation" xml:space="preserve">
     <value>Heslo musí mít alespoň 10 znaků</value>
   </data>
   <data name="PLU0016" xml:space="preserve">
@@ -240,7 +240,7 @@
   <data name="PLU0016Description" xml:space="preserve">
     <value>Heslo '{0}' neobsahuje nealfanumerický znak</value>
   </data>
-  <data name="PLU0016Recomendation" xml:space="preserve">
+  <data name="PLU0016Recommendation" xml:space="preserve">
     <value>Přidejte alespoň jeden speciální symbol </value>
   </data>
   <data name="PLU0017" xml:space="preserve">
@@ -249,7 +249,7 @@
   <data name="PLU0017Description" xml:space="preserve">
     <value>Heslo '{0}' neobsahuje číslici</value>
   </data>
-  <data name="PLU0017Recomendation" xml:space="preserve">
+  <data name="PLU0017Recommendation" xml:space="preserve">
     <value>Přidejte alespoň jednu číslici ('0'-'9').</value>
   </data>
   <data name="PLU0018" xml:space="preserve">
@@ -258,7 +258,7 @@
   <data name="PLU0018Description" xml:space="preserve">
     <value>Heslo '{0}' neobsahuje malá písmena</value>
   </data>
-  <data name="PLU0018Recomendation" xml:space="preserve">
+  <data name="PLU0018Recommendation" xml:space="preserve">
     <value>Přidejte alespoň jedno malé písmeno ('a'-'z').</value>
   </data>
   <data name="PLU0019" xml:space="preserve">
@@ -267,7 +267,7 @@
   <data name="PLU0019Description" xml:space="preserve">
     <value>Heslo '{0}' neobsahuje velká písmena</value>
   </data>
-  <data name="PLU0019Recomendation" xml:space="preserve">
+  <data name="PLU0019Recommendation" xml:space="preserve">
     <value>Přidejte alespoň jedno velké písmeno ('A'-'Z').</value>
   </data>
   <data name="PLU0020" xml:space="preserve">
@@ -276,7 +276,7 @@
   <data name="PLU0020Description" xml:space="preserve">
     <value>Heslo '{0}' neobsahuje dostatek jedinečných znaků</value>
   </data>
-  <data name="PLU0020Recomendation" xml:space="preserve">
+  <data name="PLU0020Recommendation" xml:space="preserve">
     <value>Přidejte jiné znaky.</value>
   </data>
   <data name="PLU0021" xml:space="preserve">
@@ -285,7 +285,7 @@
   <data name="PLU0021Description" xml:space="preserve">
     <value>Heslo je vyžadováno</value>
   </data>
-  <data name="PLU0021Recomendation" xml:space="preserve">
+  <data name="PLU0021Recommendation" xml:space="preserve">
     <value>Přidat heslo</value>
   </data>
   <data name="PLU0022" xml:space="preserve">
@@ -294,25 +294,25 @@
   <data name="PLU0022Description" xml:space="preserve">
     <value>Prostředí musí existovat a být povoleno</value>
   </data>
-  <data name="PLU0022Recomendation" xml:space="preserve">
+  <data name="PLU0022Recommendation" xml:space="preserve">
     <value>Zkontrolujte název prostředí</value>
   </data>
-    <data name="PLU0001Recomendation" xml:space="preserve">
+    <data name="PLU0001Recommendation" xml:space="preserve">
     <value>Uživatel musí být jedinečný</value>
 </data>
-    <data name="PLU0002Recomendation" xml:space="preserve">
+    <data name="PLU0002Recommendation" xml:space="preserve">
     <value>Vyřešte duplicity</value>
 </data>
-    <data name="PLU0007Recomendation" xml:space="preserve">
+    <data name="PLU0007Recommendation" xml:space="preserve">
     <value>Opravit e-mail</value>
 </data>
-    <data name="PLU0008Recomendation" xml:space="preserve">
+    <data name="PLU0008Recommendation" xml:space="preserve">
     <value>Opravit telefonní číslo</value>
 </data>
-    <data name="PLU0010Recomendation" xml:space="preserve">
+    <data name="PLU0010Recommendation" xml:space="preserve">
         <value>Ověřte hodnotu pro supervizora</value>
     </data>
-    <data name="PLU0011Recomendation" xml:space="preserve">
+    <data name="PLU0011Recommendation" xml:space="preserve">
         <value>Odstraňte hodnotu pole 'supervisor'</value>
     </data>
 </root>

@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Id(x => x.Id);
 
             Property(x => x.FileName);
+            Property(x => x.StorageKey, m => m.Column("storagekey"));
             Property(x => x.Size);
             Property(x => x.ImportDate, pm => pm.Type<UtcDateTimeType>());
             Property(x => x.UploadedBy);

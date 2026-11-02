@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Generated" xml:space="preserve"><value>สร้างแล้ว</value></data>
+  <data name="PageOf" xml:space="preserve"><value> จาก </value></data>
+  <data name="Comments" xml:space="preserve"><value>ความคิดเห็น</value></data>
+  <data name="YesNo" xml:space="preserve"><value>ใช่ / ไม่</value></data>
+  <data name="TableOfContent" xml:space="preserve"><value>สารบัญ</value></data>
+  <data name="Error" xml:space="preserve"><value>ข้อผิดพลาด</value></data>
+  <data name="Warning" xml:space="preserve"><value>คำเตือน</value></data>
+  <data name="Version" xml:space="preserve"><value>เวอร์ชัน {0}</value></data>
+  <data name="Started" xml:space="preserve"><value>การสัมภาษณ์เริ่มต้น</value></data>
+  <data name="Completed" xml:space="preserve"><value>การสัมภาษณ์เสร็จสมบูรณ์</value></data>
+  <data name="InterviewVolume" xml:space="preserve"><value>ปริมาณการสัมภาษณ์</value></data>
+  <data name="InterviewStatisticsSections" xml:space="preserve"><value>{0} หัวข้อ</value></data>
+  <data name="InterviewStatisticsAnswered" xml:space="preserve"><value>ตอบ {0} คำถาม</value></data>
+  <data name="InterviewStatisticsUnanswered" xml:space="preserve"><value>{0} คำถามไม่ได้ตอบ</value></data>
+  <data name="InterviewStatisticsErrors" xml:space="preserve"><value>{0} ข้อผิดพลาด</value></data>
+  <data name="InterviewStatisticsWarnings" xml:space="preserve"><value>{0} คำเตือน</value></data>
+  <data name="InterviewStatisticsCommented" xml:space="preserve"><value>{0} คำถามมีความคิดเห็น</value></data>
+  <data name="GeneratedBy" xml:space="preserve"><value>สร้างโดย {0}</value></data>
+  <data name="GeneratedAt" xml:space="preserve"><value>เมื่อ {0}</value></data>
+  <data name="SurveySolutions" xml:space="preserve"><value>Survey Solutions</value></data>
+  <data name="InterviewTranscript" xml:space="preserve"><value>การถอดความการสัมภาษณ์</value></data>
+  <data name="Cover" xml:space="preserve"><value>หน้าปก</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>แบบสอบถาม</value></data>
+  <data name="Yes" xml:space="preserve"><value>ใช่</value></data>
+  <data name="No" xml:space="preserve"><value>ไม่</value></data>
+  <data name="NotAnswered" xml:space="preserve"><value>ไม่ได้ตอบ</value></data>
+  <data name="NotCalculated" xml:space="preserve"><value>ไม่มีค่า</value></data>
+  <data name="InterviewKey" xml:space="preserve"><value>คีย์การสัมภาษณ์</value></data>
+  <data name="UserRoles_Administrator" xml:space="preserve"><value>ผู้ดูแลระบบ</value></data>
+  <data name="UserRoles_Headquarter" xml:space="preserve"><value>สำนักงานใหญ่</value></data>
+  <data name="UserRoles_Supervisor" xml:space="preserve"><value>หัวหน้างาน</value></data>
+  <data name="UserRoles_Interviewer" xml:space="preserve"><value>ผู้สัมภาษณ์</value></data>
+  <data name="UserRoles_Observer" xml:space="preserve"><value>ผู้สังเกตการณ์</value></data>
+  <data name="UserRoles_ApiUser" xml:space="preserve"><value>ผู้ใช้API</value></data>
+  <data name="AreaQestion_Area" xml:space="preserve"><value>พื้นที่</value></data>
+  <data name="AreaQestion_Length" xml:space="preserve"><value>ความยาว</value></data>
+  <data name="AreaQestion_Points" xml:space="preserve"><value>จุด</value></data>
+  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve"><value>ความแม่นยำ</value></data>
+  <data name="AreaQestion_RequestedFrequency" xml:space="preserve"><value>ความถี่</value></data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve"><value>ตารางเมตร</value></data>
+  <data name="AreaQestion_AreaMeter" xml:space="preserve"><value>เมตร</value></data>
+</root>

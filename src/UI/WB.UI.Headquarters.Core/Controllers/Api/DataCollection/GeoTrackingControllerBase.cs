@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection;
 
-public abstract class GeoTrackingControllerBase : ControllerBase
+public abstract class GeoTrackingControllerBase : DataCollectionControllerBase
 {
     private readonly ILogger<GeoTrackingControllerBase> logger;
     private readonly IPlainStorageAccessor<GeoTrackingRecord> geoTrackingStorage;

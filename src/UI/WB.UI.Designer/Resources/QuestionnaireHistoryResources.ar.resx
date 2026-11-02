@@ -307,4 +307,13 @@
   <data name="Translation_Replace" xml:space="preserve">
     <value>تم تبديل المستند إلى الترجمة {0}</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>مسح</value>
+  </data>
 </root>

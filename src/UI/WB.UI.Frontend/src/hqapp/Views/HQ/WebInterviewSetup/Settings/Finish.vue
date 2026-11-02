@@ -14,7 +14,7 @@
                                     v-model="webInterviewPageMessages['webSurveyHeader'].text" rules="required"
                                     name="webSurveyHeader" data-vv-name="webSurveyHeader" ref="webSurveyHeader"
                                     :min-height="77" maxlength="200" class="form-control js-elasticArea font-bold"
-                                    placeholder="Please enter the main text">
+                                    :placeholder="$t('WebInterviewSettings.EnterText')">
                                 </Field>
                                 <button type="button" @click="webInterviewPageMessages['webSurveyHeader'].text = ''"
                                     class="btn btn-link btn-clear">
@@ -81,17 +81,16 @@
 <script>
 
 import settings from './settingsMixin'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import { Form, Field } from 'vee-validate'
 
 export default {
     components: {
         Form,
         Field,
-        ErrorMessage,
     },
     mixins: [settings],
     mounted() {
         this.$refs.finishPage.resetForm({ values: this.$refs.finishPage.values })
-    }
+    },
 }
 </script>

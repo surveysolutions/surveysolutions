@@ -150,7 +150,7 @@
                                                                 data-vv-as="Please enter the subject" rules="required"
                                                                 name="subject" data-vv-name="subject" maxlength="200"
                                                                 class="form-control with-clear-btn"
-                                                                placeholder="Please enter the subject" />
+                                                                :placeholder="$t('WebInterviewSettings.EmailSubject')" />
                                                             <button type="button"
                                                                 @click="clearField(emailTemplate, 'subject')"
                                                                 class="btn btn-link btn-clear">
@@ -193,7 +193,7 @@
                                                                 name="message" data-vv-name="message"
                                                                 :ref="'message' + emailTemplate.value" maxlength="3000"
                                                                 :min-height="79" class="form-control js-elasticArea"
-                                                                placeholder="Please enter the main text">
+                                                                :placeholder="$t('WebInterviewSettings.MainText')">
                                                             </Field>
                                                             <button type="button" @click="emailTemplate.message = null"
                                                                 class="btn btn-link btn-clear">
@@ -227,7 +227,7 @@
                                                                 data-vv-as="Please enter password description"
                                                                 rules="required" maxlength="500"
                                                                 class="form-control with-clear-btn"
-                                                                placeholder="Please enter password description" />
+                                                                :placeholder="$t('WebInterviewSettings.DescriptionForPassword')" />
                                                             <button type="button"
                                                                 @click="clearField(emailTemplate, 'passwordDescription')"
                                                                 class="btn btn-link btn-clear">
@@ -252,7 +252,7 @@
                                                                     rules="required" name="linkText"
                                                                     data-vv-name="linkText" maxlength="200"
                                                                     class="form-control with-clear-btn width-dynamic"
-                                                                    placeholder="Please enter the text" />
+                                                                    :placeholder="$t('WebInterviewSettings.EnterText')" />
                                                                 <button type="button"
                                                                     @click="clearField(emailTemplate, 'linkText')"
                                                                     class="btn btn-link btn-clear">
@@ -449,9 +449,11 @@
                                         padding: 15px 0;
                                         white-space: pre-line;
                                       ">
-                                                                            Here the address of your organization will
-                                                                            appear as specified in your account at the
-                                                                            mass mailing server.
+
+                                                                            {{
+                                                                            $t('WebInterviewSettings.AddressDescription')
+                                                                            }}
+
                                                                         </td>
                                                                     </tr>
                                                                     <!-- <tr>
@@ -621,10 +623,9 @@
 
 <script>
 import { marked } from 'marked'
-import { map, isNil } from 'lodash'
-import emitter from '~/shared/emitter';
-
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import { map, isNil } from 'lodash-es'
+import { Form, Field } from 'vee-validate'
+import emitter from '~/shared/emitter'
 
 import Welcome from './Settings/Welcome'
 import Resume from './Settings/Resume'
@@ -637,10 +638,9 @@ import '@/assets/css/markup-interview-review.scss'
 
 export default {
     components: {
-        Welcome, Resume, Complete, Finish, LinkInterview,
         Form,
         Field,
-        ErrorMessage
+        Welcome, Resume, Complete, Finish, LinkInterview,
     },
 
     data() {

@@ -1,10 +1,15 @@
 <template>
-    <input :ref="'input'" type="text" autocomplete="off" inputmode="numeric" class="ag-cell-edit-input"
-        :value="$me.answer" v-numericFormatting="{
+    <input :ref="'input'"
+        type="text"
+        autocomplete="off"
+        inputmode="numeric"
+        class="ag-cell-edit-input"
+        :value="$me.answer"
+        v-numericFormatting="{
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
             decimalPlaces: 0,
-            minimumValue: '-2147483648',
+            minimumValue: minimumValue,
             maximumValue: '2147483647'
         }" />
 </template>
@@ -35,6 +40,20 @@ export default {
         decimalSeparator() {
             return getDecimalSeparator(this.$me)
         },
+        hasNegativeSpecialValues() {
+            return (this.$me.options || []).some(o => o.value < 0)
+        },
+        hasNegativeCurrentNonSpecialAnswer() {
+            return this.$me.answer < 0 && !this.isSpecialValue(this.$me.answer)
+        },
+        minimumValue() {
+            if (!this.$me.isNonNegative)
+                return '-2147483648'
+
+            return (this.hasNegativeSpecialValues || this.hasNegativeCurrentNonSpecialAnswer)
+                ? '-2147483648'
+                : '0'
+        },
     },
     methods: {
 
@@ -61,6 +80,11 @@ export default {
 
                 if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
                     this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotParse'), answer)
+                    return
+                }
+
+                if (this.$me.isNonNegative && answer < 0 && !this.isSpecialValue(answer)) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberNonNegativeError'), answer)
                     return
                 }
 
@@ -116,6 +140,12 @@ export default {
             return this.cancelBeforeStart
         },
 
+        isSpecialValue(value) {
+            const options = this.$me.options || []
+            if (options.length === 0) return false
+            return options.some(o => o.value === value)
+        },
+
         destroy() {
             if (this.autoNumericElement) {
                 this.autoNumericElement.remove()
@@ -134,7 +164,7 @@ export default {
             }
         })
     },
-    beforeDestroy() {
+    beforeUnmount() {
         this.destroy()
     },
 }

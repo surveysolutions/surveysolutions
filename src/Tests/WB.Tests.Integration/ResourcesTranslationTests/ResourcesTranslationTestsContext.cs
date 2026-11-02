@@ -14,22 +14,33 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 
         private static readonly Regex UiStringFormatParameterRegex = new Regex(@"{(?!{{)\S+?}}", RegexOptions.Compiled);
         private static readonly Regex StringFormatParameterRegex = new Regex(@"{(?!{)\S+?}", RegexOptions.Compiled);
+        private static readonly Dictionary<string, Dictionary<string, string>> ResourceByFileCache =
+            new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, List<string>> LinkedResourcesByProjectCache =
+            new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        private static readonly object ResourceCacheLock = new object();
+        private static readonly object LinkedResourcesCacheLock = new object();
 
         protected static IEnumerable<string> GetStringResourceNamesFromResX(string relativePathToResX)
         {
             string fullPathToResX = TestEnvironment.GetSourcePath(relativePathToResX);
 
-            return XDocument
-                .Load(fullPathToResX)
-                .Root
-                .TreeToEnumerable(_ => _.Elements())
-                .Where(element => element.Name == "data")
-                .OrderBy(element => element.Attribute("name").Value)
-                .Select(element => element.Attribute("name").Value);
+            return GetStringResourcesFromResX(fullPathToResX)
+                .Keys
+                .OrderBy(x => x)
+                .ToList();
         }
 
         protected static Dictionary<string, string> GetStringResourcesFromResX(string fullPathToResX)
         {
+            fullPathToResX = Path.GetFullPath(fullPathToResX);
+
+            lock (ResourceCacheLock)
+            {
+                if (ResourceByFileCache.TryGetValue(fullPathToResX, out var cached))
+                    return cached;
+            }
+
             try
             {
                 var doc = XDocument
@@ -39,16 +50,22 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                     .Where(element => element.Name == "data")
                     .OrderBy(element => element.Attribute("name").Value);
                 
-                return doc.ToDictionary(
+                var resources = doc.ToDictionary(
                     element => element.Attribute("name").Value,
                     element => element.Elements().Single(x => x.Name == "value").Value
                 );
+
+                lock (ResourceCacheLock)
+                {
+                    ResourceByFileCache[fullPathToResX] = resources;
+                }
+
+                return resources;
             }
             catch (Exception exc)
             {
                 throw new Exception($"Resouce loading error for file {fullPathToResX}", exc);
             }
-            
         }
 
         protected static string GetUiStringFormatEntriesAsString(string value)
@@ -101,58 +118,87 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             return value.Substring(0, value.LastIndexOf('.'));
         }
 
+        protected static bool IsNotPluralForm(string resourceName)
+        {
+            return !(resourceName.EndsWith("_other") || resourceName.EndsWith("_plural"));
+        }
+
         protected IEnumerable<string> GetAllLinkedResourceFiles(IEnumerable<string> csprojFiles)
         {
+            var yieldedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
             foreach (var csproj in csprojFiles)
             {
-                var fi = new FileInfo(csproj);
-                if (fi.Directory == null) continue;
-
-                Console.WriteLine($"Scanning {csproj}");
-
-                using (XmlReader reader = XmlReader.Create(csproj))
+                foreach (var resourceFile in GetLinkedResourceFilesForProject(csproj))
                 {
-                    while (reader.Read())
+                    if (yieldedFiles.Add(resourceFile))
+                        yield return resourceFile;
+                }
+            }
+        }
+
+        private static IReadOnlyList<string> GetLinkedResourceFilesForProject(string csproj)
+        {
+            csproj = Path.GetFullPath(csproj);
+
+            lock (LinkedResourcesCacheLock)
+            {
+                if (LinkedResourcesByProjectCache.TryGetValue(csproj, out var cached))
+                    return cached;
+            }
+
+            var fi = new FileInfo(csproj);
+            if (fi.Directory == null)
+                return Array.Empty<string>();
+
+            Console.WriteLine($"Scanning {csproj}");
+            var results = new List<string>();
+
+            using (XmlReader reader = XmlReader.Create(csproj))
+            {
+                while (reader.Read())
+                {
+                    if (reader.NodeType != XmlNodeType.Element)
+                        continue;
+
+                    if (string.Equals(reader.Name, "Project", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (reader.NodeType == XmlNodeType.Element)
+                        var sdk = reader.GetAttribute("Sdk");
+
+                        if (sdk != null)
                         {
-                            if (string.Equals(reader.Name, "Project", StringComparison.OrdinalIgnoreCase))
-                            {
-                                var sdk = reader.GetAttribute("Sdk");
-
-                                if (sdk != null)
-                                {
-                                    Console.WriteLine($"Detected new csproj format.");
-                                    foreach (var resx in Directory.EnumerateFiles(fi.Directory.FullName, "*.resx", SearchOption.AllDirectories))
-                                    {
-                                        Console.WriteLine($"Got resx file from file system: {resx}");
-                                        yield return resx;
-                                    }
-
-                                    break;
-                                }
-                            }
-
-                            if (string.Equals(reader.Name, "Content", StringComparison.OrdinalIgnoreCase) ||
-                                string.Equals(reader.Name, "EmbeddedResource", StringComparison.OrdinalIgnoreCase))
-                            {
-                                while (reader.MoveToNextAttribute())
-                                {
-                                    if (string.Equals(reader.Name, "Include", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        var readerValue = reader.Value.Replace('\\', Path.DirectorySeparatorChar);
-                                        if (readerValue.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            Console.WriteLine($"Got resx file in csproj: {Path.Combine(fi.Directory.Name, readerValue)}");
-                                            yield return Path.Combine(fi.Directory.FullName, readerValue);
-                                        }
-                                    }
-                                }
-                            }
+                            Console.WriteLine("Detected new csproj format.");
+                            results.AddRange(Directory.EnumerateFiles(fi.Directory.FullName, "*.resx", SearchOption.AllDirectories));
+                            break;
                         }
+                    }
+
+                    if (!string.Equals(reader.Name, "Content", StringComparison.OrdinalIgnoreCase) &&
+                        !string.Equals(reader.Name, "EmbeddedResource", StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    while (reader.MoveToNextAttribute())
+                    {
+                        if (!string.Equals(reader.Name, "Include", StringComparison.OrdinalIgnoreCase))
+                            continue;
+
+                        var readerValue = reader.Value.Replace('\\', Path.DirectorySeparatorChar);
+                        if (!readerValue.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
+                            continue;
+
+                        var fullPath = Path.Combine(fi.Directory.FullName, readerValue);
+                        results.Add(fullPath);
                     }
                 }
             }
+
+            var distinct = results.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+            lock (LinkedResourcesCacheLock)
+            {
+                LinkedResourcesByProjectCache[csproj] = distinct;
+            }
+
+            return distinct;
         }
     }
 }

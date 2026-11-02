@@ -92,23 +92,31 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool ConditionsContainsRowname(IComposite node, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            const string RowName = "@rowname";
-
-            if (node is IValidatable validatable && validatable.ValidationConditions.Any(vc => vc.Expression.Contains(RowName)))
+            if (node is IValidatable validatable
+                && validatable.ValidationConditions.Any(vc => UsesRowname(vc.Expression, questionnaire)))
                 return true;
 
             if (node is IQuestion question
                 && (
-                    (question.LinkedFilterExpression?.Contains(RowName) ?? false)
-                    || (question.Properties?.OptionsFilterExpression?.Contains(RowName) ?? false)
-                    || (question.ConditionExpression?.Contains(RowName) ?? false))
+                    UsesRowname(question.LinkedFilterExpression, questionnaire)
+                    || UsesRowname(question.Properties?.OptionsFilterExpression, questionnaire)
+                    || UsesRowname(question.ConditionExpression, questionnaire))
                 )
                 return true;
 
-            if (node is IVariable variable && (variable.Expression?.Contains(RowName) ?? false))
+            if (node is IVariable variable && UsesRowname(variable.Expression, questionnaire))
                 return true;
 
             return false;
+        }
+
+        private bool UsesRowname(string? expression, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(expression))
+                return false;
+
+            var identifiers = GetIdentifiersUsedInExpression(expression, questionnaire);
+            return identifiers.Contains("rowname") || identifiers.Contains("@rowname");
         }
 
         private bool FilterExpressionUsingForbiddenClasses(IQuestion node, MultiLanguageQuestionnaireDocument questionnaire)

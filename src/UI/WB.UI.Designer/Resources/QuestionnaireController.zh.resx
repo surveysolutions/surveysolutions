@@ -337,4 +337,7 @@
   <data name="CloneDeletedWarning" xml:space="preserve">
       <value>您正在创建已删除问卷的副本。某些部分可能会丢失。</value>
   </data>
+  <data name="IncludeScenarios" xml:space="preserve">
+    <value>包含场景</value>
+  </data>
 </root>

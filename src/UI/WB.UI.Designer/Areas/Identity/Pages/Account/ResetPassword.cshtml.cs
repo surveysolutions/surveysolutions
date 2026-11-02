@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.Resources;
 
@@ -14,10 +15,13 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<DesignerIdentityUser> _userManager;
+        private readonly ITransactionRollbackState _transactionRollbackState;
 
-        public ResetPasswordModel(UserManager<DesignerIdentityUser> userManager)
+        public ResetPasswordModel(UserManager<DesignerIdentityUser> userManager,
+            ITransactionRollbackState transactionRollbackState)
         {
             _userManager = userManager;
+            _transactionRollbackState = transactionRollbackState;
         }
 
         [BindProperty] public InputModel Input { get; set; } = new InputModel();
@@ -76,11 +80,14 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             }
 
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
-            user.PasswordSalt = null;
             if (result.Succeeded)
             {
+                // The new hash is unsalted, so the legacy salt is obsolete.
+                user.PasswordSalt = null;
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
+
+            _transactionRollbackState.MarkRollbackOnly();
 
             foreach (var error in result.Errors)
             {

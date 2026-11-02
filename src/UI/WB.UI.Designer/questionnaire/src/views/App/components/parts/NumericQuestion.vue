@@ -11,7 +11,7 @@
             <div class="form-group checkbox-in-column" v-show="!activeQuestion.isInteger"
                 :class="{ 'has-error': !isValidCountOfDecimalPlaces }">
                 <label for="edit-question-count-decimal">{{ $t('QuestionnaireEditor.QuestionDecimalPlaces') }}</label>
-                <input id="edit-question-count-decimal" type="number" inputmode="numeric" maxlength="9" min="1"
+                <input id="edit-question-count-decimal" type="number" inputmode="numeric" maxlength="9" min="0"
                     max="2147483647" v-number="/^(\d*)$/" name="countOfDecimalPlaces"
                     v-model.number="activeQuestion.countOfDecimalPlaces" class="form-control small-numeric-input">
                 <p class="help-block ng-cloak" v-show="!isValidCountOfDecimalPlaces">
@@ -20,6 +20,15 @@
             </div>
         </div>
 
+    </div>
+    <div class="row">
+        <div class="col-md-6 inline-inputs">
+            <div class="checkbox checkbox-in-column">
+                <input id="cb-is-non-negative" type="checkbox" class="wb-checkbox"
+                    v-model="isNonNegativeValue" />
+                <label for="cb-is-non-negative"><span></span>{{ $t('QuestionnaireEditor.QuestionNonNegative') }}</label>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-6 inline-inputs">
@@ -56,15 +65,31 @@ export default {
     data() {
         return {}
     },
+    mounted() {
+        if (this.activeQuestion.isNonNegative == null) {
+            this.activeQuestion.isNonNegative = true;
+        }
+    },
     computed: {
         isValidCountOfDecimalPlaces() {
             if (!this.activeQuestion.countOfDecimalPlaces)
                 return true;
             return isInteger(this.activeQuestion.countOfDecimalPlaces);
         },
+        isNonNegativeValue: {
+            get() {
+                return this.activeQuestion.isNonNegative !== false;
+            },
+            set(value) {
+                this.activeQuestion.isNonNegative = value;
+            }
+        }
     },
     methods: {
         async prepareToSave() {
+            if (this.activeQuestion.isNonNegative == null) {
+                this.activeQuestion.isNonNegative = true;
+            }
             await this.$refs.options.showOptionsInList();
         },
         isIntegerChange(event) {

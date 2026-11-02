@@ -177,6 +177,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include scenarios.
+        /// </summary>
+        public static string IncludeScenarios {
+            get {
+                return ResourceManager.GetString("IncludeScenarios", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string Close {

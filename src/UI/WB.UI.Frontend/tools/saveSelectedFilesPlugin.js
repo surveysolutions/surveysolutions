@@ -48,11 +48,19 @@ export default function saveSelectedFilesPlugin(options = {}) {
 
         let newScripts = `<script type='module' src='/.vite/@@vite/client'></script>\n`;
 
-        content = content.replace(scriptTagRegex, (match, src) => {
-            const newSrc = `/.vite${src}`;
+        let match;
+        scriptTagRegex.lastIndex = 0;
+        while ((match = scriptTagRegex.exec(content)) !== null) {
+            const newSrc = `/.vite${match[1]}`;
             newScripts += `<script type='module' src='${newSrc}'></script>\n`;
-            return '';
-        });
+        }
+
+        // Strip tags repeatedly until stable so overlapping matches cannot reappear.
+        let previous;
+        do {
+            previous = content;
+            content = content.replace(scriptTagRegex, '');
+        } while (content !== previous);
 
         const bodyTagRegex = /<body[^>]*>/i;
         content = content.replace(bodyTagRegex, (match) => `${match}\n${newScripts}`);

@@ -56,8 +56,8 @@
                         </div>
                         <div class="permanent-actions pull-right clearfix">
                             <button type="button" :value="$t('QuestionnaireEditor.SideBarAttachmentsUpload')"
-                                @click.stop="openFileDialog()" value="Upload new attachment"
-                                class="btn btn-default pull-right" v-if="!isReadOnlyForUser" capture>
+                                @click.stop="openFileDialog()" class="btn btn-default pull-right"
+                                v-if="!isReadOnlyForUser" capture>
                                 <span>{{ $t('QuestionnaireEditor.Update') }}</span>
                             </button>
 

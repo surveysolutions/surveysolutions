@@ -1,0 +1,574 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Active" xml:space="preserve">
+        <value>Tích cực</value>
+        </data>
+    <data name="Archive" xml:space="preserve">
+        <value>Lưu trữ</value>
+        </data>
+    <data name="Archived" xml:space="preserve">
+        <value>Đã lưu trữ</value>
+        </data>
+    <data name="AssignmentsHeader" xml:space="preserve">
+        <value>Bài tập</value>
+        </data>
+    <data name="AssignmentsSelected" xml:space="preserve">
+        <value>{{count}} Đã chọn bài tập</value>
+        </data>
+    <data name="AssignmentsSelected_other" xml:space="preserve">
+        <value>{{count}} Bài tập đã chọn</value>
+        </data>
+    <data name="ExpectedExplanation" xml:space="preserve">
+        <value>Chỉ định số lượng cuộc phỏng vấn tối đa sẽ được tạo cho nhiệm vụ đó. Các giá trị được phép: -1 dành cho phép gán không giới hạn, 0 dành cho phép gán trống, các số cho giá trị mong đợi của phép gán</value>
+        </data>
+    <data name="ChangeExpectedModalTitle" xml:space="preserve">
+        <value>Chỉnh sửa Giá trị mong đợi cho phép gán {{assignmentId}}</value>
+        </data>
+    <data name="ChangeModeModalTitle" xml:space="preserve">
+        <value>Thay đổi chế độ làm bài tập {{assignmentId}}</value>
+        </data>
+    <data name="ModeExplanation" xml:space="preserve">
+        <value>Chế độ CAWI cho phép thu thập dữ liệu trực tiếp từ người trả lời</value>
+        </data>
+    <data name="CreatedAt" xml:space="preserve">
+        <value>Được tạo vào</value>
+        </data>
+    <data name="IdentifyingQuestions" xml:space="preserve">
+        <value>Xác định câu hỏi</value>
+        </data>
+    <data name="Count" xml:space="preserve">
+        <value>Đã sưu tầm</value>
+        </data>
+    <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+        <value>{{count}} Bài tập sắp được thay đổi</value>
+        </data>
+    <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
+        <value>{{count}} Bài tập sắp được thay đổi</value>
+        </data>
+    <data name="Expected" xml:space="preserve">
+        <value>Hy vọng</value>
+        </data>
+    <data name="SelectResponsible" xml:space="preserve">
+        <value>Chọn người chịu trách nhiệm</value>
+        </data>
+    <data name="ResponsibleRequired" xml:space="preserve">
+        <value>Cần có trách nhiệm</value>
+        </data>
+    <data name="WebModeNonInterviewer" xml:space="preserve">
+        <value>Tất cả các bài tập phỏng vấn trên web phải được giao cho người phỏng vấn</value>
+        </data>
+    <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+        <value>Bạn đang chỉ định lại bài tập trên web cho một người dùng không phải là NGƯỜI PHỎNG VẤN. Nếu bạn đã gửi liên kết cho bài tập này, người trả lời sẽ không thể trả lời khảo sát của bạn cho đến khi bài tập được trả lại cho người dùng trong vai trò NGƯỜI PHỎNG VẤN.</value>
+        </data>
+    <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+        <value>Bạn đang giao lại các bài tập trên web cho một người dùng không phải là NGƯỜI PHỎNG VẤN. Nếu bạn đã gửi các liên kết cho những bài tập này, những người trả lời sẽ không thể trả lời khảo sát của bạn cho đến khi bài tập được trả lại cho người dùng trong vai trò NGƯỜI PHỎNG VẤN.</value>
+        </data>
+    <data name="ShowArchived" xml:space="preserve">
+        <value>Trạng thái đã lưu trữ</value>
+        </data>
+    <data name="Unarchive" xml:space="preserve">
+        <value>Hủy lưu trữ</value>
+        </data>
+    <data name="Unlimited" xml:space="preserve">
+        <value>Không giới hạn</value>
+        </data>
+    <data name="InterviewsNeeded" xml:space="preserve">
+        <value>Cần phỏng vấn</value>
+        </data>
+    <data name="CreateInterview" xml:space="preserve">
+        <value>Bắt đầu cuộc phỏng vấn mới</value>
+        </data>
+    <data name="UpdatedAt" xml:space="preserve">
+        <value>Đã cập nhật vào</value>
+        </data>
+    <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+        <value>Điền vào tất cả hoặc một số trường nhận dạng</value>
+        </data>
+    <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+        <value>Chọn người chịu trách nhiệm (Trụ sở chính hoặc Người giám sát hoặc Người phỏng vấn) cho nhiệm vụ này</value>
+        </data>
+    <data name="Questionnaire" xml:space="preserve">
+        <value>Bảng câu hỏi</value>
+        </data>
+    <data name="AllAssignments" xml:space="preserve">
+        <value>Tất cả các bài tập</value>
+        </data>
+    <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+        <value>Chỉ báo cho biết bài tập đang hoạt động hay đã được lưu trữ.</value>
+        </data>
+    <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+        <value>Chọn một bảng câu hỏi để xem các bài tập liên quan của nó. Chọn “Tất cả bảng câu hỏi” để xem các bài tập liên quan đến bất kỳ bảng câu hỏi nào.</value>
+        </data>
+    <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+        <value>Người dùng chịu trách nhiệm. Nhấp vào trường để chọn tên người dùng bằng cách chọn trực tiếp hoặc nhập để lọc thêm danh sách tên người dùng.</value>
+        </data>
+    <data name="Tooltip_Table_Count" xml:space="preserve">
+        <value>Số lượng cuộc phỏng vấn hiện đang được gửi cho nhiệm vụ này. Nhiều cuộc phỏng vấn khác có thể đã được tạo nhưng chưa được đồng bộ hóa. Bấm vào bất kỳ ô nào để xem các cuộc phỏng vấn liên quan. Bấm vào biểu tượng sắp xếp để sắp xếp theo số lượng.</value>
+        </data>
+    <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+        <value>Khi nhiệm vụ ban đầu được tạo ra. Bấm vào biểu tượng sắp xếp để sắp xếp theo thời gian.</value>
+        </data>
+    <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+        <value>Thông tin xác định từng nhiệm vụ. Đây là câu trả lời cho các câu hỏi được đánh dấu là xác định trong Designer.</value>
+        </data>
+    <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+        <value>Số lượng cuộc phỏng vấn cần thiết để hoàn thành nhiệm vụ này.</value>
+        </data>
+    <data name="Tooltip_Table_Responsible" xml:space="preserve">
+        <value>Người dùng hiện chịu trách nhiệm về nhiệm vụ. Nhấp vào biểu tượng sắp xếp để sắp xếp tên người dùng.</value>
+        </data>
+    <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
+        <value>Số lượng cuộc phỏng vấn tối đa có thể được thực hiện cho nhiệm vụ này. Bấm vào bất kỳ ô nào để thay đổi số này. Bấm vào biểu tượng sắp xếp để sắp xếp theo giá trị mong đợi.</value>
+        </data>
+    <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+        <value>Thời điểm bài tập được cập nhật lần cuối. Bấm vào biểu tượng sắp xếp để sắp xếp theo thời gian.</value>
+        </data>
+    <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+        <value>Chỉ báo cho biết bài tập đã được tải xuống máy tính bảng hay chưa. Bấm vào biểu tượng sắp xếp để sắp xếp theo thời gian nhận.</value>
+        </data>
+    <data name="InvalidExpected" xml:space="preserve">
+        <value>Trường dự kiến ​​phải là -1 trở lên.</value>
+        </data>
+    <data name="AssignmentExpectedInWebMode" xml:space="preserve">
+        <value>Không thể thay đổi giá trị mong đợi cho Bài tập chế độ web.</value>
+        </data>
+    <data name="SelectQuestionnaire" xml:space="preserve">
+        <value>Chọn bảng câu hỏi hiện có để nâng cấp bài tập từ</value>
+        </data>
+    <data name="UpgradeDescription" xml:space="preserve">
+        <value>Khi các bài tập được nâng cấp, tất cả các bài tập còn tồn đọng sẽ được nâng cấp.</value>
+        </data>
+    <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+        <value>Chọn bảng câu hỏi để nâng cấp từ</value>
+        </data>
+    <data name="UpgradeBtn" xml:space="preserve">
+        <value>Nâng cấp</value>
+        </data>
+    <data name="UpgradeProgressTitle" xml:space="preserve">
+        <value>Nâng cấp bài tập từ {{from}} lên {{to}}</value>
+        </data>
+    <data name="UpgradeProgressNumbers" xml:space="preserve">
+        <value>Đang nâng cấp {{processed}} của {{totalCount}}</value>
+        </data>
+    <data name="UpgradeProgressErrors" xml:space="preserve">
+        <value>Có lỗi {{errorCount}}</value>
+        </data>
+    <data name="Stop" xml:space="preserve">
+        <value>Dừng lại</value>
+        </data>
+    <data name="UpgradePreparation" xml:space="preserve">
+        <value>Đang chờ các nâng cấp khác hoàn tất</value>
+        </data>
+    <data name="UpgradeCancelled" xml:space="preserve">
+        <value>Đã dừng nâng cấp</value>
+        </data>
+    <data name="UpgradeError" xml:space="preserve">
+        <value>Đã xảy ra lỗi. Hãy thử lại sau.</value>
+        </data>
+    <data name="UpgradeProgressDone" xml:space="preserve">
+        <value>Xong</value>
+        </data>
+    <data name="UpgradeProgressDoneCount" xml:space="preserve">
+        <value>Đã nâng cấp thành công: {{processed}}</value>
+        </data>
+    <data name="UpgradeProgressErrorCount" xml:space="preserve">
+        <value>Chưa nâng cấp: {{count}}</value>
+        </data>
+    <data name="UpgradeDownloadFailed" xml:space="preserve">
+        <value>Danh sách tải xuống</value>
+        </data>
+    <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+        <value>Quá trình nâng cấp từ {{from}} lên {{to}} đã hoàn tất</value>
+        </data>
+    <data name="ReceivedByTablet_All" xml:space="preserve">
+        <value>Hiển thị tất cả</value>
+        </data>
+    <data name="ReceivedByTablet_Received" xml:space="preserve">
+        <value>Nhận được bằng máy tính bảng</value>
+        </data>
+    <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+        <value>Máy tính bảng không nhận được</value>
+        </data>
+    <data name="Tooltip_Filter_Received" xml:space="preserve">
+        <value>Chỉ báo cho biết nhiệm vụ đã được nhận hay chưa</value>
+        </data>
+    <data name="ReceivedByTablet" xml:space="preserve">
+        <value>Nhận được bằng máy tính bảng</value>
+        </data>
+    <data name="CreatingNewAssignment" xml:space="preserve">
+        <value>Tạo bài tập mới cho bảng câu hỏi {{questionnaire}}</value>
+        </data>
+    <data name="AssignTo" xml:space="preserve">
+        <value>Giao cho</value>
+        </data>
+    <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+        <value>Chọn một phiên bản câu hỏi để xem các bài tập liên quan của nó. Chọn “Tất cả các phiên bản” để xem các bài tập liên quan đến bất kỳ phiên bản nào của bảng câu hỏi đã chọn.</value>
+        </data>
+    <data name="ErrorToCreateAssignment" xml:space="preserve">
+        <value>Không thể tạo bài tập.</value>
+        </data>
+    <data name="IsAudioRecordingEnabled" xml:space="preserve">
+        <value>Ghi âm</value>
+        </data>
+    <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+        <value>Ghi lại quá trình phỏng vấn</value>
+        </data>
+    <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+        <value>Cài đặt ghi âm cho bài tập {{id}}</value>
+        </data>
+    <data name="AudioRecordingEnable" xml:space="preserve">
+        <value>Bật ghi âm</value>
+        </data>
+    <data name="CawiModeEnable" xml:space="preserve">
+        <value>Bật chế độ CAWI</value>
+        </data>
+    <data name="AudioRecordingExplanation" xml:space="preserve">
+        <value>Ứng dụng Người phỏng vấn sẽ ghi lại âm thanh của cuộc phỏng vấn khi bật kiểm tra âm thanh. Lưu ý rằng lượng dữ liệu đồng bộ hóa sẽ lớn hơn đáng kể.</value>
+        </data>
+    <data name="NewAssignment" xml:space="preserve">
+        <value>Nhiệm vụ mới</value>
+        </data>
+    <data name="Email" xml:space="preserve">
+        <value>E-mail</value>
+        </data>
+    <data name="EmailExplanation" xml:space="preserve">
+        <value>Email sẽ được sử dụng để liên lạc với người nhận bài tập</value>
+        </data>
+    <data name="Password" xml:space="preserve">
+        <value>Mật khẩu</value>
+        </data>
+    <data name="PasswordExplanation" xml:space="preserve">
+        <value>Mật khẩu sẽ được sử dụng để bảo vệ bài tập</value>
+        </data>
+    <data name="WebMode" xml:space="preserve">
+        <value>Cách thức</value>
+        </data>
+    <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+        <value>Bài tập này sẽ được sử dụng với Chế độ Web</value>
+        </data>
+    <data name="Activated" xml:space="preserve">
+        <value>Đã kích hoạt</value>
+        </data>
+    <data name="CawiActivated" xml:space="preserve">
+        <value>CAWI đã được kích hoạt</value>
+        </data>
+    <data name="Tooltip_Table_WebMode" xml:space="preserve">
+        <value>Chế độ bài tập</value>
+        </data>
+    <data name="Tooltip_Table_Email" xml:space="preserve">
+        <value>Email để nhận thông báo</value>
+        </data>
+    <data name="Tooltip_Table_Password" xml:space="preserve">
+        <value>Mật khẩu để hạn chế quyền truy cập</value>
+        </data>
+    <data name="PasswordInstructions" xml:space="preserve">
+        <value>Ít nhất 6 số và chữ in hoa hoặc ký hiệu đơn '?' để tạo mật khẩu</value>
+        </data>
+    <data name="EnterPassword" xml:space="preserve">
+        <value>Nhập mật khẩu</value>
+        </data>
+    <data name="EnterEmail" xml:space="preserve">
+        <value>Nhập email</value>
+        </data>
+    <data name="ExpectedInstructions" xml:space="preserve">
+        <value>Phải là số, -1 là không giới hạn, 1 nếu email được chỉ định</value>
+        </data>
+    <data name="InvalidEmail" xml:space="preserve">
+        <value>Email không hợp lệ</value>
+        </data>
+    <data name="InvalidPassword" xml:space="preserve">
+        <value>Mật khẩu không hợp lệ</value>
+        </data>
+    <data name="InvalidExpectedMessage" xml:space="preserve">
+        <value>Giá trị mong đợi không hợp lệ</value>
+        </data>
+    <data name="InvalidExpectedWithEmail" xml:space="preserve">
+        <value>Đối với các bài tập được phép cung cấp email, Giá trị mong đợi là 1</value>
+        </data>
+    <data name="ExpectedForWebMode" xml:space="preserve">
+        <value>Bài tập có giá trị mong đợi 1 cho chế độ web phải được cung cấp email hoặc mật khẩu</value>
+        </data>
+    <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+        <value>Mật khẩu được gán cho chế độ web với số lượng 1 phải là duy nhất</value>
+        </data>
+    <data name="QuestionnaireVersion" xml:space="preserve">
+        <value>ver. {{version}}</value>
+        </data>
+    <data name="AssignmentId" xml:space="preserve">
+        <value>ID bài tập</value>
+        </data>
+    <data name="MultipleAssignmentsClose" xml:space="preserve">
+        <value>{{count}} bài tập đã chọn sẽ bị giảm kích thước. Giá trị dự kiến ​​sẽ được đặt thành số lượng cuộc phỏng vấn hiện được thu thập.</value>
+        </data>
+    <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+        <value>Giá trị dự kiến ​​của nhiệm vụ đã chọn {{id}} sẽ được thay đổi từ {{quantity}} thành {{collected}} (số lượng cuộc phỏng vấn hiện đang được thu thập)</value>
+        </data>
+    <data name="Close" xml:space="preserve">
+        <value>Đóng</value>
+        </data>
+    <data name="AssignmentCloseWebMode" xml:space="preserve">
+        <value>Không thể thu nhỏ bài tập {{id}} vì nó đã bật chế độ web</value>
+        </data>
+    <data name="AssignmentInfo" xml:space="preserve">
+        <value>Thông tin nhiệm vụ chi tiết</value>
+        </data>
+    <data name="Action_Archived" xml:space="preserve">
+        <value>Đã lưu trữ</value>
+        </data>
+    <data name="DetailsComments" xml:space="preserve">
+        <value>Bình luận</value>
+        </data>
+    <data name="Comments" xml:space="preserve">
+        <value>Bình luận</value>
+        </data>
+    <data name="Action_AudioRecordingChanged" xml:space="preserve">
+        <value>Bản ghi âm đã thay đổi</value>
+        </data>
+    <data name="EnterComments" xml:space="preserve">
+        <value>Nhập bình luận của bạn ở đây</value>
+        </data>
+    <data name="DateFromPast" xml:space="preserve">
+        <value>Ngày đã chọn là ngày trong quá khứ</value>
+        </data>
+    <data name="Action_Created" xml:space="preserve">
+        <value>Tạo</value>
+        </data>
+    <data name="Action_Deleted" xml:space="preserve">
+        <value>Đã xóa</value>
+        </data>
+    <data name="Action_ExpectedValueChanged" xml:space="preserve">
+        <value>Giá trị mong đợi đã thay đổi</value>
+        </data>
+    <data name="Action_ReceivedByTablet" xml:space="preserve">
+        <value>Nhận được bằng máy tính bảng</value>
+        </data>
+    <data name="Action_UnArchived" xml:space="preserve">
+        <value>Chưa được lưu trữ</value>
+        </data>
+    <data name="Action_Reassigned" xml:space="preserve">
+        <value>Đã được chỉ định lại</value>
+        </data>
+    <data name="Action_WebModeChanged" xml:space="preserve">
+        <value>Chế độ web đã thay đổi</value>
+        </data>
+    <data name="Action" xml:space="preserve">
+        <value>Hoạt động</value>
+        </data>
+    <data name="Actor" xml:space="preserve">
+        <value>Qua</value>
+        </data>
+    <data name="Date" xml:space="preserve">
+        <value>Ngày</value>
+        </data>
+    <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+        <value>Đã tắt tính năng ghi âm</value>
+        </data>
+    <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+        <value>Đã bật ghi âm</value>
+        </data>
+    <data name="Action_WebModeChanged_False" xml:space="preserve">
+        <value>Chế độ web đã bị tắt</value>
+        </data>
+    <data name="Action_WebModeChanged_True" xml:space="preserve">
+        <value>Đã bật Chế độ web</value>
+        </data>
+    <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+        <value>Giá trị mong đợi đã thay đổi thành {{quantity}}</value>
+        </data>
+    <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+        <value>Giá trị mong đợi đã thay đổi thành Không giới hạn</value>
+        </data>
+    <data name="Action_Reassigned_To" xml:space="preserve">
+        <value>Đã được chỉ định lại cho {{newResponsible}}</value>
+        </data>
+    <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+        <value>Bình luận: {{comment}}</value>
+        </data>
+    <data name="AssignmentHistory" xml:space="preserve">
+        <value>Lịch sử</value>
+        </data>
+    <data name="Details_Column" xml:space="preserve">
+        <value>Chi tiết</value>
+        </data>
+    <data name="Action_Created_Comment" xml:space="preserve">
+        <value>Bình luận: {{comment}}</value>
+        </data>
+    <data name="Action_Created_Responsible" xml:space="preserve">
+        <value>Đã giao cho {{responsible}}</value>
+        </data>
+    <data name="StartWebInterview" xml:space="preserve">
+        <value>Bắt đầu cuộc phỏng vấn trên web</value>
+        </data>
+    <data name="WebModeEnabledWarning" xml:space="preserve">
+        <value>Bài tập không thể hoàn thành. Nó đã bật chế độ web, trong khi bảng câu hỏi đã tắt chế độ thu thập web</value>
+        </data>
+    <data name="NoComment" xml:space="preserve">
+        <value>(miễn bình luận)</value>
+        </data>
+    <data name="LinkToWebInterviewExample" xml:space="preserve">
+        <value>Chuyển sang mẫu liên kết Phỏng vấn trên web</value>
+        </data>
+    <data name="Action_UpgradedFrom" xml:space="preserve">
+        <value>Đã nâng cấp từ nhiệm vụ {{id}}</value>
+        </data>
+    <data name="Property" xml:space="preserve">
+        <value>Tài sản</value>
+        </data>
+    <data name="Value" xml:space="preserve">
+        <value>Giá trị</value>
+        </data>
+    <data name="Action_QuantityChanged" xml:space="preserve">
+        <value>Giá trị mong đợi đã thay đổi</value>
+        </data>
+    <data name="DetailsTargetAreaa" xml:space="preserve">
+        <value>Khu vực mục tiêu</value>
+        </data>
+    <data name="DetailsGeoTracking" xml:space="preserve">
+        <value>Theo dõi địa lý</value>
+        </data>
+    <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+        <value>Thay đổi Vùng mục tiêu cho nhiệm vụ {{assignmentId}}</value>
+        </data>
+    <data name="Action_TargetAreaChanged" xml:space="preserve">
+        <value>Khu Vực Mục Tiêu đã thay đổi</value>
+        </data>
+    <data name="TargetArea" xml:space="preserve">
+        <value>Chỉnh sửa vùng mục tiêu</value>
+        </data>
+    <data name="TargetAreaExplanation" xml:space="preserve">
+        <value>Chỉ định tên bản đồ Khu vực mục tiêu để phân công</value>
+        </data>
+    <data name="EnterTargetArea" xml:space="preserve">
+        <value>Nhập vùng mục tiêu</value>
+        </data>
+    <data name="Filter_ShowAll" xml:space="preserve">
+        <value>Hiển thị tất cả</value>
+        </data>
+    <data name="Downsize" xml:space="preserve">
+        <value>Giảm kích thước</value>
+        </data>
+    <data name="Status" xml:space="preserve">
+        <value>Trạng thái</value>
+        </data>
+    <data name="StatusChangeComment" xml:space="preserve">
+        <value>Bình luận trạng thái</value>
+        </data>
+    <data name="StatusOpen" xml:space="preserve">
+        <value>Mở</value>
+        </data>
+    <data name="StatusCompleted" xml:space="preserve">
+        <value>Hoàn thành</value>
+        </data>
+    <data name="StatusClosed" xml:space="preserve">
+        <value>Đã đóng</value>
+        </data>
+    <data name="CompleteAssignmentTitle" xml:space="preserve">
+        <value>Hoàn thành bài tập</value>
+        </data>
+    <data name="CompleteAssignmentMessage" xml:space="preserve">
+        <value>Bạn có chắc chắn đã liệt kê tất cả các đơn vị đủ điều kiện?</value>
+        </data>
+    <data name="CloseAssignmentTitle" xml:space="preserve">
+        <value>Đóng bài tập</value>
+        </data>
+    <data name="CloseAssignmentMessage" xml:space="preserve">
+        <value>Người phỏng vấn làm việc ngoại tuyến vẫn có thể tiếp tục thu thập dữ liệu cho đến khi đồng bộ hóa. Những cuộc phỏng vấn như vậy vẫn sẽ được chấp nhận.</value>
+        </data>
+    <data name="ReopenAssignmentTitle" xml:space="preserve">
+        <value>Mở lại bài tập</value>
+        </data>
+    <data name="ReopenAssignmentMessage" xml:space="preserve">
+        <value>Nhiệm vụ sẽ được đặt trở lại trạng thái Mở và người phỏng vấn sẽ có thể tạo các cuộc phỏng vấn mới.</value>
+        </data>
+    <data name="Complete" xml:space="preserve">
+        <value>Hoàn thành</value>
+        </data>
+    <data name="Reopen" xml:space="preserve">
+        <value>Mở lại</value>
+        </data>
+    <data name="Action_StatusChanged" xml:space="preserve">
+        <value>Trạng thái đã thay đổi thành {{status}}</value>
+        </data>
+    <data name="Action_StatusChanged_Comment" xml:space="preserve">
+        <value>Bình luận: {{comment}}</value>
+        </data>
+    <data name="Action_Completed" xml:space="preserve">
+        <value>Hoàn thành</value>
+        </data>
+    <data name="Action_Closed" xml:space="preserve">
+        <value>Đã đóng</value>
+        </data>
+    <data name="Action_Reopened" xml:space="preserve">
+        <value>Đã mở lại</value>
+        </data>
+    <data name="AudioRecordingSelective" xml:space="preserve">
+        <value>chọn lọc</value>
+        </data>
+    <data name="AudioAuditScopeLabel" xml:space="preserve">
+        <value>Phạm vi kiểm tra âm thanh</value>
+        </data>
+    <data name="AudioRecordingScopeNotice" xml:space="preserve">
+        <value>Nhiệm vụ này có phạm vi kiểm tra âm thanh chọn lọc. Bật ghi âm đầy đủ sẽ ghi lại tất cả các phần. Việc tắt nó sẽ trở lại trạng thái chỉ ghi các phần đã chọn.</value>
+        </data>
+    <data name="TargetAreaNameTooLong" xml:space="preserve">
+        <value>Tên bản đồ vùng mục tiêu quá dài. Độ dài tối đa cho phép là {{limit}} ký tự.</value>
+    </data>
+</root>

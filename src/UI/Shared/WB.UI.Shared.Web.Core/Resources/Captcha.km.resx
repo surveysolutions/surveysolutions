@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="EnterText" xml:space="preserve"><value>បញ្ចូលអត្ថបទដែលអ្នកឃើញខាងលើ</value></data>
+  <data name="InvalidCaptcha" xml:space="preserve"><value>Captcha មិនត្រឹមត្រូវ</value></data>
+  <data name="Required" xml:space="preserve"><value>ជាវាលដែលត្រូវបំពេញ</value></data>
+  <data name="TryAnother" xml:space="preserve"><value>សាកល្បងមួយផ្សេងទៀត</value></data>
+  <data name="CaptchaError" xml:space="preserve"><value>មានកំហុសក្នុងការបង្កើត captcha។ សូមទាក់ទងអ្នកគ្រប់គ្រងប្រព័ន្ធរបស់អ្នក។</value></data>
+</root>
+

@@ -26,7 +26,7 @@
                 <div class="modal-content" :id="modalId">
                     <div class="modal-header">
                         <button type="button" v-on:click="cancelRecording" class="close" data-bs-dismiss="modal"
-                            aria-label="Close">
+                            :aria-label="$t('Pages.CloseLabel')">
                             <span aria-hidden="true"></span>
                         </button>
                         <h4 class="modal-title">
@@ -161,8 +161,8 @@ export default {
                         self.maxDurationInterval = setInterval(self.stopRecording, self.maxDuration)
                     },
                     errorCallback: (error, stack) => {
-                        console.error('An error occurred in a child component:', error);
-                        console.error('Stack trace:', stack);
+                        console.error('An error occurred in a child component:', error)
+                        console.error('Stack trace:', stack)
                         self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.AudioInitializationFailed'))
                         this.closeModal()
                     },
@@ -181,7 +181,7 @@ export default {
         },
         updateTimer() {
             var diff = moment.utc(this.currentTime() - this.startRecordingTime)
-            this.formattedTimer = diff.format('mm:ss:SS')
+            this.formattedTimer = diff.format('mm:ss:SSS')
         },
     },
 }

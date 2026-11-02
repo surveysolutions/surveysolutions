@@ -123,7 +123,7 @@
     <Content Include="img\logo-50.bmp" />
     <Content Include="img\WixUIBannerBmp.bmp" />
     <Content Include="img\WixUIDialogBmp.bmp" />
-    <Content Include="img\WixUIExclamationIco.bmp" />
+    <Content Include="img\WixUIExclamationIco.ico" />
     <Content Include="img\WixUIInfoIco.bmp" />
     <Content Include="img\WixUIInfoIco.ico" />
   </ItemGroup>

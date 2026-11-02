@@ -1,4 +1,4 @@
-import UsersManagement from './UsersManagement'
+const UsersManagement = () => import('./UsersManagement')
 
 export default class UsersManagementComponent {
     get routes() {

@@ -276,6 +276,31 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             this.dbContext.SaveChanges();
         }
 
+        public void CopyCategoriesTranslations(Guid questionnaireId, Guid oldCategoriesId, Guid newCategoriesId,
+            IEnumerable<Guid> translationIds)
+        {
+            if (translationIds == null) throw new ArgumentNullException(nameof(translationIds));
+
+            var translationIdsToCopy = translationIds.Distinct().ToArray();
+            if (!translationIdsToCopy.Any())
+                return;
+
+            var storedTranslations = this.dbContext.TranslationInstances
+                .Where(x => x.QuestionnaireId == questionnaireId
+                    && x.QuestionnaireEntityId == oldCategoriesId
+                    && translationIdsToCopy.Contains(x.TranslationId)
+                    && x.Type == TranslationType.Categories)
+                .ToList();
+
+            foreach (var storedTranslation in storedTranslations)
+            {
+                var translationCopy = storedTranslation.Clone();
+                translationCopy.Id = Guid.NewGuid();
+                translationCopy.QuestionnaireEntityId = newCategoriesId;
+                this.dbContext.TranslationInstances.Add(translationCopy);
+            }
+        }
+
         private IEnumerable<TranslationInstance> GetWorksheetTranslations(
             TranslationsWithHeaderMap translationWithHeaderMap, QuestionnaireDocument questionnaire,
             Dictionary<Guid, bool> idsOfAllQuestionnaireEntities, Guid questionnaireId, Guid translationId,
@@ -436,15 +461,17 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         private TranslationRow GetExcelTranslation(TranslationsWithHeaderMap worksheetWithHeadersMap, int rowNumber)
         {
-            var entityId = worksheetWithHeadersMap.Worksheet.Cell($"{worksheetWithHeadersMap.EntityIdIndex}{rowNumber}")
+            // header map has no index for a column that is absent in the sheet (e.g. categories sheet has no entity id and type)
+            var worksheet = worksheetWithHeadersMap.Worksheet;
+            var entityId = GetCell(worksheet, worksheetWithHeadersMap.EntityIdIndex, rowNumber)
                 ?.GetValue<string>();
-            var type = worksheetWithHeadersMap.Worksheet.Cell($"{worksheetWithHeadersMap.TypeIndex}{rowNumber}")
+            var type = GetCell(worksheet, worksheetWithHeadersMap.TypeIndex, rowNumber)
                 ?.GetString();
-            var optionValueOrValidationIndexOrFixedRosterId = worksheetWithHeadersMap.Worksheet
-                .Cell($"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}")
+            var optionValueOrValidationIndexOrFixedRosterId = GetCell(worksheet,
+                    worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex, rowNumber)
                 ?.GetString();
-            var translation = worksheetWithHeadersMap.Worksheet
-                .Cell($"{worksheetWithHeadersMap.TranslationIndex}{rowNumber}")?.GetString();
+            var translation = GetCell(worksheet, worksheetWithHeadersMap.TranslationIndex, rowNumber)
+                ?.GetString();
             return this.AdjustIndexValue(new TranslationRow
             {
                 EntityId = entityId.NullIfEmpty(),
@@ -453,6 +480,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 Translation = translation.NullIfEmpty()
             });
         }
+
+        private static IXLCell? GetCell(IXLWorksheet worksheet, string? columnIndex, int rowNumber)
+            => columnIndex == null ? null : worksheet.Cell($"{columnIndex}{rowNumber}");
 
         private TranslationRow AdjustIndexValue(TranslationRow row)
         {

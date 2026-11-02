@@ -4,7 +4,8 @@
             aria-label="ChaptersCtrl" data-empty-place-holder-enabled="false">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content chapter-panel" ui-tree="chaptersTree">
-                <div class="foldback-button" @click.stop="foldback()"></div>
+                <div class="foldback-button" role="button" tabindex="0" :aria-label="$t('QuestionnaireEditor.Close')"
+                    @click.stop="foldback()" @keydown.enter.space.prevent="foldback()"></div>
                 <div class="ul-holder">
                     <Chapters :questionnaireId="questionnaireId"></Chapters>
                 </div>
@@ -16,7 +17,9 @@
             aria-label="ScenariosCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content macros-panel">
-                <div class="foldback-button-region" @click.stop="foldback()">
+                <div class="foldback-button-region" role="button" tabindex="0"
+                    :aria-label="$t('QuestionnaireEditor.Close')" @click.stop="foldback()"
+                    @keydown.enter.space.prevent="foldback()">
                     <div class="foldback-button"></div>
                 </div>
                 <Scenarios :questionnaireId="questionnaireId"></Scenarios>
@@ -28,7 +31,9 @@
             aria-label="MacrosCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content macros-panel">
-                <div class="foldback-button-region" @click.stop="foldback()">
+                <div class="foldback-button-region" role="button" tabindex="0"
+                    :aria-label="$t('QuestionnaireEditor.Close')" @click.stop="foldback()"
+                    @keydown.enter.space.prevent="foldback()">
                     <div class="foldback-button"></div>
                 </div>
                 <Macros></Macros>
@@ -40,7 +45,9 @@
             aria-label="LookupTablesCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content lookup-tables-panel">
-                <div class="foldback-button-region" @click.stop="foldback()">
+                <div class="foldback-button-region" role="button" tabindex="0"
+                    :aria-label="$t('QuestionnaireEditor.Close')" @click.stop="foldback()"
+                    @keydown.enter.space.prevent="foldback()">
                     <div class="foldback-button"></div>
                 </div>
                 <LookupTables :questionnaireId="questionnaireId"></LookupTables>
@@ -52,7 +59,9 @@
             aria-label="AttachmentsCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content attachments-panel">
-                <div class="foldback-button-region" @click.stop="foldback()">
+                <div class="foldback-button-region" role="button" tabindex="0"
+                    :aria-label="$t('QuestionnaireEditor.Close')" @click.stop="foldback()"
+                    @keydown.enter.space.prevent="foldback()">
                     <div class="foldback-button"></div>
                 </div>
                 <Attachments :questionnaireId="questionnaireId"></Attachments>
@@ -64,7 +73,9 @@
             aria-label="TranslationsCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content translations-panel">
-                <div class="foldback-button-region" @click.stop="foldback()">
+                <div class="foldback-button-region" role="button" tabindex="0"
+                    :aria-label="$t('QuestionnaireEditor.Close')" @click.stop="foldback()"
+                    @keydown.enter.space.prevent="foldback()">
                     <div class="foldback-button"></div>
                 </div>
                 <Translations :questionnaireId="questionnaireId"></Translations>
@@ -76,7 +87,9 @@
             aria-label="CategoriesCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content categories-panel">
-                <div class="foldback-button-region" @click.stop="foldback()">
+                <div class="foldback-button-region" role="button" tabindex="0"
+                    :aria-label="$t('QuestionnaireEditor.Close')" @click.stop="foldback()"
+                    @keydown.enter.space.prevent="foldback()">
                     <div class="foldback-button"></div>
                 </div>
                 <Categories :questionnaireId="questionnaireId"></Categories>
@@ -88,7 +101,9 @@
             aria-label="MetadataCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content metadata-panel">
-                <div class="foldback-button-region" @click.stop="foldback()">
+                <div class="foldback-button-region" role="button" tabindex="0"
+                    :aria-label="$t('QuestionnaireEditor.Close')" @click.stop="foldback()"
+                    @keydown.enter.space.prevent="foldback()">
                     <div class="foldback-button"></div>
                 </div>
                 <Metadata :questionnaireId="questionnaireId"></Metadata>
@@ -100,7 +115,9 @@
             aria-label="CommentsCtrl" data-empty-place-holder-enabled="false">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content comments-panel">
-                <div class="foldback-button-region" @click.stop="foldback()">
+                <div class="foldback-button-region" role="button" tabindex="0"
+                    :aria-label="$t('QuestionnaireEditor.Close')" @click.stop="foldback()"
+                    @keydown.enter.space.prevent="foldback()">
                     <div class="foldback-button"></div>
                 </div>
                 <Comments :questionnaireId="questionnaireId"></Comments>
@@ -112,7 +129,9 @@
             :class="{ unfolded: isFolded }" aria-label="CriticalRulesCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content macros-panel">
-                <div class="foldback-button-region" @click.stop="foldback()">
+                <div class="foldback-button-region" role="button" tabindex="0"
+                    :aria-label="$t('QuestionnaireEditor.Close')" @click.stop="foldback()"
+                    @keydown.enter.space.prevent="foldback()">
                     <div class="foldback-button"></div>
                 </div>
                 <CriticalityConditions :questionnaireId="questionnaireId"></CriticalityConditions>
@@ -157,7 +176,9 @@
             <li>
                 <a class="left-menu-comments" v-if="!questionnaire.isReadOnlyForUser"
                     :class="{ unfolded: isUnfoldedComments }" @click="unfoldComments();"
-                    :title="$t('QuestionnaireEditor.SideBarCommentsTitle')"></a>
+                    :title="$t('QuestionnaireEditor.SideBarCommentsTitle')">
+                    <span v-if="unresolvedCommentsCount > 0" class="comments-badge">{{ unresolvedCommentsCount }}</span>
+                </a>
             </li>
             <li>
                 <a class="left-menu-criticality-conditions" :class="{ unfolded: isUnfoldedCriticalityConditions }"
@@ -202,6 +223,7 @@ import Translations from './leftSidePanel/Translations.vue'
 import CriticalityConditions from './leftSidePanel/CriticalityConditions.vue';
 
 import { setFocusIn } from '../../../services/utilityService'
+import { useCommentThreadsStore } from '../../../stores/commentThreads';
 
 export default {
     name: 'LeftSidePanel',
@@ -224,6 +246,13 @@ export default {
     data() {
         return {
             openPanel: null,//'categories',
+        };
+    },
+    setup() {
+        const commentThreadsStore = useCommentThreadsStore();
+
+        return {
+            commentThreadsStore
         };
     },
     mounted() {
@@ -253,6 +282,11 @@ export default {
         this.$emitter.on('closeCriticalityConditions', this.closeAllPanel);
 
         this.$emitter.on('verifing', this.closeOpenPanelIfAny);
+
+        if (!this.questionnaire.isReadOnlyForUser) {
+            this.commentThreadsStore.initializeCount(this.questionnaireId);
+            this.commentThreadsStore.setupListeners(this.questionnaireId);
+        }
     },
     unmounted() {
         document.removeEventListener('keydown', this._onKeyDown);
@@ -280,6 +314,8 @@ export default {
         this.$emitter.off('closeCriticalityConditions', this.closeAllPanel);
 
         this.$emitter.off('verifing', this.closeOpenPanelIfAny);
+
+        this.commentThreadsStore.teardownListeners();
     },
     computed: {
         isFolded() {
@@ -295,6 +331,9 @@ export default {
         isUnfoldedComments() { return this.openPanel == 'comments' },
         isUnfoldedCategories() { return this.openPanel == 'categories' },
         isUnfoldedCriticalityConditions() { return this.openPanel == 'criticalityconditions' },
+        unresolvedCommentsCount() {
+            return this.commentThreadsStore.getUnresolvedCount;
+        },
     },
     methods: {
         handleKeyDown(event) {
@@ -462,7 +501,12 @@ export default {
             this.setCriticalityConditionsPanel();
             this.$emitter.emit("openCriticalRules", {});
         },
-        setCriticalityConditionsPanel() { this.openPanel = 'criticalityconditions'; },
+        setCriticalityConditionsPanel(payload) {
+            this.openPanel = 'criticalityconditions';
+            if (payload && payload.focusOn) {
+                setFocusIn(payload.focusOn);
+            }
+        },
     }
 };
 </script>

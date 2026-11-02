@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
 using Dapper;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -9,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 {
@@ -45,12 +48,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 
             dbContext.Database.GetDbConnection().Execute(sql, new
             {
-                title = GetTitle(composite),
+                title = StripHtml(GetTitle(composite)),
                 questionnaireId = questionnaireId,
                 entityId = composite.PublicKey,
                 entityType = GetEntityType(composite),
-                searchText = GetTextUsedForSearch(composite)
+                searchText = StripHtml(GetTextUsedForSearch(composite))
             });
+        }
+
+        // Removes HTML tags and decodes HTML entities so that the stored title and the text fed
+        // into to_tsvector contain the visible text. RemoveHtmlTags() (HtmlSanitizer) encodes the
+        // remaining special characters (e.g. '<' -> "&lt;"), which would otherwise pollute both the
+        // displayed title and the full-text index with entity artifacts (lt/gt/amp tokens).
+        private static string? StripHtml(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return value;
+            return WebUtility.HtmlDecode(value.RemoveHtmlTags());
         }
 
         private string GetEntityType(IComposite composite)
@@ -80,7 +94,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                 if (question.QuestionType == QuestionType.SingleOption
                     || question.QuestionType == QuestionType.MultyOption)
                 {
-                    question.Answers.Aggregate(textUsedForSearch, (text, answer)  => text + Environment.NewLine + answer.AnswerText);
+                    textUsedForSearch = question.Answers.Aggregate(textUsedForSearch, (text, answer) => text + Environment.NewLine + answer.AnswerText);
                 }
             }
             return textUsedForSearch;
@@ -160,13 +174,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
             return searchResult;
         }
 
-        private string? CreateTextSearchQuery(string? inputQuery)
+        // Characters that have a special meaning in a PostgreSQL tsquery.
+        // If they are passed as-is to to_tsquery() they cause a syntax error.
+        private static readonly Regex TsQuerySpecialCharacters = new Regex(@"[&|!():*<>\\'""]", RegexOptions.Compiled);
+
+        internal static string? CreateTextSearchQuery(string? inputQuery)
         {
             inputQuery = inputQuery?.Trim().ToLower();
             if (string.IsNullOrEmpty(inputQuery))
                 return inputQuery;
 
-            var words = inputQuery.Split(' ');
+            var words = inputQuery
+                .Split(new[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(word => TsQuerySpecialCharacters.Replace(word, string.Empty))
+                .Where(word => !string.IsNullOrEmpty(word))
+                .ToArray();
+
+            if (words.Length == 0)
+                return string.Empty; // nothing searchable left, to_tsquery('') matches nothing
+
             if (words.Length == 1)
             {
                 return $"{words[0]}:*"; // search word as like

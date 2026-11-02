@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AdministrativeRecords" xml:space="preserve">
+        <value>កំណត់ត្រារដ្ឋបាល</value>
+    </data>
+    <data name="AgriculturalCensus" xml:space="preserve">
+        <value>ជំរឿនកសិកម្ម</value>
+    </data>
+    <data name="AgriculturalSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិកសិកម្ម</value>
+    </data>
+    <data name="ChildLaborSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិពលកម្មកុមារ</value>
+    </data>
+    <data name="CoreWelfareIndicatorsQuestionnaire" xml:space="preserve">
+        <value>កម្រងសំណួរសូចនាករសុខុមាលភាពស្នូល</value>
+    </data>
+    <data name="DemographicAndHealthSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិប្រជាសាស្រ្ត និងសុខភាព</value>
+    </data>
+    <data name="EnterpriseCensus" xml:space="preserve">
+        <value>ជំរឿនសហគ្រាស</value>
+    </data>
+    <data name="EnterpriseSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិសហគ្រាស</value>
+    </data>
+    <data name="HouseholdHealthSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិសុខភាពគ្រួសារ</value>
+    </data>
+    <data name="HouseholdSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិគ្រួសារ</value>
+    </data>
+    <data name="InformalSectorSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិលើវិស័យក្រៅផ្លូវការ</value>
+    </data>
+    <data name="IntegratedSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិរួមបញ្ចូលគ្នា</value>
+    </data>
+    <data name="LaborForceSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិកម្លាំងពលកម្ម</value>
+    </data>
+    <data name="LivingStandardsMeasurementStudy" xml:space="preserve">
+        <value>ការសិក្សារង្វាស់ស្តង់ដាររស់នៅ</value>
+    </data>
+    <data name="MultipleIndicatorClusterSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិចង្កោមសូចនាករច្រើន។</value>
+    </data>
+    <data name="PopulationAndHousingCensus" xml:space="preserve">
+        <value>ជំរឿនប្រជាជន និងលំនៅដ្ឋាន</value>
+    </data>
+    <data name="PriceSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិតម្លៃ</value>
+    </data>
+    <data name="PrioritySurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិអាទិភាព</value>
+    </data>
+    <data name="SampleFrame" xml:space="preserve">
+        <value>ស៊ុមគំរូ</value>
+    </data>
+    <data name="ServiceProvisionAssessments" xml:space="preserve">
+        <value>ការវាយតម្លៃការផ្តល់សេវា</value>
+    </data>
+    <data name="SocioEconomicMonitoringSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិសេដ្ឋកិច្ចសង្គម / ការត្រួតពិនិត្យ</value>
+    </data>
+    <data name="StatisticalInfoAndMonitoringProg" xml:space="preserve">
+        <value>ព័ត៌មានស្ថិតិ និងកម្មវិធីតាមដាន។</value>
+    </data>
+    <data name="WorldFertilitySurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិការមានកូនពិភពលោក</value>
+    </data>
+    <data name="WorldHealthSurvey" xml:space="preserve">
+        <value>ការស្ទង់មតិសុខភាពពិភពលោក</value>
+    </data>
+</root>

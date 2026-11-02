@@ -1,19 +1,20 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.UI.Designer.Extensions;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Services.AttachmentPreview;
 
 public class AttachmentPreviewHelper : IAttachmentPreviewHelper
 {
     private readonly IWebHostEnvironment webHostEnvironment;
+    private readonly IImageProcessingService imageProcessingService;
 
-    public AttachmentPreviewHelper(IWebHostEnvironment webHostEnvironment)
+    public AttachmentPreviewHelper(IWebHostEnvironment webHostEnvironment, IImageProcessingService imageProcessingService)
     {
         this.webHostEnvironment = webHostEnvironment;
+        this.imageProcessingService = imageProcessingService;
     }
 
     public AttachmentPreviewContent? GetPreviewImage(AttachmentContent attachmentContent, int? sizeToScale)
@@ -69,25 +70,10 @@ public class AttachmentPreviewHelper : IAttachmentPreviewHelper
         return new AttachmentPreviewContent(contentType, bytes);
     }
     
-    private static byte[] GetTransformedContent(byte[] source, int? sizeToScale = null)
+    private byte[] GetTransformedContent(byte[] source, int? sizeToScale = null)
     {
         if (!sizeToScale.HasValue) return source;
-        using (var outputStream = new MemoryStream())
-        {
-            using (Image image = Image.Load(source))
-            {
-                var opt = new ResizeOptions()
-                {
-                    Mode = ResizeMode.Max,
-                    Size = new Size(sizeToScale.Value)
-                };
-                image.Mutate(ctx => ctx.Resize(opt));
 
-                var format = Image.DetectFormat(source);
-                image.Save(outputStream, format); 
-            } 
-
-            return outputStream.ToArray();
-        }
+        return imageProcessingService.ResizeImageKeepingFormat(source, sizeToScale.Value);
     }
 }

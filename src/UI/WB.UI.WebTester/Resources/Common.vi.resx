@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AlRightsReserved" xml:space="preserve"><value>Đã đăng ký bản quyền</value></data>
+  <data name="Legal" xml:space="preserve"><value>Pháp lý</value></data>
+  <data name="TheWorldBankGroup" xml:space="preserve"><value>Nhóm Ngân hàng Thế giới</value></data>
+  <data name="QuestionnaireHasErrors" xml:space="preserve"><value>Bảng câu hỏi có lỗi</value></data>
+  <data name="CantOpenQuestionnaire" xml:space="preserve"><value>Không thể mở bảng câu hỏi</value></data>
+  <data name="FixErrorsOnDesigner" xml:space="preserve"><value>Vui lòng sửa lỗi trong Designer</value></data>
+  <data name="PageNotFound" xml:space="preserve"><value>Không tìm thấy trang</value></data>
+  <data name="PageNotFoundDesc" xml:space="preserve"><value>Không tìm thấy trang được yêu cầu</value></data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve"><value>Không thể tải lại cuộc phỏng vấn</value></data>
+  <data name="ReloadPartialInterviewErrorMessage" xml:space="preserve"><value>Không thể tải lại một phần cuộc phỏng vấn</value></data>
+</root>
