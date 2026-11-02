@@ -146,7 +146,7 @@ namespace WB.UI.Shared.Web.Captcha
                 foreach (var letter in letters)
                 {
                     using var paint = new SKPaint { IsAntialias = true, Color = letter.color };
-                    canvas.DrawText(letter.text, letter.x, letter.y, letter.font, paint);
+                    canvas.DrawText(letter.text, new SKPoint(letter.x, letter.y), SKTextAlign.Left, letter.font, paint);
                 }
 
                 canvas.Restore();
@@ -260,7 +260,7 @@ namespace WB.UI.Shared.Web.Captcha
 
         private static SKPath CreateStar(SKPoint center, int prongs, float innerRadius, float outerRadius)
         {
-            var path = new SKPath();
+            using var builder = new SKPathBuilder();
             var step = Math.PI / prongs;
             for (var i = 0; i < prongs * 2; i++)
             {
@@ -271,13 +271,13 @@ namespace WB.UI.Shared.Web.Captcha
                     center.Y + (float)(Math.Sin(angle) * radius));
 
                 if (i == 0)
-                    path.MoveTo(vertex);
+                    builder.MoveTo(vertex);
                 else
-                    path.LineTo(vertex);
+                    builder.LineTo(vertex);
             }
 
-            path.Close();
-            return path;
+            builder.Close();
+            return builder.Detach();
         }
 
         int GetRandomBetween(float a, float b)
