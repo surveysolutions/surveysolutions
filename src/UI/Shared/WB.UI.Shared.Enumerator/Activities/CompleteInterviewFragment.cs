@@ -300,10 +300,21 @@ namespace WB.UI.Shared.Enumerator.Activities
                 return computedHeight + recyclerView.PaddingTop + recyclerView.PaddingBottom;
             }
 
-            if (!recyclerView.CanScrollVertically(1) && !recyclerView.CanScrollVertically(-1))
+            if (!recyclerView.CanScrollVertically(1) && !recyclerView.CanScrollVertically(-1)
+                && recyclerView.MeasuredHeight > 0)
                 return recyclerView.MeasuredHeight;
 
-            return 0;
+            // the pager may have been hidden/zero-height on first layout, so the list has no laid out children yet;
+            // measure the content with an unspecified height to get its real size
+            var width = recyclerView.Width > 0 ? recyclerView.Width : recyclerView.MeasuredWidth;
+            if (width <= 0 || recyclerView.GetAdapter()?.ItemCount is not > 0)
+                return 0;
+
+            recyclerView.Measure(
+                View.MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.Exactly),
+                View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
+            var measured = recyclerView.MeasuredHeight;
+            return measured;
         }
 
         private void RecalculateRecyclerViewHeight()
