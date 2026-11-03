@@ -241,12 +241,12 @@
   <value>أمتار</value>
 </data>
   <data name="AreaQestion_Coordinates" xml:space="preserve">
-    <value>Coordinates</value>
+    <value>الإحداثيات</value>
   </data>
   <data name="AreaQestion_Latitude" xml:space="preserve">
-    <value>Latitude</value>
+    <value>خط العرض</value>
   </data>
   <data name="AreaQestion_Longitude" xml:space="preserve">
-    <value>Longitude</value>
+    <value>خط الطول</value>
   </data>
 </root>

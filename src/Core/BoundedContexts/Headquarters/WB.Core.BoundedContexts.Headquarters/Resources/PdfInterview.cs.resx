@@ -241,12 +241,12 @@
     <value>Frekvence</value>
   </data>
   <data name="AreaQestion_Coordinates" xml:space="preserve">
-    <value>Coordinates</value>
+    <value>Souřadnice</value>
   </data>
   <data name="AreaQestion_Latitude" xml:space="preserve">
-    <value>Latitude</value>
+    <value>Zeměpisná šířka</value>
   </data>
   <data name="AreaQestion_Longitude" xml:space="preserve">
-    <value>Longitude</value>
+    <value>Zeměpisná délka</value>
   </data>
 </root>

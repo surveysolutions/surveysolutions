@@ -241,12 +241,12 @@
     <value>metros</value>
   </data>
   <data name="AreaQestion_Coordinates" xml:space="preserve">
-    <value>Coordinates</value>
+    <value>Coordenadas</value>
   </data>
   <data name="AreaQestion_Latitude" xml:space="preserve">
-    <value>Latitude</value>
+    <value>Latitud</value>
   </data>
   <data name="AreaQestion_Longitude" xml:space="preserve">
-    <value>Longitude</value>
+    <value>Longitud</value>
   </data>
 </root>

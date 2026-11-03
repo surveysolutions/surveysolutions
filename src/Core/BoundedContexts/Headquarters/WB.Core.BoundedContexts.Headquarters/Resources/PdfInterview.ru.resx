@@ -242,12 +242,12 @@
   </data>
 
   <data name="AreaQestion_Coordinates" xml:space="preserve">
-    <value>Coordinates</value>
+    <value>Координаты</value>
   </data>
   <data name="AreaQestion_Latitude" xml:space="preserve">
-    <value>Latitude</value>
+    <value>Широта</value>
   </data>
   <data name="AreaQestion_Longitude" xml:space="preserve">
-    <value>Longitude</value>
+    <value>Долгота</value>
   </data>
 </root>
