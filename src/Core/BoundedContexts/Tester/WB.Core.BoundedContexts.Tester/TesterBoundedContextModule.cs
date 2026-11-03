@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -27,6 +28,9 @@ namespace WB.Core.BoundedContexts.Tester
             registry.BindAsSingleton<IExecutedCommandsStorage, ExecutedCommandsStorage>();
 
             registry.BindAsSingleton<ICommandService, TesterCommandService>();
+
+            registry.Bind<TesterStatefulInterview>(true);
+            registry.BindToMethod<StatefulInterview>(ctx => ctx.Get<TesterStatefulInterview>());
 
         }
     }

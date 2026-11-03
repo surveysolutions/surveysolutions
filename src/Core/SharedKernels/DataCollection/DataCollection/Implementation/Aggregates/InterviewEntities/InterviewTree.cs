@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeQuestion GetQuestion(Guid id, RosterVector rosterVector)
             => this.GetNodeByIdentity(new Identity(id, rosterVector)) as InterviewTreeQuestion;
 
-        internal InterviewTreeGroup GetGroup(Identity identity)
+        public InterviewTreeGroup GetGroup(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeGroup;
 
         internal bool HasRoster(Identity identity) => this.GetRoster(identity) != null;
@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         internal InterviewTreeRoster GetRoster(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeRoster;
 
-        internal InterviewTreeStaticText GetStaticText(Identity identity)
+        public InterviewTreeStaticText GetStaticText(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeStaticText;
 
         public InterviewTreeVariable GetVariable(Identity identity)

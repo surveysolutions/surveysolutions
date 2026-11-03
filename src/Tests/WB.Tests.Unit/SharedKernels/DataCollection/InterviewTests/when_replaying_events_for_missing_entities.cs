@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Ncqrs.Domain;
+using Moq;
 using Ncqrs.Spec;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -13,7 +17,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     [TestFixture]
-    [TestOf(typeof(Interview))]
+    [TestOf(typeof(TesterStatefulInterview))]
     internal class when_replaying_events_for_missing_entities
     {
         private static IEnumerable<TestCaseData> EventsReferencingMissingEntities()
@@ -65,7 +69,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireId = Guid.NewGuid();
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter();
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocument);
-            var interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
+            var serviceLocator = Mock.Of<IServiceLocator>(x =>
+                x.GetInstance<IQuestionnaireStorage>() == questionnaireRepository);
+            var interview = new TesterStatefulInterview(
+                Create.Service.SubstitutionTextFactory(),
+                Create.Service.InterviewTreeBuilder(),
+                Create.Storage.QuestionnaireQuestionOptionsRepository())
+            {
+                ServiceLocatorInstance = serviceLocator
+            };
+            interview.SetId(Guid.NewGuid());
             var history = Prepare.Events(
                 Create.Event.InterviewCreated(questionnaireId: questionnaireId, questionnaireVersion: 1),
                 persistedEvent).ForSource(interview.EventSourceId);
