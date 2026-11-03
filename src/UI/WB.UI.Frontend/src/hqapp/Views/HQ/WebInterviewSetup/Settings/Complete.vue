@@ -7,12 +7,13 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.CompleteScreenText') }}
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" :class="{ 'has-error': errors.completeScreenText }">
                             <div class="field"
                                 :class="{ 'answered': webInterviewPageMessages['completeScreenText'].text }">
                                 <Field v-slot="{ field }"
+                                    v-model="webInterviewPageMessages['completeScreenText'].text"
                                     name="completeScreenText"
-                                    :value="webInterviewPageMessages['completeScreenText'].text">
+                                    rules="max:2000">
                                     <md-editor
                                         ref="completeScreenText"
                                         v-bind="field"
@@ -27,6 +28,7 @@
                                     <span></span>
                                 </button>
                             </div>
+                            <span class="help-block" v-if="errors.completeScreenText">{{ errors.completeScreenText }}</span>
                         </div>
                     </div>
                     <div class="row-element mb-30">

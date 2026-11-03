@@ -14,6 +14,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     [ResponseCache(NoStore = true)]
     public class WebInterviewSettingsApiController : ControllerBase
     {
+        private const int CompleteScreenTextMaxLength = 2000;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
@@ -44,6 +45,9 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (IsCompleteScreenTextTooLong(updateModel.MessageType, updateModel.MessageText))
+                return BadRequest();
 
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
@@ -107,6 +111,9 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            if (IsCompleteScreenTextTooLong(updateModel.Type, updateModel.Message))
+                return BadRequest();
+
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
@@ -120,6 +127,10 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
             return Ok();
         }
+
+        private static bool IsCompleteScreenTextTooLong(WebInterviewUserMessages type, string text) =>
+            type == WebInterviewUserMessages.CompleteScreenText &&
+            text is { Length: > CompleteScreenTextMaxLength };
 
         public class UpdateAdditionalSettingsModel
         {
