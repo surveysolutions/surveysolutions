@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 
@@ -20,20 +21,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IInvitationService invitationService;
         private readonly IEmailService emailService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
-        private readonly IReminderEmailSender reminderEmailSender;
+        private readonly IRootScopeExecutor rootScopeExecutor;
        
         public SendRemindersJob(
             ILogger<SendRemindersJob> logger, 
             IInvitationService invitationService, 
             IEmailService emailService,
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IReminderEmailSender reminderEmailSender)
+            IRootScopeExecutor rootScopeExecutor)
         {
             this.logger = logger;
             this.invitationService = invitationService;
             this.emailService = emailService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
-            this.reminderEmailSender = reminderEmailSender;
+            this.rootScopeExecutor = rootScopeExecutor;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -58,19 +59,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                     if (webInterviewConfig.ReminderAfterDaysIfNoResponse.HasValue)
                     {
-                        await reminderEmailSender.SendRemindersAsync(questionnaireIdentity, questionnaire.Title,
+                        await SendRemindersAsync(questionnaireIdentity, questionnaire.Title,
                             EmailTextTemplateType.Reminder_NoResponse,
                             webInterviewConfig.ReminderAfterDaysIfNoResponse.Value).ConfigureAwait(false);
                     }
 
                     if (webInterviewConfig.ReminderAfterDaysIfPartialResponse.HasValue)
                     {
-                        await reminderEmailSender.SendRemindersAsync(questionnaireIdentity, questionnaire.Title,
+                        await SendRemindersAsync(questionnaireIdentity, questionnaire.Title,
                             EmailTextTemplateType.Reminder_PartialResponse,
                             webInterviewConfig.ReminderAfterDaysIfPartialResponse.Value).ConfigureAwait(false);
                     }
 
-                    await reminderEmailSender.SendRemindersAsync(questionnaireIdentity, questionnaire.Title,
+                    await SendRemindersAsync(questionnaireIdentity, questionnaire.Title,
                         EmailTextTemplateType.RejectEmail, 0).ConfigureAwait(false);
                 }
 
@@ -85,6 +86,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 this.logger.LogError(ex, $"Reminders distribution job for workspace {context.Get("workspace")}: FAILED");
             }
         }
+
+        private Task<ReminderEmailSendResult> SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
+            string questionnaireTitle, EmailTextTemplateType reminderType, int thresholdDays) =>
+            rootScopeExecutor.ExecuteAsync(locator =>
+                locator.GetInstance<IReminderEmailSender>().SendRemindersAsync(questionnaireIdentity,
+                    questionnaireTitle, reminderType, thresholdDays));
     }
 
     public class SendRemindersTask : BaseTask

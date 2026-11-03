@@ -11,8 +11,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             QuestionnaireIdentity questionnaireIdentity, EmailTextTemplateType reminderType)
         {
             var lockKey = SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, reminderType);
-            // This advisory transaction lock covers recipient selection, delivery, and the delivery-state update.
-            await unitOfWork.Session.CreateSQLQuery("select pg_advisory_xact_lock(hashtext(:lockKey))")
+            await AcquireAsync(unitOfWork, $"ReminderDelivery-{lockKey}").ConfigureAwait(false);
+        }
+
+        public static Task AcquireRequestAsync(IUnitOfWork unitOfWork,
+            QuestionnaireIdentity questionnaireIdentity, EmailTextTemplateType reminderType)
+        {
+            var lockKey = SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, reminderType);
+            return AcquireAsync(unitOfWork, $"ReminderRequest-{lockKey}");
+        }
+
+        private static async Task AcquireAsync(IUnitOfWork unitOfWork, string lockKey)
+        {
+            // Advisory locks are database-wide, so include the current workspace schema in the lock key.
+            await unitOfWork.Session.CreateSQLQuery(
+                    "select pg_advisory_xact_lock(hashtext(current_schema() || :lockKey))")
                 .SetString("lockKey", lockKey)
                 .ExecuteUpdateAsync()
                 .ConfigureAwait(false);

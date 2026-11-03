@@ -93,6 +93,43 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
     public class SendRemindersJobTests
     {
         [Test]
+        public async Task when_all_reminder_types_are_enabled_then_each_batch_uses_a_separate_scope()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
+            var invitationService = new Mock<IInvitationService>();
+            invitationService.Setup(x => x.GetQuestionnairesWithInvitations())
+                .Returns(new[] { Create.Entity.QuestionnaireBrowseItem(Id.g1, 10, title: "Web Survey") });
+            var configProvider = new Mock<IWebInterviewConfigProvider>();
+            configProvider.Setup(x => x.Get(questionnaireIdentity)).Returns(new WebInterviewConfig
+            {
+                Started = true,
+                ReminderAfterDaysIfNoResponse = 1,
+                ReminderAfterDaysIfPartialResponse = 1
+            });
+            var emailService = new Mock<IEmailService>();
+            emailService.Setup(x => x.IsConfigured()).Returns(true);
+            var sender = new Mock<IReminderEmailSender>();
+            sender.Setup(x => x.SendRemindersAsync(questionnaireIdentity, "Web Survey",
+                    It.IsAny<EmailTextTemplateType>(), It.IsAny<int>()))
+                .ReturnsAsync(new ReminderEmailSendResult());
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(sender.Object);
+            var rootScopeExecutor = new Mock<IRootScopeExecutor>();
+            rootScopeExecutor.Setup(x => x.ExecuteAsync<ReminderEmailSendResult>(
+                    It.IsAny<Func<IServiceLocator, Task<ReminderEmailSendResult>>>()))
+                .Returns((Func<IServiceLocator, Task<ReminderEmailSendResult>> action) =>
+                    action(serviceLocator.Object));
+
+            var job = new SendRemindersJob(Mock.Of<ILogger<SendRemindersJob>>(), invitationService.Object,
+                emailService.Object, configProvider.Object, rootScopeExecutor.Object);
+
+            await job.Execute(Mock.Of<IJobExecutionContext>());
+
+            rootScopeExecutor.Verify(x => x.ExecuteAsync<ReminderEmailSendResult>(
+                It.IsAny<Func<IServiceLocator, Task<ReminderEmailSendResult>>>()), Times.Exactly(3));
+        }
+
+        [Test]
         public async Task when_email_service_is_not_configured()
         {
             var invitationServiceMock = new Mock<IInvitationService>();
@@ -373,17 +410,17 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type, 0))
                 .ReturnsAsync(new ReminderEmailSendResult { SentCount = sentCount, FailedCount = failedCount });
 
-            var job = new SendRemindersNowJob(
-                sender.Object,
-                new NoScopeInScopeExecutor(serviceLocator.Object),
+            serviceLocator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(sender.Object);
+            var job = new SendRemindersNowJob(new NoScopeInScopeExecutor(serviceLocator.Object),
                 Mock.Of<ILogger<SendRemindersNowJob>>());
 
             await job.Execute(request, Mock.Of<IJobExecutionContext>());
 
-            var status = statusStorage.GetById(request.StorageKey);
+            var status = statusStorage.GetById(request.StatusStorageKey);
             Assert.That(status.State, Is.EqualTo(expectedState));
             Assert.That(status.SentCount, Is.EqualTo(sentCount));
             Assert.That(status.FailedCount, Is.EqualTo(failedCount));
+            Assert.That(statusStorage.GetById(request.StorageKey).State, Is.EqualTo(expectedState));
         }
     }
 }

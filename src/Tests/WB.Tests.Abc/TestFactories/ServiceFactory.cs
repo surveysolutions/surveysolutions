@@ -1166,13 +1166,15 @@ namespace WB.Tests.Abc.TestFactories
             var actualEmailService = emailService ?? emailServiceMock.Object;
             var reminderEmailSender = ReminderEmailSender(invService, actualEmailService,
                 webInterviewConfigProvider1, emailParamsStorage, webInterviewEmailRenderer);
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(reminderEmailSender);
 
             return new SendRemindersJob(
                 Mock.Of<ILogger<SendRemindersJob>>(),
                 invService,
                 actualEmailService,
                 webInterviewConfigProvider1,
-                reminderEmailSender);
+                new NoScopeInScopeExecutor(serviceLocator.Object));
         }
 
         public ReminderEmailSender ReminderEmailSender(

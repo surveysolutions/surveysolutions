@@ -20,8 +20,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public string StorageKey => GetStorageKey(QuestionnaireIdentity, Type);
 
+        public string StatusStorageKey => GetStatusStorageKey(RequestId);
+
         public static string GetStorageKey(QuestionnaireIdentity questionnaireIdentity, EmailTextTemplateType type) =>
             $"SendRemindersNow-{questionnaireIdentity}-{type}";
+
+        public static string GetStatusStorageKey(Guid requestId) => $"SendRemindersNow-{requestId}";
     }
 
     public class SendRemindersNowStatus : AppSetting
@@ -47,16 +51,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     [DisallowConcurrentExecution]
     public class SendRemindersNowJob : IJob<SendRemindersNowRequest>
     {
-        private readonly IReminderEmailSender reminderEmailSender;
         private readonly IRootScopeExecutor rootScopeExecutor;
         private readonly ILogger<SendRemindersNowJob> logger;
 
         public SendRemindersNowJob(
-            IReminderEmailSender reminderEmailSender,
             IRootScopeExecutor rootScopeExecutor,
             ILogger<SendRemindersNowJob> logger)
         {
-            this.reminderEmailSender = reminderEmailSender;
             this.rootScopeExecutor = rootScopeExecutor;
             this.logger = logger;
         }
@@ -74,8 +75,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             try
             {
-                var result = await reminderEmailSender.SendRemindersAsync(request.QuestionnaireIdentity,
-                    request.QuestionnaireTitle, request.Type, 0).ConfigureAwait(false);
+                var result = await rootScopeExecutor.ExecuteAsync(locator =>
+                    locator.GetInstance<IReminderEmailSender>().SendRemindersAsync(request.QuestionnaireIdentity,
+                        request.QuestionnaireTitle, request.Type, 0)).ConfigureAwait(false);
                 status.SentCount = result.SentCount;
                 status.FailedCount = result.FailedCount;
                 status.State = result.FailedCount == 0
@@ -102,7 +104,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private Task StoreStatusAsync(SendRemindersNowStatus status, string storageKey) =>
             rootScopeExecutor.ExecuteAsync(locator =>
             {
-                locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>().Store(status, storageKey);
+                var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
+                storage.Store(status, SendRemindersNowRequest.GetStatusStorageKey(status.RequestId));
+                storage.Store(status, storageKey);
                 return Task.FromResult(true);
             });
     }

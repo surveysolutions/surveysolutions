@@ -256,7 +256,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
                 return BadRequest(new { error = "Email sending is not configured." });
 
             var type = model.Type.Value;
-            await ReminderEmailSendLock.AcquireAsync(unitOfWork, questionnaireIdentity, type)
+            await ReminderEmailSendLock.AcquireRequestAsync(unitOfWork, questionnaireIdentity, type)
                 .ConfigureAwait(false);
 
             var storageKey = SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, type);
@@ -282,6 +282,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             };
 
             sendRemindersStatusStorage.Store(status, request.StorageKey);
+            sendRemindersStatusStorage.Store(status, request.StatusStorageKey);
             await sendRemindersTask.Schedule(request).ConfigureAwait(false);
 
             return AcceptedAtAction(nameof(SendRemindersNowStatus), new { id, requestId }, status);
@@ -294,16 +295,9 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
-            var status = new[]
-                {
-                    EmailTextTemplateType.Reminder_NoResponse,
-                    EmailTextTemplateType.Reminder_PartialResponse,
-                    EmailTextTemplateType.RejectEmail
-                }
-                .Select(type => sendRemindersStatusStorage.GetById(
-                    SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, type)))
-                .FirstOrDefault(candidate => candidate?.RequestId == requestId);
-            if (status == null)
+            var status = sendRemindersStatusStorage.GetById(
+                SendRemindersNowRequest.GetStatusStorageKey(requestId));
+            if (status?.QuestionnaireIdentity != questionnaireIdentity)
                 return NotFound();
 
             return Ok(status);
