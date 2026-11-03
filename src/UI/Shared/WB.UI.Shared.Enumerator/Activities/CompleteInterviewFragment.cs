@@ -45,6 +45,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             SetupTabsIfNeeded();
             RegisterPageChangeCallback();
+            SubscribeToViewModel();
             viewPager.Post(RecalculateRecyclerViewHeight);
 
             return view;
@@ -62,6 +63,26 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             CleanupViewResources();
             base.OnDestroyView();
+        }
+
+        private void SubscribeToViewModel()
+        {
+            if (ViewModel == null) return;
+            ViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+            ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+        }
+
+        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName != nameof(CompleteInterviewViewModel.IsLoading)) return;
+
+            // tabs become visible only after loading is finished, so the pager height must be recalculated
+            viewPager?.Post(() =>
+            {
+                if (View == null || IsDetached) return;
+                SetupTabsIfNeeded();
+                RecalculateRecyclerViewHeight();
+            });
         }
 
         private void RegisterPageChangeCallback()
@@ -379,6 +400,9 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void CleanupViewResources()
         {
+            if (ViewModel != null)
+                ViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+
             if (viewPager != null)
                 viewPager.Adapter = null;
 
