@@ -29,6 +29,40 @@ namespace WB.Tests.Web.Headquarters.Controllers
         }
 
         [Test]
+        public void when_complete_screen_title_exceeds_limit_should_reject_page_template()
+        {
+            var controller = new WebInterviewSettingsApiController(
+                Mock.Of<IWebInterviewConfigProvider>(),
+                Mock.Of<IQuestionnaireBrowseViewFactory>());
+            var model = new WebInterviewSettingsApiController.UpdatePageTemplateModel
+            {
+                TitleType = WebInterviewUserMessages.CompleteScreenText,
+                TitleText = new string('x', 2001)
+            };
+
+            var result = controller.UpdatePageTemplate("invalid-id", model);
+
+            Assert.That(result, Is.TypeOf<BadRequestResult>());
+        }
+
+        [Test]
+        public void when_complete_screen_button_exceeds_limit_should_reject_page_template()
+        {
+            var controller = new WebInterviewSettingsApiController(
+                Mock.Of<IWebInterviewConfigProvider>(),
+                Mock.Of<IQuestionnaireBrowseViewFactory>());
+            var model = new WebInterviewSettingsApiController.UpdatePageTemplateModel
+            {
+                ButtonType = WebInterviewUserMessages.CompleteScreenText,
+                ButtonText = new string('x', 2001)
+            };
+
+            var result = controller.UpdatePageTemplate("invalid-id", model);
+
+            Assert.That(result, Is.TypeOf<BadRequestResult>());
+        }
+
+        [Test]
         public void when_complete_screen_text_exceeds_limit_should_reject_page_message()
         {
             var controller = new WebInterviewSettingsApiController(

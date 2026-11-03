@@ -46,7 +46,10 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (IsCompleteScreenTextTooLong(updateModel.MessageType, updateModel.MessageText))
+            if (IsCompleteScreenTextTooLong(updateModel.TitleType, updateModel.TitleText) ||
+                IsCompleteScreenTextTooLong(updateModel.MessageType, updateModel.MessageText) ||
+                (updateModel.ButtonType.HasValue &&
+                 IsCompleteScreenTextTooLong(updateModel.ButtonType.Value, updateModel.ButtonText)))
                 return BadRequest();
 
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
