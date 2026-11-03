@@ -151,6 +151,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private InterviewTree sourceInterview;
         private readonly HashSet<Identity> questionsChangedSinceLastRejection = new HashSet<Identity>();
+        private bool hasReviewCheckpoint;
 
         public DateTimeOffset? StartedDate => this.properties.StartedDate;
         public DateTimeOffset? CompletedDate => this.properties.CompletedDate;
@@ -183,12 +184,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (history == null)
                 throw new ArgumentNullException(nameof(history));
 
-            var events = history.ToArray();
-            this.questionsChangedSinceLastRejection.Clear();
-            base.InitializeFromHistory(eventSourceId, events);
+            base.InitializeFromHistory(eventSourceId, history);
+        }
 
-            foreach (var historicalEvent in events)
-                this.UpdateReviewState(historicalEvent.Payload);
+        protected override void HandleEvent(object evnt)
+        {
+            base.HandleEvent(evnt);
+            this.UpdateReviewState(evnt);
         }
 
         protected override void OnEventApplied(UncommittedEvent appliedEvent)
@@ -198,8 +200,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.properties.LastAnswerDate = questionAnswered.OriginDate;
             }
-
-            this.UpdateReviewState(appliedEvent.Payload);
         }
 
         private void UpdateReviewState(object payload)
@@ -209,16 +209,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 case InterviewRejected:
                 case InterviewRejectedByHQ:
                     this.questionsChangedSinceLastRejection.Clear();
+                    this.hasReviewCheckpoint = true;
                     break;
-                case QuestionAnswered questionAnswered:
+                case QuestionAnswered questionAnswered when this.hasReviewCheckpoint:
                     this.questionsChangedSinceLastRejection.Add(
                         Identity.Create(questionAnswered.QuestionId, questionAnswered.RosterVector));
                     break;
-                case AnswerRemoved answerRemoved:
+                case AnswerRemoved answerRemoved when this.hasReviewCheckpoint:
                     this.questionsChangedSinceLastRejection.Remove(
                         Identity.Create(answerRemoved.QuestionId, answerRemoved.RosterVector));
                     break;
-                case AnswersRemoved answersRemoved:
+                case AnswersRemoved answersRemoved when this.hasReviewCheckpoint:
                     foreach (var identity in answersRemoved.Questions)
                         this.questionsChangedSinceLastRejection.Remove(identity);
                     break;
