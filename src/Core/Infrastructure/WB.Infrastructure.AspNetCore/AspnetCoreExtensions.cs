@@ -10,6 +10,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Formatting.Compact;
+using Serilog.Settings.Configuration;
 using Microsoft.AspNetCore.Server.HttpSys;
 
 namespace WB.Infrastructure.AspNetCore
@@ -54,7 +55,10 @@ namespace WB.Infrastructure.AspNetCore
                 .WriteTo
                     .File(new RenderedCompactJsonFormatter(), Path.GetFullPath(verboseLog), LogEventLevel.Verbose,
                         retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
-                .ReadFrom.Configuration(host.Configuration, "Logging")
+                .ReadFrom.Configuration(host.Configuration, new ConfigurationReaderOptions
+                {
+                    SectionName = "Logging"
+                })
                 ;    
         }
 

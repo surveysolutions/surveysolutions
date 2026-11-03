@@ -10,10 +10,13 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account
 {
+    // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
+    [NoTransaction]
     public class ResendConfirmationLinkModel : PageModel
     {
         private readonly UserManager<DesignerIdentityUser> users;

@@ -614,4 +614,10 @@ Contact support for assistance.</value>
   <data name="CompleteReviewSubmitInterview" xml:space="preserve">
       <value>Interview {{key}}</value>
   </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>Geography preview</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>Tap to enter number</value>
+  </data>
 </root>

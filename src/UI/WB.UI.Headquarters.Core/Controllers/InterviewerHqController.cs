@@ -222,7 +222,8 @@ namespace WB.UI.Headquarters.Controllers
 
                 if (interviewStatuses != null)
                 {
-                    filter = filter.Where(summary => interviewStatuses.Contains(summary.Status));
+                    // Avoid the span-based Contains overload, which NHibernate cannot translate.
+                    filter = filter.Where(summary => Enumerable.Contains(interviewStatuses, summary.Status));
                 }
 
                 return filter

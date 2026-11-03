@@ -73,19 +73,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             return GetLookupTableContent(questionnaire, lookupTableId);
         }
 
-        public LookupTableContent? GetLookupTableContent(QuestionnaireRevision questionnaireId, Guid lookupTableId)
-        {
-            var questionnaire = this.documentStorage.Get(questionnaireId);
-            if (questionnaire == null ||
-                questionnaire.PublicKey != (questionnaireId.OriginalQuestionnaireId ?? questionnaireId.QuestionnaireId))
-                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
-
-            if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
-                return null;
-
-            return GetLookupTableContent(questionnaire, lookupTableId);
-        }
-
         private LookupTableContent? GetLookupTableContent(QuestionnaireDocument questionnaire, Guid lookupTableId)
         {
             if (questionnaire == null)
@@ -114,6 +101,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
 
             return GetLookupTableContentFileImpl(questionnaire, lookupTableId);
+        }
+
+        public string[]? GetLookupTableHeaders(QuestionnaireRevision questionnaireId, Guid lookupTableId)
+        {
+            var questionnaire = this.documentStorage.Get(questionnaireId);
+            if (questionnaire == null ||
+                questionnaire.PublicKey != (questionnaireId.OriginalQuestionnaireId ?? questionnaireId.QuestionnaireId))
+                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
+
+            var lookupTableContent = GetLookupTableContent(questionnaire, lookupTableId);
+            if (lookupTableContent == null)
+                return null;
+
+            return new[] { ROWCODE }.Concat(lookupTableContent.VariableNames).ToArray();
         }
 
         public Dictionary<Guid, string> GetQuestionnairesLookupTables(Guid questionnaireId)

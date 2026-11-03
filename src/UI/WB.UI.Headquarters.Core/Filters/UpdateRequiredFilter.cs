@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Filters
                 && statusCodeResult.StatusCode == StatusCodes.Status426UpgradeRequired)
             {
                 var version = productVersion.ToString();
-                context.HttpContext.Response.Headers.Add("version", version);
+                context.HttpContext.Response.Headers.Append("version", version);
             }
         }
 
