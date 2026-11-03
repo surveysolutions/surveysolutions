@@ -1130,25 +1130,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.properties.FailedCriticalRules;
         }
 
-        private void Apply(InterviewPaused @event)
+        protected void Apply(InterviewPaused @event)
         {
             this.properties.LastPaused = @event.OriginDate;
             this.properties.LastResumed = null;
         }
 
-        private void Apply(InterviewResumed @event)
+        protected void Apply(InterviewResumed @event)
         {
             this.properties.LastResumed = @event.OriginDate;
             this.properties.LastPaused = null;
         }
 
-        private void Apply(InterviewOpenedBySupervisor @event)
+        protected void Apply(InterviewOpenedBySupervisor @event)
         {
             this.properties.LastOpenedBySupervisor = @event.OriginDate;
             this.properties.LastClosedBySupervisor = null;
         }
 
-        private void Apply(InterviewClosedBySupervisor @event)
+        protected void Apply(InterviewClosedBySupervisor @event)
         {
             this.properties.LastClosedBySupervisor = @event.OriginDate;
             this.properties.LastOpenedBySupervisor = null;

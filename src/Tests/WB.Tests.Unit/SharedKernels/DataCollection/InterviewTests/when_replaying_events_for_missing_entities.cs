@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
-using Ncqrs.Domain;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
@@ -11,6 +11,8 @@ using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
@@ -61,10 +63,44 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(missingStaticText, failedValidationConditions)
                 },
                 originDate));
+            yield return new TestCaseData(new NumericIntegerQuestionAnswered(
+                Guid.NewGuid(), missingQuestion.Id, Array.Empty<decimal>(), originDate, 42));
+            yield return new TestCaseData(new AnswersRemoved(null, new[] { missingQuestion }, originDate));
+            yield return new TestCaseData(new AnswerRemoved(
+                Guid.NewGuid(), missingQuestion.Id, Array.Empty<decimal>(), originDate));
+            yield return new TestCaseData(new AnswersMarkedAsProtected(new[] { missingQuestion }, originDate));
+            yield return new TestCaseData(new AnswerCommented(
+                Guid.NewGuid(), missingQuestion.Id, Array.Empty<decimal>(), originDate, "comment", Guid.NewGuid()));
+            yield return new TestCaseData(new AnswerCommentResolved(
+                Guid.NewGuid(), missingQuestion.Id, missingQuestion.RosterVector, originDate, Array.Empty<Guid>()));
+            yield return new TestCaseData(new LinkedToListOptionsChanged(
+                new[] { new ChangedLinkedToListOptions(missingQuestion, Array.Empty<decimal>()) }, originDate));
+            yield return new TestCaseData(Create.Event.InterviewPaused(originDate));
+            yield return new TestCaseData(Create.Event.InterviewResumed(originDate));
+            yield return new TestCaseData(Create.Event.InterviewOpenedBySupervisor());
+            yield return new TestCaseData(Create.Event.InterviewClosedBySupervisor());
         }
 
         [TestCaseSource(nameof(EventsReferencingMissingEntities))]
         public void should_replay_without_event_apply_exception(IEvent persistedEvent)
+        {
+            Action act = () => CreateInterview(persistedEvent);
+
+            act.Should().NotThrow();
+        }
+
+        [Test]
+        public void should_complete_without_event_not_handled_exception()
+        {
+            var interview = CreateInterview(
+                Create.Event.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
+
+            Action act = () => interview.Complete(Guid.NewGuid(), string.Empty, DateTimeOffset.UtcNow, null);
+
+            act.Should().NotThrow();
+        }
+
+        private static TesterStatefulInterview CreateInterview(params IEvent[] persistedEvents)
         {
             var questionnaireId = Guid.NewGuid();
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter();
@@ -79,13 +115,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 ServiceLocatorInstance = serviceLocator
             };
             interview.SetId(Guid.NewGuid());
-            var history = Prepare.Events(
-                Create.Event.InterviewCreated(questionnaireId: questionnaireId, questionnaireVersion: 1),
-                persistedEvent).ForSource(interview.EventSourceId);
-
-            Action act = () => interview.InitializeFromHistory(interview.EventSourceId, history);
-
-            act.Should().NotThrow<OnEventApplyException>();
+            var history = Prepare.Events(new[]
+                {
+                    Create.Event.InterviewCreated(questionnaireId: questionnaireId, questionnaireVersion: 1)
+                }
+                .Concat(persistedEvents)
+                .ToArray()).ForSource(interview.EventSourceId);
+            interview.InitializeFromHistory(interview.EventSourceId, history);
+            return interview;
         }
     }
 }

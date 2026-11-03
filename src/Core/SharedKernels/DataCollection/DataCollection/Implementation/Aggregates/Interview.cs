@@ -380,7 +380,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.Tree.GetQuestion(linkedQuestion.QuestionId)?.AsLinked.SetOptions(linkedQuestion.Options);
         }
 
-        public void Apply(LinkedToListOptionsChanged @event)
+        public virtual void Apply(LinkedToListOptionsChanged @event)
         {
             foreach (var linkedQuestion in @event.ChangedLinkedQuestions)
                 this.Tree.GetQuestion(linkedQuestion.QuestionId).AsLinkedToList.SetOptions(linkedQuestion.Options?.Select(Convert.ToInt32) ?? EmptyArray<int>.Value);
