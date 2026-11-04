@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string? Title { get; set; }
         public string? EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
+        public bool RandomizeOrder { get; set; }
         public RosterDisplayMode DisplayMode { get; set; }
         public RosterDisplayMode[] DisplayModes { get; set; }
         public string? VariableName { get; set; }

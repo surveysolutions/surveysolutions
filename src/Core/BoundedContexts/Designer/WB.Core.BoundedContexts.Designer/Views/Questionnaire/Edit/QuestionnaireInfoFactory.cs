@@ -285,6 +285,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Title = group.Title,
                     EnablementCondition = group.ConditionExpression,
                     HideIfDisabled = group.HideIfDisabled,
+                    RandomizeOrder = group.RandomizeOrder,
                     VariableName = group.VariableName,
                     DisplayMode = group.DisplayMode
                 },
@@ -323,6 +324,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 Title = rosterTitle,
                 EnablementCondition = roster.ConditionExpression,
                 HideIfDisabled = roster.HideIfDisabled,
+                RandomizeOrder = roster.RandomizeOrder,
                 VariableName = roster.VariableName,
                 DisplayMode = roster.DisplayMode,
 
@@ -393,7 +395,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 hideIfDisabled : staticText.HideIfDisabled,
                 breadcrumbs: this.GetBreadcrumbs(questionnaire, staticText),
                 validationCondition: staticText.ValidationConditions.ToList()
-            );
+            )
+            {
+                RandomizeOrder = staticText.RandomizeOrder
+            };
 
             return result;
         }
@@ -571,6 +576,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 isCritical: question.Properties?.IsCritical
             );
             questionView.ValidationConditions.AddRange(question.ValidationConditions);
+            questionView.RandomizeOrder = question.RandomizeOrder;
 
             questionView.RosterScopeIds = new Guid[0];
             questionView.ParentGroupsIds = new Guid[0];

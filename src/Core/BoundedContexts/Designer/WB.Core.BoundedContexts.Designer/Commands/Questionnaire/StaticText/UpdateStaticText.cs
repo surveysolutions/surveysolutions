@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
         public string AttachmentName { get; set; }
 
         public bool HideIfDisabled { get; set; }
+        public bool RandomizeOrder { get; set; }
         public string EnablementCondition { get; set; }
         public List<ValidationCondition> ValidationConditions { get; set; }
     }

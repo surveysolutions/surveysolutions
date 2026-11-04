@@ -130,6 +130,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters();
 
+        IEnumerable<InterviewTreeGroup> GetAllGroupsAndRostersInDisplayOrder();
+
         Guid CurrentResponsibleId { get; }
 
         Guid SupervisorId { get; }
@@ -185,6 +187,12 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> GetUnderlyingEntitiesForReview(Identity sectionId);
 
         IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId);
+
+        /// <summary>
+        /// Sorts children of <paramref name="parentIdentity"/> (or sections when it is <c>null</c>) in display order,
+        /// taking into account deterministic randomization of questionnaire items and roster instances.
+        /// </summary>
+        IEnumerable<Identity> OrderForDisplay(Identity parentIdentity, IEnumerable<Identity> children);
 
         IEnumerable<IInterviewTreeNode> GetAllInterviewNodes();
 

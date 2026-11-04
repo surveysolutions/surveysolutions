@@ -221,6 +221,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 VariableName = group.VariableName,
                 ConditionExpression = group.ConditionExpression,
                 HideIfDisabled = group.HideIfDisabled,
+                RandomizeOrder = group.RandomizeOrder,
                 Children = group.Children
                     .Where(e => !IsIdentified(e))
                     .Select(c => MapCompositeToEntity(c, idToVarMap))
@@ -244,6 +245,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 VariableName = group.VariableName,
                 ConditionExpression = group.ConditionExpression,
                 HideIfDisabled = group.HideIfDisabled,
+                RandomizeOrder = group.RandomizeOrder,
                 DisplayMode = (Models.RosterDisplayMode)(int)group.DisplayMode,
                 RosterSizeSource = (Models.RosterSizeSourceType)(int)group.RosterSizeSource,
                 FixedRosterTitles = group.FixedRosterTitles
@@ -269,6 +271,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 AttachmentName = staticText.AttachmentName,
                 ConditionExpression = staticText.ConditionExpression,
                 HideIfDisabled = staticText.HideIfDisabled,
+                RandomizeOrder = staticText.RandomizeOrder,
                 ValidationConditions = staticText.ValidationConditions
                     .Select(MapValidationCondition)
                     .ToList()
@@ -295,6 +298,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             dst.Comments = src.Comments;
             dst.ConditionExpression = src.ConditionExpression;
             dst.HideIfDisabled = src.HideIfDisabled;
+            dst.RandomizeOrder = src.RandomizeOrder;
             dst.Instructions = src.Instructions;
             dst.HideInstructions = src.Properties?.HideInstructions ?? false;
             dst.IsCritical = src.Properties?.IsCritical ?? false;
@@ -556,7 +560,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 PublicKey = publicKey,
                 VariableName = modelGroup.VariableName ?? string.Empty,
                 ConditionExpression = modelGroup.ConditionExpression ?? string.Empty,
-                HideIfDisabled = modelGroup.HideIfDisabled
+                HideIfDisabled = modelGroup.HideIfDisabled,
+                RandomizeOrder = modelGroup.RandomizeOrder
             };
             return group;
         }
@@ -579,6 +584,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 VariableName = roster.VariableName ?? string.Empty,
                 ConditionExpression = roster.ConditionExpression ?? string.Empty,
                 HideIfDisabled = roster.HideIfDisabled,
+                RandomizeOrder = roster.RandomizeOrder,
                 IsRoster = true,
                 CustomRosterTitle = customRosterTitle,
                 DisplayMode = (Main.Core.Entities.SubEntities.RosterDisplayMode)(int)roster.DisplayMode,
@@ -603,7 +609,10 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 src.ValidationConditions?.Select(MapValidationConditionFromModel).ToList(),
                 src.AttachmentName,
                 null
-            );
+            )
+            {
+                RandomizeOrder = src.RandomizeOrder
+            };
             return staticText;
         }
 
@@ -628,6 +637,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             dst.Comments = src.Comments;
             dst.ConditionExpression = src.ConditionExpression ?? string.Empty;
             dst.HideIfDisabled = src.HideIfDisabled;
+            dst.RandomizeOrder = src.RandomizeOrder;
             dst.Instructions = src.Instructions;
             dst.QuestionScope = (Main.Core.Entities.SubEntities.QuestionScope)(int)src.QuestionScope;
             dst.QuestionText = src.QuestionText;
