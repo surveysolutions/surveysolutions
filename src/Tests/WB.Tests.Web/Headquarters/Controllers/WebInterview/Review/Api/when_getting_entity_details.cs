@@ -223,6 +223,47 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
                 Identity.Create(commentedQuestionId, RosterVector.Empty)), Is.True);
         }
 
+        [Test]
+        public void should_reset_changed_answers_after_a_later_rejection_in_live_state_and_replay()
+        {
+            var t0 = DateTimeOffset.UtcNow.AddHours(-3);
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0, "before");
+            interview.Complete(interviewerId, "", t0.AddMinutes(1), null);
+            interview.Reject(supervisorId, "first reject", t0.AddMinutes(2));
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0, "after first reject");
+            var eventCountAfterFirstAnswer = interview.GetUnCommittedChanges().Count();
+            var questionIdentity = Identity.Create(commentedQuestionId, RosterVector.Empty);
+
+            Assert.That(interview.IsQuestionChangedSinceLastRejection(questionIdentity), Is.True);
+
+            interview.Complete(interviewerId, "", t0.AddMinutes(4), null);
+            interview.Reject(supervisorId, "second reject", t0.AddMinutes(5));
+            var eventCountAfterSecondReject = interview.GetUnCommittedChanges().Count();
+
+            Assert.That(interview.IsQuestionChangedSinceLastRejection(questionIdentity), Is.False);
+
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0, "after second reject");
+
+            Assert.That(interview.IsQuestionChangedSinceLastRejection(questionIdentity), Is.True);
+
+            var history = interview.GetUnCommittedChanges().Select(e => new CommittedEvent(
+                Guid.Empty, null, e.EventIdentifier, e.EventSourceId, e.EventSequence, e.EventTimeStamp, null, e.Payload)).ToArray();
+            var replayedInterview = Create.AggregateRoot.StatefulInterview(questionnaire: document, shouldBeInitialized: false);
+            replayedInterview.InitializeFromHistory(interview.Id, history.Take(eventCountAfterFirstAnswer));
+
+            Assert.That(replayedInterview.IsQuestionChangedSinceLastRejection(questionIdentity), Is.True);
+
+            replayedInterview.InitializeFromHistory(
+                interview.Id,
+                history.Skip(eventCountAfterFirstAnswer).Take(eventCountAfterSecondReject - eventCountAfterFirstAnswer));
+
+            Assert.That(replayedInterview.IsQuestionChangedSinceLastRejection(questionIdentity), Is.False);
+
+            replayedInterview.InitializeFromHistory(interview.Id, history.Skip(eventCountAfterSecondReject));
+
+            Assert.That(replayedInterview.IsQuestionChangedSinceLastRejection(questionIdentity), Is.True);
+        }
+
         protected QuestionnaireDocument GetDocument()
         {
             return Create.Entity.QuestionnaireDocumentWithOneChapter(

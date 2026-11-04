@@ -149,10 +149,6 @@
             align-items: center;
             align-content: center;
 
-            &.changed-since-reject {
-                border-left: 4px solid #f0ad4e;
-            }
-
             .cell-content {
                 display: block;
                 width: 100%;
@@ -209,6 +205,10 @@
                 background-position: 0 0;
                 background-color: rgba(255, 46, 0, 0.2);
                 border-color: #FF2E00;
+            }
+
+            &.changed-since-reject {
+                border-left: 4px solid #f0ad4e;
             }
         }
 
