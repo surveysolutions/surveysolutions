@@ -1306,8 +1306,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(state.GroupsState.ContainsKey(sourceGroupId), Is.False);
         }
 
-        [TestCase(typeof(EnableAnonymousSharing), QuestionnaireActionType.AnonymousSharingEnabled)]
-        [TestCase(typeof(DisableAnonymousSharing), QuestionnaireActionType.AnonymousSharingDisabled)]
         [TestCase(typeof(RegenerateAnonymousSharingLink), QuestionnaireActionType.AnonymousSharingLinkRegenerated)]
         public void When_anonymous_sharing_command_Then_non_revertible_history_item_should_be_added(Type commandType, QuestionnaireActionType expectedActionType)
         {
@@ -1330,12 +1328,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             // act
             switch (Activator.CreateInstance(commandType, questionnaireId, responsibleId, false))
             {
-                case EnableAnonymousSharing command:
-                    historyPostProcessor.Process(questionnaire, command);
-                    break;
-                case DisableAnonymousSharing command:
-                    historyPostProcessor.Process(questionnaire, command);
-                    break;
                 case RegenerateAnonymousSharingLink command:
                     historyPostProcessor.Process(questionnaire, command);
                     break;
@@ -1363,8 +1355,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             var dbContext = Create.InMemoryDbContext();
             var historyVersionsService = Create.QuestionnireHistoryVersionsService(dbContext);
-            var historyPostProcessor = Create.HistoryPostProcessor(dbContext,
-                questionnaireHistoryVersionsService: historyVersionsService);
 
             var questionnaireDocument = Create.QuestionnaireDocument(id: questionnaireId, title: "My Questionnaire");
             var questionnaire = Create.Questionnaire();
@@ -1376,7 +1366,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId, questionnaireDocument.Title, null, null, null, questionnaireDocument);
 
             // act
-            historyPostProcessor.Process(questionnaire, new EnableAnonymousSharing(questionnaireId, responsibleId, false));
+            new AnonymousSharingPostProcessor(dbContext, historyVersionsService)
+                .Process(questionnaire, new EnableAnonymousSharing(questionnaireId, responsibleId));
 
             // assert
             var historyItems = dbContext.QuestionnaireChangeRecords
@@ -1403,20 +1394,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var questionnaireDocument = Create.QuestionnaireDocument(id: questionnaireId, title: "My Questionnaire");
             var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
-            var anonymousSharingPostProcessor = new AnonymousSharingPostProcessor(dbContext);
-            var historyPostProcessor = Create.HistoryPostProcessor(dbContext,
-                questionnaireHistoryVersionsService: Create.QuestionnireHistoryVersionsService(dbContext));
+            var historyVersionsService = Create.QuestionnireHistoryVersionsService(dbContext);
+            var anonymousSharingPostProcessor = new AnonymousSharingPostProcessor(dbContext, historyVersionsService);
 
-            var firstCommand = new EnableAnonymousSharing(questionnaireId, responsibleId, false);
-            anonymousSharingPostProcessor.Process(questionnaire, firstCommand);
-            historyPostProcessor.Process(questionnaire, firstCommand);
+            anonymousSharingPostProcessor.Process(questionnaire, new EnableAnonymousSharing(questionnaireId, responsibleId));
+            anonymousSharingPostProcessor.Process(questionnaire, new EnableAnonymousSharing(questionnaireId, responsibleId));
 
-            var secondCommand = new EnableAnonymousSharing(questionnaireId, responsibleId, false);
-            anonymousSharingPostProcessor.Process(questionnaire, secondCommand);
-            historyPostProcessor.Process(questionnaire, secondCommand);
-
-            Assert.That(firstCommand.StateChanged, Is.True);
-            Assert.That(secondCommand.StateChanged, Is.False);
             Assert.That(dbContext.QuestionnaireChangeRecords.Count(h => h.QuestionnaireId == questionnaireId.FormatGuid()), Is.EqualTo(1));
         }
     }

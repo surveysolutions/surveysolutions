@@ -487,29 +487,29 @@ namespace WB.UI.Designer.Controllers
         [QuestionnairePermissions(true)]
         [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
         [ValidateAntiForgeryToken]
-        public Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
+        public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
             bool isActive = postModel.IsActive;
             if (isActive)
-                this.commandService.Execute(new EnableAnonymousSharing(id, User.GetId(), User.IsAdmin()));
+                this.commandService.Execute(new EnableAnonymousSharing(id, User.GetId()));
             else
-                this.commandService.Execute(new DisableAnonymousSharing(id, User.GetId(), User.IsAdmin()));
+                this.commandService.Execute(new DisableAnonymousSharing(id, User.GetId()));
 
-            var anonymousQuestionnaire = this.GetAnonymousQuestionnaire(id);
+            var anonymousQuestionnaire = await this.GetAnonymousQuestionnaireAsync(id);
 
             if (anonymousQuestionnaire == null)
-                return Task.FromResult<IActionResult>(NotFound());
+                return NotFound();
 
             if (isActive)
                 this.postCommitActions.Enqueue(
                     () => TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId, questionnaireView: null));
             
-            return Task.FromResult<IActionResult>(Json(new
+            return Json(new
             {
                 AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
                 IsActive = isActive,
                 GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
-            }));
+            });
         }
 
         [Authorize]
@@ -517,29 +517,29 @@ namespace WB.UI.Designer.Controllers
         [QuestionnairePermissions(true)]
         [Route("questionnaire/regenerateAnonymousQuestionnaireLink/{id}")]
         [ValidateAntiForgeryToken]
-        public Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
+        public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
         {
             this.commandService.Execute(new RegenerateAnonymousSharingLink(id, User.GetId(), User.IsAdmin()));
 
-            var anonymousQuestionnaire = this.GetAnonymousQuestionnaire(id);
+            var anonymousQuestionnaire = await this.GetAnonymousQuestionnaireAsync(id);
             if (anonymousQuestionnaire == null)
-                return Task.FromResult<IActionResult>(NotFound());
+                return NotFound();
 
             this.postCommitActions.Enqueue(
                 () => TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId, questionnaireView: null));
             
-            return Task.FromResult<IActionResult>(Json(new
+            return Json(new
             {
                 AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
                 IsActive = true,
                 GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
-            }));
+            });
         }
 
-        private AnonymousQuestionnaire? GetAnonymousQuestionnaire(Guid questionnaireId)
+        private Task<AnonymousQuestionnaire?> GetAnonymousQuestionnaireAsync(Guid questionnaireId)
             => dbContext.AnonymousQuestionnaires
                 .AsNoTracking()
-                .FirstOrDefault(a => a.QuestionnaireId == questionnaireId);
+                .FirstOrDefaultAsync(a => a.QuestionnaireId == questionnaireId);
 
         private async Task TrySendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId, QuestionnaireView? questionnaireView)
         {

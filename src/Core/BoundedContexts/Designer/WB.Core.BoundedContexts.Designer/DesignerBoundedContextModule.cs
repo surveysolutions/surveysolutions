@@ -218,11 +218,11 @@ namespace WB.Core.BoundedContexts.Designer
                 // Anonymous sharing
                 .Handles<EnableAnonymousSharing>(
                     (command, aggregate) => aggregate.EnableAnonymousSharing(command),
-                    config => config.PostProcessBy<AnonymousSharingPostProcessor>().PostProcessBy<HistoryPostProcessor>())
+                    config => config.PostProcessBy<AnonymousSharingPostProcessor>())
 
                 .Handles<DisableAnonymousSharing>(
                     (command, aggregate) => aggregate.DisableAnonymousSharing(command),
-                    config => config.PostProcessBy<AnonymousSharingPostProcessor>().PostProcessBy<HistoryPostProcessor>())
+                    config => config.PostProcessBy<AnonymousSharingPostProcessor>())
 
                 .Handles<RegenerateAnonymousSharingLink>(
                     (command, aggregate) => aggregate.RegenerateAnonymousSharingLink(command),

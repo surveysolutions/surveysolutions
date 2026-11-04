@@ -3,7 +3,10 @@ using System.Linq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.DataAccess;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors
@@ -16,10 +19,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, RegenerateAnonymousSharingLink>
     {
         private readonly DesignerDbContext dbContext;
+        private readonly IQuestionnaireHistoryVersionsService historyVersionsService;
 
-        public AnonymousSharingPostProcessor(DesignerDbContext dbContext)
+        public AnonymousSharingPostProcessor(
+            DesignerDbContext dbContext,
+            IQuestionnaireHistoryVersionsService historyVersionsService)
         {
             this.dbContext = dbContext;
+            this.historyVersionsService = historyVersionsService;
         }
 
         public void Process(Questionnaire aggregate, EnableAnonymousSharing command)
@@ -27,17 +34,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var anonymousQuestionnaire = this.Find(command.QuestionnaireId);
 
             if (anonymousQuestionnaire?.IsActive == true)
-            {
-                command.StateChanged = false;
                 return;
-            }
 
             if (anonymousQuestionnaire == null)
                 this.Create(command.QuestionnaireId);
             else
                 anonymousQuestionnaire.IsActive = true;
 
-            this.dbContext.SaveChanges();
+            this.AddHistoryItem(aggregate, command, QuestionnaireActionType.AnonymousSharingEnabled);
         }
 
         public void Process(Questionnaire aggregate, DisableAnonymousSharing command)
@@ -45,13 +49,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var anonymousQuestionnaire = this.Find(command.QuestionnaireId);
 
             if (anonymousQuestionnaire?.IsActive != true)
-            {
-                command.StateChanged = false;
                 return;
-            }
 
             anonymousQuestionnaire.IsActive = false;
-            this.dbContext.SaveChanges();
+            this.AddHistoryItem(aggregate, command, QuestionnaireActionType.AnonymousSharingDisabled);
         }
 
         public void Process(Questionnaire aggregate, RegenerateAnonymousSharingLink command)
@@ -75,6 +76,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 IsActive = true,
                 GeneratedAtUtc = DateTime.UtcNow
             });
+
+        private void AddHistoryItem(
+            Questionnaire aggregate,
+            QuestionnaireCommand command,
+            QuestionnaireActionType actionType)
+        {
+            var userName = this.dbContext.Users.Find(command.ResponsibleId)?.UserName;
+            this.historyVersionsService.AddQuestionnaireChangeItem(
+                command.QuestionnaireId,
+                command.ResponsibleId,
+                userName,
+                actionType,
+                QuestionnaireItemType.Questionnaire,
+                command.QuestionnaireId,
+                aggregate.QuestionnaireDocument.Title,
+                null,
+                null,
+                null,
+                null);
+        }
     }
 }
-

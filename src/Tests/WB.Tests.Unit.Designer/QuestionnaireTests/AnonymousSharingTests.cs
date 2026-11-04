@@ -16,9 +16,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var ownerId = Guid.NewGuid();
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: ownerId);
 
-            Assert.DoesNotThrow(() => questionnaire.EnableAnonymousSharing(new EnableAnonymousSharing(questionnaire.Id, ownerId, false)));
+            Assert.DoesNotThrow(() => questionnaire.EnableAnonymousSharing(new EnableAnonymousSharing(questionnaire.Id, ownerId)));
             Assert.DoesNotThrow(() => questionnaire.RegenerateAnonymousSharingLink(new RegenerateAnonymousSharingLink(questionnaire.Id, ownerId, false)));
-            Assert.DoesNotThrow(() => questionnaire.DisableAnonymousSharing(new DisableAnonymousSharing(questionnaire.Id, ownerId, false)));
+            Assert.DoesNotThrow(() => questionnaire.DisableAnonymousSharing(new DisableAnonymousSharing(questionnaire.Id, ownerId)));
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: ownerId);
             questionnaire.AddSharedPerson(editorId, "editor@example.com", ShareType.Edit, ownerId);
 
-            Assert.DoesNotThrow(() => questionnaire.EnableAnonymousSharing(new EnableAnonymousSharing(questionnaire.Id, editorId, false)));
+            Assert.DoesNotThrow(() => questionnaire.EnableAnonymousSharing(new EnableAnonymousSharing(questionnaire.Id, editorId)));
         }
 
         [Test]
@@ -37,7 +37,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
 
-            Assert.DoesNotThrow(() => questionnaire.EnableAnonymousSharing(new EnableAnonymousSharing(questionnaire.Id, Guid.NewGuid(), true)));
+            Assert.DoesNotThrow(() => questionnaire.EnableAnonymousSharing(
+                new EnableAnonymousSharing(questionnaire.Id, Guid.NewGuid()) { IsResponsibleAdmin = true }));
         }
 
         [Test]
@@ -47,8 +48,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var strangerId = Guid.NewGuid();
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: ownerId);
 
-            Assert.Throws<QuestionnaireException>(() => questionnaire.EnableAnonymousSharing(new EnableAnonymousSharing(questionnaire.Id, strangerId, false)));
-            Assert.Throws<QuestionnaireException>(() => questionnaire.DisableAnonymousSharing(new DisableAnonymousSharing(questionnaire.Id, strangerId, false)));
+            Assert.Throws<QuestionnaireException>(() => questionnaire.EnableAnonymousSharing(new EnableAnonymousSharing(questionnaire.Id, strangerId)));
+            Assert.Throws<QuestionnaireException>(() => questionnaire.DisableAnonymousSharing(new DisableAnonymousSharing(questionnaire.Id, strangerId)));
             Assert.Throws<QuestionnaireException>(() => questionnaire.RegenerateAnonymousSharingLink(new RegenerateAnonymousSharingLink(questionnaire.Id, strangerId, false)));
         }
 
@@ -60,9 +61,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: ownerId);
             questionnaire.AddSharedPerson(viewerId, "viewer@example.com", ShareType.View, ownerId);
 
-            Assert.Throws<QuestionnaireException>(() => questionnaire.EnableAnonymousSharing(new EnableAnonymousSharing(questionnaire.Id, viewerId, false)));
+            Assert.Throws<QuestionnaireException>(() => questionnaire.EnableAnonymousSharing(new EnableAnonymousSharing(questionnaire.Id, viewerId)));
         }
     }
 }
-
 

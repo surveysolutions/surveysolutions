@@ -87,8 +87,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMetadata>,
         ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>,
-        ICommandPostProcessor<Questionnaire, EnableAnonymousSharing>,
-        ICommandPostProcessor<Questionnaire, DisableAnonymousSharing>,
         ICommandPostProcessor<Questionnaire, RegenerateAnonymousSharingLink>,
         ICommandPostProcessor<Questionnaire, ImportQuestionnaireToHq>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateCategories>,
@@ -234,18 +232,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         #endregion
 
         #region Anonymous sharing
-
-        public void Process(Questionnaire aggregate, EnableAnonymousSharing command)
-        {
-            if (command.StateChanged)
-                this.AddAnonymousSharingChangeItem(aggregate, command, QuestionnaireActionType.AnonymousSharingEnabled);
-        }
-
-        public void Process(Questionnaire aggregate, DisableAnonymousSharing command)
-        {
-            if (command.StateChanged)
-                this.AddAnonymousSharingChangeItem(aggregate, command, QuestionnaireActionType.AnonymousSharingDisabled);
-        }
 
         public void Process(Questionnaire aggregate, RegenerateAnonymousSharingLink command)
             => this.AddAnonymousSharingChangeItem(aggregate, command, QuestionnaireActionType.AnonymousSharingLinkRegenerated);
