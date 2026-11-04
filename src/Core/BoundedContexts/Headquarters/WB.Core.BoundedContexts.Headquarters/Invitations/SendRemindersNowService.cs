@@ -1,0 +1,152 @@
+using System;
+using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Quartz;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Infrastructure.Native.Storage.Postgre;
+
+namespace WB.Core.BoundedContexts.Headquarters.Invitations
+{
+    public interface ISendRemindersNowService
+    {
+        Task<SendRemindersNowStatus> SendAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
+            EmailTextTemplateType type);
+        Task<SendRemindersNowStatus> GetStatusAsync(QuestionnaireIdentity questionnaireIdentity, Guid requestId);
+    }
+
+    public class SendRemindersNowService : ISendRemindersNowService
+    {
+        private readonly IRootScopeExecutor rootScopeExecutor;
+        private readonly IScheduledTask<SendRemindersNowJob, SendRemindersNowRequest> sendRemindersTask;
+        private readonly ISchedulerFactory schedulerFactory;
+
+        public SendRemindersNowService(
+            IRootScopeExecutor rootScopeExecutor,
+            IScheduledTask<SendRemindersNowJob, SendRemindersNowRequest> sendRemindersTask,
+            ISchedulerFactory schedulerFactory)
+        {
+            this.rootScopeExecutor = rootScopeExecutor;
+            this.sendRemindersTask = sendRemindersTask;
+            this.schedulerFactory = schedulerFactory;
+        }
+
+        public async Task<SendRemindersNowStatus> SendAsync(QuestionnaireIdentity questionnaireIdentity,
+            string questionnaireTitle, EmailTextTemplateType type)
+        {
+            var status = await rootScopeExecutor.ExecuteAsync(async locator =>
+            {
+                var unitOfWork = locator.GetInstance<IUnitOfWork>();
+                await ReminderEmailSendLock.AcquireRequestAsync(unitOfWork, questionnaireIdentity, type)
+                    .ConfigureAwait(false);
+
+                var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
+                var activeStatusKey = SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, type);
+                var activeStatus = storage.GetById(activeStatusKey);
+                if (activeStatus?.State is SendRemindersNowState.Queued or SendRemindersNowState.InProgress)
+                    return activeStatus;
+
+                var status = new SendRemindersNowStatus
+                {
+                    RequestId = Guid.NewGuid(),
+                    QuestionnaireIdentity = questionnaireIdentity,
+                    QuestionnaireTitle = questionnaireTitle,
+                    Type = type,
+                    State = SendRemindersNowState.Queued
+                };
+                storage.Store(status, activeStatusKey);
+                storage.Store(status, SendRemindersNowRequest.GetStatusStorageKey(status.RequestId));
+                return status;
+            }).ConfigureAwait(false);
+
+            await EnsureScheduledAsync(status).ConfigureAwait(false);
+            return status;
+        }
+
+        public async Task<SendRemindersNowStatus> GetStatusAsync(QuestionnaireIdentity questionnaireIdentity,
+            Guid requestId)
+        {
+            var status = await rootScopeExecutor.ExecuteAsync(locator =>
+            {
+                var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
+                return Task.FromResult(storage.GetById(SendRemindersNowRequest.GetStatusStorageKey(requestId)));
+            }).ConfigureAwait(false);
+
+            if (status?.QuestionnaireIdentity != questionnaireIdentity)
+                return null;
+
+            await EnsureScheduledAsync(status).ConfigureAwait(false);
+            return status;
+        }
+
+        private async Task EnsureScheduledAsync(SendRemindersNowStatus status)
+        {
+            if (status.State is not (SendRemindersNowState.Queued or SendRemindersNowState.InProgress))
+                return;
+
+            var request = new SendRemindersNowRequest
+            {
+                RequestId = status.RequestId,
+                QuestionnaireIdentity = status.QuestionnaireIdentity,
+                QuestionnaireTitle = status.QuestionnaireTitle,
+                Type = status.Type
+            };
+
+            if (await IsScheduledOrRunningAsync(request).ConfigureAwait(false))
+                return;
+
+            try
+            {
+                await sendRemindersTask.Schedule(request).ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                status.State = SendRemindersNowState.Failed;
+                status.Error = "The reminder emails could not be scheduled.";
+                await StoreStatusAsync(status).ConfigureAwait(false);
+            }
+        }
+
+        private async Task<bool> IsScheduledOrRunningAsync(SendRemindersNowRequest request)
+        {
+            var scheduler = await schedulerFactory.GetScheduler().ConfigureAwait(false);
+            var executingJobs = await scheduler.GetCurrentlyExecutingJobs().ConfigureAwait(false);
+            if (executingJobs.Any(job => HasRequestId(job.MergedJobDataMap.GetString(BaseTask.TaskDataKey),
+                    request.RequestId)))
+                return true;
+
+            var triggers = await scheduler.GetTriggersOfJob(
+                ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key).ConfigureAwait(false);
+            return triggers.Any(trigger =>
+                HasRequestId(trigger.JobDataMap.GetString(BaseTask.TaskDataKey), request.RequestId));
+        }
+
+        private static bool HasRequestId(string serializedRequest, Guid requestId)
+        {
+            if (string.IsNullOrEmpty(serializedRequest))
+                return false;
+
+            try
+            {
+                return JsonSerializer.Deserialize<SendRemindersNowRequest>(serializedRequest)?.RequestId == requestId;
+            }
+            catch (JsonException)
+            {
+                return false;
+            }
+        }
+
+        private Task StoreStatusAsync(SendRemindersNowStatus status) =>
+            rootScopeExecutor.ExecuteAsync(locator =>
+            {
+                var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
+                storage.Store(status, SendRemindersNowRequest.GetStorageKey(status.QuestionnaireIdentity, status.Type));
+                storage.Store(status, SendRemindersNowRequest.GetStatusStorageKey(status.RequestId));
+                return Task.FromResult(true);
+            });
+    }
+}

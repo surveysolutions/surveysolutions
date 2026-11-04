@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using Microsoft.Extensions.Logging;
+using NHibernate;
 using NUnit.Framework;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
@@ -17,6 +20,7 @@ using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -65,7 +69,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             emailService.Setup(x => x.GetSenderInfo()).Returns(Mock.Of<ISenderInformation>());
             emailService.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(),
                     It.IsAny<string>(), It.IsAny<string>()))
-                .ThrowsAsync(new EmailServiceException("respondent@email.com", HttpStatusCode.BadRequest));
+                .ThrowsAsync(new InvalidOperationException("Provider timed out"));
 
             var configProvider = new Mock<IWebInterviewConfigProvider>();
             configProvider.Setup(x => x.Get(questionnaireIdentity)).Returns(new WebInterviewConfig { Started = true });
@@ -86,6 +90,43 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             Assert.That(result.FailedCount, Is.EqualTo(1));
             invitationService.Verify(x => x.ReminderWasNotSent(invitation.Id, invitation.AssignmentId,
                 "respondent@email.com", It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public async Task when_recovering_request_then_already_delivered_reminder_is_skipped()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
+            var invitation = Create.Entity.Invitation(1,
+                Create.Entity.Assignment(email: "respondent@email.com", password: "password"),
+                token: "token");
+            invitation.ReminderWasSent("previous-email-id");
+
+            var invitationService = new Mock<IInvitationService>();
+            invitationService.Setup(x => x.GetNoResponseInvitations(questionnaireIdentity, 0))
+                .Returns(new[] { invitation.Id });
+            invitationService.Setup(x => x.GetInvitation(invitation.Id)).Returns(invitation);
+
+            var emailService = new Mock<IEmailService>();
+            emailService.Setup(x => x.GetSenderInfo()).Returns(Mock.Of<ISenderInformation>());
+            var configProvider = new Mock<IWebInterviewConfigProvider>();
+            configProvider.Setup(x => x.Get(questionnaireIdentity)).Returns(new WebInterviewConfig
+            {
+                Started = true,
+                ReminderAfterDaysIfNoResponse = 1
+            });
+
+            var sender = Create.Service.ReminderEmailSender(
+                invitationService: invitationService.Object,
+                emailService: emailService.Object,
+                webInterviewConfigProvider: configProvider.Object);
+            var requestStartedAtUtc = DateTime.UtcNow.AddSeconds(-1);
+
+            var result = await sender.SendRemindersAsync(questionnaireIdentity, "Web Survey",
+                EmailTextTemplateType.Reminder_NoResponse, 0, requestStartedAtUtc);
+
+            Assert.That(result.SentCount, Is.Zero);
+            emailService.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<List<EmailAttachment>>()), Times.Never);
         }
     }
 
@@ -127,6 +168,49 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 
             rootScopeExecutor.Verify(x => x.ExecuteAsync<ReminderEmailSendResult>(
                 It.IsAny<Func<IServiceLocator, Task<ReminderEmailSendResult>>>()), Times.Exactly(3));
+        }
+
+        [TestCase(SendRemindersNowState.Completed)]
+        [TestCase(SendRemindersNowState.Failed)]
+        [TestCase(SendRemindersNowState.PartiallyFailed)]
+        public async Task when_recovering_a_terminal_request_then_delivery_is_not_repeated(
+            SendRemindersNowState terminalState)
+        {
+            var request = new SendRemindersNowRequest
+            {
+                RequestId = Guid.NewGuid(),
+                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10),
+                QuestionnaireTitle = "Web Survey",
+                Type = EmailTextTemplateType.Reminder_NoResponse
+            };
+            var storage = new TestInMemoryKeyValueStorage<SendRemindersNowStatus>();
+            storage.Store(new SendRemindersNowStatus
+            {
+                RequestId = request.RequestId,
+                QuestionnaireIdentity = request.QuestionnaireIdentity,
+                Type = request.Type,
+                State = terminalState
+            }, request.StatusStorageKey);
+
+            var sender = new Mock<IReminderEmailSender>();
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>())
+                .Returns(storage);
+            serviceLocator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(sender.Object);
+            var rootScopeExecutor = new Mock<IRootScopeExecutor>();
+            rootScopeExecutor.Setup(x => x.ExecuteAsync<SendRemindersNowStatus>(
+                    It.IsAny<Func<IServiceLocator, Task<SendRemindersNowStatus>>>()))
+                .Returns((Func<IServiceLocator, Task<SendRemindersNowStatus>> action) =>
+                    action(serviceLocator.Object));
+
+            var job = new SendRemindersNowJob(rootScopeExecutor.Object, Mock.Of<ILogger<SendRemindersNowJob>>());
+
+            await job.Execute(request, Mock.Of<IJobExecutionContext>());
+
+            sender.Verify(x => x.SendRemindersAsync(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>(),
+                It.IsAny<EmailTextTemplateType>(), It.IsAny<int>()), Times.Never);
+            rootScopeExecutor.Verify(x => x.ExecuteAsync<SendRemindersNowStatus>(
+                It.IsAny<Func<IServiceLocator, Task<SendRemindersNowStatus>>>()), Times.Once);
         }
 
         [Test]
@@ -407,7 +491,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 .Returns(statusStorage);
 
             var sender = new Mock<IReminderEmailSender>();
-            sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type, 0))
+            sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type, 0,
+                    It.IsAny<DateTime?>()))
                 .ReturnsAsync(new ReminderEmailSendResult { SentCount = sentCount, FailedCount = failedCount });
 
             serviceLocator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(sender.Object);
@@ -421,6 +506,127 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             Assert.That(status.SentCount, Is.EqualTo(sentCount));
             Assert.That(status.FailedCount, Is.EqualTo(failedCount));
             Assert.That(statusStorage.GetById(request.StorageKey).State, Is.EqualTo(expectedState));
+        }
+    }
+
+    [TestOf(typeof(SendRemindersNowService))]
+    public class SendRemindersNowServiceTests
+    {
+        [Test]
+        public async Task when_creating_request_then_queued_status_is_stored_before_scheduling()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
+            var (service, storage, scheduledTask, _) = CreateService();
+            scheduledTask.Setup(x => x.Schedule(It.IsAny<SendRemindersNowRequest>()))
+                .Callback<SendRemindersNowRequest>(request =>
+                    Assert.That(storage.GetById(request.StatusStorageKey).State, Is.EqualTo(SendRemindersNowState.Queued)))
+                .Returns(Task.CompletedTask);
+
+            var status = await service.SendAsync(questionnaireIdentity, "Web Survey",
+                EmailTextTemplateType.Reminder_NoResponse);
+
+            Assert.That(status.State, Is.EqualTo(SendRemindersNowState.Queued));
+            Assert.That(storage.GetById(SendRemindersNowRequest.GetStorageKey(questionnaireIdentity,
+                EmailTextTemplateType.Reminder_NoResponse)).State, Is.EqualTo(SendRemindersNowState.Queued));
+            scheduledTask.Verify(x => x.Schedule(It.IsAny<SendRemindersNowRequest>()), Times.Once);
+        }
+
+        [Test]
+        public async Task when_active_request_has_no_quartz_trigger_then_status_poll_reschedules_same_request()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
+            var (service, storage, scheduledTask, _) = CreateService();
+            var status = new SendRemindersNowStatus
+            {
+                RequestId = Guid.NewGuid(),
+                QuestionnaireIdentity = questionnaireIdentity,
+                QuestionnaireTitle = "Web Survey",
+                Type = EmailTextTemplateType.Reminder_NoResponse,
+                State = SendRemindersNowState.InProgress
+            };
+            storage.Store(status, SendRemindersNowRequest.GetStatusStorageKey(status.RequestId));
+            scheduledTask.Setup(x => x.Schedule(It.IsAny<SendRemindersNowRequest>()))
+                .Callback<SendRemindersNowRequest>(request =>
+                    Assert.That(request.RequestId, Is.EqualTo(status.RequestId)))
+                .Returns(Task.CompletedTask);
+
+            var returnedStatus = await service.GetStatusAsync(questionnaireIdentity, status.RequestId);
+
+            Assert.That(returnedStatus.RequestId, Is.EqualTo(status.RequestId));
+            scheduledTask.Verify(x => x.Schedule(It.IsAny<SendRemindersNowRequest>()), Times.Once);
+        }
+
+        [Test]
+        public async Task when_request_is_already_queued_then_existing_request_is_reused()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
+            var (service, storage, scheduledTask, scheduler) = CreateService();
+            var status = new SendRemindersNowStatus
+            {
+                RequestId = Guid.NewGuid(),
+                QuestionnaireIdentity = questionnaireIdentity,
+                QuestionnaireTitle = "Web Survey",
+                Type = EmailTextTemplateType.Reminder_NoResponse,
+                State = SendRemindersNowState.Queued
+            };
+            storage.Store(status, SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, status.Type));
+            var request = new SendRemindersNowRequest
+            {
+                RequestId = status.RequestId,
+                QuestionnaireIdentity = questionnaireIdentity,
+                QuestionnaireTitle = status.QuestionnaireTitle,
+                Type = status.Type
+            };
+            var trigger = new Mock<ITrigger>();
+            trigger.SetupGet(x => x.JobDataMap).Returns(new JobDataMap
+            {
+                [BaseTask.TaskDataKey] = JsonSerializer.Serialize(request)
+            });
+            scheduler.Setup(x => x.GetTriggersOfJob(It.IsAny<JobKey>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new[] { trigger.Object });
+
+            var returnedStatus = await service.SendAsync(questionnaireIdentity, "Web Survey", status.Type);
+
+            Assert.That(returnedStatus.RequestId, Is.EqualTo(status.RequestId));
+            scheduledTask.Verify(x => x.Schedule(It.IsAny<SendRemindersNowRequest>()), Times.Never);
+        }
+
+        private static (SendRemindersNowService, TestInMemoryKeyValueStorage<SendRemindersNowStatus>,
+            Mock<IScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>>, Mock<IScheduler>) CreateService()
+        {
+            var storage = new TestInMemoryKeyValueStorage<SendRemindersNowStatus>();
+            var sqlQuery = new Mock<ISQLQuery>();
+            sqlQuery.Setup(x => x.SetString(It.IsAny<string>(), It.IsAny<string>())).Returns(sqlQuery.Object);
+            sqlQuery.Setup(x => x.UniqueResultAsync<bool>(It.IsAny<CancellationToken>())).ReturnsAsync(true);
+            var session = new Mock<ISession>();
+            session.Setup(x => x.CreateSQLQuery(It.IsAny<string>())).Returns(sqlQuery.Object);
+            var unitOfWork = new Mock<IUnitOfWork>();
+            unitOfWork.Setup(x => x.Session).Returns(session.Object);
+
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>())
+                .Returns(storage);
+            serviceLocator.Setup(x => x.GetInstance<IUnitOfWork>()).Returns(unitOfWork.Object);
+
+            var rootScopeExecutor = new Mock<IRootScopeExecutor>();
+            rootScopeExecutor.Setup(x => x.ExecuteAsync<SendRemindersNowStatus>(
+                    It.IsAny<Func<IServiceLocator, Task<SendRemindersNowStatus>>>()))
+                .Returns((Func<IServiceLocator, Task<SendRemindersNowStatus>> action) =>
+                    action(serviceLocator.Object));
+
+            var scheduler = new Mock<IScheduler>();
+            scheduler.Setup(x => x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Array.Empty<IJobExecutionContext>());
+            scheduler.Setup(x => x.GetTriggersOfJob(It.IsAny<JobKey>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Array.Empty<ITrigger>());
+            var schedulerFactory = new Mock<ISchedulerFactory>();
+            schedulerFactory.Setup(x => x.GetScheduler(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(scheduler.Object);
+
+            var scheduledTask = new Mock<IScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>>();
+            var service = new SendRemindersNowService(rootScopeExecutor.Object, scheduledTask.Object,
+                schedulerFactory.Object);
+            return (service, storage, scheduledTask, scheduler);
         }
     }
 }

@@ -48,14 +48,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         }
 
         public async Task<ReminderEmailSendResult> SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
-            EmailTextTemplateType reminderType, int thresholdDays)
+            EmailTextTemplateType reminderType, int thresholdDays, DateTime? requestStartedAtUtc = null)
         {
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
             if (webInterviewConfig == null || !webInterviewConfig.Started)
                 return new ReminderEmailSendResult();
 
-            await ReminderEmailSendLock.AcquireAsync(unitOfWork, questionnaireIdentity, reminderType)
-                .ConfigureAwait(false);
+            if (!await ReminderEmailSendLock.TryAcquireDeliveryAsync(unitOfWork, questionnaireIdentity, reminderType)
+                    .ConfigureAwait(false))
+                throw new ReminderDeliveryInProgressException();
 
             ISenderInformation senderInfo = emailService.GetSenderInfo();
             var result = new ReminderEmailSendResult();
@@ -64,11 +65,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             {
                 case EmailTextTemplateType.Reminder_NoResponse:
                     await SendNoResponseRemindersAsync(questionnaireIdentity, questionnaireTitle,
-                        webInterviewConfig, senderInfo, thresholdDays, result).ConfigureAwait(false);
+                        webInterviewConfig, senderInfo, thresholdDays, result, requestStartedAtUtc).ConfigureAwait(false);
                     break;
                 case EmailTextTemplateType.Reminder_PartialResponse:
                     await SendPartialResponseRemindersAsync(questionnaireIdentity, questionnaireTitle,
-                        webInterviewConfig, senderInfo, thresholdDays, result).ConfigureAwait(false);
+                        webInterviewConfig, senderInfo, thresholdDays, result, requestStartedAtUtc).ConfigureAwait(false);
                     break;
                 case EmailTextTemplateType.RejectEmail:
                     await SendRejectedInterviewRemindersAsync(questionnaireIdentity, questionnaireTitle,
@@ -83,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         private async Task SendNoResponseRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
             string questionnaireTitle, WebInterviewConfig webInterviewConfig, ISenderInformation senderInfo,
-            int thresholdDays, ReminderEmailSendResult result)
+            int thresholdDays, ReminderEmailSendResult result, DateTime? requestStartedAtUtc)
         {
             if (!webInterviewConfig.ReminderAfterDaysIfNoResponse.HasValue && thresholdDays > 0)
                 return;
@@ -92,13 +93,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.Reminder_NoResponse);
 
-            await SendRemindersAsync(questionnaireTitle, invitationIdsToRemind, emailTemplate, senderInfo, result)
+            await SendRemindersAsync(questionnaireTitle, invitationIdsToRemind, emailTemplate, senderInfo, result,
+                    requestStartedAtUtc)
                 .ConfigureAwait(false);
         }
 
         private async Task SendPartialResponseRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
             string questionnaireTitle, WebInterviewConfig webInterviewConfig, ISenderInformation senderInfo,
-            int thresholdDays, ReminderEmailSendResult result)
+            int thresholdDays, ReminderEmailSendResult result, DateTime? requestStartedAtUtc)
         {
             if (!webInterviewConfig.ReminderAfterDaysIfPartialResponse.HasValue && thresholdDays > 0)
                 return;
@@ -107,7 +109,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.Reminder_PartialResponse);
 
-            await SendRemindersAsync(questionnaireTitle, invitationIdsToRemind, emailTemplate, senderInfo, result)
+            await SendRemindersAsync(questionnaireTitle, invitationIdsToRemind, emailTemplate, senderInfo, result,
+                    requestStartedAtUtc)
                 .ConfigureAwait(false);
         }
 
@@ -153,33 +156,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 await inScopeExecutor.ExecuteAsync(async (locator) =>
                 {
                     var invitationServiceLocal = locator.GetInstance<IInvitationService>();
+                    string emailId;
                     try
                     {
-                        var emailId = await emailService.SendEmailAsync(address,
+                        emailId = await emailService.SendEmailAsync(address,
                             emailParams.Subject,
                             interviewEmail.MessageHtml,
                             interviewEmail.MessageText).ConfigureAwait(false);
-
-                        invitationServiceLocal.MarkRejectedInterviewReminderSent(invitationId, emailId);
-                        result.SentCount++;
                     }
-                    catch (EmailServiceException e)
+                    catch (Exception e)
                     {
                         result.FailedCount++;
                         invitationServiceLocal.RejectedInterviewReminderWasNotSent(invitation.Id);
                         this.logger.LogError(e, "Rejected email was not sent");
+                        return;
                     }
+
+                    invitationServiceLocal.MarkRejectedInterviewReminderSent(invitationId, emailId);
+                    result.SentCount++;
                 }).ConfigureAwait(false);
             }
         }
 
         private async Task SendRemindersAsync(string questionnaireTitle, IEnumerable<int> invitationIdsToRemind,
-            WebInterviewEmailTemplate emailTemplate, ISenderInformation senderInfo, ReminderEmailSendResult result)
+            WebInterviewEmailTemplate emailTemplate, ISenderInformation senderInfo, ReminderEmailSendResult result,
+            DateTime? requestStartedAtUtc = null)
         {
             var surveyName = questionnaireTitle;
             foreach (var invitationId in invitationIdsToRemind)
             {
                 Invitation invitation = invitationService.GetInvitation(invitationId);
+                if (requestStartedAtUtc.HasValue &&
+                    invitation.LastReminderSentOnUtc >= requestStartedAtUtc.Value)
+                    continue;
+
                 var password = invitation.Assignment.Password;
                 var address = invitation.Assignment.Email;
                 if (string.IsNullOrEmpty(address))
@@ -208,21 +218,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams).ConfigureAwait(false);
 
+                string emailId;
                 try
                 {
-                    var emailId = await emailService.SendEmailAsync(address, emailParams.Subject,
+                    emailId = await emailService.SendEmailAsync(address, emailParams.Subject,
                             interviewEmail.MessageHtml, interviewEmail.MessageText)
                         .ConfigureAwait(false);
-
-                    invitationService.MarkInvitationAsReminded(invitationId, emailId);
-                    result.SentCount++;
                 }
-                catch (EmailServiceException e)
+                catch (Exception e)
                 {
                     result.FailedCount++;
                     invitationService.ReminderWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
                     this.logger.LogError(e, $"Interview email was not sent for invitation {invitationId}.");
+                    continue;
                 }
+
+                invitationService.MarkInvitationAsReminded(invitationId, emailId);
+                result.SentCount++;
             }
         }
     }

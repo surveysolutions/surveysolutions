@@ -384,6 +384,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<SendInvitationsJob>();
             registry.Bind<AssignmentsVerificationJob>();
             registry.Bind<SendRemindersJob>();
+            registry.Bind<ISendRemindersNowService, SendRemindersNowService>();
             registry.Bind<IPlainKeyValueStorage<SendRemindersNowStatus>,
                 PostgresKeyValueStorage<SendRemindersNowStatus>>();
                 

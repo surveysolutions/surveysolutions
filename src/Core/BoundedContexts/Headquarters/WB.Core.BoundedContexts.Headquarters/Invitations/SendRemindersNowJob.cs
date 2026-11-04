@@ -37,6 +37,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public string Error { get; set; }
         public int SentCount { get; set; }
         public int FailedCount { get; set; }
+        public string QuestionnaireTitle { get; set; }
+        public DateTime? StartedAtUtc { get; set; }
     }
 
     public enum SendRemindersNowState
@@ -64,20 +66,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public async Task Execute(SendRemindersNowRequest request, IJobExecutionContext context)
         {
-            var status = new SendRemindersNowStatus
+            var previousStatus = await GetStatusAsync(request.RequestId).ConfigureAwait(false);
+            if (previousStatus?.State is SendRemindersNowState.Completed
+                or SendRemindersNowState.Failed
+                or SendRemindersNowState.PartiallyFailed)
+                return;
+
+            var status = previousStatus ?? new SendRemindersNowStatus
             {
                 RequestId = request.RequestId,
                 QuestionnaireIdentity = request.QuestionnaireIdentity,
-                Type = request.Type
+                Type = request.Type,
+                QuestionnaireTitle = request.QuestionnaireTitle
             };
             status.State = SendRemindersNowState.InProgress;
+            status.StartedAtUtc ??= DateTime.UtcNow;
             await StoreStatusAsync(status, request.StorageKey).ConfigureAwait(false);
 
             try
             {
                 var result = await rootScopeExecutor.ExecuteAsync(locator =>
                     locator.GetInstance<IReminderEmailSender>().SendRemindersAsync(request.QuestionnaireIdentity,
-                        request.QuestionnaireTitle, request.Type, 0)).ConfigureAwait(false);
+                        request.QuestionnaireTitle, request.Type, 0, status.StartedAtUtc)).ConfigureAwait(false);
                 status.SentCount = result.SentCount;
                 status.FailedCount = result.FailedCount;
                 status.State = result.FailedCount == 0
@@ -93,7 +103,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             catch (Exception exception)
             {
                 status.State = SendRemindersNowState.Failed;
-                status.Error = "The reminder emails could not be sent.";
+                status.Error = exception is ReminderDeliveryInProgressException
+                    ? exception.Message
+                    : "The reminder emails could not be sent.";
                 logger.LogError(exception, "Immediate reminder email sending failed for request {RequestId}.",
                     request.RequestId);
             }
@@ -101,13 +113,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             await StoreStatusAsync(status, request.StorageKey).ConfigureAwait(false);
         }
 
-        private Task StoreStatusAsync(SendRemindersNowStatus status, string storageKey) =>
-            rootScopeExecutor.ExecuteAsync(locator =>
+        private async Task<SendRemindersNowStatus> GetStatusAsync(Guid requestId) =>
+            await rootScopeExecutor.ExecuteAsync(locator =>
             {
                 var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
-                storage.Store(status, SendRemindersNowRequest.GetStatusStorageKey(status.RequestId));
-                storage.Store(status, storageKey);
-                return Task.FromResult(true);
-            });
+                return Task.FromResult(storage.GetById(SendRemindersNowRequest.GetStatusStorageKey(requestId)));
+            }).ConfigureAwait(false);
+
+        private async Task StoreStatusAsync(SendRemindersNowStatus status, string storageKey)
+        {
+            for (var attempt = 0; ; attempt++)
+            {
+                try
+                {
+                    await rootScopeExecutor.ExecuteAsync(locator =>
+                    {
+                        var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
+                        storage.Store(status, SendRemindersNowRequest.GetStatusStorageKey(status.RequestId));
+                        storage.Store(status, storageKey);
+                        return Task.FromResult(true);
+                    }).ConfigureAwait(false);
+                    return;
+                }
+                catch (Exception exception) when (attempt == 0)
+                {
+                    logger.LogWarning(exception, "Retrying reminder request status persistence for request {RequestId}.",
+                        status.RequestId);
+                }
+            }
+        }
     }
 }

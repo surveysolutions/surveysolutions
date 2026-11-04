@@ -87,11 +87,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }
         }
 
-        private Task<ReminderEmailSendResult> SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
-            string questionnaireTitle, EmailTextTemplateType reminderType, int thresholdDays) =>
-            rootScopeExecutor.ExecuteAsync(locator =>
-                locator.GetInstance<IReminderEmailSender>().SendRemindersAsync(questionnaireIdentity,
-                    questionnaireTitle, reminderType, thresholdDays));
+        private async Task SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
+            string questionnaireTitle, EmailTextTemplateType reminderType, int thresholdDays)
+        {
+            try
+            {
+                await rootScopeExecutor.ExecuteAsync(locator =>
+                    locator.GetInstance<IReminderEmailSender>().SendRemindersAsync(questionnaireIdentity,
+                        questionnaireTitle, reminderType, thresholdDays)).ConfigureAwait(false);
+            }
+            catch (ReminderDeliveryInProgressException)
+            {
+                logger.LogDebug("Skipping reminder batch {QuestionnaireIdentity}/{ReminderType} because delivery is already in progress.",
+                    questionnaireIdentity, reminderType);
+            }
+        }
     }
 
     public class SendRemindersTask : BaseTask

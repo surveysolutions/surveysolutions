@@ -1,18 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
-using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Filters;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
@@ -24,25 +20,19 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IEmailService emailService;
-        private readonly IScheduledTask<SendRemindersNowJob, SendRemindersNowRequest> sendRemindersTask;
-        private readonly IPlainKeyValueStorage<SendRemindersNowStatus> sendRemindersStatusStorage;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly ISendRemindersNowService sendRemindersNowService;
 
 
         public WebInterviewSettingsApiController(
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IEmailService emailService,
-            IScheduledTask<SendRemindersNowJob, SendRemindersNowRequest> sendRemindersTask,
-            IPlainKeyValueStorage<SendRemindersNowStatus> sendRemindersStatusStorage,
-            IUnitOfWork unitOfWork)
+            ISendRemindersNowService sendRemindersNowService)
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.emailService = emailService;
-            this.sendRemindersTask = sendRemindersTask;
-            this.sendRemindersStatusStorage = sendRemindersStatusStorage;
-            this.unitOfWork = unitOfWork;
+            this.sendRemindersNowService = sendRemindersNowService;
         }
 
         public class UpdatePageTemplateModel
@@ -255,49 +245,21 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             if (!emailService.IsConfigured())
                 return BadRequest(new { error = "Email sending is not configured." });
 
-            var type = model.Type.Value;
-            await ReminderEmailSendLock.AcquireRequestAsync(unitOfWork, questionnaireIdentity, type)
-                .ConfigureAwait(false);
-
-            var storageKey = SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, type);
-            var existingStatus = sendRemindersStatusStorage.GetById(storageKey);
-            if (existingStatus?.State is SendRemindersNowState.Queued or SendRemindersNowState.InProgress)
-                return AcceptedAtAction(nameof(SendRemindersNowStatus),
-                    new { id, requestId = existingStatus.RequestId }, existingStatus);
-
-            var requestId = System.Guid.NewGuid();
-            var request = new SendRemindersNowRequest
-            {
-                RequestId = requestId,
-                QuestionnaireIdentity = questionnaireIdentity,
-                QuestionnaireTitle = questionnaire.Title,
-                Type = type
-            };
-            var status = new SendRemindersNowStatus
-            {
-                RequestId = request.RequestId,
-                QuestionnaireIdentity = questionnaireIdentity,
-                Type = request.Type,
-                State = SendRemindersNowState.Queued
-            };
-
-            sendRemindersStatusStorage.Store(status, request.StorageKey);
-            sendRemindersStatusStorage.Store(status, request.StatusStorageKey);
-            await sendRemindersTask.Schedule(request).ConfigureAwait(false);
-
-            return AcceptedAtAction(nameof(SendRemindersNowStatus), new { id, requestId }, status);
+            var status = await sendRemindersNowService.SendAsync(questionnaireIdentity, questionnaire.Title,
+                model.Type.Value).ConfigureAwait(false);
+            return AcceptedAtAction(nameof(SendRemindersNowStatus), new { id, requestId = status.RequestId }, status);
         }
 
         [Route(@"{id}/sendReminders/{requestId:guid}")]
         [HttpGet]
-        public IActionResult SendRemindersNowStatus(string id, System.Guid requestId)
+        public async Task<IActionResult> SendRemindersNowStatus(string id, System.Guid requestId)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
-            var status = sendRemindersStatusStorage.GetById(
-                SendRemindersNowRequest.GetStatusStorageKey(requestId));
-            if (status?.QuestionnaireIdentity != questionnaireIdentity)
+            var status = await sendRemindersNowService.GetStatusAsync(questionnaireIdentity, requestId)
+                .ConfigureAwait(false);
+            if (status == null)
                 return NotFound();
 
             return Ok(status);
