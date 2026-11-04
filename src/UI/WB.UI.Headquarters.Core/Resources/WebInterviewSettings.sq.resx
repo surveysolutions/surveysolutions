@@ -148,13 +148,13 @@
     <value>Personalizo tekstin e email-eve</value>
   </data>
   <data name="CustomizeAndSendEmailsText" xml:space="preserve">
-    <value>Customize and send emails text</value>
+    <value>Përshtatni tekstin e emaileve dhe dërgojini ato</value>
   </data>
   <data name="SendNow" xml:space="preserve">
-    <value>SEND NOW</value>
+    <value>DËRGO TANI</value>
   </data>
   <data name="SendNowTooltip" xml:space="preserve">
-    <value>{{reminderType}} reminders for all assignments and interviews will be sent right now with no waiting period.</value>
+    <value>Kujtesat e llojit {{reminderType}} për të gjitha detyrat dhe intervistat do të dërgohen menjëherë, pa periudhë pritjeje.</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Përshkrim:</value>

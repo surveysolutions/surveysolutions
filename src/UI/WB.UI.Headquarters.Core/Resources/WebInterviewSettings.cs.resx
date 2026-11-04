@@ -166,13 +166,13 @@
     <value>Přizpůsobit text e-mailů</value>
   </data>
   <data name="CustomizeAndSendEmailsText" xml:space="preserve">
-    <value>Customize and send emails text</value>
+    <value>Přizpůsobit text e-mailů a odeslat je</value>
   </data>
   <data name="SendNow" xml:space="preserve">
-    <value>SEND NOW</value>
+    <value>ODESLAT NYNÍ</value>
   </data>
   <data name="SendNowTooltip" xml:space="preserve">
-    <value>{{reminderType}} reminders for all assignments and interviews will be sent right now with no waiting period.</value>
+    <value>Připomínky typu {{reminderType}} pro všechna zadání a rozhovory budou odeslány ihned, bez čekací doby.</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Popis:</value>

@@ -10,9 +10,9 @@
   <data name="ExampleResumePage" xml:space="preserve"><value>Contoh halaman lanjutkan</value></data>
   <data name="ExampleFinishPage" xml:space="preserve"><value>Contoh halaman selesai</value></data>
   <data name="CustomizeEmailsText" xml:space="preserve"><value>Sesuaikan email</value></data>
-  <data name="CustomizeAndSendEmailsText" xml:space="preserve"><value>Customize and send emails text</value></data>
-  <data name="SendNow" xml:space="preserve"><value>SEND NOW</value></data>
-  <data name="SendNowTooltip" xml:space="preserve"><value>{{reminderType}} reminders for all assignments and interviews will be sent right now with no waiting period.</value></data>
+  <data name="CustomizeAndSendEmailsText" xml:space="preserve">  <value>Sesuaikan teks email dan kirim email</value></data>
+  <data name="SendNow" xml:space="preserve">  <value>KIRIM SEKARANG</value></data>
+  <data name="SendNowTooltip" xml:space="preserve">  <value>Pengingat jenis {{reminderType}} untuk semua penugasan dan wawancara akan dikirim sekarang juga tanpa waktu tunggu.</value></data>
   <data name="Invitation" xml:space="preserve"><value>Undangan</value></data>
   <data name="Reminder" xml:space="preserve"><value>Pengingat</value></data>
   <data name="Reject" xml:space="preserve"><value>Tolak</value></data>

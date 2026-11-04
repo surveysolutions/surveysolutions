@@ -136,13 +136,13 @@
   <value>تخصيص نصوص البريد الإلكتروني</value>
 </data>
    <data name="CustomizeAndSendEmailsText" xml:space="preserve">
-  <value>Customize and send emails text</value>
+  <value>تخصيص نص رسائل البريد الإلكتروني وإرسالها</value>
 </data>
    <data name="SendNow" xml:space="preserve">
-  <value>SEND NOW</value>
+  <value>إرسال الآن</value>
 </data>
    <data name="SendNowTooltip" xml:space="preserve">
-  <value>{{reminderType}} reminders for all assignments and interviews will be sent right now with no waiting period.</value>
+  <value>سيتم إرسال التذكيرات من نوع {{reminderType}} لجميع التكليفات والمقابلات الآن، دون فترة انتظار.</value>
 </data>
     <data name="Invitation" xml:space="preserve">
   <value>دعوة</value>

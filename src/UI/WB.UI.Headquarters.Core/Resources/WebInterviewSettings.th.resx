@@ -10,9 +10,9 @@
   <data name="ExampleResumePage" xml:space="preserve"><value>ตัวอย่างหน้าดำเนินการต่อ</value></data>
   <data name="ExampleFinishPage" xml:space="preserve"><value>ตัวอย่างหน้าเสร็จสิ้น</value></data>
   <data name="CustomizeEmailsText" xml:space="preserve"><value>ปรับแต่งอีเมล</value></data>
-  <data name="CustomizeAndSendEmailsText" xml:space="preserve"><value>Customize and send emails text</value></data>
-  <data name="SendNow" xml:space="preserve"><value>SEND NOW</value></data>
-  <data name="SendNowTooltip" xml:space="preserve"><value>{{reminderType}} reminders for all assignments and interviews will be sent right now with no waiting period.</value></data>
+  <data name="CustomizeAndSendEmailsText" xml:space="preserve">  <value>ปรับแต่งข้อความอีเมลและส่งอีเมล</value></data>
+  <data name="SendNow" xml:space="preserve">  <value>ส่งทันที</value></data>
+  <data name="SendNowTooltip" xml:space="preserve">  <value>การแจ้งเตือนประเภท {{reminderType}} สำหรับงานที่มอบหมายและการสัมภาษณ์ทั้งหมดจะถูกส่งทันทีโดยไม่มีระยะเวลารอ</value></data>
   <data name="Invitation" xml:space="preserve"><value>คำเชิญ</value></data>
   <data name="Reminder" xml:space="preserve"><value>การแจ้งเตือน</value></data>
   <data name="Reject" xml:space="preserve"><value>ปฏิเสธ</value></data>

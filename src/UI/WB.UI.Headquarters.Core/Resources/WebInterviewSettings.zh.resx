@@ -77,13 +77,13 @@
         <value>自定义电子邮件文本</value>
     </data>
     <data name="CustomizeAndSendEmailsText" xml:space="preserve">
-        <value>Customize and send emails text</value>
+        <value>自定义邮件内容并发送邮件</value>
     </data>
     <data name="SendNow" xml:space="preserve">
-        <value>SEND NOW</value>
+        <value>立即发送</value>
     </data>
     <data name="SendNowTooltip" xml:space="preserve">
-        <value>{{reminderType}} reminders for all assignments and interviews will be sent right now with no waiting period.</value>
+        <value>所有任务和访谈的“{{reminderType}}”类型提醒将立即发送，无需等待。</value>
     </data>
     <data name="Invitation" xml:space="preserve">
         <value>邀请</value>

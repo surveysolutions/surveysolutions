@@ -26,9 +26,9 @@
   <data name="ExampleResumePage" xml:space="preserve"><value>გასაგრძელებელი გვერდის მაგალითი</value></data>
   <data name="ExampleFinishPage" xml:space="preserve"><value>დასასრულის გვერდის მაგალითი</value></data>
   <data name="CustomizeEmailsText" xml:space="preserve"><value>ელ-ფოსტის ტექსტის მორგება</value></data>
-  <data name="CustomizeAndSendEmailsText" xml:space="preserve"><value>Customize and send emails text</value></data>
-  <data name="SendNow" xml:space="preserve"><value>SEND NOW</value></data>
-  <data name="SendNowTooltip" xml:space="preserve"><value>{{reminderType}} reminders for all assignments and interviews will be sent right now with no waiting period.</value></data>
+  <data name="CustomizeAndSendEmailsText" xml:space="preserve">  <value>ელფოსტის ტექსტის მორგება და წერილების გაგზავნა</value></data>
+  <data name="SendNow" xml:space="preserve">  <value>ახლავე გაგზავნა</value></data>
+  <data name="SendNowTooltip" xml:space="preserve">  <value>{{reminderType}} ტიპის შეხსენებები ყველა დავალებისა და ინტერვიუსთვის გაიგზავნება დაუყოვნებლივ, ლოდინის გარეშე.</value></data>
   <data name="Invitation" xml:space="preserve"><value>მოწვევა</value></data>
   <data name="Reminder" xml:space="preserve"><value>შეხსენება</value></data>
   <data name="Reject" xml:space="preserve"><value>უარყოფა</value></data>

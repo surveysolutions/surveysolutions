@@ -136,13 +136,13 @@
     <value>Personnaliser le texte des e-mails</value>
   </data>
   <data name="CustomizeAndSendEmailsText" xml:space="preserve">
-    <value>Customize and send emails text</value>
+    <value>Personnaliser le texte des e-mails et les envoyer</value>
   </data>
   <data name="SendNow" xml:space="preserve">
-    <value>SEND NOW</value>
+    <value>ENVOYER MAINTENANT</value>
   </data>
   <data name="SendNowTooltip" xml:space="preserve">
-    <value>{{reminderType}} reminders for all assignments and interviews will be sent right now with no waiting period.</value>
+    <value>Les rappels de type {{reminderType}} pour toutes les affectations et tous les entretiens seront envoyés immédiatement, sans délai d'attente.</value>
   </data>
   <data name="Invitation" xml:space="preserve">
     <value>Invitation</value>

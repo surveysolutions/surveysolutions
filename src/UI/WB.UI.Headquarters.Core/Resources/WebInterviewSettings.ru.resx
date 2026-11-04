@@ -138,13 +138,13 @@
     <value>Настройка текстов писем</value>
   </data>
   <data name="CustomizeAndSendEmailsText" xml:space="preserve">
-    <value>Customize and send emails text</value>
+    <value>Настроить текст писем и отправить их</value>
   </data>
   <data name="SendNow" xml:space="preserve">
-    <value>SEND NOW</value>
+    <value>ОТПРАВИТЬ СЕЙЧАС</value>
   </data>
   <data name="SendNowTooltip" xml:space="preserve">
-    <value>{{reminderType}} reminders for all assignments and interviews will be sent right now with no waiting period.</value>
+    <value>Напоминания типа «{{reminderType}}» для всех заданий и интервью будут отправлены прямо сейчас, без ожидания.</value>
   </data>
   <data name="Invitation" xml:space="preserve">
     <value>Приглашение</value>
