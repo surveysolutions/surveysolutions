@@ -79,3 +79,10 @@ test('normal sections, Complete, and legacy Cover keep their own section identit
     await legacy.router.push('/interview/Cover')
     assert.equal(legacy.storedRoute().params.sectionId, undefined)
 })
+
+test('Section/newcover remains a normal section when no cover page is configured', async () => {
+    const { router, storedRoute } = await setup(null)
+    await router.push('/interview/Section/newcover')
+    assert.equal(router.currentRoute.value.name, 'section')
+    assert.equal(storedRoute().params.sectionId, 'newcover')
+})

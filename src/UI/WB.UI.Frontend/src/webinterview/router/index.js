@@ -48,7 +48,7 @@ function NewRouter(store) {
                     },
                     {
                         name: 'cover',
-                        path: 'Section/' + (config.coverPageId || 'newcover'),
+                        path: 'Section/' + config.coverPageId,
                         component: Cover,
                     },
                     {
