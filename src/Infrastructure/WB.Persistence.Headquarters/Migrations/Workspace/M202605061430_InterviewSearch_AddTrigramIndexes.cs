@@ -12,45 +12,40 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
     {
         public override void Up()
         {
-            string ginTrgmOperatorClass = null;
             Execute.WithConnection((connection, _) =>
             {
-                ginTrgmOperatorClass = connection.QuerySingleOrDefault<string>(@"
+                var ginTrgmOperatorClass = connection.QuerySingleOrDefault<string>(@"
                     SELECT format('%I.gin_trgm_ops', n.nspname)
                     FROM pg_extension e
                     JOIN pg_namespace n ON n.oid = e.extnamespace
                     WHERE e.extname = 'pg_trgm'");
-            });
+                if (ginTrgmOperatorClass == null)
+                    throw new InvalidOperationException(
+                        "The pg_trgm extension must be installed by a database administrator before interview search indexes can be created.");
 
-            if (ginTrgmOperatorClass == null)
-                throw new InvalidOperationException(
-                    "The pg_trgm extension must be installed by a database administrator before interview search indexes can be created.");
-
-            Execute.WithConnection((connection, _) =>
-            {
                 DropInvalidIndex(connection, "interviewsummaries_key_trgm_idx");
                 DropInvalidIndex(connection, "interviewsummaries_clientkey_trgm_idx");
                 DropInvalidIndex(connection, "interviewsummaries_responsible_name_lower_case_trgm_idx");
                 DropInvalidIndex(connection, "interviewsummaries_teamlead_name_lower_case_trgm_idx");
                 DropInvalidIndex(connection, "identifyingentityvalue_value_lower_case_trgm_idx");
+
+                // GIN trigram indexes on interviewsummaries fields used in substring search
+                connection.Execute($@"CREATE INDEX CONCURRENTLY IF NOT EXISTS interviewsummaries_key_trgm_idx
+                    ON interviewsummaries USING GIN (key {ginTrgmOperatorClass});");
+
+                connection.Execute($@"CREATE INDEX CONCURRENTLY IF NOT EXISTS interviewsummaries_clientkey_trgm_idx
+                    ON interviewsummaries USING GIN (clientkey {ginTrgmOperatorClass});");
+
+                connection.Execute($@"CREATE INDEX CONCURRENTLY IF NOT EXISTS interviewsummaries_responsible_name_lower_case_trgm_idx
+                    ON interviewsummaries USING GIN (responsible_name_lower_case {ginTrgmOperatorClass});");
+
+                connection.Execute($@"CREATE INDEX CONCURRENTLY IF NOT EXISTS interviewsummaries_teamlead_name_lower_case_trgm_idx
+                    ON interviewsummaries USING GIN (teamlead_name_lower_case {ginTrgmOperatorClass});");
+
+                // GIN trigram index on identifyingentityvalue used in substring search
+                connection.Execute($@"CREATE INDEX CONCURRENTLY IF NOT EXISTS identifyingentityvalue_value_lower_case_trgm_idx
+                    ON identifyingentityvalue USING GIN (value_lower_case {ginTrgmOperatorClass});");
             });
-
-            // GIN trigram indexes on interviewsummaries fields used in substring search
-            Execute.Sql($@"CREATE INDEX CONCURRENTLY IF NOT EXISTS interviewsummaries_key_trgm_idx
-                ON interviewsummaries USING GIN (key {ginTrgmOperatorClass});");
-
-            Execute.Sql($@"CREATE INDEX CONCURRENTLY IF NOT EXISTS interviewsummaries_clientkey_trgm_idx
-                ON interviewsummaries USING GIN (clientkey {ginTrgmOperatorClass});");
-
-            Execute.Sql($@"CREATE INDEX CONCURRENTLY IF NOT EXISTS interviewsummaries_responsible_name_lower_case_trgm_idx
-                ON interviewsummaries USING GIN (responsible_name_lower_case {ginTrgmOperatorClass});");
-
-            Execute.Sql($@"CREATE INDEX CONCURRENTLY IF NOT EXISTS interviewsummaries_teamlead_name_lower_case_trgm_idx
-                ON interviewsummaries USING GIN (teamlead_name_lower_case {ginTrgmOperatorClass});");
-
-            // GIN trigram index on identifyingentityvalue used in substring search
-            Execute.Sql($@"CREATE INDEX CONCURRENTLY IF NOT EXISTS identifyingentityvalue_value_lower_case_trgm_idx
-                ON identifyingentityvalue USING GIN (value_lower_case {ginTrgmOperatorClass});");
         }
 
         private static void DropInvalidIndex(IDbConnection connection, string indexName)
