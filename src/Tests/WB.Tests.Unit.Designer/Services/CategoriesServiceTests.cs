@@ -10,7 +10,6 @@ using CsvHelper.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
-using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;

@@ -1,4 +1,5 @@
 import { mande } from 'mande';
+import { getRejectionMessage } from '../../questionnaire/src/helpers/rejectionMessage.js';
 
 const api = mande('/error/report');
 
@@ -41,7 +42,7 @@ export function setupErrorHandler() {
         }
 
         var errorDetails = {
-            message: message,
+            message: getRejectionMessage(e.reason),
 
             additionalData: {
                 source: 'unhandledrejection event',
