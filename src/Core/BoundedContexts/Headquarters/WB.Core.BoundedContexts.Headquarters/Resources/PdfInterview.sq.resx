@@ -74,4 +74,7 @@
   <data name="AreaQestion_RequestedFrequency" xml:space="preserve"><value>Frekuenca</value></data>
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve"><value>metra katrorë</value></data>
   <data name="AreaQestion_AreaMeter" xml:space="preserve"><value>metra</value></data>
+  <data name="AreaQestion_Coordinates" xml:space="preserve"><value>Koordinatat</value></data>
+  <data name="AreaQestion_Latitude" xml:space="preserve"><value>Gjerësia gjeografike</value></data>
+  <data name="AreaQestion_Longitude" xml:space="preserve"><value>Gjatësia gjeografike</value></data>
 </root>
