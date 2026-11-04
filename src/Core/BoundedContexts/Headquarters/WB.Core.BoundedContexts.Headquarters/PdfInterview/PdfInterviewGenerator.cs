@@ -158,8 +158,9 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 if (questionnaire.IsQuestion(node.Id))
                 {
                     var question = interview.GetQuestion(node);
-                    new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig, attachmentContentService)
-                        .Write(section.AddParagraph());
+                    var questionWriter = new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig, attachmentContentService);
+                    questionWriter.Write(section.AddParagraph());
+                    questionWriter.WriteCoordinates(() => section.AddParagraph());
                     if (question.FailedErrors != null && question.FailedErrors.Any())
                         new ErrorsPdfWriter(question).Write(section.AddParagraph());
                     if (question.FailedWarnings != null && question.FailedWarnings.Any())
@@ -220,8 +221,9 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                         }
 
                         var answerCell = row[2];
-                        new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig, attachmentContentService)
-                            .Write(answerCell.AddParagraph(), () =>
+                        var questionWriter = new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig, attachmentContentService);
+                        questionWriter.Write(answerCell.AddParagraph());
+                        questionWriter.WriteCoordinates(() =>
                             {
                                 answerCell = questionsTable.AddRow()[2];
                                 return answerCell.AddParagraph();

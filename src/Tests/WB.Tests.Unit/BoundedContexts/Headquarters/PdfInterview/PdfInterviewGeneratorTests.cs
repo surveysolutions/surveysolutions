@@ -83,6 +83,7 @@ public class PdfInterviewGeneratorTests
         var section = document.AddSection();
         var paragraph = section.AddParagraph();
         writer.Write(paragraph);
+        writer.WriteCoordinates(() => paragraph);
 
         var ddl = DdlWriter.WriteToString(document);
 
