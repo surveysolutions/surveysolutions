@@ -101,7 +101,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             var oldChangeRecord = this.dbContext.QuestionnaireChangeRecords
                 .Where(x => 
                     x.QuestionnaireId == sQuestionnaireId 
-                    && x.ActionType != QuestionnaireActionType.ImportToHq)
+                    && x.ActionType != QuestionnaireActionType.ImportToHq
+                    && (x.Patch != null || x.ResultingQuestionnaireDocument != null))
                 .OrderByDescending(x => x.Sequence)
                 .Skip(maxHistoryDepth)
                 .ToList();
