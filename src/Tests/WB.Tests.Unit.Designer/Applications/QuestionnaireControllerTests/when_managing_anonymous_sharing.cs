@@ -126,7 +126,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 commandService: commandService,
                 dbContext: dbContext,
                 postCommitActions: postCommitActions,
-                users: users.Object);
+                userManager: users.Object);
 
             var claims = new[]
             {
