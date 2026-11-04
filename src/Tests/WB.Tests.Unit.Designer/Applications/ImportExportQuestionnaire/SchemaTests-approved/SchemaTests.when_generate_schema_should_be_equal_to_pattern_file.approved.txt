@@ -204,6 +204,9 @@
             "HideIfDisabled": {
               "type": "boolean"
             },
+            "RandomizeOrder": {
+              "type": "boolean"
+            },
             "Instructions": {
               "type": [
                 "null",
@@ -704,6 +707,9 @@
             "HideIfDisabled": {
               "type": "boolean"
             },
+            "RandomizeOrder": {
+              "type": "boolean"
+            },
             "Title": {
               "type": "string"
             }
@@ -832,6 +838,9 @@
               ]
             },
             "HideIfDisabled": {
+              "type": "boolean"
+            },
+            "RandomizeOrder": {
               "type": "boolean"
             }
           }

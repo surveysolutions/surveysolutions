@@ -350,5 +350,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
 
             Assert.That(contentVersion, Is.LessThan(37));
         }
+
+        [Test]
+        public void should_return_38_when_questionnaire_item_has_randomized_order()
+        {
+            var question = Create.TextQuestion(Id.g1);
+            question.RandomizeOrder = true;
+
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(question);
+
+            var service = CreateDesignerEngineVersionService();
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(38));
+        }
+
+        [Test]
+        public void should_not_return_38_when_there_is_no_randomized_order()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(Create.TextQuestion(Id.g1));
+
+            var service = CreateDesignerEngineVersionService();
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.LessThan(38));
+        }
     }
 }
