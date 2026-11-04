@@ -171,6 +171,7 @@ namespace WB.UI.Headquarters.Services.Impl
             && node.Or(FilterOption.Flagged, FilterOption.NotFlagged)
             && node.Or(FilterOption.Valid, FilterOption.Invalid)
             && node.Or(FilterOption.Answered, FilterOption.NotAnswered)
+            && node.Is(FilterOption.Changed)
             && node.Or(FilterOption.ForSupervisor, FilterOption.ForInterviewer)
             && node.Or(FilterOption.CriticalQuestions, FilterOption.CriticalRules);
 
@@ -190,7 +191,7 @@ namespace WB.UI.Headquarters.Services.Impl
             
             var rule = new InterviewQuestionFilter(
                 new HashSet<Identity>(flagged), 
-                FilteringRule, questionnaire);
+                FilteringRule, questionnaire, interview);
 
             var nodes = interview.GetAllInterviewNodes()
                 .Where(n => n is InterviewTreeQuestion || n is InterviewTreeStaticText);

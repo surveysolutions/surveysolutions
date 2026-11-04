@@ -37,6 +37,12 @@
             </filters-block>
 
             <filters-block separate>
+                <filter-item option="Changed"
+                    :title="$t('WebInterview.Filters_Changed')"
+                    @change="change" />
+            </filters-block>
+
+            <filters-block separate>
                 <filter-item option="ForSupervisor"
                     :title="$t('WebInterview.Filters_ForSupervisor')"
                     @change="change" />

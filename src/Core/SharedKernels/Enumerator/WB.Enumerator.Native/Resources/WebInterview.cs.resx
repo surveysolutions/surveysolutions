@@ -382,4 +382,7 @@ Děkujeme za spolupráci!</value>
     <data name="Filters_CriticalRules" xml:space="preserve">
   <value>Kritická pravidla</value>
 </data>
+  <data name="Filters_Changed" xml:space="preserve">
+  <value>Změněné</value>
+</data>
 </root>

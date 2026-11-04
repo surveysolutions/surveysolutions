@@ -20,6 +20,7 @@ export default {
 
             Answered: { value: false },
             NotAnswered: { value: false },
+            Changed: { value: false },
 
             ForSupervisor: { value: false },
             ForInterviewer: { value: false },
@@ -147,4 +148,3 @@ export default {
         },
     },
 }
-

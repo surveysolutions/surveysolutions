@@ -114,4 +114,5 @@
   <data name="NoteForSupervisor" xml:space="preserve"><value>Komentar</value></data>
   <data name="Complete" xml:space="preserve"><value>Selesai</value></data>
   <data name="LinkToWebInterviewExample" xml:space="preserve"><value>Contoh tautan ke halaman arahan wawancara web</value></data>
+  <data name="Filters_Changed" xml:space="preserve"><value>Diubah</value></data>
 </root>

@@ -12,15 +12,17 @@ namespace WB.UI.Headquarters.Services.Impl
     {
         private readonly Func<InterviewQuestionFilter, bool> rule;
         private readonly IQuestionnaire questionnaire;
+        private readonly IStatefulInterview interview;
         private readonly HashSet<Identity> flaggedQuestionsSet;
         private HashSet<FilterOption> filters;
         private IInterviewTreeNode node;
 
         public InterviewQuestionFilter(HashSet<Identity> flaggedQuestionsSetQuestions,
-            Func<InterviewQuestionFilter, bool> rule, IQuestionnaire questionnaire)
+            Func<InterviewQuestionFilter, bool> rule, IQuestionnaire questionnaire, IStatefulInterview interview)
         {
             this.rule = rule;
             this.questionnaire = questionnaire;
+            this.interview = interview;
             this.flaggedQuestionsSet = flaggedQuestionsSetQuestions;
             
         }
@@ -63,6 +65,7 @@ namespace WB.UI.Headquarters.Services.Impl
                     switch (option)
                     {
                         case FilterOption.WithComments: return false;
+                        case FilterOption.Changed: return false;
                         case FilterOption.Invalid: return !staticText.IsValid;
                         case FilterOption.Valid: return staticText.IsValid;
                         default:
@@ -78,6 +81,9 @@ namespace WB.UI.Headquarters.Services.Impl
                         case FilterOption.Valid: return question.IsValid;
                         case FilterOption.Answered: return question.IsAnswered();
                         case FilterOption.NotAnswered: return !question.IsAnswered();
+                        case FilterOption.Changed:
+                            return question.IsAnswered() &&
+                                   interview.IsQuestionChangedSinceLastRejection(question.Identity);
                         case FilterOption.ForSupervisor: return question.IsSupervisors;
                         case FilterOption.ForInterviewer: return question.IsInterviewer && !question.IsReadonly;
                         case FilterOption.CriticalQuestions: return questionnaire.IsQuestionCritical(question.Identity.Id);
