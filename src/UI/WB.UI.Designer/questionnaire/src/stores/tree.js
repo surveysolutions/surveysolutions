@@ -143,6 +143,7 @@ export const useTreeStore = defineStore('tree', {
             question.isInteger = data.isInteger;
             question.yesNoView = data.yesNoView;
             question.hideIfDisabled = data.hideIfDisabled;
+            question.randomizeOrder = data.randomizeOrder;
             question.isCritical = data.isCritical;
 
             const varType = this.getUnderlyingQuestionType(question);
@@ -202,6 +203,7 @@ export const useTreeStore = defineStore('tree', {
                 event.enablementCondition !== null &&
                 /\S/.test(event.enablementCondition);
             staticText.hideIfDisabled = event.hideIfDisabled;
+            staticText.randomizeOrder = event.randomizeOrder;
         },
 
         variableUpdated(data) {
@@ -249,6 +251,7 @@ export const useTreeStore = defineStore('tree', {
                 chapter.title = payload.group.title;
                 chapter.hasCondition = hasCondition;
                 chapter.hideIfDisabled = payload.group.hideIfDisabled;
+                chapter.randomizeOrder = payload.group.randomizeOrder;
             }
 
             var group = this.findTreeItem(itemId);
@@ -257,6 +260,7 @@ export const useTreeStore = defineStore('tree', {
             group.variable = payload.group.variableName;
             group.hasCondition = hasCondition;
             group.hideIfDisabled = payload.group.hideIfDisabled;
+            group.randomizeOrder = payload.group.randomizeOrder;
         },
 
         rosterUpdated(data) {
@@ -271,6 +275,7 @@ export const useTreeStore = defineStore('tree', {
             roster.variable = data.roster.variableName;
             roster.hasCondition = hasCondition;
             roster.hideIfDisabled = data.roster.hideIfDisabled;
+            roster.randomizeOrder = data.roster.randomizeOrder;
 
             this.updateVariableName(itemId, data.roster.variableName, 'Roster');
         },

@@ -19,6 +19,7 @@ export function updateRoster(questionnaireId, roster) {
         description: roster.description,
         condition: roster.enablementCondition,
         hideIfDisabled: roster.hideIfDisabled,
+        randomizeOrder: roster.randomizeOrder,
         variableName: roster.variableName,
         displayMode: roster.displayMode,
         isRoster: true

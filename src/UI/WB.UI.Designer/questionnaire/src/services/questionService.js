@@ -38,6 +38,7 @@ export function updateQuestion(
             variableLabel: question.variableLabel,
             enablementCondition: question.enablementCondition,
             hideIfDisabled: question.hideIfDisabled,
+            randomizeOrder: question.randomizeOrder,
             instructions: question.instructions,
             hideInstructions: question.hideInstructions,
             optionsFilterExpression: question.optionsFilterExpression,

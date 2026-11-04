@@ -3170,5 +3170,17 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("Stick", resourceCulture);
             }
         }
+        
+        public static string RandomizeOrder {
+            get {
+                return ResourceManager.GetString("RandomizeOrder", resourceCulture);
+            }
+        }
+        
+        public static string RandomizeOrderTooltip {
+            get {
+                return ResourceManager.GetString("RandomizeOrderTooltip", resourceCulture);
+            }
+        }
     }
 }
