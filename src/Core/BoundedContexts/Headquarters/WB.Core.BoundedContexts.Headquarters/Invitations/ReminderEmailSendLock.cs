@@ -23,6 +23,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 await Task.Delay(50).ConfigureAwait(false);
         }
 
+        public static async Task AcquireSchedulingAsync(IUnitOfWork unitOfWork, Guid requestId)
+        {
+            while (!await TryAcquireAsync(unitOfWork, $"ReminderScheduling-{requestId:N}").ConfigureAwait(false))
+                await Task.Delay(50).ConfigureAwait(false);
+        }
+
         private static async Task<bool> TryAcquireAsync(IUnitOfWork unitOfWork, string lockKey)
         {
             // Advisory locks are database-wide, so include the current workspace schema in the lock key.

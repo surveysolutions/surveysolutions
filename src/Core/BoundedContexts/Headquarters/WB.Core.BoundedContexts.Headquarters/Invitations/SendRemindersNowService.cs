@@ -85,30 +85,56 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         private async Task EnsureScheduledAsync(SendRemindersNowStatus status)
         {
-            if (status.State is not (SendRemindersNowState.Queued or SendRemindersNowState.InProgress))
+            if (status == null)
                 return;
 
-            var request = new SendRemindersNowRequest
+            await rootScopeExecutor.ExecuteAsync(async locator =>
             {
-                RequestId = status.RequestId,
-                QuestionnaireIdentity = status.QuestionnaireIdentity,
-                QuestionnaireTitle = status.QuestionnaireTitle,
-                Type = status.Type
-            };
+                var unitOfWork = locator.GetInstance<IUnitOfWork>();
+                await ReminderEmailSendLock.AcquireSchedulingAsync(unitOfWork, status.RequestId)
+                    .ConfigureAwait(false);
 
-            if (await IsScheduledOrRunningAsync(request).ConfigureAwait(false))
-                return;
+                var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
+                var statusStorageKey = SendRemindersNowRequest.GetStatusStorageKey(status.RequestId);
+                var currentStatus = storage.GetById(statusStorageKey);
+                if (currentStatus?.State is not (SendRemindersNowState.Queued or SendRemindersNowState.InProgress))
+                    return true;
 
-            try
-            {
-                await sendRemindersTask.Schedule(request).ConfigureAwait(false);
-            }
-            catch (Exception)
-            {
-                status.State = SendRemindersNowState.Failed;
-                status.Error = "The reminder emails could not be scheduled.";
-                await StoreStatusAsync(status).ConfigureAwait(false);
-            }
+                var request = new SendRemindersNowRequest
+                {
+                    RequestId = currentStatus.RequestId,
+                    QuestionnaireIdentity = currentStatus.QuestionnaireIdentity,
+                    QuestionnaireTitle = currentStatus.QuestionnaireTitle,
+                    Type = currentStatus.Type
+                };
+
+                if (await IsScheduledOrRunningAsync(request).ConfigureAwait(false))
+                    return true;
+
+                var startedAtUtc = currentStatus.StartedAtUtc;
+                try
+                {
+                    await sendRemindersTask.Schedule(request).ConfigureAwait(false);
+                }
+                catch (Exception)
+                {
+                    var latestStatus = storage.GetById(statusStorageKey);
+                    if (latestStatus?.State is not (SendRemindersNowState.Queued or SendRemindersNowState.InProgress)
+                        || latestStatus.StartedAtUtc != startedAtUtc
+                        || await IsScheduledOrRunningAsync(request).ConfigureAwait(false))
+                        return true;
+
+                    latestStatus.State = SendRemindersNowState.Failed;
+                    latestStatus.Error = "The reminder emails could not be scheduled.";
+                    status.State = latestStatus.State;
+                    status.Error = latestStatus.Error;
+                    storage.Store(latestStatus,
+                        SendRemindersNowRequest.GetStorageKey(latestStatus.QuestionnaireIdentity, latestStatus.Type));
+                    storage.Store(latestStatus, statusStorageKey);
+                }
+
+                return true;
+            }).ConfigureAwait(false);
         }
 
         private async Task<bool> IsScheduledOrRunningAsync(SendRemindersNowRequest request)
@@ -139,14 +165,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 return false;
             }
         }
-
-        private Task StoreStatusAsync(SendRemindersNowStatus status) =>
-            rootScopeExecutor.ExecuteAsync(locator =>
-            {
-                var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
-                storage.Store(status, SendRemindersNowRequest.GetStorageKey(status.QuestionnaireIdentity, status.Type));
-                storage.Store(status, SendRemindersNowRequest.GetStatusStorageKey(status.RequestId));
-                return Task.FromResult(true);
-            });
     }
 }

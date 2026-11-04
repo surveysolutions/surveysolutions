@@ -1183,6 +1183,7 @@ namespace WB.Tests.Abc.TestFactories
             IWebInterviewConfigProvider webInterviewConfigProvider = null,
             IPlainKeyValueStorage<EmailParameters> emailParamsStorage = null,
             IWebInterviewEmailRenderer webInterviewEmailRenderer = null,
+            IInScopeExecutor inScopeExecutor = null,
             IUnitOfWork unitOfWork = null)
         {
             var invitationServiceActual = invitationService ?? Mock.Of<IInvitationService>();
@@ -1208,15 +1209,20 @@ namespace WB.Tests.Abc.TestFactories
                 unitOfWork = unitOfWorkMock.Object;
             }
 
+            var actualEmailParamsStorage = emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>();
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IInvitationService>()).Returns(invitationServiceActual);
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<EmailParameters>>())
+                .Returns(actualEmailParamsStorage);
+
             return new ReminderEmailSender(
                 Mock.Of<ILogger<ReminderEmailSender>>(),
                 invitationServiceActual,
                 emailService ?? Mock.Of<IEmailService>(),
                 webInterviewConfigProvider ?? Mock.Of<IWebInterviewConfigProvider>(),
-                emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>(),
+                actualEmailParamsStorage,
                 webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>(),
-                Create.Service.InScopeExecutor(Mock.Of<IServiceLocator>(sl =>
-                    sl.GetInstance<IInvitationService>() == invitationServiceActual)),
+                inScopeExecutor ?? Create.Service.InScopeExecutor(serviceLocator.Object),
                 linkProvider,
                 unitOfWork);
         }

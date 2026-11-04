@@ -214,27 +214,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     SenderName = senderInfo.SenderName,
                     Link = link
                 };
-                emailParamsStorage.Store(emailParams, emailParamsId);
 
                 var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams).ConfigureAwait(false);
 
-                string emailId;
-                try
+                await inScopeExecutor.ExecuteAsync(async locator =>
                 {
-                    emailId = await emailService.SendEmailAsync(address, emailParams.Subject,
-                            interviewEmail.MessageHtml, interviewEmail.MessageText)
-                        .ConfigureAwait(false);
-                }
-                catch (Exception e)
-                {
-                    result.FailedCount++;
-                    invitationService.ReminderWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
-                    this.logger.LogError(e, $"Interview email was not sent for invitation {invitationId}.");
-                    continue;
-                }
+                    var invitationServiceLocal = locator.GetInstance<IInvitationService>();
+                    locator.GetInstance<IPlainKeyValueStorage<EmailParameters>>()
+                        .Store(emailParams, emailParamsId);
 
-                invitationService.MarkInvitationAsReminded(invitationId, emailId);
-                result.SentCount++;
+                    string emailId;
+                    try
+                    {
+                        emailId = await emailService.SendEmailAsync(address, emailParams.Subject,
+                                interviewEmail.MessageHtml, interviewEmail.MessageText)
+                            .ConfigureAwait(false);
+                    }
+                    catch (Exception e)
+                    {
+                        result.FailedCount++;
+                        invitationServiceLocal.ReminderWasNotSent(invitationId, invitation.AssignmentId, address,
+                            e.Message);
+                        this.logger.LogError(e, $"Interview email was not sent for invitation {invitationId}.");
+                        return;
+                    }
+
+                    invitationServiceLocal.MarkInvitationAsReminded(invitationId, emailId);
+                    result.SentCount++;
+                }).ConfigureAwait(false);
             }
         }
     }
