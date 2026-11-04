@@ -84,9 +84,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         [TestCaseSource(nameof(EventsReferencingMissingEntities))]
         public void should_replay_without_event_apply_exception(IEvent persistedEvent)
         {
-            Action act = () => CreateInterview(persistedEvent);
+            var interview = CreateInterview(persistedEvent);
 
-            act.Should().NotThrow();
+            interview.InitialVersion.Should().Be(2);
         }
 
         [Test]
