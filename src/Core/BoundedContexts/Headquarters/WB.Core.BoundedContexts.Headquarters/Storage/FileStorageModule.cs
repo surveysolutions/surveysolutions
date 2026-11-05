@@ -26,7 +26,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
 
         public static void Setup(IServiceCollection services, IConfiguration configuration)
         {
-            AWSConfigsS3.UseSignatureVersion4 = true;
             var awsOptions = configuration.GetAWSOptions();
             services.AddDefaultAWSOptions(awsOptions);
 
