@@ -73,7 +73,7 @@
     <PackageReference Include="NodaTime" Version="3.3.2" />
     <PackageReference Include="PasswordGenerator" Version="2.1.0" />
     <PackageReference Include="Polly" Version="8.7.0" />
-    <PackageReference Include="Quartz" Version="3.13.1" />
+    <PackageReference Include="Quartz" Version="4.7.2" />
     <PackageReference Include="refit" Version="8.0.0" />
     <PackageReference Include="Sendgrid" Version="9.29.3" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
@@ -84,7 +84,7 @@
     <PackageReference Include="PDFsharp-MigraDoc" Version="6.2.4" />
     <PackageReference Include="PDFsharp" Version="6.2.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.1" />
-    <PackageReference Include="ZXing.Net" Version="0.16.10" />
+    <PackageReference Include="ZXing.Net" Version="0.16.11" />
   </ItemGroup>
 
   <ItemGroup>
