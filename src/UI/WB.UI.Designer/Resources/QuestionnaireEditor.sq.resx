@@ -1835,4 +1835,10 @@ Pamijet Tabelë dhe Matricë mbështeten vetëm në sondazhin në internet, tabl
   <data name="Stick" xml:space="preserve">
       <value>Bashkëngjit</value>
   </data>
+  <data name="RandomizeOrder" xml:space="preserve">
+      <value>Rend i rastësishëm</value>
+  </data>
+  <data name="RandomizeOrderTooltip" xml:space="preserve">
+      <value>Rendi i shfaqjes së këtij elementi përzihet rastësisht së bashku me elementet fqinje të shënuara me 'Rend i rastësishëm'</value>
+  </data>
 </root>

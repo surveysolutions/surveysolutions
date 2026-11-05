@@ -1865,4 +1865,10 @@
   <data name="Stick" xml:space="preserve">
       <value>附加</value>
   </data>
+  <data name="RandomizeOrder" xml:space="preserve">
+      <value>随机顺序</value>
+  </data>
+  <data name="RandomizeOrderTooltip" xml:space="preserve">
+      <value>此项的显示顺序将与标记为“随机顺序”的相邻项一起随机排列</value>
+  </data>
 </root>

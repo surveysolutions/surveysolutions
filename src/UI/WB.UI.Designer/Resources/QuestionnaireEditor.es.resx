@@ -1690,4 +1690,10 @@ Ingresaste una entrada no válida. Cada línea debe seguir el formato: "Título.
   <data name="Stick" xml:space="preserve">
       <value>Adherir</value>
   </data>
+  <data name="RandomizeOrder" xml:space="preserve">
+      <value>Orden aleatorio</value>
+  </data>
+  <data name="RandomizeOrderTooltip" xml:space="preserve">
+      <value>El orden de visualización de este elemento se aleatoriza junto con los elementos vecinos marcados con 'Orden aleatorio'</value>
+  </data>
 </root>

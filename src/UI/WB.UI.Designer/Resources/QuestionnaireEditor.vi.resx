@@ -1628,4 +1628,10 @@ Vui lòng kiểm tra kết nối mạng của bạn hoặc liên hệ với bộ
     <data name="Stick" xml:space="preserve">
         <value>Đính kèm</value>
     </data>
+    <data name="RandomizeOrder" xml:space="preserve">
+        <value>Thứ tự ngẫu nhiên</value>
+    </data>
+    <data name="RandomizeOrderTooltip" xml:space="preserve">
+        <value>Thứ tự hiển thị của mục này được xáo trộn ngẫu nhiên cùng với các mục lân cận được đánh dấu 'Thứ tự ngẫu nhiên'</value>
+    </data>
 </root>

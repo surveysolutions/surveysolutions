@@ -1714,4 +1714,10 @@
   <data name="Stick" xml:space="preserve">
       <value>Прикріпити</value>
   </data>
+  <data name="RandomizeOrder" xml:space="preserve">
+      <value>Випадковий порядок</value>
+  </data>
+  <data name="RandomizeOrderTooltip" xml:space="preserve">
+      <value>Порядок відображення цього елемента перемішується разом із сусідніми елементами, позначеними 'Випадковий порядок'</value>
+  </data>
 </root>
