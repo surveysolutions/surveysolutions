@@ -21,7 +21,7 @@
 /* eslint-disable vue/no-unused-components */
 import { entityDetails } from '../mixins'
 import { debounce, map } from 'lodash-es'
-import { AgGridVue, agGridTheme } from './agGrid'
+import { AgGridVue, agGridTheme, isRtl } from './agGrid'
 
 import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'
 import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'
@@ -113,6 +113,7 @@ export default {
         gridOptions() {
             return {
                 theme: agGridTheme,
+                enableRtl: isRtl,
                 suppressClickEdit: true,
                 suppressCellFocus: true,
                 suppressMovableColumns: true,
@@ -168,7 +169,7 @@ export default {
                 headerName: '', //this.$me.title,
                 field: 'rosterTitle',
                 autoHeight: true,
-                pinned: true,
+                pinned: isRtl ? 'right' : 'left',
                 editable: false,
                 cellStyle: { minHeight: '40px' },
                 cellRenderer: 'MatrixRoster_RosterTitle',

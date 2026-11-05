@@ -1,0 +1,61 @@
+/* rtl:begin:ignore */
+html.web-interview-page[dir="rtl"] {
+    input[type="email"],
+    input[type="url"],
+    input[inputmode="numeric"],
+    input[inputmode="decimal"],
+    .numeric-question input,
+    .time-question input,
+    .interview-ID,
+    .gps-question .block-with-data a,
+    .area-question .block-with-data a {
+        direction: ltr;
+        unicode-bidi: isolate;
+    }
+
+    input::placeholder {
+        direction: rtl;
+        text-align: right;
+    }
+
+    .btn-back::before {
+        transform: scaleX(-1);
+    }
+
+    .table-view .ag-theme-customStyles {
+        .ag-horizontal-right-spacer {
+            height: 0;
+        }
+
+        .ag-grid-pinned-right-cells .ag-header-cell {
+            border-right: 1px solid #E5E5E5;
+            border-left: 1px solid rgba(0, 0, 0, 0.3);
+        }
+
+        .ag-grid-pinned-right-cells {
+            border-left: 1px solid rgba(0, 0, 0, 0.3);
+            border-right: 1px solid #E5E5E5;
+
+            .ag-cell {
+                background-color: transparent;
+            }
+        }
+    }
+
+    .flatpickr-calendar {
+        // Keep day order consistent with Flatpickr's native arrow-key navigation.
+        direction: ltr;
+    }
+
+    #toast-container > div {
+        padding: 15px 50px 15px 15px;
+        background-position: right 15px center;
+    }
+
+    .toast-close-button {
+        float: left;
+        right: auto;
+        left: -.3em;
+    }
+}
+/* rtl:end:ignore */

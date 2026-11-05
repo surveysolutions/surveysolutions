@@ -38,4 +38,6 @@ ModuleRegistry.registerModules(modules)
 // so the grids have to opt out of the theming api
 export const agGridTheme = 'legacy'
 
+export const isRtl = document.documentElement.matches('.web-interview-page[dir="rtl"]')
+
 export { AgGridVue } from 'ag-grid-vue3'

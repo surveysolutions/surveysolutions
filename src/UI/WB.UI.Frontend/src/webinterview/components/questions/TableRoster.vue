@@ -22,7 +22,7 @@
 
 import { entityDetails } from '../mixins'
 import { debounce, every, some, map } from 'lodash-es'
-import { AgGridVue, agGridTheme } from './agGrid'
+import { AgGridVue, agGridTheme, isRtl } from './agGrid'
 
 import TableRoster_QuestionEditor from './TableRoster.QuestionEditor'
 import TableRoster_ViewAnswer from './TableRoster.ViewAnswer'
@@ -91,6 +91,7 @@ export default {
         gridOptions() {
             return {
                 theme: agGridTheme,
+                enableRtl: isRtl,
                 stopEditingWhenCellsLoseFocus: true,
                 suppressMovableColumns: true,
                 singleClickEdit: true,
@@ -139,7 +140,7 @@ export default {
                 },
                 field: 'rosterTitle',
                 autoHeight: true,
-                pinned: true,
+                pinned: isRtl ? 'right' : 'left',
                 editable: false,
                 cellStyle: { minHeight: '40px' },
                 cellRenderer: 'TableRoster_RosterTitle',

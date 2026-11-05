@@ -1,0 +1,120 @@
+import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { test } from 'node:test'
+import postcss from 'postcss'
+import * as sass from 'sass'
+import webInterviewRtl from '../../tools/postcss-webinterview-rtl.js'
+
+const frontend = new URL('../../', import.meta.url)
+const ltr = ':where(html:not(.web-interview-page[dir="rtl"]))'
+const rtl = ':where(html.web-interview-page[dir="rtl"])'
+
+async function transform(css, file = 'src/assets/css/markup.scss') {
+    return postcss([webInterviewRtl()]).process(css, {
+        from: fileURLToPath(new URL(file, frontend)),
+    })
+}
+
+function declarations(root, selector, property) {
+    const values = []
+    root.walkRules(rule => {
+        if (!rule.selectors.includes(selector)) return
+        rule.walkDecls(property, declaration => values.push(declaration.value))
+    })
+    return values
+}
+
+test('generates scoped RTL and preserves unmarked HQ and LTR rules without adding specificity', async () => {
+    const { root } = await transform('.question { margin-left: 12px; padding: 1px 2px 3px 4px; text-align: left }')
+    assert.deepEqual(declarations(root, `${ltr} .question`, 'margin-left'), ['12px'])
+    assert.deepEqual(declarations(root, `${rtl} .question`, 'margin-right'), ['12px'])
+    assert.deepEqual(declarations(root, `${ltr} .question`, 'padding'), ['1px 2px 3px 4px'])
+    assert.deepEqual(declarations(root, `${rtl} .question`, 'padding'), ['1px 4px 3px 2px'])
+    assert.deepEqual(declarations(root, `${rtl} .question`, 'text-align'), ['right'])
+})
+
+test('prefixes html itself rather than requiring a nested html element', async () => {
+    const { root } = await transform('html { padding-left: 12px }')
+    assert.deepEqual(declarations(root, `html${rtl}`, 'padding-right'), ['12px'])
+})
+
+test('preserves reset order and media queries', async () => {
+    const { root } = await transform(`
+        .question { padding-left: 20px }
+        .reset { padding: 0 }
+        @media (max-width: 768px) { .question { padding-left: 5px } }
+    `)
+    assert.deepEqual(declarations(root, '.reset', 'padding'), ['0'])
+    const media = root.nodes.find(node => node.type === 'atrule')
+    assert.equal(media.params, '(max-width: 768px)')
+    assert.deepEqual(declarations(media, `${rtl} .question`, 'padding-right'), ['5px'])
+})
+
+test('preserves sprite coordinates, image URLs and non-directional resets', async () => {
+    const { root } = await transform(`
+        .tick { left: 2px; background-image: url("questionnaire-sprite.png"); background-position: 0 0 }
+        .checked { background-position: -78px 2px }
+        .flag { background-position: 1px 0 }
+    `)
+    assert.deepEqual(declarations(root, '.tick', 'background-position'), ['0 0'])
+    assert.deepEqual(declarations(root, '.checked', 'background-position'), ['-78px 2px'])
+    assert.deepEqual(declarations(root, '.flag', 'background-position'), ['1px 0'])
+    assert.deepEqual(declarations(root, '.tick', 'background-image'), ['url("questionnaire-sprite.png")'])
+    assert.deepEqual(declarations(root, `${rtl} .tick`, 'right'), ['2px'])
+})
+
+test('does not process native RTL vendor styles or unrelated entry points', async () => {
+    const css = '.ag-rtl { left: 20px; direction: rtl }'
+    for (const file of [
+        'node_modules/ag-grid-community/styles/ag-grid.css',
+        'src/assets/css/markup-specific.scss',
+        'src/shared/components/Bootstrap5Popover.vue',
+    ]) {
+        assert.equal((await transform(css, file)).css, css)
+    }
+})
+
+test('explicit RTL exceptions are not mirrored a second time', async () => {
+    const { root } = await transform(`
+        /* rtl:begin:ignore */
+        html.web-interview-page[dir="rtl"] input { direction: ltr; text-align: right }
+        /* rtl:end:ignore */
+    `)
+    assert.deepEqual(declarations(root, 'html.web-interview-page[dir="rtl"] input', 'direction'), ['ltr'])
+    assert.deepEqual(declarations(root, 'html.web-interview-page[dir="rtl"] input', 'text-align'), ['right'])
+})
+
+test('actual styles mirror desktop and mobile sidebar positions and retain numeric exceptions', async () => {
+    for (const name of ['markup', 'markup-web-interview']) {
+        const file = `src/assets/css/${name}.scss`
+        const compiled = sass.compile(fileURLToPath(new URL(file, frontend)), {
+            logger: sass.Logger.silent,
+        })
+        const { root } = await transform(compiled.css, file)
+        if (name === 'markup-web-interview') {
+            assert.ok(declarations(root, `${rtl} .content`, 'right').includes('12px'))
+            assert.ok(declarations(root, `${rtl} .web-interview .content`, 'right').some(value => value.startsWith('-')))
+            assert.ok(declarations(root, `${rtl} .web-interview .content`, 'left').length === 0)
+            assert.ok(declarations(root, `${ltr} .content`, 'left').includes('12px'))
+        } else {
+            assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] input[inputmode=decimal]', 'direction'), ['ltr'])
+            assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .flatpickr-calendar', 'direction'), ['ltr'])
+            assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .btn-back::before', 'transform'), ['scaleX(-1)'])
+            assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .table-view .ag-theme-customStyles .ag-grid-pinned-right-cells .ag-header-cell', 'border-left'), ['1px solid rgba(0, 0, 0, 0.3)'])
+        }
+    }
+})
+
+test('all interview page templates select direction from UI culture before the app mounts', () => {
+    for (const file of [
+        '../WB.UI.Headquarters.Core/Views/WebInterview/Index.Template.cshtml',
+        '../WB.UI.Headquarters.Core/Views/WebInterview/_WebInterviewLayout.Template.cshtml',
+        '../WB.UI.WebTester/Views/Shared/_Layout.Template.cshtml',
+    ]) {
+        const source = readFileSync(new URL(file, frontend), 'utf8')
+        assert.match(source, /<html lang="@System\.Globalization\.CultureInfo\.CurrentUICulture\.Name"/)
+        assert.match(source, /dir="@\(System\.Globalization\.CultureInfo\.CurrentUICulture\.TextInfo\.IsRightToLeft \? "rtl" : "ltr"\)"/)
+        assert.match(source, /class="web-interview-page"/)
+    }
+})

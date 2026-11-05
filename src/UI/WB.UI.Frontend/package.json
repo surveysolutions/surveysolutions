@@ -8,6 +8,7 @@
         "build": "vite build",
         "dev": "vite build --mode development",
         "hot": "vite",
+        "test:rtl": "node --test tests/unit/webinterview-rtl.spec.js",
         "lint": "eslint --ext .js,.vue --fix src",
         "format": "prettier .  --write"
     },
@@ -55,6 +56,8 @@
         "eslint-plugin-vue": "^10.8.0",
         "fast-glob": "^3.3.3",
         "prettier": "3.0.0",
+        "postcss": "^8.5.26",
+        "postcss-rtlcss": "^6.0.0",
         "sass": "^1.85.0",
         "vite": "^8.3.5",
         "xmldoc": "^1.1.2"
@@ -108,7 +111,7 @@
         "node-notifier": ">=8.0.1",
         "normalize-url": ">=4.5.1",
         "nth-check": "2.1.1",
-        "postcss": ">=8.5.26",
+        "postcss": "$postcss",
         "postcss-selector-parser": ">=7.1.7",
         "parse-url": "8.1.0",
         "selfsigned": ">=1.3.0",

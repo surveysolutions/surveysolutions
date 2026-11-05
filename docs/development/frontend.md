@@ -42,6 +42,29 @@ And then, the main app is compiled. During development, `shared_vendor.dll.js` w
 
 There are 2 webpack configuration files in the `.build` directory, one for `shared_vendor.dll.js` and another for application entries.
 
+# Web interview RTL
+
+Web interview pages and WebTester use the server-resolved UI culture for their
+HTML `lang` and `dir`. The existing request-localization providers select that
+culture (including the browser's `Accept-Language`, unless a culture query
+parameter or cookie takes precedence). Arabic selects RTL; changing the
+questionnaire translation does not change direction in this first version.
+Designer and questionnaire documents have no RTL setting.
+
+Vite uses `tools/postcss-webinterview-rtl.js` in `WB.UI.Frontend` to generate both
+directions for `markup.scss` and `markup-web-interview.scss`. RTL rules only apply
+to `html.web-interview-page[dir="rtl"]`; other HQ pages retain LTR. Zero-specificity
+prefixes preserve the existing CSS cascade. Vendor CSS is not transformed:
+AG Grid uses its native RTL option, while exceptions and toast adjustments live in
+`_web-interview-rtl.scss`. Sprite background coordinates must not be mirrored.
+The date picker retains LTR day order and native arrow-key navigation, with
+localized month/day labels. Numeric inputs, URLs and coordinates also retain LTR.
+
+Run `npm run test:rtl` and `npm run build` from `src/UI/WB.UI.Frontend`.
+Check Arabic and English on desktop and mobile, including start/resume/finish,
+sidebar navigation, all question types, table/matrix rosters, dialogs and dates.
+Numeric wire formats, calendar system and questionnaire translations are unchanged.
+
 # Store Modules
 
 
@@ -84,5 +107,3 @@ All view components are processed and merged with `ComponentsProvider` class - i
 Each view component can optionally provide array of `route`s to register, method `initialize` for one time initialization and `modules` hash object to register them in RootStore
 
 Each view component initialized only once on first navigation.
-
-
