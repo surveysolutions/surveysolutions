@@ -45,4 +45,7 @@
   <data name="AreaQestion_RequestedFrequency" xml:space="preserve"><value>Frekuensi</value></data>
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve"><value>meter persegi</value></data>
   <data name="AreaQestion_AreaMeter" xml:space="preserve"><value>meter</value></data>
+  <data name="AreaQestion_Coordinates" xml:space="preserve"><value>Koordinat</value></data>
+  <data name="AreaQestion_Latitude" xml:space="preserve"><value>Lintang</value></data>
+  <data name="AreaQestion_Longitude" xml:space="preserve"><value>Bujur</value></data>
 </root>

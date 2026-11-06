@@ -74,4 +74,7 @@
   <data name="AreaQestion_RequestedFrequency" xml:space="preserve"><value>სიხშირე</value></data>
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve"><value>კვ. მეტრი</value></data>
   <data name="AreaQestion_AreaMeter" xml:space="preserve"><value>მეტრი</value></data>
+  <data name="AreaQestion_Coordinates" xml:space="preserve"><value>კოორდინატები</value></data>
+  <data name="AreaQestion_Latitude" xml:space="preserve"><value>განედი</value></data>
+  <data name="AreaQestion_Longitude" xml:space="preserve"><value>გრძედი</value></data>
 </root>

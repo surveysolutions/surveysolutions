@@ -3,12 +3,15 @@ using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Options;
 using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.IO;
 using MigraDoc.DocumentObjectModel.Tables;
 using Moq;
 using NUnit.Framework;
+using PdfSharp.Pdf.IO;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
+using WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -50,6 +53,92 @@ public class PdfInterviewGeneratorTests
         var generate = generator.Generate(Id.g1, PdfView.Interviewer);
         
         Assert.That(generate, Is.Not.Null);
+    }
+
+    [Test]
+    public void when_writing_area_question_with_coordinates_should_contain_swapped_and_rounded_values()
+    {
+        var questionId = Id.g1;
+        // Coordinates stored as "longitude,latitude" pairs (GIS X,Y order)
+        const string coordinates = "10.123456,20.654321;11.222333,21.444555";
+
+        var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+            id: Id.g2,
+            children: new[] { Create.Entity.GeographyQuestion(id: questionId) });
+        var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+        var interview = SetUp.StatefulInterview(questionnaireDocument);
+        interview.Apply(new AreaQuestionAnswered(
+            Id.g3, questionId, RosterVector.Empty, DateTimeOffset.Now,
+            "POLYGON(...)", null, 123.456, 45.678, coordinates, null, 2, null, null));
+
+        var question = interview.GetQuestion(Identity.Create(questionId, RosterVector.Empty));
+
+        var writer = new QuestionPdfWriter(
+            question, interview, questionnaire,
+            Mock.Of<IImageFileStorage>(),
+            Mock.Of<IOptions<GoogleMapsConfig>>(),
+            Mock.Of<IAttachmentContentService>());
+
+        var document = new Document();
+        var section = document.AddSection();
+        var paragraph = section.AddParagraph();
+        writer.Write(paragraph);
+        writer.WriteCoordinates(() => paragraph);
+
+        var ddl = DdlWriter.WriteToString(document);
+
+        Assert.Multiple(() =>
+        {
+            // Latitude (parts[1]) shown before longitude (parts[0]), 6 decimal places, no comma between them
+            var firstLatitudeIndex = ddl.IndexOf("20.654321", StringComparison.Ordinal);
+            var firstLongitudeIndex = ddl.IndexOf("10.123456", StringComparison.Ordinal);
+            var secondLatitudeIndex = ddl.IndexOf("21.444555", StringComparison.Ordinal);
+            var secondLongitudeIndex = ddl.IndexOf("11.222333", StringComparison.Ordinal);
+            Assert.That(firstLatitudeIndex, Is.GreaterThanOrEqualTo(0), "Latitude of first point should appear");
+            Assert.That(firstLongitudeIndex, Is.GreaterThan(firstLatitudeIndex), "Latitude should precede longitude for first point");
+            Assert.That(secondLatitudeIndex, Is.GreaterThanOrEqualTo(0), "Latitude of second point should appear");
+            Assert.That(secondLongitudeIndex, Is.GreaterThan(secondLatitudeIndex), "Latitude should precede longitude for second point");
+            Assert.That(ddl, Does.Not.Contain("20.654321, 10.123456"), "Comma-separated lat,lon format should not be used");
+            // Area and length with 3 decimal places (values < 1000 avoid thousands-separator formatting)
+            Assert.That(ddl, Does.Contain("123.456"), "Area should use 3 decimal places");
+            Assert.That(ddl, Does.Contain("45.678"), "Length should use 3 decimal places");
+        });
+    }
+
+    [Test]
+    public void when_generating_pdf_with_long_polygon_should_continue_coordinates_on_later_pages()
+    {
+        var questionId = Id.g1;
+        var coordinates = string.Join(";", Enumerable.Range(1, 100)
+            .Select(i => $"{i}.123456,{i}.654321"));
+        var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+            id: Id.g2,
+            children: new[] { Create.Entity.GeographyQuestion(id: questionId) });
+        var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+        var interview = SetUp.StatefulInterview(questionnaireDocument);
+        interview.Apply(new InterviewKeyAssigned(new InterviewKey(2895), DateTimeOffset.Now));
+        interview.Apply(new AreaQuestionAnswered(
+            Id.g3, questionId, RosterVector.Empty, DateTimeOffset.Now,
+            "POLYGON(...)", null, 123.456, 45.678, coordinates, null, 100, null, null));
+
+        var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s =>
+            s.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language) == questionnaire);
+        var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(r =>
+            r.Get(Id.g1.FormatGuid()) == interview);
+        var generator = new PdfInterviewGenerator(questionnaireStorage,
+            statefulInterviewRepository,
+            Mock.Of<IImageFileStorage>(),
+            Mock.Of<IAttachmentContentService>(),
+            Mock.Of<IOptions<GoogleMapsConfig>>(),
+            Mock.Of<IOptions<HeadquartersConfig>>(c => c.Value == new HeadquartersConfig()),
+            Mock.Of<IAuthorizedUser>());
+
+        using var pdfStream = generator.Generate(Id.g1, PdfView.Interviewer);
+        Assert.That(pdfStream, Is.Not.Null);
+        pdfStream!.Position = 0;
+        using var pdf = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Import);
+
+        Assert.That(pdf.Pages.Count, Is.GreaterThanOrEqualTo(3));
     }
 
     [Test]
