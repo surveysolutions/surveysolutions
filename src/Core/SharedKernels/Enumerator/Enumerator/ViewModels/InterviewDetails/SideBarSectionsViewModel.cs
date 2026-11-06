@@ -208,7 +208,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     .ForEach(x => itemsToBeExpandedAndTheirImmidiateChildren.Add(x.Identity));
             }
 
-            var sectionOrSubSections = interview.GetAllGroupsAndRosters().Where(x =>
+            var sectionOrSubSections = interview.GetAllGroupsAndRostersInDisplayOrder().Where(x =>
                 IsSectionVisible(x) && !questionnaire.IsFlatRoster(x.Identity.Id));
             
             foreach (var sectionOrSubSection in  sectionOrSubSections)

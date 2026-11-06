@@ -30,12 +30,14 @@ namespace WB.Services.Export.CsvExport.Exporters
         private readonly ICsvWriter csvWriter;
         private readonly IOptions<ExportServiceSettings> options;
         private readonly IInterviewErrorsExporter errorsExporter;
+        private readonly IInterviewItemsOrderExporter itemsOrderExporter;
         private readonly IExportQuestionService exportQuestionService;
 
         public InterviewsExporter(
             IExportQuestionService exportQuestionService,
             IInterviewFactory interviewFactory,
             IInterviewErrorsExporter errorsExporter,
+            IInterviewItemsOrderExporter itemsOrderExporter,
             ICsvWriter csvWriter,
             IOptions<ExportServiceSettings> options,
             ILogger<InterviewsExporter> logger)
@@ -46,6 +48,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.csvWriter = csvWriter ?? throw new ArgumentNullException(nameof(csvWriter));
             this.options = options;
             this.errorsExporter = errorsExporter ?? throw new ArgumentNullException(nameof(errorsExporter));
+            this.itemsOrderExporter = itemsOrderExporter ?? throw new ArgumentNullException(nameof(itemsOrderExporter));
         }
 
         public async Task ExportAsync(ExportSettings settings,
@@ -77,6 +80,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
+            this.itemsOrderExporter.WriteHeaders(questionnaire, basePath, dataFileExtension);
             return this.ExportInterviewsAsync(tenant, interviewIdsToExport, basePath, questionnaireExportStructure, questionnaire, progress, cancellationToken, geographyExportFormat);
         }
 
@@ -238,6 +242,10 @@ namespace WB.Services.Export.CsvExport.Exporters
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewDataExportView, interviewToExport);
             var dataFileSeparator = ExportFileSettings.DataFileSeparator.ToString();
             exportedData.Data[InterviewErrorsExporter.FileName] = errors.Select(x => string.Join(dataFileSeparator, x.Select(v => v?.Replace(dataFileSeparator, "")))).ToArray();
+            foreach (var itemsOrder in itemsOrderExporter.Export(questionnaire, interview, interviewToExport.Id, interviewToExport.Key))
+            {
+                exportedData.Data[itemsOrder.Key] = itemsOrder.Value.Select(x => string.Join(dataFileSeparator, x)).ToArray();
+            }
             exportProcessingStopwatch.Stop();
             return exportedData;
         }

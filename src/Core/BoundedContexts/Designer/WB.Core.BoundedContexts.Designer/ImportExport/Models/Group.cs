@@ -14,6 +14,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models
 
         public bool HideIfDisabled { get; set; }
 
+        public bool RandomizeOrder { get; set; }
+
         public string Title { get; set; } = string.Empty;
     }
 }

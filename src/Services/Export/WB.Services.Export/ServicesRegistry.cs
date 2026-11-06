@@ -63,6 +63,7 @@ namespace WB.Services.Export
             services.AddTransient<IInterviewsDoFilesExporter, InterviewsDoFilesExporter>();
             services.AddTransient<IInterviewFactory, InterviewFactory>();
             services.AddTransient<IInterviewErrorsExporter, InterviewErrorsExporter>();
+            services.AddTransient<IInterviewItemsOrderExporter, InterviewItemsOrderExporter>();
             services.AddTransient<IExportQuestionService, ExportQuestionService>();
             services.AddTransient<IGeographySerializer, GeographySerializer>();
             services.AddTransient<IEnvironmentContentService, StataEnvironmentContentService>();

@@ -157,7 +157,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 hasValidation : staticText.ValidationConditions.Count > 0
             )
             {
-                HideIfDisabled = staticText.HideIfDisabled
+                HideIfDisabled = staticText.HideIfDisabled,
+                RandomizeOrder = staticText.RandomizeOrder
             };
         }
 
@@ -173,6 +174,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 IsRoster = group.IsRoster,
                 HasCondition = !string.IsNullOrWhiteSpace(group.ConditionExpression),
                 HideIfDisabled = group.HideIfDisabled,
+                RandomizeOrder = group.RandomizeOrder,
                 Variable = group.VariableName,
                 Items = new List<IQuestionnaireItem>(),
                 GroupsCount = 0,
@@ -190,6 +192,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Variable = question.StataExportCaption,
                 HasCondition = !string.IsNullOrWhiteSpace(question.ConditionExpression),
                 HideIfDisabled = question.HideIfDisabled,
+                RandomizeOrder = question.RandomizeOrder,
                 HasValidation = question.ValidationConditions.Count > 0,
                 Type = question.QuestionType,
                 LinkedToQuestionId = question.LinkedToQuestionId?.FormatGuid(),

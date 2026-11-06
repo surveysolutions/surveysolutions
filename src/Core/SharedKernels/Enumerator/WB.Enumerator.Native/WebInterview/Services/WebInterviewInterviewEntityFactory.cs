@@ -62,9 +62,17 @@ namespace WB.Enumerator.Native.WebInterview.Services
             // custom view rosters (flat/table/matrix) are hidden from the sidebar table of contents,
             // but they still participate in the navigation hierarchy: their child subsections are
             // surfaced in place of the roster root so they remain reachable from the TOC
+            IEnumerable<InterviewTreeGroup> InDisplayOrder(Identity parentIdentity, IEnumerable<InterviewTreeGroup> groups)
+            {
+                var groupsList = groups.ToList();
+                var groupsByIdentity = groupsList.ToDictionary(g => g.Identity);
+                return interview.OrderForDisplay(parentIdentity, groupsList.Select(g => g.Identity))
+                    .Select(identity => groupsByIdentity[identity]);
+            }
+
             IEnumerable<InterviewTreeGroup> GetVisibleChildSections(InterviewTreeGroup group)
             {
-                foreach (var child in group.Children.OfType<InterviewTreeGroup>())
+                foreach (var child in InDisplayOrder(group.Identity, group.Children.OfType<InterviewTreeGroup>()))
                 {
                     if (!IsSectionVisible(child))
                         continue;
@@ -103,7 +111,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 IEnumerable<InterviewTreeGroup> children;
                 if (isRoot)
                 {
-                    children = interview.GetAllSections().OfType<InterviewTreeGroup>().Where(IsSectionVisible);
+                    children = InDisplayOrder(null, interview.GetAllSections().OfType<InterviewTreeGroup>().Where(IsSectionVisible));
                 }
                 else
                 {
@@ -431,9 +439,15 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         substitutionText?.BrowserReadyText, questionIdentity, questionnaire, callerInterview, webLinksVirtualDirectory);
                 }
 
-                var tableRosterInstances = parentGroup.Children
+                var rosterInstances = parentGroup.Children
                     .Where(c => c.Identity.Id == identity.Id)
                     .Cast<InterviewTreeRoster>()
+                    .ToList();
+                var rosterInstancesByIdentity = rosterInstances.ToDictionary(ri => ri.Identity);
+
+                var tableRosterInstances = callerInterview
+                    .OrderForDisplay(parentGroup.Identity, rosterInstances.Select(ri => ri.Identity))
+                    .Select(rosterInstanceIdentity => rosterInstancesByIdentity[rosterInstanceIdentity])
                     .Select(ri => new TableRosterInstance()
                     {
                         Id = ri.Identity.ToString(),

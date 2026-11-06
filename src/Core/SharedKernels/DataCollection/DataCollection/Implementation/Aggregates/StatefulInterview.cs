@@ -424,9 +424,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var isCover = this.sourceInterview.Questionnaire.IsCoverPage(sectionId.Id);
 
-            return section.Children
+            return this.OrderForDisplay(sectionId, section.Children
                 .Where(x => isCover || !(x is InterviewTreeVariable))
-                .Select(x => x.Identity);
+                .Select(x => x.Identity));
         }
 
         public IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId)
@@ -620,6 +620,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>();
+
+        public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRostersInDisplayOrder()
+        {
+            IEnumerable<InterviewTreeGroup> GetInDisplayOrder(Identity parentIdentity, IReadOnlyCollection<InterviewTreeGroup> groups)
+            {
+                var groupsByIdentity = groups.ToDictionary(group => group.Identity);
+
+                foreach (var identity in this.OrderForDisplay(parentIdentity, groups.Select(group => group.Identity)))
+                {
+                    var group = groupsByIdentity[identity];
+                    yield return group;
+
+                    foreach (var child in GetInDisplayOrder(group.Identity, group.Children.OfType<InterviewTreeGroup>().ToList()))
+                        yield return child;
+                }
+            }
+
+            return GetInDisplayOrder(null, this.Tree.Sections.Cast<InterviewTreeGroup>().ToList());
+        }
 
         public IEnumerable<IInterviewTreeNode> GetAllInterviewNodes()
         {

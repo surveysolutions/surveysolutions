@@ -257,6 +257,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsIdentifying(Guid entityId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
 
+        bool IsOrderRandomized(Guid entityId);
+
+        bool HasRandomizedChildren(Guid groupId);
+
         string GetValidationMessage(Guid questionId, int conditionIndex);
         string[] GetValidationMessages(Guid entityId);
 

@@ -13,5 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models
         public List<ValidationCondition>? ValidationConditions { get; set; }
         public string? ConditionExpression { get; set; } = string.Empty;
         public bool HideIfDisabled { get; set; }
+
+        public bool RandomizeOrder { get; set; }
     }
 }
