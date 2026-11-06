@@ -105,12 +105,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 do
                 {
                     response = await client.ListObjectsV2Async(listObjects).ConfigureAwait(false);
-                    files.AddRange(response.S3Objects.Select(s3 => new FileObject
+                    files.AddRange(response.S3Objects?.Select(s3 => new FileObject
                     {
                         Path = s3.Key.Substring(BucketInfo.PathPrefix.Length),
                         Size = s3.Size.GetValueOrDefault(),
                         LastModified = s3.LastModified.GetValueOrDefault(),
-                    }));
+                    }) ?? Enumerable.Empty<FileObject>());
                     listObjects.ContinuationToken = response.NextContinuationToken;
                 } while (response.IsTruncated == true);
 
@@ -268,7 +268,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                         deleteRequest.AddKey(BucketInfo.PathTo(path));
 
                     var response = await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
-                    if (response.DeleteErrors.Count > 0)
+                    if (response.DeleteErrors?.Count > 0)
                     {
                         foreach (var error in response.DeleteErrors)
                             logger.LogError("S3 delete error for key {Key}: {Code} {Message}", error.Key, error.Code, error.Message);
