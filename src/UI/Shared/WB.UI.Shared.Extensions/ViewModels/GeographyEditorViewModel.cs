@@ -35,6 +35,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private GeometryByTypeBuilder geometryBuilder;
         
         private GraphicsOverlay positionCandidateOverlay;
+        private GraphicsOverlay savedGeometryOverlay;
 
         public GeographyEditorViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService,
             IMapService mapService, IUserInteractionService userInteractionService, ILogger logger,
@@ -221,12 +222,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (IsManual)
             {
-                if (this.MapView.GeometryEditor != null)
+                var geometryEditor = this.MapView?.GeometryEditor;
+                if (geometryEditor != null)
                 {
-                    if (this.MapView.GeometryEditor.IsStarted && 
-                        CalculateCanSave(new GeometryByTypeBuilder(this.MapView.GeometryEditor.Geometry).PointCount))
+                    var geometry = geometryEditor.Geometry;
+                    if (geometryEditor.IsStarted && geometry != null &&
+                        CalculateCanSave(new GeometryByTypeBuilder(geometry).PointCount))
                     {
-                        this.MapView.GeometryEditor.Stop();
+                        DisplaySavedGeometry(geometry);
+                        geometryEditor.Stop();
                     }
                     else
                     {
@@ -253,6 +257,24 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 await FinishEditing();
             }
         });
+
+        private void DisplaySavedGeometry(Geometry geometry)
+        {
+            var overlays = this.MapView?.GraphicsOverlays;
+            if (overlays == null)
+                return;
+
+            savedGeometryOverlay ??= new GraphicsOverlay
+            {
+                Renderer = CreateRenderer(RequestedGeometryType, Color.Red)
+            };
+
+            if (!overlays.Contains(savedGeometryOverlay))
+                overlays.Add(savedGeometryOverlay);
+
+            savedGeometryOverlay.Graphics.Clear();
+            savedGeometryOverlay.Graphics.Add(new Graphic(geometry));
+        }
 
         private void UpdateLabels(Geometry geometry)
         {
