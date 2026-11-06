@@ -293,7 +293,10 @@ export default {
             if (value == null) return '-'
 
             const duration = moment.duration(value, 'minutes')
-            const formated = moment.utc(duration.as('milliseconds')).format('D[d] H[h] mm[m]')
+            const days = Math.floor(duration.asDays())
+            const hours = duration.hours()
+            const minutes = String(duration.minutes()).padStart(2, '0')
+            const formated = `${days}d ${hours}h ${minutes}m`
             return `<span>${formated}</span>`
         },
         reportTypeSelected(option) {
