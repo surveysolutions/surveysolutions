@@ -10,6 +10,17 @@ namespace WB.Tests.Integration
 {
     internal static class TestEnvironment
     {
+        private static readonly HashSet<string> IgnoredDirectoryNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "bin",
+            "obj",
+            "packages",
+            "node_modules",
+            ".git",
+            ".svn",
+            ".vs"
+        };
+
         private static List<string> projectsInSolution = null;
 
         // Caches the full recursive file listing (per mask) so that repeated calls
@@ -50,7 +61,7 @@ namespace WB.Tests.Integration
                     .Distinct();
 
                 allResxFilesInSolutionCache = projectDirectories
-                    .SelectMany(dir => Directory.EnumerateFiles(dir, "*.resx", SearchOption.AllDirectories))
+                    .SelectMany(dir => EnumerateFilesRecursively(dir, "*.resx"))
                     .Distinct()
                     .ToList();
             }
@@ -70,7 +81,35 @@ namespace WB.Tests.Integration
             if (!Directory.Exists(sourceFolder))
                 throw new DirectoryNotFoundException(relativePath);
 
-            return masks.SelectMany(mask => Directory.EnumerateFiles(sourceFolder, mask, SearchOption.AllDirectories));
+            return masks.SelectMany(mask => EnumerateFilesRecursively(sourceFolder, mask));
+        }
+
+        private static IEnumerable<string> EnumerateFilesRecursively(string rootDirectory, string mask)
+        {
+            if (string.IsNullOrEmpty(rootDirectory) || !Directory.Exists(rootDirectory))
+                return Enumerable.Empty<string>();
+
+            var stack = new Stack<string>();
+            stack.Push(rootDirectory);
+
+            var files = new List<string>();
+            while (stack.Count > 0)
+            {
+                var directory = stack.Pop();
+
+                foreach (var childDirectory in Directory.EnumerateDirectories(directory))
+                {
+                    var childDirectoryName = Path.GetFileName(childDirectory);
+                    if (IgnoredDirectoryNames.Contains(childDirectoryName))
+                        continue;
+
+                    stack.Push(childDirectory);
+                }
+
+                files.AddRange(Directory.EnumerateFiles(directory, mask, SearchOption.TopDirectoryOnly));
+            }
+
+            return files;
         }
 
         public static string GetSourcePath(string relativePath)
