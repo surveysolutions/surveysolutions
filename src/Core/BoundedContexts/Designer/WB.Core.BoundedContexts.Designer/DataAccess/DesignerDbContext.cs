@@ -73,6 +73,8 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
         
         public DbSet<StoredAppSetting> StoredAppSettings { get; set; }
 
+        public bool BypassSharedKeyValueCacheInCurrentTransaction { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

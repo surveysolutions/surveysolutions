@@ -1,6 +1,5 @@
 <template>
-    <div class="unit-section first-last-chapter complete-section"
-        v-if="hasCompleteInfo"
+    <div class="unit-section first-last-chapter complete-section" v-if="hasCompleteInfo"
         v-bind:class="{ 'section-with-error': hasErrors, 'complete-section': isAllAnswered }">
         <div class="unit-title">
             <wb-humburger></wb-humburger>
@@ -16,101 +15,66 @@
             </div>
         </div>
 
-        <div class="wrapper-info"
-            v-if="!hasAnyIssue">
+        <div class="wrapper-info" v-if="!hasAnyIssue">
             <div class="container-info info-block">
-                <div class="gray-uppercase success-text"
-                    v-dompurify-html="$t('WebInterviewUI.Complete_AllGood')">
+                <div class="gray-uppercase success-text" v-dompurify-html="$t('WebInterviewUI.Complete_AllGood')">
                 </div>
             </div>
         </div>
 
-        <ul class="wrapper-info complete-tabs"
-            v-else
-            role="tablist">
-            <li v-for="(completeGroup, idx) in completeGroups"
-                :key="idx"
+        <ul class="wrapper-info complete-tabs" v-else role="tablist">
+            <li v-for="(completeGroup, idx) in completeGroups" :key="idx"
                 :class="['tab-item', completeGroup.cssClass, { active: idx === activeCompleteGroupIndex, disabled: !(completeGroup.items?.length > 0) }]"
-                :aria-label="completeGroup.ariaLabel"
-                role="presentation"
-                @click.stop="setActive(idx)">
+                :aria-label="completeGroup.ariaLabel" role="presentation" @click.stop="setActive(idx)">
                 <div class="tab-count">{{ completeGroup.total }}</div>
-                <div class="tab-title"
-                    v-dompurify-html="completeGroup.title"></div>
+                <div class="tab-title" v-dompurify-html="completeGroup.title"></div>
             </li>
         </ul>
 
-        <div v-if="hasAnyIssue"
-            class="tab-content wrapper-info list-unstyled marked-questions"
+        <div v-if="hasAnyIssue" class="tab-content wrapper-info list-unstyled marked-questions"
             :class="activeGroup.cssClass">
-            <div class="tab-content-item"
-                v-for="item in activeGroup.items"
-                :key="item.id"
-                @click="navigateTo(item)"
+            <div class="tab-content-item" v-for="item in activeGroup.items" :key="item.id" @click="navigateTo(item)"
                 :class="{ 'critical-rule': item.type === 'critical-rule' }">
-                <a class="item-title"
-                    v-if="item.parentId || item.isPrefilled"
-                    href="javascript:void(0);"
+                <a class="item-title" v-if="item.parentId || item.isPrefilled" href="javascript:void(0);"
                     v-dompurify-html="item.title"></a>
-                <div class="item-title"
-                    v-else
-                    v-dompurify-html="item.title"></div>
+                <div class="item-title" v-else v-dompurify-html="item.title"></div>
 
-                <div class="item-error"
-                    v-if="item.error"
-                    v-dompurify-html="item.error"></div>
-                <div class="item-comment"
-                    v-if="item.comment"
-                    v-dompurify-html="item.comment">
+                <div class="item-error" v-if="item.error" v-dompurify-html="item.error"></div>
+                <div class="item-comment" v-if="item.comment" v-dompurify-html="item.comment">
                 </div>
             </div>
 
-            <div class="and-more"
-                v-if="moreCount > 0">{{ $t('WebInterviewUI.Complete_AndMore', { count: moreCount }) }}
+            <div class="and-more" v-if="moreCount > 0">{{ $t('WebInterviewUI.Complete_AndMore', { count: moreCount }) }}
             </div>
         </div>
 
         <div class="wrapper-info note-supervisor">
             <div class="container-info">
-                <label class="info-block gray-uppercase"
-                    for="comment-for-supervisor">
+                <label class="info-block gray-uppercase" for="comment-for-supervisor">
                     {{ noteToSupervisor }} <template v-if="hasCriticalIssues && criticalityLevel == 'Warn'">
                         ({{ $t('WebInterviewUI.Complete_Required') }})
                     </template>
                 </label>
                 <div class="field">
-                    <textarea class="field-to-fill"
-                        id="comment-for-supervisor"
-                        v-autosize
-                        :placeholder="$t('WebInterviewUI.TextEnter')"
-                        v-model="comment"
-                        maxlength="750"></textarea>
-                    <button type="submit"
-                        class="btn btn-link btn-clear">
+                    <textarea class="field-to-fill" id="comment-for-supervisor" v-autosize
+                        :placeholder="$t('WebInterviewUI.TextEnter')" v-model="comment" maxlength="750"></textarea>
+                    <button type="submit" class="btn btn-link btn-clear">
                         <span></span>
                     </button>
                 </div>
             </div>
         </div>
-        <div class="wrapper-info"
-            v-if="mayBeSwitchedToWebMode">
+        <div class="wrapper-info" v-if="mayBeSwitchedToWebMode">
             <div class="container-info">
-                <input v-if="mayBeSwitchedToWebMode"
-                    class="wb-checkbox"
-                    type="checkbox"
-                    id="switchToWeb_id"
-                    name="switchToWeb"
-                    v-model="switchToWeb" />
-                <label for="switchToWeb_id"
-                    class="font-bold"
-                    v-if="mayBeSwitchedToWebMode">
+                <input v-if="mayBeSwitchedToWebMode" class="wb-checkbox" type="checkbox" id="switchToWeb_id"
+                    name="switchToWeb" v-model="switchToWeb" />
+                <label for="switchToWeb_id" class="font-bold" v-if="mayBeSwitchedToWebMode">
                     <span class="tick"></span>
                     {{ $t('WebInterviewUI.SwitchToWebMode') }}
                 </label>
             </div>
-            <div class="container-info action-block"
-                v-if="switchToWeb">
-                <p calss="info-block gray-uppercase">
+            <div class="container-info action-block" v-if="switchToWeb">
+                <p class="info-block gray-uppercase">
                     {{ $t('WebInterviewUI.SwitchToWebMode_LinkDescription') }}
                 </p>
                 <p class="font-bold">
@@ -119,25 +83,18 @@
             </div>
         </div>
         <div class="wrapper-info">
-            <div class="submit-info"
-                v-dompurify-html="$t('WebInterviewUI.Complete_SubmitInfo')"></div>
+            <div class="submit-info" v-dompurify-html="$t('WebInterviewUI.Complete_SubmitInfo')"></div>
             <div class="container-info">
-                <a href="javascript:void(0);"
-                    id="btnComplete"
-                    class="btn btn-lg btn-with-icon"
-                    v-bind:class="{
-                        'btn-success': isAllAnswered,
-                        'btn-primary': hasUnansweredQuestions,
-                        'btn-danger': hasErrors,
-                        'disabled': !isCompletionPermitted,
-                    }"
-                    @click="completeInterview">
+                <a href="javascript:void(0);" id="btnComplete" class="btn btn-lg btn-with-icon" v-bind:class="{
+                    'btn-success': isAllAnswered,
+                    'btn-primary': hasUnansweredQuestions,
+                    'btn-danger': hasErrors,
+                    'disabled': !isCompletionPermitted,
+                }" @click="completeInterview">
                     <span class="btn-icon"></span>
                     {{ competeButtonTitle }}
                 </a>
-                <div class="info-block gray-uppercase"
-                    v-if="doesShowCompleteComment"
-                    style="margin-top:10px;">{{
+                <div class="info-block gray-uppercase" v-if="doesShowCompleteComment" style="margin-top:10px;">{{
                     completeButtionComment }}
                 </div>
             </div>
@@ -147,7 +104,6 @@
 </template>
 
 <style lang="scss" scoped>
-
 @import '../../assets/css/_variables.scss';
 
 .submit-info {

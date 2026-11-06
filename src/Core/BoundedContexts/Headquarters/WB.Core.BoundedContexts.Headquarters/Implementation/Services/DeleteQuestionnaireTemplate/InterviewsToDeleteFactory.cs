@@ -84,31 +84,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             await query.ExecuteUpdateAsync();
         }
 
-        private async Task RemoveAudioAuditForInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
-        {
-            await this.sessionFactory.Session.Query<AudioAuditFile>()
-                .Where(a => 
-                    this.sessionFactory.Session.Query<InterviewSummary>()
-                    .Any(s =>
-                        s.InterviewId == a.InterviewId
-                        && s.QuestionnaireId == questionnaireIdentity.QuestionnaireId
-                        && s.QuestionnaireVersion == questionnaireIdentity.Version))
-                .DeleteAsync();
-
-            /*
-            var queryText = $"DELETE FROM plainstore.audioauditfiles as a " +
-                            $"USING readside.interviewsummaries as i " +
-                            $"WHERE a.interviewid = i.interviewid " +
-                            $"  AND i.questionnaireid = :questionnaireId " +
-                            $"  AND i.questionnaireversion = :questionnaireVersion ";
-
-            var query = sessionFactory.Session.CreateSQLQuery(queryText);
-            query.SetParameter("questionnaireId", questionnaireIdentity.QuestionnaireId);
-            query.SetParameter("questionnaireVersion", questionnaireIdentity.Version);
-            await query.ExecuteUpdateAsync();
-        */
-        }
-
         private async Task RemoveAudioForInterviewsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
             await this.sessionFactory.Session.Query<AudioFile>()
@@ -203,18 +178,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         private async Task RemoveBinaryDataForBatchAsync(List<Guid> interviewIds)
         {
-            await imageFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
-            await audioAuditFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
-            await brokenImageFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
-            await brokenAudioFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
-            await brokenAudioAuditFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
+            await Task.WhenAll(
+                imageFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds),
+                audioAuditFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds),
+                brokenImageFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds),
+                brokenAudioFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds),
+                brokenAudioAuditFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds));
         }
 
         public async Task RemoveAllInterviewsDataAsync(QuestionnaireIdentity questionnaireIdentity)
         {
             await logger.LogExecuteTimeAsync(() => RemoveInterviewsBinaryDataAsync(questionnaireIdentity), "removing interview's binary data");
             await logger.LogExecuteTimeAsync(() => RemoveAudioForInterviewsAsync(questionnaireIdentity), "removing interview's audio");
-            await logger.LogExecuteTimeAsync(() => RemoveAudioAuditForInterviewsAsync(questionnaireIdentity), "removing interview's audio audit");
             await logger.LogExecuteTimeAsync(() => RemoveAllEventsForInterviewsAsync(questionnaireIdentity), "removing interview's events");
             await logger.LogExecuteTimeAsync(() => RemoveAllInterviewsAsync(questionnaireIdentity),"removing interviews");
         }

@@ -10,11 +10,12 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Controllers.Api.DataCollection;
 
 namespace WB.UI.Headquarters.API.DataCollection.Enumerator.v1
 {
     [Authorize(Roles = "Interviewer, Supervisor")]
-    public class ReusableCategoriesApiV1Controller : ControllerBase
+    public class ReusableCategoriesApiV1Controller : DataCollectionControllerBase
     {
         private readonly IReusableCategoriesStorage reusableCategoriesStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;

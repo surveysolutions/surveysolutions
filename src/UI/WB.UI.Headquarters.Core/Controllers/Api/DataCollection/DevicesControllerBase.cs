@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public abstract class DevicesControllerBase : ControllerBase
+    public abstract class DevicesControllerBase : DataCollectionControllerBase
     {
         protected readonly IAuthorizedUser authorizedUser;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;

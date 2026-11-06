@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.Resources;
 
@@ -13,13 +14,16 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<DesignerIdentityUser> _userManager;
         private readonly SignInManager<DesignerIdentityUser> _signInManager;
+        private readonly ITransactionRollbackState _transactionRollbackState;
 
         public ChangePasswordModel(
             UserManager<DesignerIdentityUser> userManager,
-            SignInManager<DesignerIdentityUser> signInManager)
+            SignInManager<DesignerIdentityUser> signInManager,
+            ITransactionRollbackState transactionRollbackState)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _transactionRollbackState = transactionRollbackState;
         }
 
         [BindProperty]
@@ -73,7 +77,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
             if (!changePasswordResult.Succeeded)
             {
-                user.PasswordSalt = null; 
+                // Verifying a legacy salted password clears the salt in memory; committing that without the new hash locks the account.
+                _transactionRollbackState.MarkRollbackOnly();
 
                 foreach (var error in changePasswordResult.Errors)
                 {

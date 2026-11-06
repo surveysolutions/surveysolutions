@@ -545,4 +545,10 @@ Ujistěte se, že všechny informace jsou správné.</value>
     <data name="CompleteReviewSubmitInterview" xml:space="preserve">
         <value>Rozhovor {{key}}</value>
     </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>N&#225;hled geografick&#253;ch &#250;daj&#367;</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>Klepnutím zadejte číslo</value>
+  </data>
 </root>

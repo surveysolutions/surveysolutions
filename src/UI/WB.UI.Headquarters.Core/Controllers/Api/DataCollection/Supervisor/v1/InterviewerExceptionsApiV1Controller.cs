@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
     [Authorize(Roles = "Supervisor")]
-    public class InterviewerExceptionsApiV1Controller : ControllerBase
+    public class InterviewerExceptionsApiV1Controller : DataCollectionControllerBase
     {
         private readonly IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository;
 

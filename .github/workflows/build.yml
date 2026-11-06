@@ -12,7 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   NODE_VERSION: 24
-  DOTNET_VERSION: '9.0.x'
+  DOTNET_VERSION: '10.0.x'
 
 jobs:
   prepare:
@@ -147,7 +147,7 @@ jobs:
           profile: pixel_6
           disable-animations: true
           script: |
-            dotnet build src/Tests/WB.Tests.Android.Instrumentation -c Release -t:Install -f net9.0-android
+            dotnet build src/Tests/WB.Tests.Android.Instrumentation -c Release -t:Install -f net10.0-android
             adb logcat -c
             adb shell am instrument -w wb.tests.android.instrumentation/wb.tests.android.instrumentation.NUnitInstrumentation | tee instrumentation-output.txt
             grep -q "shortMsg=Process crashed" instrumentation-output.txt && { echo "::error::Instrumentation process crashed, see logcat below"; adb logcat -d | tail -n 300; exit 1; } || true
@@ -207,8 +207,7 @@ jobs:
         -androidKeyStore "${{ secrets.INTERVIEWER_KEYSTORE }}" `
         -KeystorePassword "${{ secrets.INTERVIEWER_KEYSTORE_PASSWORD }}" `
         -GoogleMapKey "${{ secrets.GOOGLEMAPS_KEY }}" `
-        -ArcGisKey "${{ secrets.ARCGIS_KEY }}"
-        -ArcGisApiKey "${{ secrets.ARCGIS_API_KEY }}"
+        -NewArcGisKey300 "${{ secrets.ARCGIS_KEY_300 }}"
 
     - name: Publish
       uses: actions/upload-artifact@v6
@@ -304,7 +303,7 @@ jobs:
 
       - name: Setup WIX
         run: |
-          Invoke-WebRequest -Uri https://github.com/wixtoolset/wix3/releases/download/wix314rtm/wix314-binaries.zip -OutFile wix314-binaries.zip
+          Invoke-WebRequest -Uri https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip -OutFile wix314-binaries.zip
           Expand-Archive -Path wix314-binaries.zip -DestinationPath installer/wix314-binaries
 
       - name: Download mobile artifacts
