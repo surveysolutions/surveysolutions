@@ -238,13 +238,16 @@ namespace WB.UI.WebTester.Services.Implementation
             }
             catch (InterviewException)
             {
-                if (existingInterviewCommands != null && existingInterviewCommands.Count > 0 &&
-                    lastCommandIndex > 0)
+                if (existingInterviewCommands != null && existingInterviewCommands.Count > 0)
                 {
-                    int count = existingInterviewCommands.Count - lastCommandIndex;
-                    existingInterviewCommands.RemoveRange(lastCommandIndex, count);
-                    this.executedCommandsStorage.Store(existingInterviewCommands,
-                        originalInterviewId, originalInterviewId);
+                    if (lastCommandIndex > 0)
+                    {
+                        int count = existingInterviewCommands.Count - lastCommandIndex;
+                        existingInterviewCommands.RemoveRange(lastCommandIndex, count);
+                        this.executedCommandsStorage.Store(existingInterviewCommands,
+                            originalInterviewId, originalInterviewId);
+                    }
+
                     return CreationResult.DataPartialRestored;
                 }
 
