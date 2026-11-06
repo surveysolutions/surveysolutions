@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Persistence.Designer\WB.Persistence.Designer.csproj" />
+    <ProjectReference Include="..\..\UI\WB.UI.Designer\WB.UI.Designer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

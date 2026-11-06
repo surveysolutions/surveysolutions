@@ -903,6 +903,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Hartë</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>Parapamja e hartës</value>
+  </data>
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>Shkalla maksimale</value>
   </data>
@@ -1784,5 +1787,11 @@
   </data>
   <data name="Observer_Memo2" xml:space="preserve">
     <value>Klikoni një llogari dhe zgjidhni 'Shiko si ky përdorues në modalitetin vetëm-lexim' për të filluar. Përdorni lidhjen e verdhë në krye për t'u kthyer në llogarinë tuaj.</value>
+  </data>
+  <data name="Successful" xml:space="preserve">
+      <value>I suksesshëm</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>Dështoi</value>
   </data>
 </root>

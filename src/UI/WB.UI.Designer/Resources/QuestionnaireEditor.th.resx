@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -970,8 +970,8 @@
     <data name="HelpRosterDisplayMode" xml:space="preserve">
         <value>ส่วนย่อย - คำถามของบัญชีรายชื่อจะแสดงอยู่ด้านหลังปุ่มที่สอดคล้องกับกรณีของบัญชีรายชื่อ
 คงที่ - คำถามของบัญชีรายชื่อจะแสดงในระดับเดียวกันโดยคั่นด้วยส่วนหัวที่สอดคล้องกับอินสแตนซ์ของบัญชีรายชื่อ
-ตาราง - คำถามของบัญชีรายชื่อจะแสดงในระดับเดียวกับแถวและคอลัมน์ของตาราง 
-เมทริกซ์ - คำถามเชิงหมวดหมู่ของบัญชีรายชื่อจะแสดงเป็นเมทริกซ์ 
+ตาราง - คำถามของบัญชีรายชื่อจะแสดงในระดับเดียวกับแถวและคอลัมน์ของตาราง
+เมทริกซ์ - คำถามเชิงหมวดหมู่ของบัญชีรายชื่อจะแสดงเป็นเมทริกซ์
 มุมมองตารางและเมทริกซ์ได้รับการสนับสนุนเฉพาะในแบบสำรวจเว็บเท่านั้น แท็บเล็ตจะกลับไปเป็นโหมด 'ส่วนย่อย'</value>
     </data>
     <data name="HelpHideInstructions" xml:space="preserve">
@@ -1621,5 +1621,11 @@
     </data>
     <data name="AIAssistant" xml:space="preserve">
         <value>AI</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>แก้ไข</value>
+    </data>
+    <data name="Stick" xml:space="preserve">
+        <value>แนบ</value>
     </data>
 </root>

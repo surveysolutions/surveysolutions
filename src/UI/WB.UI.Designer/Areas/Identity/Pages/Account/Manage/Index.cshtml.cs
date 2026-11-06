@@ -13,10 +13,13 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Models.Mails;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
 {
+    // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
+    [NoTransaction]
     public partial class IndexModel : PageModel
     {
         private readonly UserManager<DesignerIdentityUser> userManager;

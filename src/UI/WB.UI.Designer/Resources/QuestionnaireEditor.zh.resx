@@ -1859,4 +1859,10 @@
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>切换到将更改问卷的显示语言。翻译必须包含所有元素的文本。</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+      <value>编辑</value>
+  </data>
+  <data name="Stick" xml:space="preserve">
+      <value>附加</value>
+  </data>
 </root>

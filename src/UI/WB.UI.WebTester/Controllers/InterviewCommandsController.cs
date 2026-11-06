@@ -14,13 +14,16 @@ namespace WB.UI.WebTester.Controllers
     public class InterviewCommandsController : CommandsController
     {
         private readonly IEvictionNotifier evictionNotify;
+        private readonly IWebTesterSessionService sessionService;
 
         public InterviewCommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, 
             IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
-            IWebInterviewNotificationService webInterviewNotificationService, IEvictionNotifier evictionNotify) 
+            IWebInterviewNotificationService webInterviewNotificationService, IEvictionNotifier evictionNotify,
+            IWebTesterSessionService sessionService)
             : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
         {
             this.evictionNotify = evictionNotify;
+            this.sessionService = sessionService;
         }
 
         [HttpPost]
@@ -87,7 +90,11 @@ namespace WB.UI.WebTester.Controllers
         [Route("completeInterview")]
         public override IActionResult CompleteInterview(Guid interviewId, [FromBody]CompleteInterviewRequest completeInterviewRequest)
         {
-            evictionNotify.Evict(interviewId);
+            var questionnaireId = sessionService.GetQuestionnaireId(HttpContext.Session, interviewId);
+            if (questionnaireId.HasValue)
+                sessionService.RevokeQuestionnaire(HttpContext.Session, interviewId, questionnaireId.Value);
+
+            evictionNotify.Complete(interviewId);
             return Ok();
         }
 

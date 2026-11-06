@@ -1229,6 +1229,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Карта</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>Предварительный просмотр карты</value>
+  </data>
   <data name="MapDetails_ImportedOn" xml:space="preserve">
     <value>Карта загружена</value>
   </data>
@@ -1853,4 +1856,10 @@
   <data name="Observer_Memo2" xml:space="preserve">
     <value>Нажмите на учетную запись и выберите "Просмотр от имени этого пользователя в режиме только для чтения", чтобы начать. Используйте желтую ссылку вверху, чтобы вернуться к своей учетной записи.</value>
 </data>
+  <data name="Successful" xml:space="preserve">
+      <value>Успешно</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>Неуспешно</value>
+  </data>
 </root>
