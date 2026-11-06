@@ -105,9 +105,9 @@ namespace WB.UI.Headquarters.Code.Workspaces
         internal static readonly string[] AdministrationWorkspaceAllowedPaths =
         {
             "/Account",          // login, logout, 2FA, password change
-            "/Administration",   // server diagnostics (AdministrationController)
+            "/" + WorkspaceConstants.WorkspaceNames.AdminWorkspaceName, // server diagnostics (AdministrationController)
             "/Workspaces",       // workspace management UI (WorkspacesController)
-            "/Users",            // user management UI
+            "/" + WorkspaceConstants.WorkspaceNames.UsersWorkspaceName, // user management UI
             "/Profile",          // user profile pages
             "/error",            // error pages served by the error handler
             "/Diagnostics/AuditLog",
