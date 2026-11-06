@@ -382,6 +382,56 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             ClassicAssert.Null(context.Result);
         }
 
+        [Test]
+        public void when_anonymous_workspace_specific_endpoint_requested_in_admin_workspace_should_return_404()
+        {
+            CurrentWorkspace = Workspace.Admin.AsContext();
+            AuthenticationType = null;
+            Attributes.Add(new AllowAnonymousAttribute());
+            RequestPath = "/api/v1/interviews/11111111111111111111111111111111/pdf";
+
+            var context = Act();
+
+            Assert.That(context.Result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public void when_anonymous_account_endpoint_requested_in_admin_workspace_should_allow_access()
+        {
+            CurrentWorkspace = Workspace.Admin.AsContext();
+            AuthenticationType = null;
+            Attributes.Add(new AllowAnonymousAttribute());
+            RequestPath = "/Account/Login";
+
+            var context = Act();
+
+            ClassicAssert.Null(context.Result);
+        }
+
+        [Test]
+        public void when_tenant_token_requests_workspace_specific_endpoint_in_admin_workspace_should_return_404()
+        {
+            CurrentWorkspace = Workspace.Admin.AsContext();
+            AuthenticationType = AuthType.TenantToken;
+            RequestPath = "/api/v1/interviews";
+
+            var context = Act();
+
+            Assert.That(context.Result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public void when_tenant_token_requests_workspaces_endpoint_in_admin_workspace_should_allow_access()
+        {
+            CurrentWorkspace = Workspace.Admin.AsContext();
+            AuthenticationType = AuthType.TenantToken;
+            RequestPath = "/api/v1/workspaces";
+
+            var context = Act();
+
+            ClassicAssert.Null(context.Result);
+        }
+
         private AuthorizationFilterContext Act()
         {
             var sut = CreateSut();

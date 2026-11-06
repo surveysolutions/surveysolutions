@@ -35,6 +35,20 @@ namespace WB.UI.Headquarters.Code.Workspaces
             
             var workspace = workspaceContextAccessor.CurrentWorkspace();
 
+            if (workspace.IsAdministrationWorkspace())
+            {
+                // Only allow access to administration-appropriate paths in the admin workspace.
+                // Workspace-specific pages and APIs should not be accessible here.
+                var requestPath = context.HttpContext.Request.Path;
+                bool isAdminSafePath = AdministrationWorkspaceAllowedPaths
+                    .Any(p => requestPath.StartsWithSegments(p, StringComparison.OrdinalIgnoreCase));
+                if (!isAdminSafePath)
+                {
+                    context.Result = new NotFoundResult();
+                    return;
+                }
+            }
+
             if (context.HttpContext.User.Identity?.AuthenticationType == AuthType.TenantToken)
             {
                 if (workspace?.IsEnabled() != true)
@@ -57,20 +71,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
                 if (hasAuthorization && !allowAnonymous && workspace.IsSystemDefinedWorkspace())
                 {
-                    if (workspace.IsAdministrationWorkspace())
-                    {
-                        // Only allow access to administration-appropriate paths in the admin workspace.
-                        // Workspace-specific pages and APIs should not be accessible here.
-                        var requestPath = context.HttpContext.Request.Path;
-                        bool isAdminSafePath = AdministrationWorkspaceAllowedPaths
-                            .Any(p => requestPath.StartsWithSegments(p, StringComparison.OrdinalIgnoreCase));
-                        if (!isAdminSafePath)
-                        {
-                            context.Result = new NotFoundResult();
-                            return;
-                        }
-                    }
-
                     // allow user to access to special workspace
                     return;
                 }
