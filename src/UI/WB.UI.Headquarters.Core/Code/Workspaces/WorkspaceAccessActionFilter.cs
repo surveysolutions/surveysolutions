@@ -110,6 +110,14 @@ namespace WB.UI.Headquarters.Code.Workspaces
             "/Users",            // user management UI
             "/Profile",          // user profile pages
             "/error",            // error pages served by the error handler
+            "/Diagnostics/AuditLog",
+            "/Diagnostics/TabletInfos",
+            "/api/AdminSettings/GetSystemLog",
+            "/api/ControlPanelApi/TabletInfos",
+            "/api/ControlPanelApi/Download",
+            "/api/ControlPanelApi/GetHealthResult",
+            "/api/ControlPanelApi/GetMetricsState",
+            "/api/ControlPanelApi/GetServerResponseByStatusCode",
             "/api/v1/workspaces", // workspace management REST API (WorkspacesPublicApiController)
             "/api/v1/users",     // user management REST API
         };

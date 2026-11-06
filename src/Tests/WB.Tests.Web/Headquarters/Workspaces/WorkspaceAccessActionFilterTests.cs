@@ -382,6 +382,49 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             ClassicAssert.Null(context.Result);
         }
 
+        [TestCase("/Administration/Diagnostics")]
+        [TestCase("/Diagnostics/AuditLog")]
+        [TestCase("/Diagnostics/TabletInfos")]
+        [TestCase("/diagnostics/auditlog/")]
+        [TestCase("/api/AdminSettings/GetSystemLog")]
+        [TestCase("/api/ControlPanelApi/TabletInfos")]
+        [TestCase("/api/ControlPanelApi/Download/tablet-info.zip")]
+        [TestCase("/api/ControlPanelApi/GetHealthResult")]
+        [TestCase("/api/ControlPanelApi/GetMetricsState")]
+        [TestCase("/api/ControlPanelApi/GetServerResponseByStatusCode")]
+        public void when_requesting_server_diagnostics_in_admin_workspace_should_allow_access(string path)
+        {
+            CurrentWorkspace = Workspace.Admin.AsContext();
+            Role = UserRoles.Administrator;
+            RequestPath = path;
+
+            var context = Act();
+
+            ClassicAssert.Null(context.Result);
+        }
+
+        [TestCase("/Diagnostics/Logs")]
+        [TestCase("/Diagnostics/InterviewPackages")]
+        [TestCase("/api/AdminSettings/WorkspaceSettings")]
+        [TestCase("/api/ControlPanelApi/InterviewPackages")]
+        [TestCase("/api/ControlPanelApi/ExceptionTypes")]
+        [TestCase("/api/ControlPanelApi/ExpectedExceptionTypes")]
+        [TestCase("/api/ControlPanelApi/DownloadSyncPackage/1")]
+        [TestCase("/api/ControlPanelApi/ReprocessSelectedBrokenPackages")]
+        [TestCase("/api/ControlPanelApi/MarkReasonAsKnown")]
+        [TestCase("/Diagnostics/AuditLogOther")]
+        [TestCase("/api/AdminSettings/GetSystemLogOther")]
+        public void when_requesting_other_diagnostics_in_admin_workspace_should_return_404(string path)
+        {
+            CurrentWorkspace = Workspace.Admin.AsContext();
+            Role = UserRoles.Administrator;
+            RequestPath = path;
+
+            var context = Act();
+
+            Assert.That(context.Result, Is.InstanceOf<NotFoundResult>());
+        }
+
         private AuthorizationFilterContext Act()
         {
             var sut = CreateSut();
