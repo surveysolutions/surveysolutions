@@ -5,9 +5,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
 {
     public class WorkspacesListFilter : DataTableRequest
     {
-        public int Start { get; set; } = 0;
-
-        public int Length { get; set; } = 20;
+        public WorkspacesListFilter()
+        {
+            Start = 0; // keeps the existing default page start (the base default is 0)
+            Length = 20; // keeps the existing default page size (the base default is 10)
+        }
         
         /// <summary>
         /// Return only workspaces assigned to specified user

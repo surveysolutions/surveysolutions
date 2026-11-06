@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
-using Microsoft.Security.Application;
+using System.Text.Encodings.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -67,7 +67,7 @@ namespace WB.UI.Headquarters.Code
 
         public static IHtmlContent ToSafeJavascriptMessage(this IHtmlHelper page, string sourceMessage)
         {
-            var html = Encoder.JavaScriptEncode(sourceMessage, false);
+            var html = JavaScriptEncoder.Default.Encode(sourceMessage);
 
             return page.Raw(html);
         }
