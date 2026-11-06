@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Android.Media;
+using Android.OS;
 using MvvmCross.Base;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
@@ -39,7 +40,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             try
             {
                 await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>();
-                await this.permissions.AssureHasExternalStoragePermissionOrThrow();
+                if (Build.VERSION.SdkInt < BuildVersionCodes.Q)
+                    await this.permissions.AssureHasExternalStoragePermissionOrThrow();
                 photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
             }
             catch (PermissionException e)
@@ -73,7 +75,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             
             try
             {
-                await this.permissions.AssureHasExternalStoragePermissionOrThrow();
+                if (Build.VERSION.SdkInt < BuildVersionCodes.Q)
+                    await this.permissions.AssureHasExternalStoragePermissionOrThrow();
                 photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
             }
             catch (PermissionException e)
