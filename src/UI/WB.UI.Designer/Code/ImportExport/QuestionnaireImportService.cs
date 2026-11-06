@@ -7,8 +7,8 @@ using System.Text;
 using Main.Core.Documents;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
+using NJsonSchema;
+using NJsonSchema.Validation;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ImportExport;
@@ -196,7 +196,7 @@ namespace WB.UI.Designer.Code.ImportExport
             throw new ArgumentException(message);
         }
 
-        private bool ValidateBySchema(string json, out IList<ValidationError> errors)
+        private bool ValidateBySchema(string json, out ICollection<ValidationError> errors)
         {
             var testType = typeof(QuestionnaireImportService);
             var readResourceFile = $"{testType.Namespace}.QuestionnaireSchema.json";
@@ -207,12 +207,10 @@ namespace WB.UI.Designer.Code.ImportExport
             using StreamReader reader = new StreamReader(stream);
             string schemaText = reader.ReadToEnd();
 
-            var schema = JSchema.Parse(schemaText);
+            var schema = JsonSchema.FromJsonAsync(schemaText).GetAwaiter().GetResult();
 
-            JToken jToken = JToken.Parse(json);
-            var isValid = jToken.IsValid(schema, out IList<ValidationError> jsonErrors);
-            errors = jsonErrors;
-            return isValid;
+            errors = schema.Validate(json);
+            return errors.Count == 0;
         }
 
         private Questionnaire RestoreQuestionnaireFromZipFileOrThrow(ZipArchive zipStream, RestoreState state)
@@ -254,7 +252,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 {
                     state.Error =
                         "Questionnaire json file has schema errors. Please fix it." +
-                        errors.Select(v => $"{v.Path}(line {v.LineNumber}): {v.Message}").Aggregate("", (current, message) => current + "\r\n" + message);
+                        errors.Flatten().Select(v => $"{v.Path}(line {v.LineNumber}): {v.Kind}").Aggregate("", (current, message) => current + "\r\n" + message);
                     throw new ArgumentException("Questionnaire json file has schema errors. Please fix it.");
                 }
             }

@@ -186,4 +186,7 @@
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>Aktualizace dotazníků</value>
   </data>
+  <data name="CopyWebInterviewSettings" xml:space="preserve">
+    <value>Zkopírovat nastavení Web Interview z předchozí verze (včetně e-mailových šablon a textů obrazovek)</value>
+  </data>
 </root>
