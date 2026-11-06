@@ -103,9 +103,10 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [Test]
-        public void When_snapshot_free_history_exceeds_retention_limit_then_import_revision_remains_reconstructable()
+        [TestCase(1)]
+        [TestCase(2)]
+        public void When_snapshot_free_history_exceeds_retention_limit_then_import_revision_remains_reconstructable(int historyLimit)
         {
-            var historyLimit = 2;
             var historyService = Create.QuestionnireHistoryVersionsService(
                 dbContext: db,
                 questionnaireHistorySettings: Options.Create(

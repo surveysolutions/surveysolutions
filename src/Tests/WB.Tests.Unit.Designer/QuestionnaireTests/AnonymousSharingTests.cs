@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
 
             Assert.DoesNotThrow(() => questionnaire.EnableAnonymousSharing(
-                new EnableAnonymousSharing(questionnaire.Id, Guid.NewGuid()) { IsResponsibleAdmin = true }));
+                new EnableAnonymousSharing(questionnaire.Id, Guid.NewGuid(), isResponsibleAdmin: true)));
         }
 
         [Test]

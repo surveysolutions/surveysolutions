@@ -6,8 +6,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
     [Serializable]
     public class DisableAnonymousSharing : QuestionnaireCommand
     {
-        public DisableAnonymousSharing(Guid questionnaireId, Guid responsibleId)
-            : base(questionnaireId, responsibleId)
+        public DisableAnonymousSharing(Guid questionnaireId, Guid responsibleId, bool isResponsibleAdmin = false)
+            : base(questionnaireId, responsibleId, isResponsibleAdmin)
         {
         }
     }

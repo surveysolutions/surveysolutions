@@ -491,9 +491,9 @@ namespace WB.UI.Designer.Controllers
         {
             bool isActive = postModel.IsActive;
             if (isActive)
-                this.commandService.Execute(new EnableAnonymousSharing(id, User.GetId()));
+                this.commandService.Execute(new EnableAnonymousSharing(id, User.GetId(), User.IsAdmin()));
             else
-                this.commandService.Execute(new DisableAnonymousSharing(id, User.GetId()));
+                this.commandService.Execute(new DisableAnonymousSharing(id, User.GetId(), User.IsAdmin()));
 
             var anonymousQuestionnaire = await this.GetAnonymousQuestionnaireAsync(id);
 

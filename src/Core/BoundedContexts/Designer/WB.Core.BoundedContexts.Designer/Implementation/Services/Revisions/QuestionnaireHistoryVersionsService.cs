@@ -184,8 +184,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
 
             this.dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
             
-            // -1 is to take into account newly added change record that is not yet in DB
-            this.RemoveOldQuestionnaireHistory(sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
+            // The new document-bearing record is not yet in the database.
+            this.RemoveOldQuestionnaireHistory(sQuestionnaireId,
+                historySettings.Value.QuestionnaireChangeHistoryLimit - (questionnaireDocument != null ? 1 : 0));
             this.dbContext.SaveChanges();
         }
 
