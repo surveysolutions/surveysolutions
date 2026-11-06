@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { test } from 'node:test'
 import postcss from 'postcss'
 import * as sass from 'sass'
+import { compileStyleAsync, parse } from 'vue/compiler-sfc'
 import webInterviewRtl from '../../tools/postcss-webinterview-rtl.js'
 
 const frontend = new URL('../../', import.meta.url)
@@ -24,6 +25,52 @@ function declarations(root, selector, property) {
     })
     return values
 }
+
+async function componentStyles(name) {
+    const filename = fileURLToPath(new URL(`src/webinterview/components/${name}.vue`, frontend))
+    const { descriptor, errors } = parse(readFileSync(filename, 'utf8'), { filename })
+    assert.deepEqual(errors, [])
+    const style = descriptor.styles[0]
+    const compiled = await compileStyleAsync({
+        filename,
+        source: style.content,
+        id: 'data-v-rtl-test',
+        scoped: style.scoped,
+        preprocessLang: style.lang,
+        preprocessOptions: { logger: sass.Logger.silent },
+    })
+    assert.deepEqual(compiled.errors, [])
+    return postcss.parse(compiled.code)
+}
+
+test('completion component uses logical alignment, spacing and stripe corners in scoped styles', async () => {
+    const root = await componentStyles('Complete')
+    for (const selector of [
+        '.tab-item .tab-title',
+        '.tab-item .tab-count',
+        '.tab-content-item .item-title',
+        '.tab-content-item .item-error',
+        '.tab-content-item .item-comment',
+    ]) {
+        assert.deepEqual(declarations(root, `${selector}[data-v-rtl-test]`, 'text-align'), ['start'])
+    }
+    const stripe = '.tab-content .tab-content-item[data-v-rtl-test]::before'
+    assert.deepEqual(declarations(root, stripe, 'inset-inline-start'), ['0'])
+    assert.deepEqual(declarations(root, stripe, 'left'), [])
+    assert.deepEqual(declarations(root, stripe, 'border-radius'), ['0'])
+    assert.deepEqual(declarations(root, stripe, 'border-start-start-radius'), ['4px'])
+    assert.deepEqual(declarations(root, stripe, 'border-end-start-radius'), ['4px'])
+    assert.deepEqual(declarations(root, '.tab-content-item[data-v-rtl-test]', 'padding-inline-start'), ['20px'])
+    assert.deepEqual(declarations(root, '.and-more[data-v-rtl-test]', 'padding-inline-start'), ['19px'])
+})
+
+test('reconnect button uses an automatic margin on the inline start side', async () => {
+    const root = await componentStyles('ReconnectingBanner')
+    const selector = '.reconnecting-banner__reload[data-v-rtl-test]'
+    assert.deepEqual(declarations(root, selector, 'margin-inline-start'), ['auto'])
+    assert.deepEqual(declarations(root, selector, 'margin-left'), [])
+    assert.deepEqual(declarations(root, selector, 'margin-right'), [])
+})
 
 test('generates scoped RTL and preserves unmarked HQ and LTR rules without adding specificity', async () => {
     const { root } = await transform('.question { margin-left: 12px; padding: 1px 2px 3px 4px; text-align: left }')

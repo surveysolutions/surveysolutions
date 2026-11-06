@@ -59,6 +59,9 @@ AG Grid uses its native RTL option, while exceptions and toast adjustments live 
 `_web-interview-rtl.scss`. Sprite background coordinates must not be mirrored.
 The date picker retains LTR day order and native arrow-key navigation, with
 localized month/day labels. Numeric inputs, URLs and coordinates also retain LTR.
+Scoped Vue styles are not processed by the RTL generator. Completion-page labels,
+error stripes and reconnect-banner spacing use logical CSS properties so they
+follow the page direction without separate RTL overrides.
 
 Run `npm run test:rtl` and `npm run build` from `src/UI/WB.UI.Frontend`.
 Check Arabic and English on desktop and mobile, including start/resume/finish,
