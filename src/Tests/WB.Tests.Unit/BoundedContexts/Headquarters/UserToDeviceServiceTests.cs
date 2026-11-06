@@ -30,7 +30,7 @@ public class UserToDeviceServiceTests
 
         Assert.That(exception, Is.Not.Null);
         Assert.That(exception!.GetType(), Is.EqualTo(typeof(InvalidOperationException)));
-        Assert.That(exception.Message, Is.EqualTo("You must have approval from supervisor or headquarters to relink device"));
+        Assert.That(exception.Result.Message, Is.EqualTo("You must have approval from supervisor or headquarters to relink device"));
     }
 
     private IUserToDeviceService CreateService(IUserRepository userRepository) => new UserToDeviceService(userRepository);

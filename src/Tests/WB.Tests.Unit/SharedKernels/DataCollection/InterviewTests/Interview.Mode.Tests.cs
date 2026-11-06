@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Delete(supervisorId, DateTimeOffset.Now);
 
             // Act
-            TestDelegate act = () => interview.ChangeInterviewMode(headquarterId, DateTimeOffset.Now, InterviewMode.CAWI);
+           Action act = () => interview.ChangeInterviewMode(headquarterId, DateTimeOffset.Now, InterviewMode.CAWI);
 
             // Assert
             Assert.That(act, Throws.Exception.InstanceOf<InterviewException>());
@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Apply(Create.Event.InterviewStatusChanged(targetStatus));
 
             // Act
-            TestDelegate act = () => interview.ChangeInterviewMode(headquarterId, DateTimeOffset.Now, InterviewMode.CAWI);
+           Action act = () => interview.ChangeInterviewMode(headquarterId, DateTimeOffset.Now, InterviewMode.CAWI);
 
             // Assert
             Assert.That(act, Throws.Nothing);
@@ -100,7 +100,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Apply(Create.Event.InterviewStatusChanged(targetStatus));
 
             // Act
-            TestDelegate act = () => interview.ChangeInterviewMode(headquarterId, DateTimeOffset.Now, InterviewMode.CAWI);
+           Action act = () => interview.ChangeInterviewMode(headquarterId, DateTimeOffset.Now, InterviewMode.CAWI);
 
             // Assert
             Assert.That(act, Throws.Exception.InstanceOf<InterviewException>());

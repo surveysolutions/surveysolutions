@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupPublicKey, responsibleId: Guid.NewGuid());
 
             // act
-            TestDelegate act = () => questionnaire.DeleteGroup(groupPublicKey, responsibleId: Guid.NewGuid());
+           Action act = () => questionnaire.DeleteGroup(groupPublicKey, responsibleId: Guid.NewGuid());
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q1");
 
             // act
-            TestDelegate act = () => questionnaire.DeleteGroup(groupId, responsibleId: responsibleId);
+           Action act = () => questionnaire.DeleteGroup(groupId, responsibleId: responsibleId);
 
             // assert
             Assert.DoesNotThrow(act);
@@ -100,7 +100,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var questionnaire = Create.Questionnaire(responsibleId, questionnaireDocument);
 
             // act
-            TestDelegate act = () => questionnaire.DeleteGroup(userSectionId, responsibleId: responsibleId);
+           Action act = () => questionnaire.DeleteGroup(userSectionId, responsibleId: responsibleId);
 
             // assert
             Assert.Catch<QuestionnaireException>(act);

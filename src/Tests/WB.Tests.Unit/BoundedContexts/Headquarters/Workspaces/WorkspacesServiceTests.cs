@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
@@ -63,8 +64,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             // Act
             var hqUser = Create.Entity.HqUser(role: role, userId: Id.gA);
             hqUser.Workspaces.Add(new WorkspacesUsers(enabledWorkspace, hqUser, null));
-            AsyncTestDelegate act = async () => await service.AssignWorkspacesAsync(hqUser, new List<AssignUserWorkspace>());
-
+            
+            Func<Task> act = async () => await service.AssignWorkspacesAsync(hqUser, new List<AssignUserWorkspace>());
+            
             // Assert
             Assert.ThrowsAsync<WorkspaceRemovalNotAllowedException>(act);
         }

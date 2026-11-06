@@ -142,7 +142,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var exception = Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
 
-            Assert.That(exception?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewExpired));
+            Assert.That(exception?.Result?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewExpired));
         }
 
         [Test]
@@ -152,7 +152,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var exception = Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
 
-            Assert.That(exception?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewNotFound));
+            Assert.That(exception?.Result?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewNotFound));
         }
 
         [Test]
@@ -164,7 +164,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var exception = Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
 
-            Assert.That(exception?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewNotFound));
+            Assert.That(exception?.Result?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewNotFound));
         }
 
         private WebInterviewController CreateController(int quantity, string interviewId,

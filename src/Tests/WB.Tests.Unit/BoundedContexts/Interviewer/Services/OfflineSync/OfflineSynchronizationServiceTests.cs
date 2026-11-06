@@ -121,7 +121,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
             var e = Assert.CatchAsync<SynchronizationException>(async () => await service.CanSynchronizeAsync());
 
             // assert
-            Assert.That(e.Type, Is.EqualTo(syncExceptionType));
+            Assert.That(e.Result?.Type, Is.EqualTo(syncExceptionType));
         }
     }
 }
