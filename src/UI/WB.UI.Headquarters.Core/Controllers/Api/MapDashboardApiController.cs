@@ -7,7 +7,7 @@ using GeoJSON.Net.Geometry;
 using Main.Core.Entities.SubEntities;
 using MarkerClustering;
 using Microsoft.AspNetCore.Mvc;
-using Supercluster;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Clustering;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
