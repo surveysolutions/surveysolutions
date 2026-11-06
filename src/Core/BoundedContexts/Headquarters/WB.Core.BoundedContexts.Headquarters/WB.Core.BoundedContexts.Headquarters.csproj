@@ -82,7 +82,6 @@
     <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
     <PackageReference Include="PDFsharp-MigraDoc" Version="6.2.4" />
     <PackageReference Include="PDFsharp" Version="6.2.4" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.9.1" />
     <PackageReference Include="ZXing.Net" Version="0.16.10" />
   </ItemGroup>
 
