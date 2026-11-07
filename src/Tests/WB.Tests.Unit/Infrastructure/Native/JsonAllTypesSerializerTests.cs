@@ -60,5 +60,14 @@ namespace WB.Tests.Unit.Infrastructure.Native
             Assert.That(deserialized[0].Key, Is.EqualTo(identity));
             Assert.That(deserialized[0].Value[0], Is.EqualTo(failedValidationCondition));
         }
+
+        [Test]
+        public void When_deserializing_payload_with_disallowed_type_Should_throw()
+        {
+            var serializer = new JsonAllTypesSerializer();
+            var payload = "{\"$type\":\"System.Diagnostics.Process, System.Diagnostics.Process\"}";
+
+            Assert.Throws<Newtonsoft.Json.JsonSerializationException>(() => serializer.Deserialize<object>(payload));
+        }
     }
 }
