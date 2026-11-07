@@ -4,6 +4,7 @@ using Android.Graphics;
 using Android.Media;
 using NUnit.Framework;
 using WB.UI.Shared.Enumerator.Services.Internals;
+using Path = System.IO.Path;
 
 namespace WB.Tests.Android.Instrumentation.CustomServices
 {
