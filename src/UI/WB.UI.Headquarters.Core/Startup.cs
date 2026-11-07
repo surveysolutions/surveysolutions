@@ -454,7 +454,6 @@ namespace WB.UI.Headquarters
                 }
             });
 
-            app.UseRequestDecompression();
             app.UseResponseCompression();
             
             app.UseRequestLocalization(opt =>
@@ -547,6 +546,7 @@ namespace WB.UI.Headquarters
             
             app.UseAppMetrics(Configuration);
             app.UseRouting();
+            app.UseRequestDecompression();
             app.UseCors();
 
             app.UseCookiePolicy();

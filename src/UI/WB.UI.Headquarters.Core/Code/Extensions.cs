@@ -67,7 +67,7 @@ namespace WB.UI.Headquarters.Code
 
         public static IHtmlContent ToSafeJavascriptMessage(this IHtmlHelper page, string sourceMessage)
         {
-            var html = JavaScriptEncoder.Default.Encode(sourceMessage);
+            var html = JavaScriptEncoder.Default.Encode(sourceMessage ?? string.Empty);
 
             return page.Raw(html);
         }

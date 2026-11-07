@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
 
         [TestCase(UserRoles.Supervisor)]
         [TestCase(UserRoles.Interviewer)]
-        public void should_not_allow_removing_user_with_pending_work_from_workspace(UserRoles role)
+        public async Task should_not_allow_removing_user_with_pending_work_from_workspace(UserRoles role)
         {
             var interviewFactory = Mock.Of<IInterviewInformationFactory>(
                 i => i.GetInProgressInterviewsForSupervisor(Id.gA) ==
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             Func<Task> act = async () => await service.AssignWorkspacesAsync(hqUser, new List<AssignUserWorkspace>());
             
             // Assert
-            Assert.ThrowsAsync<WorkspaceRemovalNotAllowedException>(act);
+            await Assert.ThrowsAsync<WorkspaceRemovalNotAllowedException>(act);
         }
     }
 }

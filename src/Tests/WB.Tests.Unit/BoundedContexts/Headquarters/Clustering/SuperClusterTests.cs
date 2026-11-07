@@ -59,6 +59,27 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Clustering
         }
 
         [Test]
+        public void should_ignore_neighbors_assigned_to_other_clusters_when_expanding()
+        {
+            const double degreesPerRadiusAtZoomThree = 360 * 90.0 / (512 * 8);
+            var cluster = Load(
+                Point(0, 1.5 * degreesPerRadiusAtZoomThree),
+                Point(0, 1.55 * degreesPerRadiusAtZoomThree),
+                Point(0, 0.9 * degreesPerRadiusAtZoomThree),
+                Point(0, 0),
+                Point(0, 0.1 * degreesPerRadiusAtZoomThree));
+            var world = new GeoBounds(-90, -180, 90, 180);
+            var selectedCluster = cluster.GetClusters(world, 3).Single(point => point.UserData.NumPoints == 2);
+            var selectedClusterBounds = new GeoBounds(-1, -1, 1, 1);
+
+            var zoom = cluster.GetClusterExpansionZoom(selectedCluster.UserData.Index);
+
+            zoom.Should().BeGreaterThan(4);
+            cluster.GetClusters(selectedClusterBounds, zoom - 1).Should().ContainSingle();
+            cluster.GetClusters(selectedClusterBounds, zoom).Should().HaveCount(2);
+        }
+
+        [Test]
         public void should_expand_bounds_to_cover_all_points()
         {
             var bounds = GeoBounds.Closed.Expand(10, 20).Expand(-5, 30).Expand(15, 25);

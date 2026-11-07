@@ -115,7 +115,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Clustering
             var origin = index.GetByOriginIndex(originId) ?? throw new InvalidOperationException(errorMsg);
 
             var r = Radius / (Extent * Math.Pow(2, originZoom - 1));
-            return index.Query(origin.X, origin.Y, r);
+            return index.Query(origin.X, origin.Y, r)
+                .Where(child => child.UserData.ParentId == clusterId)
+                .ToList();
         }
 
         private static int LimitZoom(int zoom) => Math.Max(MinZoom, Math.Min(zoom, MaxZoom + 1));
