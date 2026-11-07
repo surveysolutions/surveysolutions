@@ -55,6 +55,33 @@ public class PdfImageSourceTests
         Assert.That(height, Is.EqualTo(5));
     }
 
+    [Test]
+    public void when_image_exceeds_max_dimension_should_downscale_and_preserve_aspect_ratio()
+    {
+        var source = PdfImageSource.FromBinaryResized(CreateImage(SKEncodedImageFormat.Jpeg, 2000, 1000));
+
+        var (_, width, height) = ReadInfo(source);
+        Assert.That(width, Is.EqualTo(1024));
+        Assert.That(height, Is.EqualTo(512));
+    }
+
+    [Test]
+    public void when_image_is_within_max_dimension_should_not_upscale()
+    {
+        var source = PdfImageSource.FromBinaryResized(CreateImage(SKEncodedImageFormat.Jpeg, 500, 400));
+
+        var (_, width, height) = ReadInfo(source);
+        Assert.That(width, Is.EqualTo(500));
+        Assert.That(height, Is.EqualTo(400));
+    }
+
+    [Test]
+    public void when_max_dimension_is_not_positive_should_throw_argument_out_of_range_exception()
+    {
+        Assert.That(() => PdfImageSource.FromBinaryResized(CreateImage(SKEncodedImageFormat.Jpeg, 10, 10), 0),
+            Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("maxDimension"));
+    }
+
     private static byte[] CreateImage(SKEncodedImageFormat format, int width, int height)
     {
         using var bitmap = new SKBitmap(width, height);

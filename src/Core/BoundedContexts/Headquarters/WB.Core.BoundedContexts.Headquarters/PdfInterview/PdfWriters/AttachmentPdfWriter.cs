@@ -43,7 +43,7 @@ public class AttachmentPdfWriter : IPdfWriter
 
             try
             {
-                var image = paragraph.AddImage(PdfImageSource.FromBinary(attachment.Content));
+                var image = paragraph.AddImage(PdfImageSource.FromBinaryResized(attachment.Content));
                 image.LockAspectRatio = true;
                 image.Width = Unit.FromPoint(300);
                 image.Height = Unit.FromPoint(300);
