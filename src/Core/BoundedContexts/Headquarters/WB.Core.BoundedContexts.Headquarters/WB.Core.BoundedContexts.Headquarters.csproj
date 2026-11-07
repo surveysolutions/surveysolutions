@@ -80,8 +80,8 @@
     <PackageReference Include="SkiaSharp" Version="4.153.1" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="4.153.1" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
-    <PackageReference Include="PDFsharp-MigraDoc" Version="6.5.0" />
-    <PackageReference Include="PDFsharp" Version="6.5.0" />
+    <PackageReference Include="PDFsharp-MigraDoc" Version="6.2.4" />
+    <PackageReference Include="PDFsharp" Version="6.2.4" />
     <PackageReference Include="ZXing.Net" Version="0.16.10" />
   </ItemGroup>
 
