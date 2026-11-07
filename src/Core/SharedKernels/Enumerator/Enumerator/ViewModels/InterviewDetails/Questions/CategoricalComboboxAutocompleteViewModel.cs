@@ -8,6 +8,7 @@ using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -26,6 +27,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly bool displaySelectedValue;
         private readonly ThrottlingViewModel throttlingModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
+        private readonly ILogger logger;
+        private const int LoadingIndicatorDelayInMilliseconds = 300;
+        private long suggestionsRequestId;
 
         private CancellationTokenSource loadSuggestionsToken = new CancellationTokenSource();
         
@@ -39,6 +43,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.throttlingModel = Mvx.IoCProvider.Create<ThrottlingViewModel>();
             this.throttlingModel.Init(UpdateFilterThrottled);
             this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
+            this.logger = Mvx.IoCProvider.CanResolve<ILoggerProvider>()
+                ? Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<CategoricalComboboxAutocompleteViewModel>()
+                : null;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -224,10 +231,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private List<OptionWithSearchTerm> GetSuggestions(string filter)
         {
+            var currentRequestId = Interlocked.Increment(ref suggestionsRequestId);
+            using var loadingIndicatorCancellation = new CancellationTokenSource();
+            _ = this.ShowLoadingIfSlowSafeAsync(currentRequestId, loadingIndicatorCancellation.Token);
+
             try
             {
-                Loading = true;
-                
                 List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
 
                 var categoricalOptions = filteredOptions.Count == 1 && displaySelectedValue
@@ -243,7 +252,44 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             finally
             {
-                Loading = false;
+                loadingIndicatorCancellation.Cancel();
+                _ = SetLoadingStateSafeAsync(false, currentRequestId);
+            }
+        }
+
+        private async Task ShowLoadingIfSlowSafeAsync(long requestId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await Task.Delay(LoadingIndicatorDelayInMilliseconds, cancellationToken);
+                await SetLoadingStateSafeAsync(true, requestId, cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception ex)
+            {
+                this.logger?.Error("Failed to show delayed loading state for categorical combobox options.", ex);
+            }
+        }
+
+        private async Task SetLoadingStateSafeAsync(bool loadingState, long requestId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                {
+                    if (!isDisposed
+                        && !cancellationToken.IsCancellationRequested
+                        && requestId == Volatile.Read(ref suggestionsRequestId))
+                    {
+                        Loading = loadingState;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                this.logger?.Error("Failed to update loading state for categorical combobox options.", ex);
             }
         }
 
