@@ -135,6 +135,15 @@
     <data name="CustomizeEmailsText" xml:space="preserve">
   <value>تخصيص نصوص البريد الإلكتروني</value>
 </data>
+   <data name="CustomizeAndSendEmailsText" xml:space="preserve">
+  <value>تخصيص نص رسائل البريد الإلكتروني وإرسالها</value>
+</data>
+   <data name="SendNow" xml:space="preserve">
+  <value>إرسال الآن</value>
+</data>
+   <data name="SendNowTooltip" xml:space="preserve">
+  <value>سيتم إرسال التذكيرات من نوع {{reminderType}} لجميع التكليفات والمقابلات الآن، دون فترة انتظار.</value>
+</data>
     <data name="Invitation" xml:space="preserve">
   <value>دعوة</value>
 </data>

@@ -165,6 +165,15 @@
   <data name="CustomizeEmailsText" xml:space="preserve">
     <value>Přizpůsobit text e-mailů</value>
   </data>
+  <data name="CustomizeAndSendEmailsText" xml:space="preserve">
+    <value>Přizpůsobit text e-mailů a odeslat je</value>
+  </data>
+  <data name="SendNow" xml:space="preserve">
+    <value>ODESLAT NYNÍ</value>
+  </data>
+  <data name="SendNowTooltip" xml:space="preserve">
+    <value>Připomínky typu {{reminderType}} pro všechna zadání a rozhovory budou odeslány ihned, bez čekací doby.</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Popis:</value>
   </data>

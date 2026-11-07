@@ -47,6 +47,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private IDbConnection Connection => this.unitOfWork.Session.Connection;
 
         public virtual TEntity? GetById(string id)
+            => GetByIdUncached(id);
+
+        public TEntity? GetByIdUncached(string id)
         {
             var connectionBuilder = new NpgsqlConnectionStringBuilder(Connection.ConnectionString);
 

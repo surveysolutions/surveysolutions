@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -16,14 +19,20 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
+        private readonly IEmailService emailService;
+        private readonly ISendRemindersNowService sendRemindersNowService;
 
 
         public WebInterviewSettingsApiController(
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IEmailService emailService,
+            ISendRemindersNowService sendRemindersNowService)
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.emailService = emailService;
+            this.sendRemindersNowService = sendRemindersNowService;
         }
 
         public class UpdatePageTemplateModel
@@ -202,6 +211,58 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();
+        }
+
+        public class SendRemindersNowModel
+        {
+            [Required] public EmailTextTemplateType? Type { get; set; }
+        }
+
+        [ValidateAntiForgeryToken]
+        [Route(@"{id}/sendReminders")]
+        [HttpPost]
+        public async Task<IActionResult> SendRemindersNow(string id, [FromBody] SendRemindersNowModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaire == null)
+                return NotFound();
+
+            if (model.Type is not (EmailTextTemplateType.Reminder_NoResponse
+                or EmailTextTemplateType.Reminder_PartialResponse
+                or EmailTextTemplateType.RejectEmail))
+                return BadRequest(new { error = "Only reminder and rejected-interview templates can be sent now." });
+
+            var config = this.webInterviewConfigProvider.GetUncached(questionnaireIdentity);
+            if (config == null || !config.Started)
+                return BadRequest(new { error = "Web interview is not started." });
+
+            if (!emailService.IsConfigured())
+                return BadRequest(new { error = "Email sending is not configured." });
+
+            var status = await sendRemindersNowService.SendAsync(questionnaireIdentity, questionnaire.Title,
+                model.Type.Value).ConfigureAwait(false);
+            return AcceptedAtAction(nameof(SendRemindersNowStatus), new { id, requestId = status.RequestId }, status);
+        }
+
+        [Route(@"{id}/sendReminders/{requestId:guid}")]
+        [HttpGet]
+        public async Task<IActionResult> SendRemindersNowStatus(string id, System.Guid requestId)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            var status = await sendRemindersNowService.GetStatusAsync(questionnaireIdentity, requestId)
+                .ConfigureAwait(false);
+            if (status == null)
+                return NotFound();
+
+            return Ok(status);
         }
     }
 }

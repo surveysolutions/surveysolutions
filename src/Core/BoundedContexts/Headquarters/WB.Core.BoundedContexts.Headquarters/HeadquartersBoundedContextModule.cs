@@ -107,6 +107,7 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Workspaces;
 using CalendarEvent = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.CalendarEvent;
 using WB.UI.Shared.Web.Services;
@@ -345,6 +346,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
             registry.Bind<IWebInterviewLinkProvider, WebInterviewLinkProvider>();
+            registry.Bind<IReminderEmailSender, ReminderEmailSender>();
             registry.Bind<IUserImportService, UserImportService>();
 
             registry.BindInPerLifetimeScope<IWorkspaceContextHolder, WorkspaceContextHolder>();
@@ -382,6 +384,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<SendInvitationsJob>();
             registry.Bind<AssignmentsVerificationJob>();
             registry.Bind<SendRemindersJob>();
+            registry.Bind<ISendRemindersNowService, SendRemindersNowService>();
+            registry.Bind<IPlainKeyValueStorage<SendRemindersNowStatus>,
+                PostgresKeyValueStorage<SendRemindersNowStatus>>();
                 
             registry.Bind<SendInterviewCompletedJob>();
             registry.Bind<SendInterviewCompletedTask>();
@@ -396,6 +401,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindScheduledJob<UpgradeAssignmentJob, AssignmentsUpgradeProcess>();
             registry.BindScheduledJob<UsersImportJob, Unit>();
             registry.BindScheduledJob<UpdateDynamicReportJob, UpdateDynamicReportRequest>();
+            registry.BindScheduledJob<SendRemindersNowJob, SendRemindersNowRequest>();
 
             registry.Bind<CalendarEvent>();
 

@@ -111,7 +111,7 @@
 
                 <div class="col-md-12">
                     <h3>
-                        {{ $t('WebInterviewSettings.CustomizeEmailsText') }}
+                        {{ $t('WebInterviewSettings.CustomizeAndSendEmailsText') }}
                     </h3>
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
@@ -275,6 +275,14 @@
                                                         @click="cancelEditEmailTemplate(emailTemplate)"
                                                         class="btn btn-md btn-link">
                                                         {{ $t('WebInterviewSettings.Cancel') }}
+                                                    </button>
+                                                    <button v-if="isReminderTemplate(emailTemplate)"
+                                                        type="button"
+                                                        :disabled="!started || meta.dirty || pendingReminderTypes[emailTemplate.value]"
+                                                        @click="sendRemindersNow(emailTemplate)"
+                                                        :title="$t('WebInterviewSettings.SendNowTooltip', { reminderType: emailTemplate.buttonTitle })"
+                                                        class="btn btn-md btn-warning">
+                                                        {{ $t('WebInterviewSettings.SendNow') }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -625,6 +633,7 @@
 import { marked } from 'marked'
 import { map, isNil } from 'lodash-es'
 import { Form, Field } from 'vee-validate'
+import * as toastr from 'toastr'
 import emitter from '~/shared/emitter'
 
 import Welcome from './Settings/Welcome'
@@ -659,11 +668,17 @@ export default {
             logoUrl: '',
             hasLogo: false,
             emailTemplateData: [],
+            pendingReminderTypes: {},
+            reminderAbortController: new AbortController(),
         }
     },
 
     onBeforeUpdate() {
         this.emailTemplateData = []
+    },
+
+    beforeUnmount() {
+        this.reminderAbortController.abort()
     },
 
     beforeMount() {
@@ -1002,6 +1017,89 @@ export default {
         },
         isMessageSupportedInterviewData(emailTemplate) {
             return emailTemplate.value == 'completeInterviewEmail'
+        },
+        isReminderTemplate(emailTemplate) {
+            return (
+                emailTemplate.value === 'reminder_NoResponse' ||
+                emailTemplate.value === 'reminder_PartialResponse' ||
+                emailTemplate.value === 'rejectEmail'
+            )
+        },
+        async sendRemindersNow(emailTemplate) {
+            const signal = this.reminderAbortController.signal
+            if (signal.aborted || this.pendingReminderTypes[emailTemplate.value]) return
+
+            this.pendingReminderTypes[emailTemplate.value] = true
+            try {
+                this.$store.dispatch('showProgress')
+                let response
+                try {
+                    response = await this.$hq.WebInterviewSettings.sendRemindersNow(
+                        this.questionnaireId,
+                        emailTemplate.value,
+                        signal
+                    )
+                } finally {
+                    this.$store.dispatch('hideProgress')
+                }
+                if (signal.aborted) return
+
+                const requestId = response.data.requestId
+                let status = response.data
+                const terminalStates = [2, 3, 4, 'Completed', 'Failed', 'PartiallyFailed']
+
+                while (!terminalStates.includes(status.state)) {
+                    await new Promise(resolve => {
+                        const finish = () => {
+                            clearTimeout(timer)
+                            signal.removeEventListener('abort', finish)
+                            resolve()
+                        }
+                        const timer = setTimeout(finish, 2000)
+                        signal.addEventListener('abort', finish, { once: true })
+                    })
+                    if (signal.aborted) return
+
+                    try {
+                        status = (await this.$hq.WebInterviewSettings.sendRemindersNowStatus(
+                            this.questionnaireId,
+                            requestId,
+                            signal
+                        )).data
+                    } catch (error) {
+                        if (signal.aborted) return
+                        const statusCode = error.response?.status
+                        if (error.response && statusCode < 500 && statusCode !== 408 && statusCode !== 429) {
+                            throw error
+                        }
+                    }
+                    if (signal.aborted) return
+                }
+
+                if (status.state === 2 || status.state === 'Completed') {
+                    if (status.sentCount === 0) {
+                        toastr.info(this.$t('WebInterviewSettings.NothingWasSent'))
+                    } else {
+                        toastr.success(this.$t('WebInterviewSettings.NoErrors'))
+                    }
+                } else if (status.state === 4 || status.state === 'PartiallyFailed') {
+                    if (status.failedCount > 0) {
+                        toastr.warning(this.$t('WebInterviewSettings.TotalWithErrors', {
+                            withErrorsCount: status.failedCount,
+                        }))
+                    } else {
+                        toastr.warning(status.error || this.$t('WebInterviewSettings.SendingFailed'),
+                            undefined, { escapeHtml: true })
+                    }
+                } else {
+                    toastr.error(status.error || this.$t('WebInterviewSettings.SendingFailed'),
+                        undefined, { escapeHtml: true })
+                }
+            } catch (error) {
+                if (!signal.aborted) this.$errorHandler(error, this)
+            } finally {
+                this.pendingReminderTypes[emailTemplate.value] = false
+            }
         },
     },
     computed: {
