@@ -152,7 +152,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private InterviewTree sourceInterview;
         private readonly HashSet<Identity> questionsChangedSinceLastRejection = new HashSet<Identity>();
         private readonly object reviewStateLock = new object();
-        private int? lastRejectionEventSequence;
+        private Guid? lastRejectionEventIdentifier;
+        private Guid applyingEventIdentifier;
 
         public DateTimeOffset? StartedDate => this.properties.StartedDate;
         public DateTimeOffset? CompletedDate => this.properties.CompletedDate;
@@ -189,15 +190,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.UpdateReviewState(evnt);
         }
 
+        protected override void OnEventApplying(Guid eventIdentifier, object payload, bool isHistorical, bool isSynchronized)
+        {
+            base.OnEventApplying(eventIdentifier, payload, isHistorical, isSynchronized);
+            lock (this.reviewStateLock)
+            {
+                this.applyingEventIdentifier = eventIdentifier;
+                if (!isHistorical && !isSynchronized && payload is QuestionAnswered questionAnswered)
+                    questionAnswered.LastRejectionEventIdentifier ??= this.lastRejectionEventIdentifier ?? Guid.Empty;
+            }
+        }
+
         protected override void OnEventApplied(UncommittedEvent appliedEvent)
         {
             base.OnEventApplied(appliedEvent);
-            if (appliedEvent.Payload is InterviewRejected || appliedEvent.Payload is InterviewRejectedByHQ)
-            {
-                lock (this.reviewStateLock)
-                    this.lastRejectionEventSequence = appliedEvent.EventSequence;
-            }
-
             if (appliedEvent.Payload is QuestionAnswered questionAnswered)
             {
                 this.properties.LastAnswerDate = questionAnswered.OriginDate;
@@ -213,22 +219,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case InterviewRejected:
                     case InterviewRejectedByHQ:
                         this.questionsChangedSinceLastRejection.Clear();
-                        this.lastRejectionEventSequence = this.Version + 1;
+                        this.lastRejectionEventIdentifier = this.applyingEventIdentifier;
                         break;
-                    case QuestionAnswered questionAnswered:
-                        questionAnswered.LastRejectionEventSequence ??= this.lastRejectionEventSequence;
-                        if (questionAnswered.LastRejectionEventSequence.HasValue &&
-                            questionAnswered.LastRejectionEventSequence == this.lastRejectionEventSequence)
+                    case QuestionAnswered questionAnswered
+                        when questionAnswered.LastRejectionEventIdentifier.HasValue &&
+                             questionAnswered.LastRejectionEventIdentifier != Guid.Empty &&
+                             questionAnswered.LastRejectionEventIdentifier == this.lastRejectionEventIdentifier:
                         {
                             this.questionsChangedSinceLastRejection.Add(
                                 Identity.Create(questionAnswered.QuestionId, questionAnswered.RosterVector));
                         }
                         break;
-                    case AnswerRemoved answerRemoved when this.lastRejectionEventSequence.HasValue:
+                    case AnswerRemoved answerRemoved
+                        when this.lastRejectionEventIdentifier.HasValue &&
+                             this.lastRejectionEventIdentifier != Guid.Empty:
                         this.questionsChangedSinceLastRejection.Remove(
                             Identity.Create(answerRemoved.QuestionId, answerRemoved.RosterVector));
                         break;
-                    case AnswersRemoved answersRemoved when this.lastRejectionEventSequence.HasValue:
+                    case AnswersRemoved answersRemoved
+                        when this.lastRejectionEventIdentifier.HasValue &&
+                             this.lastRejectionEventIdentifier != Guid.Empty:
                         foreach (var identity in answersRemoved.Questions)
                             this.questionsChangedSinceLastRejection.Remove(identity);
                         break;

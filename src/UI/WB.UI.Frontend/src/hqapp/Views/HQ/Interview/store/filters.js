@@ -39,15 +39,18 @@ export default {
             skip: 0,
             pageSize: 20,
             needToClear: false,
+            requestVersion: 0,
         },
     },
 
     actions: {
         async fetchSearchResults({ commit, state }) {
+            const requestVersion = state.search.requestVersion
             const flags = getSelectedFlags(state)
             const skip = state.search.needToClear ? 0 : state.search.skip
             const limit = state.search.pageSize
             const res = await api.get('search', { flags, skip, limit })
+            if (requestVersion !== state.search.requestVersion) return
             commit('LOG_LAST_ACTIVITY')
             commit('SET_SEARCH_RESULT', res)
         },
@@ -124,18 +127,25 @@ export default {
 
             state.filter[filter].value = value
             state.search.needToClear = true
+            state.search.requestVersion++
         },
 
         SEARCH_NEED_TO_CLEAR(state) {
             state.search.needToClear = true
+            state.search.requestVersion++
         },
 
         RESET_FILTERS(state) {
+            let filtersChanged = false
             Object.keys(state.filter).forEach(key => {
-                if (state.filter[key].value != false)
+                if (state.filter[key].value != false) {
                     state.search.needToClear = true
+                    filtersChanged = true
+                }
                 state.filter[key]['value'] = false
             })
+            if (filtersChanged)
+                state.search.requestVersion++
         },
     },
     getters: {

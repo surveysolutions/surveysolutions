@@ -194,9 +194,12 @@ export default {
         dispatch('refreshSearchResults')
     }, 200),
 
-    refreshSectionState({ commit, dispatch }) {
+    refreshSectionState({ commit, dispatch, getters }) {
         commit('SET_LOADING_PROGRESS', true)
         dispatch('_refreshSectionState')
+        if (getters.isReviewMode) {
+            dispatch('refreshReviewSearch')
+        }
     },
 
     _refreshSectionState: debounce(({ dispatch, commit }) => {

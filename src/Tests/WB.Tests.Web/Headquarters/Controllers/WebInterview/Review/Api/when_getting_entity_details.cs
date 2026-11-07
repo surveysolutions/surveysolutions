@@ -4,12 +4,16 @@ using FluentAssertions.Common;
 using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
 using WB.UI.Headquarters.API.WebInterview.Services;
@@ -151,6 +155,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
                 answer: "after",
                 userId: interviewerId,
                 originDate: t0);
+            answerEvent.LastRejectionEventIdentifier = history
+                .Single(e => e.Payload is InterviewRejectedByHQ)
+                .EventIdentifier;
             var lastEvent = history.Last();
             history.Add(new CommittedEvent(
                 Guid.Empty,
@@ -202,16 +209,21 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             var history = interview.GetUnCommittedChanges().Select(e => new CommittedEvent(
                 Guid.Empty, null, e.EventIdentifier, e.EventSourceId, e.EventSequence, e.EventTimeStamp, null, e.Payload)).ToArray();
             var pendingAnswer = history.Last();
+            var firstRejection = history.Single(e => e.Payload is InterviewRejected);
+            var answer = (QuestionAnswered)pendingAnswer.Payload;
+            Assert.That(answer.LastRejectionEventIdentifier, Is.EqualTo(firstRejection.EventIdentifier));
+
             var laterRejection = Create.Event.InterviewRejected(
                 supervisorId,
                 "rejected on another device",
                 t0.AddMinutes(3));
+            var laterRejectionId = Guid.NewGuid();
             history = history
                 .Take(history.Length - 1)
                 .Append(new CommittedEvent(
                     Guid.Empty,
                     null,
-                    Guid.NewGuid(),
+                    laterRejectionId,
                     interview.Id,
                     pendingAnswer.EventSequence,
                     DateTime.UtcNow,
@@ -230,6 +242,70 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 
             var replayedInterview = Create.AggregateRoot.StatefulInterview(questionnaire: document, shouldBeInitialized: false);
             replayedInterview.InitializeFromHistory(interview.Id, history);
+
+            Assert.That(replayedInterview.IsQuestionChangedSinceLastRejection(
+                Identity.Create(commentedQuestionId, RosterVector.Empty)), Is.False);
+        }
+
+        [Test]
+        public void should_not_mark_an_offline_answer_without_a_rejection_checkpoint_after_a_first_rejection_is_inserted()
+        {
+            var t0 = DateTimeOffset.UtcNow.AddHours(-3);
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0, "offline answer");
+            interview.Complete(interviewerId, "", t0.AddMinutes(1), null);
+
+            var history = interview.GetUnCommittedChanges().Select(e => new CommittedEvent(
+                Guid.Empty, null, e.EventIdentifier, e.EventSourceId, e.EventSequence, e.EventTimeStamp, null, e.Payload)).ToArray();
+            var pendingAnswer = history.Single(e => e.Payload is QuestionAnswered);
+            var answer = (QuestionAnswered)pendingAnswer.Payload;
+            Assert.That(answer.LastRejectionEventIdentifier, Is.EqualTo(Guid.Empty));
+
+            var serializedAnswer = JsonConvert.SerializeObject(
+                answer,
+                EventSerializerSettings.SyncronizationJsonSerializerSettings);
+            var restoredAnswer = (QuestionAnswered)JsonConvert.DeserializeObject(
+                serializedAnswer,
+                answer.GetType(),
+                EventSerializerSettings.SyncronizationJsonSerializerSettings);
+            Assert.That(restoredAnswer.LastRejectionEventIdentifier, Is.EqualTo(Guid.Empty));
+
+            var rejection = Create.Event.InterviewRejected(
+                supervisorId,
+                "rejected on another device",
+                t0.AddMinutes(2));
+            var reorderedHistory = history
+                .Where(e => e != pendingAnswer)
+                .Append(new CommittedEvent(
+                    Guid.Empty,
+                    null,
+                    Guid.NewGuid(),
+                    interview.Id,
+                    0,
+                    DateTime.UtcNow,
+                    null,
+                    rejection))
+                .Append(new CommittedEvent(
+                    pendingAnswer.CommitId,
+                    pendingAnswer.Origin,
+                    pendingAnswer.EventIdentifier,
+                    pendingAnswer.EventSourceId,
+                    0,
+                    pendingAnswer.EventTimeStamp,
+                    null,
+                    restoredAnswer))
+                .Select((e, index) => new CommittedEvent(
+                    e.CommitId,
+                    e.Origin,
+                    e.EventIdentifier,
+                    e.EventSourceId,
+                    index + 1,
+                    e.EventTimeStamp,
+                    null,
+                    e.Payload))
+                .ToArray();
+
+            var replayedInterview = Create.AggregateRoot.StatefulInterview(questionnaire: document, shouldBeInitialized: false);
+            replayedInterview.InitializeFromHistory(interview.Id, reorderedHistory);
 
             Assert.That(replayedInterview.IsQuestionChangedSinceLastRejection(
                 Identity.Create(commentedQuestionId, RosterVector.Empty)), Is.False);
