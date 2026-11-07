@@ -48,17 +48,42 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             if (photo == null)
                 return null;
 
-            return ProcessCapturedPhoto(photo);
+            try
+            {
+                try
+                {
+                    return ProcessCapturedPhoto(photo.FullPath);
+                }
+                catch (PictureProcessingException)
+                {
+                    throw;
+                }
+                catch (System.Exception e)
+                {
+                    throw new PictureProcessingException(UIResources.Multimedia_PhotoProcessingFailed, e);
+                }
+            }
+            finally
+            {
+                try
+                {
+                    File.Delete(photo.FullPath);
+                }
+                catch (System.Exception e) when (e is IOException || e is UnauthorizedAccessException)
+                {
+                    NLog.LogManager.GetCurrentClassLogger().Warn(e, "Unable to delete captured photo");
+                }
+            }
         }
 
-        private static Stream ProcessCapturedPhoto(FileResult photo)
+        internal static Stream ProcessCapturedPhoto(string photoPath)
         {
-            using (var originalMetadata = new ExifInterface(photo.FullPath))
+            using (var originalMetadata = new ExifInterface(photoPath))
             {
                 var boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true };
-                BitmapFactory.DecodeFile(photo.FullPath, boundsOptions);
+                BitmapFactory.DecodeFile(photoPath, boundsOptions);
                 var sampleSize = BitmapHelper.CalculateInSampleSize(boundsOptions, 1024, 1024);
-                using var bitmap = BitmapFactory.DecodeFile(photo.FullPath, new BitmapFactory.Options { InSampleSize = sampleSize });
+                using var bitmap = BitmapFactory.DecodeFile(photoPath, new BitmapFactory.Options { InSampleSize = sampleSize });
                 if (bitmap == null)
                     throw new PictureProcessingException(UIResources.Multimedia_PhotoProcessingFailed);
 
