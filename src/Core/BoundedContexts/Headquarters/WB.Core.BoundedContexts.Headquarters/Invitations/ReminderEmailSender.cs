@@ -18,8 +18,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly ILogger<ReminderEmailSender> logger;
         private readonly IInvitationService invitationService;
         private readonly IEmailService emailService;
-        private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
-        private readonly IPlainKeyValueStorage<EmailParameters> emailParamsStorage;
+        private readonly IPlainKeyValueStorage<WebInterviewConfig> webInterviewConfigs;
+        private readonly IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes> deliveryOutcomes;
+        private readonly IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint> deliveryCheckpoints;
         private readonly IWebInterviewEmailRenderer webInterviewEmailRenderer;
         private readonly IInScopeExecutor inScopeExecutor;
         private readonly IWebInterviewLinkProvider interviewLinkProvider;
@@ -29,8 +30,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             ILogger<ReminderEmailSender> logger,
             IInvitationService invitationService,
             IEmailService emailService,
-            IWebInterviewConfigProvider webInterviewConfigProvider,
-            IPlainKeyValueStorage<EmailParameters> emailParamsStorage,
+            IPlainKeyValueStorage<WebInterviewConfig> webInterviewConfigs,
+            IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes> deliveryOutcomes,
+            IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint> deliveryCheckpoints,
             IWebInterviewEmailRenderer webInterviewEmailRenderer,
             IInScopeExecutor inScopeExecutor,
             IWebInterviewLinkProvider interviewLinkProvider,
@@ -39,210 +41,153 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.logger = logger;
             this.invitationService = invitationService;
             this.emailService = emailService;
-            this.webInterviewConfigProvider = webInterviewConfigProvider;
-            this.emailParamsStorage = emailParamsStorage;
+            this.webInterviewConfigs = webInterviewConfigs;
+            this.deliveryOutcomes = deliveryOutcomes;
+            this.deliveryCheckpoints = deliveryCheckpoints;
             this.webInterviewEmailRenderer = webInterviewEmailRenderer;
             this.inScopeExecutor = inScopeExecutor;
             this.interviewLinkProvider = interviewLinkProvider;
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<ReminderEmailSendResult> SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
-            EmailTextTemplateType reminderType, int thresholdDays, DateTime? requestStartedAtUtc = null)
+        public async Task<ReminderEmailSendResult> SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
+            string questionnaireTitle, EmailTextTemplateType reminderType, int thresholdDays,
+            DateTime? requestStartedAtUtc = null, Guid? requestId = null)
         {
-            WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
-            if (webInterviewConfig == null || !webInterviewConfig.Started)
-                return new ReminderEmailSendResult();
-
             if (!await ReminderEmailSendLock.TryAcquireDeliveryAsync(unitOfWork, questionnaireIdentity, reminderType)
                     .ConfigureAwait(false))
                 throw new ReminderDeliveryInProgressException();
 
-            ISenderInformation senderInfo = emailService.GetSenderInfo();
-            var result = new ReminderEmailSendResult();
+            var outcomes = requestId.HasValue
+                ? deliveryOutcomes.GetByIdUncached(ReminderEmailDeliveryOutcomes.GetStorageKey(requestId.Value))
+                    ?? new ReminderEmailDeliveryOutcomes()
+                : new ReminderEmailDeliveryOutcomes();
+            var result = outcomes.GetResult();
+            var config = webInterviewConfigs.GetByIdUncached(questionnaireIdentity.ToString());
+            if (config == null || !config.Started)
+                return result;
 
+            IEnumerable<int> invitationIds;
             switch (reminderType)
             {
                 case EmailTextTemplateType.Reminder_NoResponse:
-                    await SendNoResponseRemindersAsync(questionnaireIdentity, questionnaireTitle,
-                        webInterviewConfig, senderInfo, thresholdDays, result, requestStartedAtUtc).ConfigureAwait(false);
+                    if (!config.ReminderAfterDaysIfNoResponse.HasValue && thresholdDays > 0)
+                        return result;
+                    invitationIds = invitationService.GetNoResponseInvitations(questionnaireIdentity, thresholdDays);
                     break;
                 case EmailTextTemplateType.Reminder_PartialResponse:
-                    await SendPartialResponseRemindersAsync(questionnaireIdentity, questionnaireTitle,
-                        webInterviewConfig, senderInfo, thresholdDays, result, requestStartedAtUtc).ConfigureAwait(false);
+                    if (!config.ReminderAfterDaysIfPartialResponse.HasValue && thresholdDays > 0)
+                        return result;
+                    invitationIds = invitationService.GetPartialResponseInvitations(questionnaireIdentity, thresholdDays);
                     break;
                 case EmailTextTemplateType.RejectEmail:
-                    await SendRejectedInterviewRemindersAsync(questionnaireIdentity, questionnaireTitle,
-                        webInterviewConfig, senderInfo, result).ConfigureAwait(false);
+                    invitationIds = invitationService.GetInvitationsWithRejectedInterview(questionnaireIdentity);
                     break;
                 default:
                     throw new ArgumentException($"Unsupported reminder type: {reminderType}", nameof(reminderType));
             }
 
+            var senderInfo = emailService.GetSenderInfo();
+            var emailTemplate = config.GetEmailTemplate(reminderType);
+            foreach (var invitationId in invitationIds)
+            {
+                // Request checkpoints, unlike reminder timestamps, also retain failed deliveries and recipients
+                // that no longer match the live eligibility query after a restart.
+                if (requestId.HasValue && deliveryCheckpoints.GetByIdUncached(
+                        ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId.Value, invitationId)) != null)
+                    continue;
+
+                var invitation = invitationService.GetInvitation(invitationId);
+                if (!requestId.HasValue && requestStartedAtUtc.HasValue &&
+                    invitation.LastReminderSentOnUtc >= requestStartedAtUtc.Value)
+                    continue;
+                if (string.IsNullOrWhiteSpace(invitation.Assignment.Email))
+                    continue;
+
+                var sent = await SendReminderAsync(invitation, questionnaireTitle, emailTemplate, senderInfo,
+                    reminderType == EmailTextTemplateType.RejectEmail, requestId).ConfigureAwait(false);
+                if (sent)
+                    result.SentCount++;
+                else
+                    result.FailedCount++;
+            }
+
             return result;
         }
 
-        private async Task SendNoResponseRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
-            string questionnaireTitle, WebInterviewConfig webInterviewConfig, ISenderInformation senderInfo,
-            int thresholdDays, ReminderEmailSendResult result, DateTime? requestStartedAtUtc)
+        private async Task<bool> SendReminderAsync(Invitation invitation, string questionnaireTitle,
+            WebInterviewEmailTemplate emailTemplate, ISenderInformation senderInfo, bool rejected, Guid? requestId)
         {
-            if (!webInterviewConfig.ReminderAfterDaysIfNoResponse.HasValue && thresholdDays > 0)
-                return;
-
-            var invitationIdsToRemind = invitationService.GetNoResponseInvitations(questionnaireIdentity, thresholdDays);
-
-            var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.Reminder_NoResponse);
-
-            await SendRemindersAsync(questionnaireTitle, invitationIdsToRemind, emailTemplate, senderInfo, result,
-                    requestStartedAtUtc)
-                .ConfigureAwait(false);
-        }
-
-        private async Task SendPartialResponseRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
-            string questionnaireTitle, WebInterviewConfig webInterviewConfig, ISenderInformation senderInfo,
-            int thresholdDays, ReminderEmailSendResult result, DateTime? requestStartedAtUtc)
-        {
-            if (!webInterviewConfig.ReminderAfterDaysIfPartialResponse.HasValue && thresholdDays > 0)
-                return;
-
-            var invitationIdsToRemind = invitationService.GetPartialResponseInvitations(questionnaireIdentity, thresholdDays);
-
-            var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.Reminder_PartialResponse);
-
-            await SendRemindersAsync(questionnaireTitle, invitationIdsToRemind, emailTemplate, senderInfo, result,
-                    requestStartedAtUtc)
-                .ConfigureAwait(false);
-        }
-
-        private async Task SendRejectedInterviewRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
-            string questionnaireTitle, WebInterviewConfig webInterviewConfig, ISenderInformation senderInfo,
-            ReminderEmailSendResult result)
-        {
-            var invitationIdsToSend = invitationService.GetInvitationsWithRejectedInterview(questionnaireIdentity);
-
-            var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.RejectEmail);
-
-            foreach (var invitationId in invitationIdsToSend)
+            var password = invitation.Assignment.Password;
+            var address = invitation.Assignment.Email;
+            var link = rejected
+                ? interviewLinkProvider.WebInterviewContinueLink(invitation)
+                : interviewLinkProvider.WebInterviewStartLink(invitation);
+            var emailContent = new EmailContent(emailTemplate, questionnaireTitle, link, password);
+            var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitation.Id}" + (rejected ? "-Reject" : "");
+            var emailParams = new EmailParameters
             {
-                Invitation invitation = invitationService.GetInvitation(invitationId);
-                var password = invitation.Assignment.Password;
-                var address = invitation.Assignment.Email;
-                if (string.IsNullOrWhiteSpace(address))
-                    continue;
-
-                var link = interviewLinkProvider.WebInterviewContinueLink(invitation);
-                var emailContent = new EmailContent(emailTemplate, questionnaireTitle, link, password);
-
-                var emailParamsId = $"{Guid.NewGuid():N}-{invitationId}-Reject";
-                var emailParams = new EmailParameters
-                {
-                    Id = emailParamsId,
-                    AssignmentId = invitation.AssignmentId,
-                    InvitationId = invitation.Id,
-                    Subject = emailContent.Subject,
-                    LinkText = emailContent.LinkText,
-                    MainText = emailContent.MainText,
-                    PasswordDescription = emailContent.PasswordDescription,
-                    Password = password,
-                    Address = senderInfo.Address,
-                    SurveyName = questionnaireTitle,
-                    SenderName = senderInfo.SenderName,
-                    Link = link
-                };
-                emailParamsStorage.Store(emailParams, emailParamsId);
-
-                var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams).ConfigureAwait(false);
-
-                await inScopeExecutor.ExecuteAsync(async (locator) =>
-                {
-                    var invitationServiceLocal = locator.GetInstance<IInvitationService>();
-                    string emailId;
-                    try
-                    {
-                        emailId = await emailService.SendEmailAsync(address,
-                            emailParams.Subject,
-                            interviewEmail.MessageHtml,
-                            interviewEmail.MessageText).ConfigureAwait(false);
-                    }
-                    catch (Exception e)
-                    {
-                        result.FailedCount++;
-                        invitationServiceLocal.RejectedInterviewReminderWasNotSent(invitation.Id);
-                        this.logger.LogError(e, "Rejected email was not sent");
-                        return;
-                    }
-
-                    invitationServiceLocal.MarkRejectedInterviewReminderSent(invitationId, emailId);
-                    result.SentCount++;
-                }).ConfigureAwait(false);
-            }
-        }
-
-        private async Task SendRemindersAsync(string questionnaireTitle, IEnumerable<int> invitationIdsToRemind,
-            WebInterviewEmailTemplate emailTemplate, ISenderInformation senderInfo, ReminderEmailSendResult result,
-            DateTime? requestStartedAtUtc = null)
-        {
-            var surveyName = questionnaireTitle;
-            foreach (var invitationId in invitationIdsToRemind)
+                Id = emailParamsId,
+                AssignmentId = invitation.AssignmentId,
+                InvitationId = invitation.Id,
+                Subject = emailContent.Subject,
+                LinkText = emailContent.LinkText,
+                MainText = emailContent.MainText,
+                PasswordDescription = emailContent.PasswordDescription,
+                Password = password,
+                Address = senderInfo.Address,
+                SurveyName = questionnaireTitle,
+                SenderName = senderInfo.SenderName,
+                Link = link
+            };
+            var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams).ConfigureAwait(false);
+            var sent = false;
+            await inScopeExecutor.ExecuteAsync(async locator =>
             {
-                Invitation invitation = invitationService.GetInvitation(invitationId);
-                if (requestStartedAtUtc.HasValue &&
-                    invitation.LastReminderSentOnUtc >= requestStartedAtUtc.Value)
-                    continue;
+                var localInvitations = locator.GetInstance<IInvitationService>();
+                locator.GetInstance<IPlainKeyValueStorage<EmailParameters>>().Store(emailParams, emailParamsId);
 
-                var password = invitation.Assignment.Password;
-                var address = invitation.Assignment.Email;
-                if (string.IsNullOrEmpty(address))
-                    continue;
-
-                var link = this.interviewLinkProvider.WebInterviewStartLink(invitation);
-                var emailContent = new EmailContent(emailTemplate, questionnaireTitle, link, password);
-
-                var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";
-                var emailParams = new EmailParameters
+                string emailId = null;
+                try
                 {
-                    Id = emailParamsId,
-                    AssignmentId = invitation.AssignmentId,
-                    InvitationId = invitation.Id,
-                    Subject = emailContent.Subject,
-                    LinkText = emailContent.LinkText,
-                    MainText = emailContent.MainText,
-                    PasswordDescription = emailContent.PasswordDescription,
-                    Password = password,
-                    Address = senderInfo.Address,
-                    SurveyName = surveyName,
-                    SenderName = senderInfo.SenderName,
-                    Link = link
-                };
-
-                var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams).ConfigureAwait(false);
-
-                await inScopeExecutor.ExecuteAsync(async locator =>
+                    emailId = await emailService.SendEmailAsync(address, emailParams.Subject,
+                        interviewEmail.MessageHtml, interviewEmail.MessageText).ConfigureAwait(false);
+                    sent = true;
+                }
+                catch (Exception exception)
                 {
-                    var invitationServiceLocal = locator.GetInstance<IInvitationService>();
-                    locator.GetInstance<IPlainKeyValueStorage<EmailParameters>>()
-                        .Store(emailParams, emailParamsId);
+                    if (rejected)
+                        localInvitations.RejectedInterviewReminderWasNotSent(invitation.Id);
+                    else
+                        localInvitations.ReminderWasNotSent(invitation.Id, invitation.AssignmentId, address,
+                            exception.Message);
+                    logger.LogError(exception, "Interview email was not sent for invitation {InvitationId}.", invitation.Id);
+                }
 
-                    string emailId;
-                    try
-                    {
-                        emailId = await emailService.SendEmailAsync(address, emailParams.Subject,
-                                interviewEmail.MessageHtml, interviewEmail.MessageText)
-                            .ConfigureAwait(false);
-                    }
-                    catch (Exception e)
-                    {
-                        result.FailedCount++;
-                        invitationServiceLocal.ReminderWasNotSent(invitationId, invitation.AssignmentId, address,
-                            e.Message);
-                        this.logger.LogError(e, $"Interview email was not sent for invitation {invitationId}.");
-                        return;
-                    }
+                if (sent)
+                {
+                    if (rejected)
+                        localInvitations.MarkRejectedInterviewReminderSent(invitation.Id, emailId);
+                    else
+                        localInvitations.MarkInvitationAsReminded(invitation.Id, emailId);
+                }
 
-                    invitationServiceLocal.MarkInvitationAsReminded(invitationId, emailId);
-                    result.SentCount++;
-                }).ConfigureAwait(false);
-            }
+                if (requestId.HasValue)
+                {
+                    var storage = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>();
+                    var key = ReminderEmailDeliveryOutcomes.GetStorageKey(requestId.Value);
+                    var outcomes = storage.GetByIdUncached(key) ?? new ReminderEmailDeliveryOutcomes();
+                    if (sent)
+                        outcomes.SentCount++;
+                    else
+                        outcomes.FailedCount++;
+                    storage.Store(outcomes, key);
+                    locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>()
+                        .Store(new ReminderEmailDeliveryCheckpoint { Sent = sent },
+                            ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId.Value, invitation.Id));
+                }
+            }).ConfigureAwait(false);
+            return sent;
         }
     }
 }

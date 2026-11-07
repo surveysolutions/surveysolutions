@@ -8,7 +8,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     public interface IReminderEmailSender
     {
         Task<ReminderEmailSendResult> SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
-            EmailTextTemplateType reminderType, int thresholdDays, DateTime? requestStartedAtUtc = null);
+            EmailTextTemplateType reminderType, int thresholdDays, DateTime? requestStartedAtUtc = null,
+            Guid? requestId = null);
     }
 
     public class ReminderEmailSendResult

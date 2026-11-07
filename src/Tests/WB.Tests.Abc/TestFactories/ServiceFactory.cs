@@ -1184,7 +1184,10 @@ namespace WB.Tests.Abc.TestFactories
             IPlainKeyValueStorage<EmailParameters> emailParamsStorage = null,
             IWebInterviewEmailRenderer webInterviewEmailRenderer = null,
             IInScopeExecutor inScopeExecutor = null,
-            IUnitOfWork unitOfWork = null)
+            IUnitOfWork unitOfWork = null,
+            IPlainKeyValueStorage<WebInterviewConfig> webInterviewConfigs = null,
+            IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes> deliveryOutcomes = null,
+            IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint> deliveryCheckpoints = null)
         {
             var invitationServiceActual = invitationService ?? Mock.Of<IInvitationService>();
             var linkProvider = new WebInterviewLinkProvider(
@@ -1214,13 +1217,23 @@ namespace WB.Tests.Abc.TestFactories
             serviceLocator.Setup(x => x.GetInstance<IInvitationService>()).Returns(invitationServiceActual);
             serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<EmailParameters>>())
                 .Returns(actualEmailParamsStorage);
+            var actualDeliveryOutcomes = deliveryOutcomes ?? new TestInMemoryKeyValueStorage<ReminderEmailDeliveryOutcomes>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>())
+                .Returns(actualDeliveryOutcomes);
+            var actualDeliveryCheckpoints = deliveryCheckpoints ?? new TestInMemoryKeyValueStorage<ReminderEmailDeliveryCheckpoint>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>())
+                .Returns(actualDeliveryCheckpoints);
+            var configs = new Mock<IPlainKeyValueStorage<WebInterviewConfig>>();
+            configs.Setup(x => x.GetByIdUncached(It.IsAny<string>()))
+                .Returns((string id) => webInterviewConfigProvider?.Get(QuestionnaireIdentity.Parse(id)));
 
             return new ReminderEmailSender(
                 Mock.Of<ILogger<ReminderEmailSender>>(),
                 invitationServiceActual,
                 emailService ?? Mock.Of<IEmailService>(),
-                webInterviewConfigProvider ?? Mock.Of<IWebInterviewConfigProvider>(),
-                actualEmailParamsStorage,
+                webInterviewConfigs ?? configs.Object,
+                actualDeliveryOutcomes,
+                actualDeliveryCheckpoints,
                 webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>(),
                 inScopeExecutor ?? Create.Service.InScopeExecutor(serviceLocator.Object),
                 linkProvider,

@@ -549,19 +549,20 @@ class WebInterviewSettingsApi {
             })
     }
 
-    sendRemindersNow(questionnaireId, type) {
+    sendRemindersNow(questionnaireId, type, signal) {
         var url = `${this.base}/${questionnaireId}/sendReminders`
         return this.http(
             {
                 method: 'post',
                 url: url,
                 data: { type: type },
+                signal: signal,
                 headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
 
-    sendRemindersNowStatus(questionnaireId, requestId) {
-        return this.http.get(`${this.base}/${questionnaireId}/sendReminders/${requestId}`)
+    sendRemindersNowStatus(questionnaireId, requestId, signal) {
+        return this.http.get(`${this.base}/${questionnaireId}/sendReminders/${requestId}`, { signal })
     }
 }
 

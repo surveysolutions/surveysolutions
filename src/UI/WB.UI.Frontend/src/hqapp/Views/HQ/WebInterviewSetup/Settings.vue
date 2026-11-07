@@ -669,11 +669,16 @@ export default {
             hasLogo: false,
             emailTemplateData: [],
             pendingReminderTypes: {},
+            reminderAbortController: new AbortController(),
         }
     },
 
     onBeforeUpdate() {
         this.emailTemplateData = []
+    },
+
+    beforeUnmount() {
+        this.reminderAbortController.abort()
     },
 
     beforeMount() {
@@ -1021,39 +1026,66 @@ export default {
             )
         },
         async sendRemindersNow(emailTemplate) {
+            const signal = this.reminderAbortController.signal
+            if (signal.aborted || this.pendingReminderTypes[emailTemplate.value]) return
+
             this.pendingReminderTypes[emailTemplate.value] = true
-            this.$store.dispatch('showProgress')
             try {
-                const response = await this.$hq.WebInterviewSettings.sendRemindersNow(
-                    this.questionnaireId,
-                    emailTemplate.value
-                )
+                this.$store.dispatch('showProgress')
+                let response
+                try {
+                    response = await this.$hq.WebInterviewSettings.sendRemindersNow(
+                        this.questionnaireId,
+                        emailTemplate.value,
+                        signal
+                    )
+                } finally {
+                    this.$store.dispatch('hideProgress')
+                }
+                if (signal.aborted) return
+
                 const requestId = response.data.requestId
                 let status = response.data
                 const terminalStates = [2, 3, 4, 'Completed', 'Failed', 'PartiallyFailed']
 
                 while (!terminalStates.includes(status.state)) {
-                    await new Promise(resolve => setTimeout(resolve, 2000))
+                    await new Promise(resolve => {
+                        const finish = () => {
+                            clearTimeout(timer)
+                            signal.removeEventListener('abort', finish)
+                            resolve()
+                        }
+                        const timer = setTimeout(finish, 2000)
+                        signal.addEventListener('abort', finish, { once: true })
+                    })
+                    if (signal.aborted) return
+
                     status = (await this.$hq.WebInterviewSettings.sendRemindersNowStatus(
                         this.questionnaireId,
-                        requestId
+                        requestId,
+                        signal
                     )).data
+                    if (signal.aborted) return
                 }
 
                 if (status.state === 2 || status.state === 'Completed') {
-                    toastr.success(this.$t('WebInterviewSettings.NoErrors'))
+                    if (status.sentCount === 0) {
+                        toastr.info(this.$t('WebInterviewSettings.NothingWasSent'))
+                    } else {
+                        toastr.success(this.$t('WebInterviewSettings.NoErrors'))
+                    }
                 } else if (status.state === 4 || status.state === 'PartiallyFailed') {
                     toastr.warning(this.$t('WebInterviewSettings.TotalWithErrors', {
                         withErrorsCount: status.failedCount,
                     }))
                 } else {
-                    toastr.error(this.$t('WebInterviewSettings.SendingFailed'))
+                    toastr.error(status.error || this.$t('WebInterviewSettings.SendingFailed'),
+                        undefined, { escapeHtml: true })
                 }
             } catch (error) {
-                this.$errorHandler(error, this)
+                if (!signal.aborted) this.$errorHandler(error, this)
             } finally {
                 this.pendingReminderTypes[emailTemplate.value] = false
-                this.$store.dispatch('hideProgress')
             }
         },
     },
