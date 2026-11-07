@@ -267,4 +267,7 @@
   <data name="AllowTranscriptDownloading" xml:space="preserve">
       <value>Permitir la descarga de la transcripción de la entrevista después del envío</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>Texto que se muestra en la pantalla de finalización encima de las listas de errores y preguntas sin respuesta</value>
+  </data>
 </root>

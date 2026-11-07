@@ -293,4 +293,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
     <value>网络访谈链接落地页上的欢迎语标题</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>显示在完成页面上错误和未答问题列表上方的文本</value>
+  </data>
 </root>

@@ -208,4 +208,7 @@
     <data name="AllowTranscriptDownloading" xml:space="preserve">
         <value>อนุญาตให้ดาวน์โหลดสำเนาบทสัมภาษณ์หลังจากส่งแล้ว</value>
     </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>ข้อความที่แสดงบนหน้าจอเสร็จสิ้นเหนือรายการข้อผิดพลาดและคำถามที่ยังไม่ได้ตอบ</value>
+  </data>
 </root>

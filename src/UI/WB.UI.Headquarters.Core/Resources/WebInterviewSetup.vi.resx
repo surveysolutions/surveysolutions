@@ -208,4 +208,7 @@
     <data name="AllowTranscriptDownloading" xml:space="preserve">
         <value>Cho phép tải bảng điểm phỏng vấn sau khi nộp</value>
         </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>Văn bản hiển thị trên màn hình hoàn tất phía trên danh sách lỗi và câu hỏi chưa được trả lời</value>
+  </data>
 </root>

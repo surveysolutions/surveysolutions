@@ -167,4 +167,7 @@
     <data name="AddressDescription" xml:space="preserve">
       <value>Tại đây, địa chỉ tổ chức của bạn sẽ hiển thị theo như đã được chỉ định trong tài khoản của bạn trên máy chủ gửi thư hàng loạt.</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>Văn bản trên màn hình hoàn tất (không bắt buộc)</value>
+  </data>
 </root>

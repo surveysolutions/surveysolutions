@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -14,6 +15,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     [ResponseCache(NoStore = true)]
     public class WebInterviewSettingsApiController : ControllerBase
     {
+        private const int CompleteScreenTextMaxLength = 2000;
+        private const int CompleteScreenTextMaxStoredLength = CompleteScreenTextMaxLength * 6;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
@@ -44,6 +47,12 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (IsCompleteScreenTextTooLong(updateModel.TitleType, updateModel.TitleText) ||
+                IsCompleteScreenTextTooLong(updateModel.MessageType, updateModel.MessageText) ||
+                (updateModel.ButtonType.HasValue &&
+                 IsCompleteScreenTextTooLong(updateModel.ButtonType.Value, updateModel.ButtonText)))
+                return BadRequest();
 
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
@@ -107,6 +116,9 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            if (IsCompleteScreenTextTooLong(updateModel.Type, updateModel.Message))
+                return BadRequest();
+
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
@@ -120,6 +132,11 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
             return Ok();
         }
+
+        private static bool IsCompleteScreenTextTooLong(WebInterviewUserMessages type, string text) =>
+            type == WebInterviewUserMessages.CompleteScreenText &&
+            (text is { Length: > CompleteScreenTextMaxStoredLength } ||
+             text is not null && WebUtility.HtmlDecode(text).Length > CompleteScreenTextMaxLength);
 
         public class UpdateAdditionalSettingsModel
         {

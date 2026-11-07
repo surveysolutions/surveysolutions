@@ -309,4 +309,7 @@
   <data name="AddressDescription" xml:space="preserve">
       <value>Aqui aparecerá o endereço da sua organização conforme especificado na sua conta no servidor de envio em massa.</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>Texto na tela de conclusão (opcional)</value>
+  </data>
 </root>

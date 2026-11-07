@@ -186,6 +186,9 @@
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
     <value>Note for Supervisor</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText" xml:space="preserve">
+    <value>Complete screen text</value>
+  </data>
   <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
     <value>Complete</value>
   </data>

@@ -202,4 +202,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
     <value>Текст заголовка</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText" xml:space="preserve">
+    <value>Текст экрана завершения</value>
+  </data>
 </root>

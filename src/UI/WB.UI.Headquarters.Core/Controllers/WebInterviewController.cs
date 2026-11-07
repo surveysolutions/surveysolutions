@@ -212,10 +212,11 @@ namespace WB.UI.Headquarters.Controllers
 
             var config = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity);
 
-            foreach (var messageKey in webInterviewConfig.CustomMessages.Keys.ToList())
+            var customMessages = new Dictionary<WebInterviewUserMessages, string>(webInterviewConfig.CustomMessages);
+            foreach (var messageKey in customMessages.Keys.ToList())
             {
-                var oldMessage = webInterviewConfig.CustomMessages[messageKey];
-                webInterviewConfig.CustomMessages[messageKey] = 
+                var oldMessage = customMessages[messageKey];
+                customMessages[messageKey] =
                     SubstituteQuestionnaireName(oldMessage, questionnaire.Title);
             }
 
@@ -232,7 +233,7 @@ namespace WB.UI.Headquarters.Controllers
                 Id = interviewId,
                 CoverPageId = questionnaire.IsCoverPageSupported ? questionnaire.CoverPageSectionId.FormatGuid() : "",
                 IsResumeLinkAvailable = isResumeLinkAvailable,
-                CustomMessages = webInterviewConfig.CustomMessages,
+                CustomMessages = customMessages,
                 MayBeSwitchedToWebMode = config.Started && config.AllowSwitchToCawiForInterviewer && (interview.Mode != InterviewMode.CAWI),
                 AllowTranscriptDownloading = config.AllowTranscriptDownloading,
                 WebInterviewUrl = RenderWebInterviewUri(assignmentId, interview.Id),

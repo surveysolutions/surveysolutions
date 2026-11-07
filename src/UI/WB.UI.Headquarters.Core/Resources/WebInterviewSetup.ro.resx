@@ -271,4 +271,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
     <value>Textul antetului de bun venit pe pagina de destinație a linkului pentru interviul web</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>Text afișat pe ecranul de finalizare deasupra listelor de erori și întrebări fără răspuns</value>
+  </data>
 </root>

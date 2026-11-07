@@ -303,4 +303,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
     <value>მისალმების სათაურის ტექსტი Web ინტერვიუს ბმულის საწყის გვერდზე</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>ტექსტი, რომელიც ნაჩვენებია დასრულების ეკრანზე შეცდომებისა და უპასუხო კითხვების სიების ზემოთ</value>
+  </data>
 </root>
