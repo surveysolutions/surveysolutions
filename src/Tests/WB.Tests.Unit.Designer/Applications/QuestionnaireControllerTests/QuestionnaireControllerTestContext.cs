@@ -33,6 +33,7 @@ using WB.Tests.Unit.Designer.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Controllers;
+using WB.UI.Designer.Filters;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
@@ -49,7 +50,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             IEmailSender emailSender = null,
             IViewRenderService viewRenderService = null,
             UserManager<DesignerIdentityUser> userManager = null,
-            ITransactionRollbackState transactionRollbackState = null)
+            ITransactionRollbackState transactionRollbackState = null,
+            IPostCommitActions postCommitActions = null)
         {
             var questionnaireController = new QuestionnaireController(
                 questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
@@ -71,7 +73,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 Mock.Of<IWebHostEnvironment>(),
                 Mock.Of<IOptions<ViteTagOptions>>(),
                 Mock.Of<IMemoryCache>(),
-                transactionRollbackState ?? new TransactionRollbackState());
+                transactionRollbackState ?? new TransactionRollbackState(),
+                postCommitActions ?? Mock.Of<IPostCommitActions>());
             questionnaireController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext
@@ -79,6 +82,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                     Session = new MockHttpSession(),
                     User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                     {
+                        new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
                         new Claim(ClaimTypes.Name, "testuser")
                     }))
                 }

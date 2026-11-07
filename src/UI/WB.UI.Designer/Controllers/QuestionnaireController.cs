@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
@@ -105,6 +105,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IOptions<ViteTagOptions> options;
         private readonly IMemoryCache memoryCache;
         private readonly ITransactionRollbackState transactionRollbackState;
+        private readonly IPostCommitActions postCommitActions;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -126,7 +127,8 @@ namespace WB.UI.Designer.Controllers
             IWebHostEnvironment webHost,
             IOptions<ViteTagOptions> options,
             IMemoryCache memoryCache,
-            ITransactionRollbackState transactionRollbackState)
+            ITransactionRollbackState transactionRollbackState,
+            IPostCommitActions postCommitActions)
             : base(dbContext, questionnaireViewFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -147,6 +149,7 @@ namespace WB.UI.Designer.Controllers
             this.options = options;
             this.memoryCache = memoryCache;
             this.transactionRollbackState = transactionRollbackState;
+            this.postCommitActions = postCommitActions;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
@@ -484,35 +487,36 @@ namespace WB.UI.Designer.Controllers
         [QuestionnairePermissions(true)]
         [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
         [ValidateAntiForgeryToken]
-        // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
-        [NoTransaction]
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
-            var questionnaireView = GetQuestionnaireView(id);
-            if (questionnaireView == null)
-                return NotFound();
-
             bool isActive = postModel.IsActive;
-            var anonymousQuestionnaire = await dbContext.AnonymousQuestionnaires.FirstOrDefaultAsync(a => a.QuestionnaireId == id);
+            if (isActive)
+                this.commandService.Execute(new EnableAnonymousSharing(id, User.GetId(), User.IsAdmin()));
+            else
+                this.commandService.Execute(new DisableAnonymousSharing(id, User.GetId(), User.IsAdmin()));
+
+            var anonymousQuestionnaire = await this.GetAnonymousQuestionnaireAsync(id);
+
             if (anonymousQuestionnaire == null)
             {
-                anonymousQuestionnaire = new AnonymousQuestionnaire()
-                    { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive, GeneratedAtUtc = DateTime.UtcNow };
-                dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
-            }
-            else
-            {
-                anonymousQuestionnaire.IsActive = isActive;
-            }
+                if (isActive)
+                    return NotFound();
 
-            await dbContext.SaveChangesAsync();
+                return Json(new
+                {
+                    AnonymousQuestionnaireId = (Guid?)null,
+                    IsActive = false,
+                    GeneratedAtUtc = (DateTime?)null,
+                });
+            }
 
             if (isActive)
-                await TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId, questionnaireView);
+                this.postCommitActions.Enqueue(
+                    () => TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId, questionnaireView: null));
             
             return Json(new
             {
-                AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
+                AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId,
                 IsActive = isActive,
                 GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
             });
@@ -523,22 +527,16 @@ namespace WB.UI.Designer.Controllers
         [QuestionnairePermissions(true)]
         [Route("questionnaire/regenerateAnonymousQuestionnaireLink/{id}")]
         [ValidateAntiForgeryToken]
-        // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
-        [NoTransaction]
         public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
         {
-            var existedRecord = await dbContext.AnonymousQuestionnaires.FirstOrDefaultAsync(a => a.QuestionnaireId == id);
-            if (existedRecord == null)
+            this.commandService.Execute(new RegenerateAnonymousSharingLink(id, User.GetId(), User.IsAdmin()));
+
+            var anonymousQuestionnaire = await this.GetAnonymousQuestionnaireAsync(id);
+            if (anonymousQuestionnaire == null)
                 return NotFound();
 
-            dbContext.Remove(existedRecord);
-           
-            var anonymousQuestionnaire = new AnonymousQuestionnaire()
-                { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = true, GeneratedAtUtc = DateTime.UtcNow };
-            await dbContext.AnonymousQuestionnaires.AddAsync(anonymousQuestionnaire);
-            await dbContext.SaveChangesAsync();
-
-            await TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId, questionnaireView: null);
+            this.postCommitActions.Enqueue(
+                () => TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId, questionnaireView: null));
             
             return Json(new
             {
@@ -547,6 +545,11 @@ namespace WB.UI.Designer.Controllers
                 GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
             });
         }
+
+        private Task<AnonymousQuestionnaire?> GetAnonymousQuestionnaireAsync(Guid questionnaireId)
+            => dbContext.AnonymousQuestionnaires
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.QuestionnaireId == questionnaireId);
 
         private async Task TrySendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId, QuestionnaireView? questionnaireView)
         {
