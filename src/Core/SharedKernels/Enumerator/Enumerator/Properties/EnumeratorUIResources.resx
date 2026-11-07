@@ -1067,6 +1067,12 @@ It will appear on interviewer device after next synchronization</value>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="PlayVideo_OpenFullScreen" xml:space="preserve">
+    <value>Open full screen</value>
+  </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>Close assignment</value>
   </data>

@@ -585,6 +585,12 @@
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>យល់ព្រម</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>បិទ</value>
+  </data>
+  <data name="PlayVideo_OpenFullScreen" xml:space="preserve">
+    <value>បើកពេញអេក្រង់</value>
+  </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>បិទការចាត់តាំង</value>
   </data>

@@ -1058,6 +1058,12 @@
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>اعتماد</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="PlayVideo_OpenFullScreen" xml:space="preserve">
+    <value>فتح ملء الشاشة</value>
+  </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>إغلاق التعيين</value>
   </data>

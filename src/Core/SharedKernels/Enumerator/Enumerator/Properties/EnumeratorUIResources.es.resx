@@ -1045,6 +1045,12 @@
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Aprobar</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="PlayVideo_OpenFullScreen" xml:space="preserve">
+    <value>Abrir a pantalla completa</value>
+  </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>Cerrar asignación</value>
   </data>
