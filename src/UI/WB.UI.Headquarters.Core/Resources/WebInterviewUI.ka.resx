@@ -665,4 +665,5 @@
   <data name="RealQuestion_Hint" xml:space="preserve">
       <value>შეეხეთ რიცხვის შესაყვანად</value>
   </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>ეს პასუხი შეიცვალა ბოლო უარყოფის შემდეგ.</value></data>
 </root>

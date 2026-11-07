@@ -550,4 +550,5 @@ Liên hệ hỗ trợ để được hỗ trợ.</value>
   <data name="RealQuestion_Hint" xml:space="preserve">
       <value>Chạm để nhập số</value>
   </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>Câu trả lời này đã thay đổi kể từ lần từ chối gần nhất.</value></data>
 </root>

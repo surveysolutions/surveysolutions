@@ -1,6 +1,8 @@
 <template>
     <div :class="questionStyle"
         :id="`mr_view_${questionId}`">
+        <span class="sr-only"
+            v-if="question.isChangedSinceReject">{{ $t('WebInterviewUI.AnswerChangedSinceLastRejection') }}</span>
         <popover class="tooltip-wrapper"
             trigger="hover-focus"
             append-to="body"

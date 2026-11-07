@@ -151,7 +151,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private InterviewTree sourceInterview;
         private readonly HashSet<Identity> questionsChangedSinceLastRejection = new HashSet<Identity>();
-        private bool hasReviewCheckpoint;
+        private readonly object reviewStateLock = new object();
+        private int? lastRejectionEventSequence;
 
         public DateTimeOffset? StartedDate => this.properties.StartedDate;
         public DateTimeOffset? CompletedDate => this.properties.CompletedDate;
@@ -177,14 +178,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public bool IsQuestionChangedSinceLastRejection(Identity identity)
-            => this.questionsChangedSinceLastRejection.Contains(identity);
-
-        public override void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history)
         {
-            if (history == null)
-                throw new ArgumentNullException(nameof(history));
-
-            base.InitializeFromHistory(eventSourceId, history);
+            lock (this.reviewStateLock)
+                return this.questionsChangedSinceLastRejection.Contains(identity);
         }
 
         protected override void HandleEvent(object evnt)
@@ -196,6 +192,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected override void OnEventApplied(UncommittedEvent appliedEvent)
         {
             base.OnEventApplied(appliedEvent);
+            if (appliedEvent.Payload is InterviewRejected || appliedEvent.Payload is InterviewRejectedByHQ)
+            {
+                lock (this.reviewStateLock)
+                    this.lastRejectionEventSequence = appliedEvent.EventSequence;
+            }
+
             if (appliedEvent.Payload is QuestionAnswered questionAnswered)
             {
                 this.properties.LastAnswerDate = questionAnswered.OriginDate;
@@ -204,25 +206,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void UpdateReviewState(object payload)
         {
-            switch (payload)
+            lock (this.reviewStateLock)
             {
-                case InterviewRejected:
-                case InterviewRejectedByHQ:
-                    this.questionsChangedSinceLastRejection.Clear();
-                    this.hasReviewCheckpoint = true;
-                    break;
-                case QuestionAnswered questionAnswered when this.hasReviewCheckpoint:
-                    this.questionsChangedSinceLastRejection.Add(
-                        Identity.Create(questionAnswered.QuestionId, questionAnswered.RosterVector));
-                    break;
-                case AnswerRemoved answerRemoved when this.hasReviewCheckpoint:
-                    this.questionsChangedSinceLastRejection.Remove(
-                        Identity.Create(answerRemoved.QuestionId, answerRemoved.RosterVector));
-                    break;
-                case AnswersRemoved answersRemoved when this.hasReviewCheckpoint:
-                    foreach (var identity in answersRemoved.Questions)
-                        this.questionsChangedSinceLastRejection.Remove(identity);
-                    break;
+                switch (payload)
+                {
+                    case InterviewRejected:
+                    case InterviewRejectedByHQ:
+                        this.questionsChangedSinceLastRejection.Clear();
+                        this.lastRejectionEventSequence = this.Version + 1;
+                        break;
+                    case QuestionAnswered questionAnswered:
+                        questionAnswered.LastRejectionEventSequence ??= this.lastRejectionEventSequence;
+                        if (questionAnswered.LastRejectionEventSequence.HasValue &&
+                            questionAnswered.LastRejectionEventSequence == this.lastRejectionEventSequence)
+                        {
+                            this.questionsChangedSinceLastRejection.Add(
+                                Identity.Create(questionAnswered.QuestionId, questionAnswered.RosterVector));
+                        }
+                        break;
+                    case AnswerRemoved answerRemoved when this.lastRejectionEventSequence.HasValue:
+                        this.questionsChangedSinceLastRejection.Remove(
+                            Identity.Create(answerRemoved.QuestionId, answerRemoved.RosterVector));
+                        break;
+                    case AnswersRemoved answersRemoved when this.lastRejectionEventSequence.HasValue:
+                        foreach (var identity in answersRemoved.Questions)
+                            this.questionsChangedSinceLastRejection.Remove(identity);
+                        break;
+                }
             }
         }
 

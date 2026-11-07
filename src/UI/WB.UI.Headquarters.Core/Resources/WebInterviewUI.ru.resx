@@ -610,4 +610,5 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="RealQuestion_Hint" xml:space="preserve">
       <value>Нажмите, чтобы ввести число</value>
   </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>Этот ответ изменён после последнего отклонения.</value></data>
 </root>

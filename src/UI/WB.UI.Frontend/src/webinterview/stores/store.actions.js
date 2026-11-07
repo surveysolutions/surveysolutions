@@ -191,7 +191,7 @@ export default {
     },
 
     refreshReviewSearch: debounce(({ dispatch }) => {
-        dispatch('fetchSearchResults')
+        dispatch('refreshSearchResults')
     }, 200),
 
     refreshSectionState({ commit, dispatch }) {

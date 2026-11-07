@@ -618,4 +618,5 @@ Asegúrese de que toda la información sea correcta.</value>
   <data name="RealQuestion_Hint" xml:space="preserve">
       <value>Toque para introducir un número</value>
   </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>Esta respuesta cambió desde el último rechazo.</value></data>
 </root>

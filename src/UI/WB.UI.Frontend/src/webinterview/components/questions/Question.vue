@@ -3,6 +3,8 @@
         v-if="isVisible"
         :class="questionClass"
         :id="hash">
+        <span class="sr-only"
+            v-if="question.isChangedSinceReject">{{ $t('WebInterviewUI.AnswerChangedSinceLastRejection') }}</span>
         <button class="section-blocker"
             disabled="disabled"
             v-if="isFetchInProgress"></button>

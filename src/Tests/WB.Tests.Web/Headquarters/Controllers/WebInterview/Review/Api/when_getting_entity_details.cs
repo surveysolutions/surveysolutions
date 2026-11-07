@@ -191,6 +191,51 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         }
 
         [Test]
+        public void should_not_mark_pending_offline_answers_after_a_later_rejection()
+        {
+            var t0 = DateTimeOffset.UtcNow.AddHours(-3);
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0, "before");
+            interview.Complete(interviewerId, "", t0.AddMinutes(1), null);
+            interview.Reject(supervisorId, "first reject", t0.AddMinutes(2));
+            interview.AnswerTextQuestion(interviewerId, commentedQuestionId, RosterVector.Empty, t0, "offline answer");
+
+            var history = interview.GetUnCommittedChanges().Select(e => new CommittedEvent(
+                Guid.Empty, null, e.EventIdentifier, e.EventSourceId, e.EventSequence, e.EventTimeStamp, null, e.Payload)).ToArray();
+            var pendingAnswer = history.Last();
+            var laterRejection = Create.Event.InterviewRejected(
+                supervisorId,
+                "rejected on another device",
+                t0.AddMinutes(3));
+            history = history
+                .Take(history.Length - 1)
+                .Append(new CommittedEvent(
+                    Guid.Empty,
+                    null,
+                    Guid.NewGuid(),
+                    interview.Id,
+                    pendingAnswer.EventSequence,
+                    DateTime.UtcNow,
+                    null,
+                    laterRejection))
+                .Append(new CommittedEvent(
+                    pendingAnswer.CommitId,
+                    pendingAnswer.Origin,
+                    pendingAnswer.EventIdentifier,
+                    pendingAnswer.EventSourceId,
+                    pendingAnswer.EventSequence + 1,
+                    pendingAnswer.EventTimeStamp,
+                    null,
+                    pendingAnswer.Payload))
+                .ToArray();
+
+            var replayedInterview = Create.AggregateRoot.StatefulInterview(questionnaire: document, shouldBeInitialized: false);
+            replayedInterview.InitializeFromHistory(interview.Id, history);
+
+            Assert.That(replayedInterview.IsQuestionChangedSinceLastRejection(
+                Identity.Create(commentedQuestionId, RosterVector.Empty)), Is.False);
+        }
+
+        [Test]
         public void should_preserve_changed_answers_when_replaying_incremental_history()
         {
             var t0 = DateTimeOffset.UtcNow.AddHours(-3);

@@ -620,4 +620,5 @@ Contact support for assistance.</value>
   <data name="RealQuestion_Hint" xml:space="preserve">
       <value>Tap to enter number</value>
   </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>This answer changed since the last rejection.</value></data>
 </root>

@@ -550,4 +550,5 @@
     <data name="RealQuestion_Hint" xml:space="preserve">
         <value>ប៉ះដើម្បីបញ្ចូលលេខ</value>
     </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>ចម្លើយនេះបានផ្លាស់ប្តូរចាប់តាំងពីការបដិសេធចុងក្រោយ។</value></data>
 </root>

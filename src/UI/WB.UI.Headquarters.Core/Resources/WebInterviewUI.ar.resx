@@ -608,4 +608,5 @@
   <data name="RealQuestion_Hint" xml:space="preserve">
       <value>اضغط لإدخال رقم</value>
   </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>تغيّرت هذه الإجابة منذ آخر رفض.</value></data>
 </root>
