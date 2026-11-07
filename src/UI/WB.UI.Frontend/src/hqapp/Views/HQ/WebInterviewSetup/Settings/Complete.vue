@@ -10,15 +10,15 @@
                         <div class="form-group" :class="{ 'has-error': errors.completeScreenText }">
                             <div class="field"
                                 :class="{ 'answered': webInterviewPageMessages['completeScreenText'].text }">
-                                <Field v-slot="{ field }"
-                                    v-model="webInterviewPageMessages['completeScreenText'].text"
+                                <Field v-slot="{ handleChange }"
+                                    v-model="completeScreenTextMarkdown"
                                     name="completeScreenText"
                                     rules="max:2000">
                                     <md-editor
                                         ref="completeScreenText"
-                                        v-bind="field"
+                                        :model-value="webInterviewPageMessages['completeScreenText'].text"
+                                        @update:model-value="updateCompleteScreenText($event, handleChange)"
                                         data-vv-name="completeScreenText"
-                                        v-model="webInterviewPageMessages['completeScreenText'].text"
                                         :aria-label="$t('WebInterviewSettings.CompleteScreenText')">
                                     </md-editor>
                                 </Field>
@@ -123,6 +123,7 @@
 <script>
 import settings from './settingsMixin'
 import { Form, Field } from 'vee-validate'
+import { escape, unescape } from 'lodash-es'
 
 export default {
     components: {
@@ -130,6 +131,21 @@ export default {
         Field,
     },
     mixins: [settings],
+    computed: {
+        completeScreenTextMarkdown: {
+            get() {
+                return unescape(this.webInterviewPageMessages['completeScreenText'].text)
+            },
+            set(value) {
+                this.webInterviewPageMessages['completeScreenText'].text = escape(value)
+            },
+        },
+    },
+    methods: {
+        updateCompleteScreenText(value, handleChange) {
+            handleChange(unescape(value))
+        },
+    },
     mounted() {
         this.$refs.completePage.resetForm({ values: this.$refs.completePage.values })
     },

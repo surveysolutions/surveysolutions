@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -15,6 +16,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     public class WebInterviewSettingsApiController : ControllerBase
     {
         private const int CompleteScreenTextMaxLength = 2000;
+        private const int CompleteScreenTextMaxStoredLength = CompleteScreenTextMaxLength * 5;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
@@ -133,7 +135,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         private static bool IsCompleteScreenTextTooLong(WebInterviewUserMessages type, string text) =>
             type == WebInterviewUserMessages.CompleteScreenText &&
-            text is { Length: > CompleteScreenTextMaxLength };
+            (text is { Length: > CompleteScreenTextMaxStoredLength } ||
+             text is not null && WebUtility.HtmlDecode(text).Length > CompleteScreenTextMaxLength);
 
         public class UpdateAdditionalSettingsModel
         {
