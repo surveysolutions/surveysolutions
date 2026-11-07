@@ -498,7 +498,17 @@ namespace WB.UI.Designer.Controllers
             var anonymousQuestionnaire = await this.GetAnonymousQuestionnaireAsync(id);
 
             if (anonymousQuestionnaire == null)
-                return NotFound();
+            {
+                if (isActive)
+                    return NotFound();
+
+                return Json(new
+                {
+                    AnonymousQuestionnaireId = (Guid?)null,
+                    IsActive = false,
+                    GeneratedAtUtc = (DateTime?)null,
+                });
+            }
 
             if (isActive)
                 this.postCommitActions.Enqueue(
@@ -506,7 +516,7 @@ namespace WB.UI.Designer.Controllers
             
             return Json(new
             {
-                AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
+                AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId,
                 IsActive = isActive,
                 GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
             });

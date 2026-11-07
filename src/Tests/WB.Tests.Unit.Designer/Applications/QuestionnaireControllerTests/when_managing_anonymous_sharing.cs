@@ -82,6 +82,34 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         }
 
         [Test]
+        public async Task when_disabling_never_shared_questionnaire_should_return_disabled_settings()
+        {
+            var commandService = new Mock<ICommandService>();
+            var postCommitActions = new Mock<IPostCommitActions>();
+            var dbContext = Create.InMemoryDbContext();
+            var controller = CreateController(
+                commandService.Object,
+                dbContext,
+                postCommitActions: postCommitActions.Object);
+
+            var result = await controller.UpdateAnonymousQuestionnaireSettings(
+                QuestionnaireId,
+                new QuestionnaireController.UpdateAnonymousQuestionnaireSettingsModel { IsActive = false });
+
+            var jsonResult = result.Should().BeOfType<JsonResult>().Subject;
+            jsonResult.Value.Should().BeEquivalentTo(new
+            {
+                AnonymousQuestionnaireId = (Guid?)null,
+                IsActive = false,
+                GeneratedAtUtc = (DateTime?)null
+            });
+            commandService.Verify(x => x.Execute(
+                It.Is<DisableAnonymousSharing>(c => c.QuestionnaireId == QuestionnaireId),
+                It.IsAny<string>()), Times.Once);
+            postCommitActions.Verify(x => x.Enqueue(It.IsAny<Func<Task>>()), Times.Never);
+        }
+
+        [Test]
         public async Task when_regenerating_link_should_execute_regenerate_command_with_admin_flag()
         {
             var commandService = new Mock<ICommandService>();

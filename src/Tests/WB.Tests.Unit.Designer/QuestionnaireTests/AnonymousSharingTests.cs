@@ -42,6 +42,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         }
 
         [Test]
+        public void should_not_allow_administrator_to_enable_anonymous_sharing_for_deleted_questionnaire()
+        {
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
+            questionnaire.QuestionnaireDocument.IsDeleted = true;
+
+            var exception = Assert.Throws<QuestionnaireException>(() => questionnaire.EnableAnonymousSharing(
+                new EnableAnonymousSharing(questionnaire.Id, Guid.NewGuid(), isResponsibleAdmin: true)));
+
+            exception.ErrorType.Should().Be(DomainExceptionType.QuestionnaireIsDeleted);
+        }
+
+        [Test]
         public void should_not_allow_person_without_access_to_manage_anonymous_sharing()
         {
             var ownerId = Guid.NewGuid();
@@ -65,4 +77,3 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         }
     }
 }
-

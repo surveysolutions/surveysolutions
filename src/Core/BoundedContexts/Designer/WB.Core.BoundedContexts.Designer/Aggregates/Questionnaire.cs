@@ -1732,6 +1732,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowIfViewerCannotManageAnonymousSharing(QuestionnaireCommandBase command)
         {
+            if (this.innerDocument.IsDeleted)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.QuestionnaireIsDeleted, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+            }
+
             if (!command.IsResponsibleAdmin)
                 this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         }

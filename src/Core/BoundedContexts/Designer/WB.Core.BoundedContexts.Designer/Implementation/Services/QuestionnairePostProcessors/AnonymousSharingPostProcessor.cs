@@ -58,10 +58,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, RegenerateAnonymousSharingLink command)
         {
             var anonymousQuestionnaire = this.Find(command.QuestionnaireId);
+            var wasActive = anonymousQuestionnaire?.IsActive == true;
             if (anonymousQuestionnaire != null)
                 this.dbContext.AnonymousQuestionnaires.Remove(anonymousQuestionnaire);
 
             this.Create(command.QuestionnaireId);
+            if (!wasActive)
+                this.AddHistoryItem(aggregate, command, QuestionnaireActionType.AnonymousSharingEnabled);
             this.dbContext.SaveChanges();
         }
 

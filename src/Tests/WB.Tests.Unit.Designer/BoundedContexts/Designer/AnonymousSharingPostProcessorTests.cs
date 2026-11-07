@@ -122,6 +122,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(record.AnonymousQuestionnaireId, Is.Not.EqualTo(oldAnonymousId));
         }
 
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(null, true)]
+        public void When_regenerating_link_Then_disabled_state_should_be_recorded_as_enabled_history(
+            bool? wasActive,
+            bool shouldRecordEnabledHistory)
+        {
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.Users.Add(new DesignerIdentityUser { Id = ResponsibleId, UserName = "responsible" });
+            if (wasActive.HasValue)
+                dbContext.AnonymousQuestionnaires.Add(CreateRecord(Guid.NewGuid(), wasActive.Value));
+            dbContext.SaveChanges();
+            var postProcessor = CreatePostProcessor(dbContext);
+
+            postProcessor.Process(
+                CreateQuestionnaire(),
+                new RegenerateAnonymousSharingLink(QuestionnaireId, ResponsibleId, false));
+
+            Assert.That(
+                dbContext.QuestionnaireChangeRecords.Any(
+                    record => record.ActionType == QuestionnaireActionType.AnonymousSharingEnabled),
+                Is.EqualTo(shouldRecordEnabledHistory));
+        }
+
         [TestCase(true, QuestionnaireActionType.AnonymousSharingEnabled)]
         [TestCase(false, QuestionnaireActionType.AnonymousSharingDisabled)]
         public void When_sharing_state_changes_Then_matching_history_item_should_be_added(
