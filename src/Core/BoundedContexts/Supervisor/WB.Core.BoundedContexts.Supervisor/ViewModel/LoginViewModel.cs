@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Supervisor.Views;
+﻿using System;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -37,9 +38,27 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public override string GetUserLastWorkspace()
             => this.supervisorsPlainStorage.FirstOrDefault().Workspace;
 
+        public override string GetUserPasswordHash()
+        {
+            var userName = this.UserName;
+            if (string.IsNullOrWhiteSpace(userName))
+                return null;
+
+            var normalizedUserName = userName.ToLower();
+            var supervisor = this.supervisorsPlainStorage.FirstOrDefault(x =>
+                x.Name.ToLower() == normalizedUserName);
+
+            return supervisor?.PasswordHash;
+        }
+
         public override void UpdateLocalUser(string userName, string token, string passwordHash)
         {
-            var localSupervisor = this.supervisorsPlainStorage.FirstOrDefault(x => x.Name.ToLower() == userName.ToLower());
+            var normalizedUserName = userName.ToLower();
+            var localSupervisor = this.supervisorsPlainStorage.FirstOrDefault(x =>
+                x.Name.ToLower() == normalizedUserName);
+            if (localSupervisor == null)
+                throw new InvalidOperationException($"Supervisor with {userName} not found");
+
             localSupervisor.Token = token;
             localSupervisor.PasswordHash = passwordHash;
 

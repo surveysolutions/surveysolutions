@@ -100,6 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         public IMvxAsyncCommand SignInCommand => new MvxAsyncCommand(this.SignIn);
+        public IMvxAsyncCommand SignInWithHashCommand => new MvxAsyncCommand(this.SignInWithHash);
         public IMvxAsyncCommand OnlineSignInCommand => new MvxAsyncCommand(this.RemoteSignInAsync);
         public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => 
             new MvxAsyncCommand(() => this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
@@ -107,6 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public abstract bool HasUser();
         public abstract string GetUserName();
         public abstract string GetUserLastWorkspace();
+        public abstract string GetUserPasswordHash();
         public abstract void UpdateLocalUser(string userName, string token, string passwordHash);
 
         public override async Task Initialize()
@@ -148,6 +150,42 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 auditLogService.WriteApplicationLevelRecord(new LoginAuditLogEntity(userName));
             }
 
+            this.Password = string.Empty;
+            await this.viewModelNavigationService.NavigateToDashboardAsync();
+            await this.viewModelNavigationService.Close(this);
+        }
+
+        private async Task SignInWithHash()
+        {
+            var userName = this.UserName;
+            this.logger.Trace($"Logging in {userName} with biometric authentication");
+
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                this.IsUserValid = false;
+                this.PasswordError = EnumeratorUIResources.Unauthorized;
+                return;
+            }
+
+            var passwordHash = this.GetUserPasswordHash();
+
+            if (string.IsNullOrWhiteSpace(passwordHash))
+            {
+                this.IsUserValid = false;
+                this.PasswordError = EnumeratorUIResources.Unauthorized;
+                return;
+            }
+
+            this.IsUserValid = this.Principal.SignInWithHash(userName, passwordHash, true);
+
+            if (!this.IsUserValid)
+            {
+                this.PasswordError = EnumeratorUIResources.Login_WrongPassword;
+                this.IncreaseCountOfFailedLoginAttempts();
+                return;
+            }
+
+            auditLogService.WriteApplicationLevelRecord(new LoginAuditLogEntity(userName));
             this.Password = string.Empty;
             await this.viewModelNavigationService.NavigateToDashboardAsync();
             await this.viewModelNavigationService.Close(this);
