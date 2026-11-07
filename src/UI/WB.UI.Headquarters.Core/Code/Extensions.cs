@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
-using Microsoft.Security.Application;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using UAParser;
@@ -68,7 +68,7 @@ namespace WB.UI.Headquarters.Code
 
         public static IHtmlContent ToSafeJavascriptMessage(this IHtmlHelper page, string sourceMessage)
         {
-            var html = Encoder.JavaScriptEncode(sourceMessage, false);
+            var html = JavaScriptEncoder.Default.Encode(sourceMessage ?? string.Empty);
 
             return page.Raw(html);
         }

@@ -14,7 +14,6 @@
   </PropertyGroup>  
   <ItemGroup>
     <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.14.0" />
-    <PackageReference Include="AntiXSS.NetStandard" Version="0.2.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.16" />
     <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.1.16" />
