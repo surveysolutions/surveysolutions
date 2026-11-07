@@ -1060,11 +1060,19 @@ export default {
                     })
                     if (signal.aborted) return
 
-                    status = (await this.$hq.WebInterviewSettings.sendRemindersNowStatus(
-                        this.questionnaireId,
-                        requestId,
-                        signal
-                    )).data
+                    try {
+                        status = (await this.$hq.WebInterviewSettings.sendRemindersNowStatus(
+                            this.questionnaireId,
+                            requestId,
+                            signal
+                        )).data
+                    } catch (error) {
+                        if (signal.aborted) return
+                        const statusCode = error.response?.status
+                        if (error.response && statusCode < 500 && statusCode !== 408 && statusCode !== 429) {
+                            throw error
+                        }
+                    }
                     if (signal.aborted) return
                 }
 
@@ -1075,9 +1083,14 @@ export default {
                         toastr.success(this.$t('WebInterviewSettings.NoErrors'))
                     }
                 } else if (status.state === 4 || status.state === 'PartiallyFailed') {
-                    toastr.warning(this.$t('WebInterviewSettings.TotalWithErrors', {
-                        withErrorsCount: status.failedCount,
-                    }))
+                    if (status.failedCount > 0) {
+                        toastr.warning(this.$t('WebInterviewSettings.TotalWithErrors', {
+                            withErrorsCount: status.failedCount,
+                        }))
+                    } else {
+                        toastr.warning(status.error || this.$t('WebInterviewSettings.SendingFailed'),
+                            undefined, { escapeHtml: true })
+                    }
                 } else {
                     toastr.error(status.error || this.$t('WebInterviewSettings.SendingFailed'),
                         undefined, { escapeHtml: true })

@@ -51,8 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         }
 
         public async Task<ReminderEmailSendResult> SendRemindersAsync(QuestionnaireIdentity questionnaireIdentity,
-            string questionnaireTitle, EmailTextTemplateType reminderType, int thresholdDays,
-            DateTime? requestStartedAtUtc = null, Guid? requestId = null)
+            string questionnaireTitle, EmailTextTemplateType reminderType, int thresholdDays, Guid? requestId = null)
         {
             if (!await ReminderEmailSendLock.TryAcquireDeliveryAsync(unitOfWork, questionnaireIdentity, reminderType)
                     .ConfigureAwait(false))
@@ -63,6 +62,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     ?? new ReminderEmailDeliveryOutcomes()
                 : new ReminderEmailDeliveryOutcomes();
             var result = outcomes.GetResult();
+            if (requestId.HasValue && outcomes.InvitationIds != null)
+            {
+                foreach (var invitationId in outcomes.InvitationIds)
+                {
+                    var checkpoint = deliveryCheckpoints.GetByIdUncached(
+                        ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId.Value, invitationId));
+                    if (checkpoint?.AttemptInProgress == true &&
+                        await MarkDeliveryUnconfirmedAsync(requestId.Value, invitationId).ConfigureAwait(false))
+                        result.UnconfirmedCount++;
+                }
+            }
+
             var config = webInterviewConfigs.GetByIdUncached(questionnaireIdentity.ToString());
             if (config == null || !config.Started)
                 return result;
@@ -91,16 +102,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var emailTemplate = config.GetEmailTemplate(reminderType);
             foreach (var invitationId in invitationIds)
             {
-                // Request checkpoints, unlike reminder timestamps, also retain failed deliveries and recipients
-                // that no longer match the live eligibility query after a restart.
+                // Request checkpoints retain deliveries and recipients that no longer match the live query after a restart.
                 if (requestId.HasValue && deliveryCheckpoints.GetByIdUncached(
                         ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId.Value, invitationId)) != null)
                     continue;
 
                 var invitation = invitationService.GetInvitation(invitationId);
-                if (!requestId.HasValue && requestStartedAtUtc.HasValue &&
-                    invitation.LastReminderSentOnUtc >= requestStartedAtUtc.Value)
-                    continue;
                 if (string.IsNullOrWhiteSpace(invitation.Assignment.Email))
                     continue;
 
@@ -141,11 +148,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 Link = link
             };
             var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams).ConfigureAwait(false);
+
+            if (requestId.HasValue)
+            {
+                await inScopeExecutor.ExecuteAsync(locator =>
+                {
+                    locator.GetInstance<IPlainKeyValueStorage<EmailParameters>>().Store(emailParams, emailParamsId);
+                    var outcomesStorage = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>();
+                    var outcomesKey = ReminderEmailDeliveryOutcomes.GetStorageKey(requestId.Value);
+                    var outcomes = outcomesStorage.GetByIdUncached(outcomesKey) ?? new ReminderEmailDeliveryOutcomes();
+                    outcomes.InvitationIds ??= new List<int>();
+                    if (!outcomes.InvitationIds.Contains(invitation.Id))
+                        outcomes.InvitationIds.Add(invitation.Id);
+                    outcomesStorage.Store(outcomes, outcomesKey);
+                    locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>()
+                        .Store(new ReminderEmailDeliveryCheckpoint { AttemptInProgress = true },
+                            ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId.Value, invitation.Id));
+                    return Task.CompletedTask;
+                }).ConfigureAwait(false);
+            }
+
             var sent = false;
             await inScopeExecutor.ExecuteAsync(async locator =>
             {
                 var localInvitations = locator.GetInstance<IInvitationService>();
-                locator.GetInstance<IPlainKeyValueStorage<EmailParameters>>().Store(emailParams, emailParamsId);
+                if (!requestId.HasValue)
+                    locator.GetInstance<IPlainKeyValueStorage<EmailParameters>>().Store(emailParams, emailParamsId);
 
                 string emailId = null;
                 try
@@ -188,6 +216,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 }
             }).ConfigureAwait(false);
             return sent;
+        }
+
+        private async Task<bool> MarkDeliveryUnconfirmedAsync(Guid requestId, int invitationId)
+        {
+            return await inScopeExecutor.ExecuteAsync(locator =>
+            {
+                var checkpointStorage = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>();
+                var checkpointKey = ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId, invitationId);
+                var checkpoint = checkpointStorage.GetByIdUncached(checkpointKey);
+                if (checkpoint?.AttemptInProgress != true)
+                    return Task.FromResult(false);
+
+                checkpoint.AttemptInProgress = false;
+                checkpoint.Unconfirmed = true;
+                checkpointStorage.Store(checkpoint, checkpointKey);
+
+                var outcomesStorage = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>();
+                var outcomesKey = ReminderEmailDeliveryOutcomes.GetStorageKey(requestId);
+                var outcomes = outcomesStorage.GetByIdUncached(outcomesKey) ?? new ReminderEmailDeliveryOutcomes();
+                outcomes.InvitationIds ??= new List<int>();
+                outcomes.UnconfirmedCount++;
+                outcomesStorage.Store(outcomes, outcomesKey);
+                return Task.FromResult(true);
+            }).ConfigureAwait(false);
         }
     }
 }

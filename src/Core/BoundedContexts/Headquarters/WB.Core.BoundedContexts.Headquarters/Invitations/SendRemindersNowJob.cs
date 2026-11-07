@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Quartz;
@@ -38,6 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public string Error { get; set; }
         public int SentCount { get; set; }
         public int FailedCount { get; set; }
+        public int UnconfirmedCount { get; set; }
         public string QuestionnaireTitle { get; set; }
         public DateTime? StartedAtUtc { get; set; }
     }
@@ -55,19 +57,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     {
         public int SentCount { get; set; }
         public int FailedCount { get; set; }
+        public int UnconfirmedCount { get; set; }
+        public List<int> InvitationIds { get; set; } = new List<int>();
 
         public static string GetStorageKey(Guid requestId) => $"ReminderDeliveryOutcomes-{requestId:N}";
 
         public ReminderEmailSendResult GetResult() => new ReminderEmailSendResult
         {
             SentCount = SentCount,
-            FailedCount = FailedCount
+            FailedCount = FailedCount,
+            UnconfirmedCount = UnconfirmedCount
         };
     }
 
     public class ReminderEmailDeliveryCheckpoint : AppSetting
     {
         public bool Sent { get; set; }
+        public bool AttemptInProgress { get; set; }
+        public bool Unconfirmed { get; set; }
 
         public static string GetStorageKey(Guid requestId, int invitationId) =>
             $"ReminderDeliveryCheckpoint-{requestId:N}-{invitationId}";
@@ -106,7 +113,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             if (previousStatus?.State is SendRemindersNowState.Completed
                 or SendRemindersNowState.Failed
                 or SendRemindersNowState.PartiallyFailed)
+            {
+                await CleanupDeliveryRecordsAsync(request.RequestId).ConfigureAwait(false);
                 return;
+            }
 
             var status = previousStatus ?? new SendRemindersNowStatus
             {
@@ -123,16 +133,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             {
                 var result = await rootScopeExecutor.ExecuteAsync(locator =>
                     locator.GetInstance<IReminderEmailSender>().SendRemindersAsync(request.QuestionnaireIdentity,
-                        request.QuestionnaireTitle, request.Type, 0, status.StartedAtUtc, request.RequestId)).ConfigureAwait(false);
+                        request.QuestionnaireTitle, request.Type, 0, request.RequestId)).ConfigureAwait(false);
                 result = await GetDeliveryResultAsync(request.RequestId, result).ConfigureAwait(false);
                 status.SentCount = result.SentCount;
                 status.FailedCount = result.FailedCount;
-                status.State = result.FailedCount == 0
+                status.UnconfirmedCount = result.UnconfirmedCount;
+                status.State = result.FailedCount == 0 && result.UnconfirmedCount == 0
                     ? SendRemindersNowState.Completed
                     : result.SentCount == 0
                         ? SendRemindersNowState.Failed
                         : SendRemindersNowState.PartiallyFailed;
-                if (result.FailedCount > 0)
+                if (result.UnconfirmedCount > 0)
+                    status.Error = "Delivery of some reminder emails could not be confirmed; they were not retried.";
+                else if (result.FailedCount > 0)
                     status.Error = result.SentCount == 0
                         ? "The reminder emails could not be sent."
                         : "Some reminder emails could not be sent.";
@@ -143,11 +156,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     .ConfigureAwait(false);
                 status.SentCount = result.SentCount;
                 status.FailedCount = result.FailedCount;
+                status.UnconfirmedCount = result.UnconfirmedCount;
                 status.State = result.SentCount == 0
                     ? SendRemindersNowState.Failed
                     : SendRemindersNowState.PartiallyFailed;
                 status.Error = exception is ReminderDeliveryInProgressException
                     ? exception.Message
+                    : result.UnconfirmedCount > 0
+                        ? "Delivery of some reminder emails could not be confirmed; they were not retried."
                     : result.SentCount == 0
                         ? "The reminder emails could not be sent."
                         : "Some reminder emails could not be sent.";
@@ -156,21 +172,64 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }
 
             await StoreStatusAsync(status, request.StorageKey).ConfigureAwait(false);
+            await CleanupDeliveryRecordsAsync(request.RequestId).ConfigureAwait(false);
         }
 
         private async Task<ReminderEmailSendResult> GetDeliveryResultAsync(Guid requestId,
             ReminderEmailSendResult currentResult)
         {
-            var outcomes = await rootScopeExecutor.ExecuteAsync(locator => Task.FromResult(
-                locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>()
-                    .GetByIdUncached(ReminderEmailDeliveryOutcomes.GetStorageKey(requestId)))).ConfigureAwait(false);
-            if (outcomes == null)
-                return currentResult;
+            return await rootScopeExecutor.ExecuteAsync(locator =>
+            {
+                var outcomesStorage = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>();
+                var outcomesKey = ReminderEmailDeliveryOutcomes.GetStorageKey(requestId);
+                var outcomes = outcomesStorage.GetByIdUncached(outcomesKey);
+                if (outcomes == null)
+                    return Task.FromResult(currentResult);
 
-            var result = outcomes.GetResult();
-            result.SentCount = Math.Max(result.SentCount, currentResult.SentCount);
-            result.FailedCount = Math.Max(result.FailedCount, currentResult.FailedCount);
-            return result;
+                if (outcomes.InvitationIds is { Count: > 0 })
+                {
+                    var checkpoints = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>();
+                    foreach (var invitationId in outcomes.InvitationIds)
+                    {
+                        var checkpointKey = ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId, invitationId);
+                        var checkpoint = checkpoints.GetByIdUncached(checkpointKey);
+                        if (checkpoint?.AttemptInProgress != true)
+                            continue;
+
+                        checkpoint.AttemptInProgress = false;
+                        checkpoint.Unconfirmed = true;
+                        checkpoints.Store(checkpoint, checkpointKey);
+                        outcomes.UnconfirmedCount++;
+                    }
+
+                    outcomesStorage.Store(outcomes, outcomesKey);
+                }
+
+                var result = outcomes.GetResult();
+                result.SentCount = Math.Max(result.SentCount, currentResult.SentCount);
+                result.FailedCount = Math.Max(result.FailedCount, currentResult.FailedCount);
+                result.UnconfirmedCount = Math.Max(result.UnconfirmedCount, currentResult.UnconfirmedCount);
+                return Task.FromResult(result);
+            }).ConfigureAwait(false);
+        }
+
+        private async Task CleanupDeliveryRecordsAsync(Guid requestId)
+        {
+            await rootScopeExecutor.ExecuteAsync(locator =>
+            {
+                var outcomesStorage = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>();
+                var outcomesKey = ReminderEmailDeliveryOutcomes.GetStorageKey(requestId);
+                var outcomes = outcomesStorage.GetByIdUncached(outcomesKey);
+                if (outcomes?.InvitationIds is { Count: > 0 })
+                {
+                    var checkpoints = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>();
+                    foreach (var invitationId in outcomes.InvitationIds)
+                        checkpoints.Remove(ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId, invitationId));
+                }
+
+                outcomesStorage.Remove(outcomesKey);
+                return Task.FromResult(true);
+            }).ConfigureAwait(false);
         }
 
         private async Task<SendRemindersNowStatus> GetStatusAsync(Guid requestId) =>

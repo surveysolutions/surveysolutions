@@ -238,7 +238,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
                 or EmailTextTemplateType.RejectEmail))
                 return BadRequest(new { error = "Only reminder and rejected-interview templates can be sent now." });
 
-            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            var config = this.webInterviewConfigProvider.GetUncached(questionnaireIdentity);
             if (config == null || !config.Started)
                 return BadRequest(new { error = "Web interview is not started." });
 

@@ -14,7 +14,16 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 
         public WebInterviewConfig Get(QuestionnaireIdentity identity)
         {
-            var webInterviewConfig = this.configs.GetById(identity.ToString());
+            return Get(identity, this.configs.GetById(identity.ToString()));
+        }
+
+        public WebInterviewConfig GetUncached(QuestionnaireIdentity identity)
+        {
+            return Get(identity, this.configs.GetByIdUncached(identity.ToString()));
+        }
+
+        private static WebInterviewConfig Get(QuestionnaireIdentity identity, WebInterviewConfig webInterviewConfig)
+        {
             return webInterviewConfig ?? new WebInterviewConfig
             {
                 QuestionnaireId = identity,

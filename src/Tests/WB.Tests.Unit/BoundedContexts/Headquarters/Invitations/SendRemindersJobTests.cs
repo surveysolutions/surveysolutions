@@ -81,19 +81,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
         }
 
         [Test]
-        public async Task when_another_request_sent_recently_then_new_request_still_sends()
-        {
-            var delivery = new DeliveryContext();
-            delivery.Invitation.ReminderWasSent("another-request");
-            delivery.SetRecipients(EmailTextTemplateType.Reminder_NoResponse, 1);
-
-            var result = await delivery.Sender.SendRemindersAsync(delivery.Identity, "Survey",
-                EmailTextTemplateType.Reminder_NoResponse, 0, DateTime.UtcNow.AddMinutes(-1), Guid.NewGuid());
-
-            Assert.That(result.SentCount, Is.EqualTo(1));
-        }
-
-        [Test]
         public async Task when_current_web_configuration_is_stopped_then_cached_started_configuration_is_not_used()
         {
             var delivery = new DeliveryContext();
@@ -112,7 +99,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 
         [TestCase(EmailTextTemplateType.Reminder_NoResponse)]
         [TestCase(EmailTextTemplateType.RejectEmail)]
-        public async Task when_sending_then_parameters_and_delivery_checkpoint_share_recipient_scope(
+        public async Task when_sending_now_then_delivery_attempt_is_committed_before_dispatch(
             EmailTextTemplateType type)
         {
             var delivery = new DeliveryContext();
@@ -126,16 +113,30 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>())
                 .Returns(delivery.Checkpoints);
             var executor = new Mock<IInScopeExecutor>();
+            var scopeCount = 0;
             executor.Setup(x => x.ExecuteAsync(It.IsAny<Func<IServiceLocator, Task>>(), It.IsAny<string>()))
                 .Returns(async (Func<IServiceLocator, Task> action, string _) =>
                 {
-                    Assert.That(scopedParameters.Storage, Is.Empty);
+                    scopeCount++;
                     await action(locator.Object);
                     Assert.That(scopedParameters.Storage.Count, Is.EqualTo(1));
-                    Assert.That(delivery.Outcomes.GetById(ReminderEmailDeliveryOutcomes.GetStorageKey(requestId))
-                        .SentCount, Is.EqualTo(1));
-                    Assert.That(delivery.Checkpoints.GetById(
-                        ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId, 1)).Sent, Is.True);
+                    var checkpoint = delivery.Checkpoints.GetById(
+                        ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId, 1));
+                    if (scopeCount == 1)
+                    {
+                        Assert.That(delivery.Outcomes.GetById(ReminderEmailDeliveryOutcomes.GetStorageKey(requestId))
+                            .InvitationIds, Does.Contain(1));
+                        Assert.That(checkpoint.AttemptInProgress, Is.True);
+                        delivery.Email.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(),
+                            It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+                    }
+                    else
+                    {
+                        Assert.That(delivery.Outcomes.GetById(ReminderEmailDeliveryOutcomes.GetStorageKey(requestId))
+                            .SentCount, Is.EqualTo(1));
+                        Assert.That(checkpoint.Sent, Is.True);
+                        Assert.That(checkpoint.AttemptInProgress, Is.False);
+                    }
                 });
             var rootParameters = new Mock<IPlainKeyValueStorage<EmailParameters>>();
             var sender = delivery.CreateSender(executor.Object, rootParameters.Object);
@@ -143,11 +144,40 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 
             await sender.SendRemindersAsync(delivery.Identity, "Survey", type, 0, requestId: requestId);
 
+            Assert.That(scopeCount, Is.EqualTo(2));
             rootParameters.Verify(x => x.Store(It.IsAny<EmailParameters>(), It.IsAny<string>()), Times.Never);
             if (type == EmailTextTemplateType.RejectEmail)
                 delivery.Invitations.Verify(x => x.MarkRejectedInterviewReminderSent(1, "email-id"), Times.Once);
             else
                 delivery.Invitations.Verify(x => x.MarkInvitationAsReminded(1, "email-id"), Times.Once);
+        }
+
+        [Test]
+        public async Task when_request_is_interrupted_after_provider_accepts_then_recipient_is_not_resent()
+        {
+            var delivery = new DeliveryContext();
+            var requestId = Guid.NewGuid();
+            delivery.SetRecipients(EmailTextTemplateType.Reminder_NoResponse, 1);
+            delivery.Invitations.Setup(x => x.MarkInvitationAsReminded(1, "email-id"))
+                .Throws(new InvalidOperationException("Delivery state could not be committed."));
+
+            var sender = delivery.Sender;
+            Assert.ThrowsAsync<InvalidOperationException>(() => sender.SendRemindersAsync(delivery.Identity,
+                "Survey", EmailTextTemplateType.Reminder_NoResponse, 0, requestId));
+            delivery.SetRecipients(EmailTextTemplateType.Reminder_NoResponse);
+
+            var recovered = await sender.SendRemindersAsync(delivery.Identity, "Survey",
+                EmailTextTemplateType.Reminder_NoResponse, 0, requestId);
+
+            Assert.That(recovered.SentCount, Is.Zero);
+            Assert.That(recovered.FailedCount, Is.Zero);
+            Assert.That(recovered.UnconfirmedCount, Is.EqualTo(1));
+            Assert.That(delivery.Outcomes.GetById(ReminderEmailDeliveryOutcomes.GetStorageKey(requestId))
+                .UnconfirmedCount, Is.EqualTo(1));
+            Assert.That(delivery.Checkpoints.GetById(
+                ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId, 1)).Unconfirmed, Is.True);
+            delivery.Email.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
         private class DeliveryContext
@@ -299,42 +329,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 Times.Once);
         }
 
-        [Test]
-        public async Task when_recovering_request_then_already_delivered_reminder_is_skipped()
-        {
-            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
-            var invitation = Create.Entity.Invitation(1,
-                Create.Entity.Assignment(email: "respondent@email.com", password: "password"),
-                token: "token");
-            invitation.ReminderWasSent("previous-email-id");
-
-            var invitationService = new Mock<IInvitationService>();
-            invitationService.Setup(x => x.GetNoResponseInvitations(questionnaireIdentity, 0))
-                .Returns(new[] { invitation.Id });
-            invitationService.Setup(x => x.GetInvitation(invitation.Id)).Returns(invitation);
-
-            var emailService = new Mock<IEmailService>();
-            emailService.Setup(x => x.GetSenderInfo()).Returns(Mock.Of<ISenderInformation>());
-            var configProvider = new Mock<IWebInterviewConfigProvider>();
-            configProvider.Setup(x => x.Get(questionnaireIdentity)).Returns(new WebInterviewConfig
-            {
-                Started = true,
-                ReminderAfterDaysIfNoResponse = 1
-            });
-
-            var sender = Create.Service.ReminderEmailSender(
-                invitationService: invitationService.Object,
-                emailService: emailService.Object,
-                webInterviewConfigProvider: configProvider.Object);
-            var requestStartedAtUtc = DateTime.UtcNow.AddSeconds(-1);
-
-            var result = await sender.SendRemindersAsync(questionnaireIdentity, "Web Survey",
-                EmailTextTemplateType.Reminder_NoResponse, 0, requestStartedAtUtc);
-
-            Assert.That(result.SentCount, Is.Zero);
-            emailService.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<List<EmailAttachment>>()), Times.Never);
-        }
     }
 
     [TestOf(typeof(SendRemindersJob))]
@@ -422,6 +416,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 Type = EmailTextTemplateType.Reminder_NoResponse
             };
             var storage = new TestInMemoryKeyValueStorage<SendRemindersNowStatus>();
+            var outcomes = new TestInMemoryKeyValueStorage<ReminderEmailDeliveryOutcomes>();
             storage.Store(new SendRemindersNowStatus
             {
                 RequestId = request.RequestId,
@@ -434,6 +429,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var serviceLocator = new Mock<IServiceLocator>();
             serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>())
                 .Returns(storage);
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>())
+                .Returns(outcomes);
             serviceLocator.Setup(x => x.GetInstance<IUnitOfWork>())
                 .Returns(SendRemindersNowJobTests.CreateExecutionUnitOfWork());
             serviceLocator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(sender.Object);
@@ -740,12 +737,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 Type = EmailTextTemplateType.Reminder_NoResponse
             };
             var statuses = new TestInMemoryKeyValueStorage<SendRemindersNowStatus>();
+            var outcomes = new TestInMemoryKeyValueStorage<ReminderEmailDeliveryOutcomes>();
             var query = new Mock<ISQLQuery>();
             query.SetupSequence(x => x.UniqueResultAsync<bool>(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true).ReturnsAsync(false);
             var locator = new Mock<IServiceLocator>();
             locator.Setup(x => x.GetInstance<IUnitOfWork>()).Returns(CreateExecutionUnitOfWork(query));
             locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>()).Returns(statuses);
+            locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>()).Returns(outcomes);
             var sender = new Mock<IReminderEmailSender>();
             locator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(sender.Object);
             var executor = new Mock<IRootScopeExecutor>();
@@ -769,7 +768,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                     return await action(locator.Object);
                 });
             sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type,
-                    0, It.IsAny<DateTime?>(), request.RequestId))
+                    0, request.RequestId))
                 .Returns(async () =>
                 {
                     if (!afterDelivery)
@@ -790,7 +789,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             Assert.That(statuses.GetById(request.StatusStorageKey).State, Is.EqualTo(SendRemindersNowState.Completed));
             Assert.That(statuses.GetById(request.StatusStorageKey).SentCount, Is.EqualTo(1));
             sender.Verify(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type,
-                0, It.IsAny<DateTime?>(), request.RequestId), Times.Once);
+                0, request.RequestId), Times.Once);
             query.Verify(x => x.SetString("lockKey", $"ReminderExecution-{request.RequestId:N}"), Times.Exactly(2));
         }
 
@@ -814,7 +813,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>()).Returns(outcomes);
             var sender = new Mock<IReminderEmailSender>();
             sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type,
-                    0, It.IsAny<DateTime?>(), request.RequestId))
+                    0, request.RequestId))
                 .Callback(() => outcomes.Store(new ReminderEmailDeliveryOutcomes
                     { SentCount = sent, FailedCount = failed }, ReminderEmailDeliveryOutcomes.GetStorageKey(request.RequestId)))
                 .ThrowsAsync(new InvalidOperationException("Sensitive provider detail"));
@@ -847,7 +846,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 .Returns(new TestInMemoryKeyValueStorage<ReminderEmailDeliveryOutcomes>());
             var sender = new Mock<IReminderEmailSender>();
             sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type,
-                    0, It.IsAny<DateTime?>(), request.RequestId))
+                    0, request.RequestId))
                 .ThrowsAsync(new ReminderDeliveryInProgressException());
             locator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(sender.Object);
             var job = new SendRemindersNowJob(new NoScopeInScopeExecutor(locator.Object),
@@ -860,11 +859,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 Is.EqualTo(new ReminderDeliveryInProgressException().Message));
         }
 
-        [TestCase(2, 0, SendRemindersNowState.Completed)]
-        [TestCase(0, 2, SendRemindersNowState.Failed)]
-        [TestCase(1, 1, SendRemindersNowState.PartiallyFailed)]
+        [TestCase(2, 0, 0, SendRemindersNowState.Completed)]
+        [TestCase(0, 2, 0, SendRemindersNowState.Failed)]
+        [TestCase(1, 1, 0, SendRemindersNowState.PartiallyFailed)]
+        [TestCase(1, 0, 1, SendRemindersNowState.PartiallyFailed)]
         public async Task when_email_delivery_result_is_known_then_status_reflects_it(
-            int sentCount, int failedCount, SendRemindersNowState expectedState)
+            int sentCount, int failedCount, int unconfirmedCount, SendRemindersNowState expectedState)
         {
             var request = new SendRemindersNowRequest
             {
@@ -873,17 +873,40 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 Type = EmailTextTemplateType.Reminder_NoResponse
             };
             var statusStorage = new TestInMemoryKeyValueStorage<SendRemindersNowStatus>();
+            var outcomes = new TestInMemoryKeyValueStorage<ReminderEmailDeliveryOutcomes>();
+            var checkpoints = new TestInMemoryKeyValueStorage<ReminderEmailDeliveryCheckpoint>();
             var serviceLocator = new Mock<IServiceLocator>();
             serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>())
                 .Returns(statusStorage);
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>())
+                .Returns(outcomes);
             serviceLocator.Setup(x => x.GetInstance<IUnitOfWork>()).Returns(CreateExecutionUnitOfWork());
 
             var sender = new Mock<IReminderEmailSender>();
             sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type, 0,
-                    It.IsAny<DateTime?>(), request.RequestId))
-                .ReturnsAsync(new ReminderEmailSendResult { SentCount = sentCount, FailedCount = failedCount });
+                    request.RequestId))
+                .Callback(() =>
+                {
+                    outcomes.Store(new ReminderEmailDeliveryOutcomes
+                    {
+                        SentCount = sentCount,
+                        FailedCount = failedCount,
+                        UnconfirmedCount = unconfirmedCount,
+                        InvitationIds = new List<int> { 1 }
+                    }, ReminderEmailDeliveryOutcomes.GetStorageKey(request.RequestId));
+                    checkpoints.Store(new ReminderEmailDeliveryCheckpoint { Sent = sentCount > 0 },
+                        ReminderEmailDeliveryCheckpoint.GetStorageKey(request.RequestId, 1));
+                })
+                .ReturnsAsync(new ReminderEmailSendResult
+                {
+                    SentCount = sentCount,
+                    FailedCount = failedCount,
+                    UnconfirmedCount = unconfirmedCount
+                });
 
             serviceLocator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(sender.Object);
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>())
+                .Returns(checkpoints);
             var job = new SendRemindersNowJob(new NoScopeInScopeExecutor(serviceLocator.Object),
                 Mock.Of<ILogger<SendRemindersNowJob>>());
 
@@ -893,7 +916,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             Assert.That(status.State, Is.EqualTo(expectedState));
             Assert.That(status.SentCount, Is.EqualTo(sentCount));
             Assert.That(status.FailedCount, Is.EqualTo(failedCount));
+            Assert.That(status.UnconfirmedCount, Is.EqualTo(unconfirmedCount));
             Assert.That(statusStorage.GetById(request.StorageKey).State, Is.EqualTo(expectedState));
+            Assert.That(outcomes.GetById(ReminderEmailDeliveryOutcomes.GetStorageKey(request.RequestId)), Is.Null);
+            Assert.That(checkpoints.GetById(
+                ReminderEmailDeliveryCheckpoint.GetStorageKey(request.RequestId, 1)), Is.Null);
+            Assert.That(statusStorage.GetById(request.StatusStorageKey), Is.Not.Null);
         }
 
         [Test]
@@ -918,7 +946,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 
             var sender = new Mock<IReminderEmailSender>();
             sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type, 0,
-                    It.IsAny<DateTime?>(), request.RequestId))
+                    request.RequestId))
                 .ReturnsAsync(new ReminderEmailSendResult { FailedCount = 1 });
             serviceLocator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(sender.Object);
             var job = new SendRemindersNowJob(new NoScopeInScopeExecutor(serviceLocator.Object),
@@ -930,6 +958,48 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             Assert.That(status.SentCount, Is.EqualTo(1));
             Assert.That(status.FailedCount, Is.EqualTo(1));
             Assert.That(status.State, Is.EqualTo(SendRemindersNowState.PartiallyFailed));
+        }
+
+        [Test]
+        public async Task when_job_fails_with_an_in_flight_delivery_then_status_reports_unconfirmed_delivery()
+        {
+            var request = new SendRemindersNowRequest
+            {
+                RequestId = Guid.NewGuid(),
+                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 1),
+                Type = EmailTextTemplateType.Reminder_NoResponse
+            };
+            var statuses = new TestInMemoryKeyValueStorage<SendRemindersNowStatus>();
+            var outcomes = new TestInMemoryKeyValueStorage<ReminderEmailDeliveryOutcomes>();
+            outcomes.Store(new ReminderEmailDeliveryOutcomes { InvitationIds = new List<int> { 1 } },
+                ReminderEmailDeliveryOutcomes.GetStorageKey(request.RequestId));
+            var checkpoints = new TestInMemoryKeyValueStorage<ReminderEmailDeliveryCheckpoint>();
+            checkpoints.Store(new ReminderEmailDeliveryCheckpoint { AttemptInProgress = true },
+                ReminderEmailDeliveryCheckpoint.GetStorageKey(request.RequestId, 1));
+
+            var locator = new Mock<IServiceLocator>();
+            locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>()).Returns(statuses);
+            locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>()).Returns(outcomes);
+            locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>())
+                .Returns(checkpoints);
+            locator.Setup(x => x.GetInstance<IUnitOfWork>()).Returns(CreateExecutionUnitOfWork());
+            var sender = new Mock<IReminderEmailSender>();
+            sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type,
+                    0, request.RequestId))
+                .ThrowsAsync(new InvalidOperationException("The delivery transaction failed."));
+            locator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(sender.Object);
+            var job = new SendRemindersNowJob(new NoScopeInScopeExecutor(locator.Object),
+                Mock.Of<ILogger<SendRemindersNowJob>>());
+
+            await job.Execute(request, Mock.Of<IJobExecutionContext>());
+
+            var status = statuses.GetById(request.StatusStorageKey);
+            Assert.That(status.State, Is.EqualTo(SendRemindersNowState.Failed));
+            Assert.That(status.UnconfirmedCount, Is.EqualTo(1));
+            Assert.That(status.Error, Does.Contain("could not be confirmed"));
+            Assert.That(outcomes.GetById(ReminderEmailDeliveryOutcomes.GetStorageKey(request.RequestId)), Is.Null);
+            Assert.That(checkpoints.GetById(
+                ReminderEmailDeliveryCheckpoint.GetStorageKey(request.RequestId, 1)), Is.Null);
         }
     }
 
