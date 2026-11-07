@@ -895,6 +895,42 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             Assert.That(status.FailedCount, Is.EqualTo(failedCount));
             Assert.That(statusStorage.GetById(request.StorageKey).State, Is.EqualTo(expectedState));
         }
+
+        [Test]
+        public async Task when_recovering_request_then_persisted_delivery_counts_are_included_in_status()
+        {
+            var request = new SendRemindersNowRequest
+            {
+                RequestId = Guid.NewGuid(),
+                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 1),
+                Type = EmailTextTemplateType.Reminder_NoResponse
+            };
+            var statusStorage = new TestInMemoryKeyValueStorage<SendRemindersNowStatus>();
+            var outcomes = new TestInMemoryKeyValueStorage<ReminderEmailDeliveryOutcomes>();
+            outcomes.Store(new ReminderEmailDeliveryOutcomes { SentCount = 1 },
+                ReminderEmailDeliveryOutcomes.GetStorageKey(request.RequestId));
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>())
+                .Returns(statusStorage);
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>())
+                .Returns(outcomes);
+            serviceLocator.Setup(x => x.GetInstance<IUnitOfWork>()).Returns(CreateExecutionUnitOfWork());
+
+            var sender = new Mock<IReminderEmailSender>();
+            sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type, 0,
+                    It.IsAny<DateTime?>(), request.RequestId))
+                .ReturnsAsync(new ReminderEmailSendResult { FailedCount = 1 });
+            serviceLocator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(sender.Object);
+            var job = new SendRemindersNowJob(new NoScopeInScopeExecutor(serviceLocator.Object),
+                Mock.Of<ILogger<SendRemindersNowJob>>());
+
+            await job.Execute(request, Mock.Of<IJobExecutionContext>());
+
+            var status = statusStorage.GetById(request.StatusStorageKey);
+            Assert.That(status.SentCount, Is.EqualTo(1));
+            Assert.That(status.FailedCount, Is.EqualTo(1));
+            Assert.That(status.State, Is.EqualTo(SendRemindersNowState.PartiallyFailed));
+        }
     }
 
     [TestOf(typeof(SendRemindersNowService))]

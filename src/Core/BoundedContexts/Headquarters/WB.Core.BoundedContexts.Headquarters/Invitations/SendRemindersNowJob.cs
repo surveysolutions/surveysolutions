@@ -124,6 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 var result = await rootScopeExecutor.ExecuteAsync(locator =>
                     locator.GetInstance<IReminderEmailSender>().SendRemindersAsync(request.QuestionnaireIdentity,
                         request.QuestionnaireTitle, request.Type, 0, status.StartedAtUtc, request.RequestId)).ConfigureAwait(false);
+                result = await GetDeliveryResultAsync(request.RequestId, result).ConfigureAwait(false);
                 status.SentCount = result.SentCount;
                 status.FailedCount = result.FailedCount;
                 status.State = result.FailedCount == 0
@@ -138,10 +139,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }
             catch (Exception exception)
             {
-                var result = await rootScopeExecutor.ExecuteAsync(locator => Task.FromResult(
-                    locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>()
-                        .GetByIdUncached(ReminderEmailDeliveryOutcomes.GetStorageKey(request.RequestId))?.GetResult()
-                    ?? new ReminderEmailSendResult())).ConfigureAwait(false);
+                var result = await GetDeliveryResultAsync(request.RequestId, new ReminderEmailSendResult())
+                    .ConfigureAwait(false);
                 status.SentCount = result.SentCount;
                 status.FailedCount = result.FailedCount;
                 status.State = result.SentCount == 0
@@ -157,6 +156,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }
 
             await StoreStatusAsync(status, request.StorageKey).ConfigureAwait(false);
+        }
+
+        private async Task<ReminderEmailSendResult> GetDeliveryResultAsync(Guid requestId,
+            ReminderEmailSendResult currentResult)
+        {
+            var outcomes = await rootScopeExecutor.ExecuteAsync(locator => Task.FromResult(
+                locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>()
+                    .GetByIdUncached(ReminderEmailDeliveryOutcomes.GetStorageKey(requestId)))).ConfigureAwait(false);
+            if (outcomes == null)
+                return currentResult;
+
+            var result = outcomes.GetResult();
+            result.SentCount = Math.Max(result.SentCount, currentResult.SentCount);
+            result.FailedCount = Math.Max(result.FailedCount, currentResult.FailedCount);
+            return result;
         }
 
         private async Task<SendRemindersNowStatus> GetStatusAsync(Guid requestId) =>
