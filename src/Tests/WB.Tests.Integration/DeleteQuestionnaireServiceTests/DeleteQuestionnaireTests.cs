@@ -176,7 +176,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
         }
 
         [Test]
-        public void when_remove_questionnaire_binary_data_and_storage_fails_then_should_propagate_exception_after_starting_all_deletions()
+        public async Task when_remove_questionnaire_binary_data_and_storage_fails_then_should_propagate_exception_after_starting_all_deletions()
         {
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 5);
             var brokenOnlyInterviewId = Guid.NewGuid();
@@ -208,7 +208,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 interviewsReader,
                 Mock.Of<ILogger<InterviewsToDeleteFactory>>());
 
-            var exception = Assert.ThrowsAsync<InvalidOperationException>(() =>
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 interviewsToDeleteFactory.RemoveAllInterviewsDataAsync(questionnaireIdentity));
 
             Assert.That(exception, Is.SameAs(expectedException));
