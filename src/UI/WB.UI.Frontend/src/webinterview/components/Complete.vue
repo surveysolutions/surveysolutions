@@ -355,6 +355,7 @@
 
 <script lang="js">
 import { marked } from 'marked'
+import { unescape } from 'lodash-es'
 import modal from '@/shared/modal'
 import SectionProgress from './SectionLoadProgress'
 
@@ -498,7 +499,7 @@ export default {
         },
         completeScreenTextHtml() {
             const text = this.$config.customTexts.completeScreenText
-            return text ? marked(text) : ''
+            return text ? marked(unescape(text)) : ''
         },
         noteToSupervisor() {
             return this.$config.customTexts.noteToSupervisor

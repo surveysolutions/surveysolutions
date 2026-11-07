@@ -98,6 +98,23 @@ namespace WB.Tests.Web.Headquarters.Controllers
         }
 
         [Test]
+        public void when_complete_screen_text_contains_encoded_double_quotes_should_not_reject_page_message()
+        {
+            var controller = new WebInterviewSettingsApiController(
+                Mock.Of<IWebInterviewConfigProvider>(),
+                Mock.Of<IQuestionnaireBrowseViewFactory>());
+            var model = new WebInterviewSettingsApiController.UpdatePageMessageModel
+            {
+                Type = WebInterviewUserMessages.CompleteScreenText,
+                Message = new string('"', 2000).Replace("\"", "&quot;")
+            };
+
+            var result = controller.UpdatePageMessage("invalid-id", model);
+
+            Assert.That(result, Is.TypeOf<NotFoundResult>());
+        }
+
+        [Test]
         public void when_complete_screen_text_exceeds_stored_limit_should_reject_page_message()
         {
             var controller = new WebInterviewSettingsApiController(
@@ -106,7 +123,7 @@ namespace WB.Tests.Web.Headquarters.Controllers
             var model = new WebInterviewSettingsApiController.UpdatePageMessageModel
             {
                 Type = WebInterviewUserMessages.CompleteScreenText,
-                Message = string.Concat(Enumerable.Repeat("&eacute;", 1251))
+                Message = string.Concat(Enumerable.Repeat("&eacute;", 1501))
             };
 
             var result = controller.UpdatePageMessage("invalid-id", model);

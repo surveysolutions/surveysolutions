@@ -16,7 +16,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     public class WebInterviewSettingsApiController : ControllerBase
     {
         private const int CompleteScreenTextMaxLength = 2000;
-        private const int CompleteScreenTextMaxStoredLength = CompleteScreenTextMaxLength * 5;
+        private const int CompleteScreenTextMaxStoredLength = CompleteScreenTextMaxLength * 6;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 

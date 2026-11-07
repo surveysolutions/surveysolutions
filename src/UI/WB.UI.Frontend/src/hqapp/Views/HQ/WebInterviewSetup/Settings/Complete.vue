@@ -24,6 +24,7 @@
                                 </Field>
                                 <button type="button"
                                     @click="webInterviewPageMessages['completeScreenText'].text = ''"
+                                    :aria-label="$t('Common.Clear')"
                                     class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
@@ -95,7 +96,7 @@
                                     </div>
                                 </div>
                                 <div class="row-element mb-20" v-if="webInterviewPageMessages['completeScreenText'].text"
-                                    v-dompurify-html="previewHtml(webInterviewPageMessages['completeScreenText'].text)">
+                                    v-dompurify-html="previewCompleteScreenText(webInterviewPageMessages['completeScreenText'].text)">
                                 </div>
                                 <div class="row-element mb-40">
                                     <div class="h2 info-block gray-uppercase">
@@ -142,6 +143,9 @@ export default {
         },
     },
     methods: {
+        previewCompleteScreenText(text) {
+            return this.previewHtml(unescape(text))
+        },
         updateCompleteScreenText(value, handleChange) {
             handleChange(unescape(value))
         },
