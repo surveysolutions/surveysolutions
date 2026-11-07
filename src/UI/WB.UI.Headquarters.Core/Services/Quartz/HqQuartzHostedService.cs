@@ -37,9 +37,9 @@ namespace WB.UI.Headquarters.Services.Quartz
             return Task.CompletedTask;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
-            return scheduler.Shutdown(options.Value.WaitForJobsToComplete, cancellationToken);
+            await scheduler.Shutdown(options.Value.WaitForJobsToComplete, cancellationToken);
         }
     }
 }

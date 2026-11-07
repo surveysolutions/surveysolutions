@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Quartz;
@@ -27,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.invitationMailingService = invitationMailingService;
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken = default)
         {
             InvitationDistributionStatus status = null;
             try
@@ -46,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 this.logger.LogDebug("Invitations distribution job: Started");
 
                 status = invitationService.StartEmailDistribution();
-                var cancellationToken = invitationService.GetCancellationToken();
+                var invitationCancellationToken = invitationService.GetCancellationToken();
                 var sw = new Stopwatch();
                 sw.Start();
 
@@ -55,6 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 foreach (var invitationId in invitationIdsToSend)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
+                    invitationCancellationToken.ThrowIfCancellationRequested();
 
                     Invitation invitation = invitationService.GetInvitation(invitationId);
                     var address = invitation.Assignment.Email;
