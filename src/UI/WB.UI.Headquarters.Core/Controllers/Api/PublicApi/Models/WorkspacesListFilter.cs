@@ -8,8 +8,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
         public WorkspacesListFilter()
         {
             Start = 0; // keeps the existing default page start (the base default is 0)
-            Length = 20; // keeps the existing default page size (the base default is 10)
         }
+
+        public new int Length { get; set; } = 20;
         
         /// <summary>
         /// Return only workspaces assigned to specified user

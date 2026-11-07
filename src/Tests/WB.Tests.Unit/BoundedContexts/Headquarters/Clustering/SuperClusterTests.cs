@@ -46,6 +46,34 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Clustering
         }
 
         [Test]
+        public void should_keep_cluster_and_singleton_ids_distinct()
+        {
+            var cluster = Load(
+                Point(0, 0),
+                Point(0, 0.0001),
+                Point(0, 40),
+                Point(0, 80),
+                Point(0, 120));
+
+            var result = cluster.GetClusters(new GeoBounds(-90, -180, 90, 180), 3);
+            var ids = result.Select(point => point.UserData.Index).ToList();
+
+            result.Should().Contain(point => point.UserData.NumPoints == 2);
+            ids.Distinct().Should().HaveCount(ids.Count);
+        }
+
+        [Test]
+        public void should_preserve_exact_bounds_near_the_dateline()
+        {
+            var cluster = Load(Point(0, 179.9975), Point(0, 179.999));
+
+            var result = cluster.GetClusters(new GeoBounds(-1, 179.997, 1, 179.998), 17);
+
+            result.Should().ContainSingle();
+            result[0].Longitude.Should().BeApproximately(179.9975, 1e-6);
+        }
+
+        [Test]
         public void should_return_zoom_at_which_cluster_splits()
         {
             var cluster = Load(Point(10, 10), Point(10.0001, 10.0001));

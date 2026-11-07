@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Clustering
         {
             var minLng = ((bounds.West + 180) % 360 + 360) % 360 - 180;
             var minLat = Math.Max(-90, Math.Min(90, bounds.South));
-            var maxLng = Math.Abs(bounds.East - 180) < 0.01 ? 180 : ((bounds.East + 180) % 360 + 360) % 360 - 180;
+            var maxLng = bounds.East == 180 ? 180 : ((bounds.East + 180) % 360 + 360) % 360 - 180;
             var maxLat = Math.Max(-90, Math.Min(90, bounds.North));
 
             if (bounds.East - bounds.West >= 360)
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Clustering
                 new Cluster
                 {
                     Zoom = int.MaxValue,
-                    Index = id,
+                    Index = ~id,
                     ParentId = -1,
                     Props = feature.Properties
                 });
