@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters;
 public class UserToDeviceServiceTests
 {
     [Test]
-    public void when_try_link_device_without_relink_flag()
+    public async Task when_try_link_device_without_relink_flag()
     {
         var user = Mock.Of<HqUser>(u =>
             u.IsInRole(UserRoles.Interviewer) == true
@@ -26,11 +26,11 @@ public class UserToDeviceServiceTests
             r.FindByIdAsync(Id.g1, It.IsAny<CancellationToken>()) == Task.FromResult(user));
         var service = CreateService(userRepository);
 
-        var exception = Assert.CatchAsync(() => service.LinkDeviceToUserAsync(Id.g1, "deviceId"));
+        var exception = await Assert.CatchAsync(() => service.LinkDeviceToUserAsync(Id.g1, "deviceId"));
 
         Assert.That(exception, Is.Not.Null);
         Assert.That(exception!.GetType(), Is.EqualTo(typeof(InvalidOperationException)));
-        Assert.That(exception.Result.Message, Is.EqualTo("You must have approval from supervisor or headquarters to relink device"));
+        Assert.That(exception.Message, Is.EqualTo("You must have approval from supervisor or headquarters to relink device"));
     }
 
     private IUserToDeviceService CreateService(IUserRepository userRepository) => new UserToDeviceService(userRepository);

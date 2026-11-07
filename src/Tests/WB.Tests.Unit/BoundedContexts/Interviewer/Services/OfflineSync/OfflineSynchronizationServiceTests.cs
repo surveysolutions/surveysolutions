@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
         [TestCase(SyncDeclineReason.UserIsLocked, SynchronizationExceptionType.UserLocked)]
         [TestCase(SyncDeclineReason.SupervisorRequireOnlineSync, SynchronizationExceptionType.SupervisorRequireOnlineSync)]
         [TestCase(SyncDeclineReason.Unknown, SynchronizationExceptionType.Unexpected)]
-        public void when_CanSynchronize_and_interviewer_from_different_team_Should_throw_specified_SynchronizationException(
+        public async Task when_CanSynchronize_and_interviewer_from_different_team_Should_throw_specified_SynchronizationException(
                 SyncDeclineReason responseReason, SynchronizationExceptionType syncExceptionType)
         {
             // arrange
@@ -118,10 +118,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
             var service = Create.Service.OfflineSynchronizationService(clientMock.Object, interviewerPrincipal.Object);
 
             // act
-            var e = Assert.CatchAsync<SynchronizationException>(async () => await service.CanSynchronizeAsync());
+            var e = await Assert.CatchAsync<SynchronizationException>(async () => await service.CanSynchronizeAsync());
 
             // assert
-            Assert.That(e.Result?.Type, Is.EqualTo(syncExceptionType));
+            Assert.That(e.Type, Is.EqualTo(syncExceptionType));
         }
     }
 }
