@@ -551,4 +551,5 @@ Ujistěte se, že všechny informace jsou správné.</value>
   <data name="RealQuestion_Hint" xml:space="preserve">
       <value>Klepnutím zadejte číslo</value>
   </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>Tato odpověď byla změněna od posledního zamítnutí.</value></data>
 </root>

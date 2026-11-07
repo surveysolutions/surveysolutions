@@ -114,4 +114,5 @@
   <data name="NoteForSupervisor" xml:space="preserve"><value>ความคิดเห็น</value></data>
   <data name="Complete" xml:space="preserve"><value>เสร็จสิ้น</value></data>
   <data name="LinkToWebInterviewExample" xml:space="preserve"><value>ตัวอย่างลิงก์ไปยังหน้า Landing ของการสัมภาษณ์ทางเว็บ</value></data>
+  <data name="Filters_Changed" xml:space="preserve"><value>เปลี่ยนแปลงแล้ว</value></data>
 </root>

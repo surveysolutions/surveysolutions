@@ -7,6 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
         [Obsolete("Please use OriginDate property")]
         public DateTime? AnswerTimeUtc { get; set; }
 
+        public Guid? LastRejectionEventIdentifier { get; set; }
+
         protected QuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTimeOffset originDate)
             : base(userId, questionId, rosterVector, originDate)
         {

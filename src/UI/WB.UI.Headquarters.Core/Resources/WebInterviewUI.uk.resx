@@ -623,4 +623,5 @@
   <data name="RealQuestion_Hint" xml:space="preserve">
       <value>Торкніться, щоб ввести число</value>
   </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>Цю відповідь змінено після останнього відхилення.</value></data>
 </root>

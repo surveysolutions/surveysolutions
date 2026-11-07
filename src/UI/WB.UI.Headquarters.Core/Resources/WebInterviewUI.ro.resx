@@ -627,4 +627,5 @@ Vă rugăm să vă asigurați că toate informațiile sunt corecte.</value>
   <data name="RealQuestion_Hint" xml:space="preserve">
       <value>Atingeți pentru a introduce un număr</value>
   </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>Acest răspuns a fost modificat de la ultima respingere.</value></data>
 </root>

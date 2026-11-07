@@ -631,4 +631,5 @@ Sigurohuni që gjithë informacioni është korrekt.</value>
   <data name="RealQuestion_Hint" xml:space="preserve">
       <value>Prekni për të futur një numër</value>
   </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>Kjo përgjigje ka ndryshuar që nga refuzimi i fundit.</value></data>
 </root>

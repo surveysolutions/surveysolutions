@@ -1,6 +1,8 @@
 <template>
     <div :class="questionStyle"
         :id="`tr_view_${questionId}`">
+        <span class="sr-only"
+            v-if="question.isChangedSinceReject">{{ $t('WebInterviewUI.AnswerChangedSinceLastRejection') }}</span>
         <popover trigger="hover-focus"
             append-to="body"
             :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)"
@@ -73,6 +75,7 @@ export default {
                 'has-warnings': !this.question.isDisabled && this.question.validity.warnings.length > 0,
                 'not-applicable': this.question.isLocked,
                 'syncing': this.isFetchInProgress,
+                'changed-since-reject': this.question.isChangedSinceReject === true,
             }, 'cell-unit']
         },
         doesExistValidationMessage() {

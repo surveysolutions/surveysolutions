@@ -118,12 +118,28 @@ namespace Ncqrs.Eventing.Sourcing
             DateTime eventTimeStamp,
             WB.Core.Infrastructure.EventBus.IEvent evnt)
         {
+            this.ApplyEvent(eventIdentifier, eventTimeStamp, evnt, isSynchronized: false);
+        }
+
+        protected internal void ApplySynchronizedEvent(Guid eventIdentifier,
+            DateTime eventTimeStamp,
+            WB.Core.Infrastructure.EventBus.IEvent evnt)
+        {
+            this.ApplyEvent(eventIdentifier, eventTimeStamp, evnt, isSynchronized: true);
+        }
+
+        private void ApplyEvent(Guid eventIdentifier,
+            DateTime eventTimeStamp,
+            WB.Core.Infrastructure.EventBus.IEvent evnt,
+            bool isSynchronized)
+        {
             var eventSequence = GetNextSequence();
             var wrappedEvent = new UncommittedEvent(eventIdentifier, EventSourceId, eventSequence, _initialVersion,
                 eventTimeStamp, evnt);
 
             try
             {
+                this.OnEventApplying(wrappedEvent.EventIdentifier, wrappedEvent.Payload, isHistorical: false, isSynchronized: isSynchronized);
                 HandleEvent(wrappedEvent.Payload);
                 OnEventApplied(wrappedEvent);
             }
@@ -164,6 +180,7 @@ namespace Ncqrs.Eventing.Sourcing
             
             try
             {
+                this.OnEventApplying(evnt.EventIdentifier, evnt.Payload, isHistorical: true, isSynchronized: false);
                 HandleEvent(evnt.Payload);
             }
             catch (EventNotHandledException)
@@ -195,6 +212,10 @@ namespace Ncqrs.Eventing.Sourcing
                     evnt.EventSequence, Version, Version + 1);
                 throw new InvalidOperationException(message);
             }
+        }
+
+        protected virtual void OnEventApplying(Guid eventIdentifier, object payload, bool isHistorical, bool isSynchronized)
+        {
         }
 
         public virtual void AcceptChanges()

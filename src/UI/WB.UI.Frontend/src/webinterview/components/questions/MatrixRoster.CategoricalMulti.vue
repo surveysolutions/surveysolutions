@@ -1,6 +1,8 @@
 <template>
     <div :class="questionStyle"
         :id="`mr_view_${questionId}`">
+        <span class="sr-only"
+            v-if="question.isChangedSinceReject">{{ $t('WebInterviewUI.AnswerChangedSinceLastRejection') }}</span>
         <popover class="tooltip-wrapper"
             trigger="hover-focus"
             append-to="body"
@@ -113,6 +115,7 @@ export default {
                 'has-warnings': !this.question.isDisabled && this.question.validity.warnings.length > 0,
                 'not-applicable': this.question.isLocked,
                 'syncing': this.isFetchInProgress,
+                'changed-since-reject': this.question.isChangedSinceReject === true,
             }, 'cell-unit', 'options-group', ' h-100', ' d-flex']
         },
     },

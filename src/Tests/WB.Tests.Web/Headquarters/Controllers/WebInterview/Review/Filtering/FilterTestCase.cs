@@ -44,10 +44,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
                 int flagged, int notFlagged, int withComments,
                 int invalid, int valid, int answered, int notAnswered,
                 int forSupervisor, int forInterviewer, 
-                int criticalQuestions, int criticalRules)
+                int criticalQuestions, int criticalRules, int changed = 0)
             {
                 StatsCounter = new[]
-                    {flagged, notFlagged, withComments, invalid, valid, answered, notAnswered, forSupervisor, forInterviewer, criticalQuestions, criticalRules};
+                    {flagged, notFlagged, withComments, invalid, valid, answered, notAnswered, forSupervisor, forInterviewer, criticalQuestions, criticalRules, changed};
                 return this;
             }
         }

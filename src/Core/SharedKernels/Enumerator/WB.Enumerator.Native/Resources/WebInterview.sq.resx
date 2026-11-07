@@ -114,4 +114,5 @@
   <data name="NoteForSupervisor" xml:space="preserve"><value>Koment</value></data>
   <data name="Complete" xml:space="preserve"><value>Kompletoni</value></data>
   <data name="LinkToWebInterviewExample" xml:space="preserve"><value>Shembull i lidhjes drejt faqes hyrëse të intervistës web</value></data>
+  <data name="Filters_Changed" xml:space="preserve"><value>Të ndryshuara</value></data>
 </root>

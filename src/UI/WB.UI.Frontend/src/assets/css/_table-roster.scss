@@ -206,6 +206,10 @@
                 background-color: rgba(255, 46, 0, 0.2);
                 border-color: #FF2E00;
             }
+
+            &.changed-since-reject {
+                border-left: 4px solid #8C3B00;
+            }
         }
 
         &:not(.roster-matrix) {
