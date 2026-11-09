@@ -33,6 +33,7 @@
                             :questionId="$me.id"
                             @input="appendCompboboxItem"
                             :optionsSource="optionsSource"
+                            :showValueCode="isDevMode"
                             :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
                     </div>
                 </div>
