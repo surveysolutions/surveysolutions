@@ -52,7 +52,7 @@
                         </ul>
                     </li>
                     <li v-if="isResumeLinkAvailable">
-                        <a href="#" @click="emailPersonalLink"
+                        <a href="#" @click.prevent="emailPersonalLink"
                             :title="$t('WebInterviewUI.EmailLink_EmailResumeLink')">{{
                                 $t('WebInterviewUI.EmailLink_EmailResumeLink') }}</a>
                     </li>
