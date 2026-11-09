@@ -28,7 +28,6 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         private string AuthenticationType { get; set; }
         private List<object> Attributes { get; set; }
         private List<string> UserWorkspaces { get; set; }
-        private string RequestPath { get; set; }
         private Mock<IAuthorizedUser> AuthorizedUser { get; set; }
         private Mock<IWorkspaceContextAccessor> ContextAccessor { get; set; }
 
@@ -44,7 +43,6 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             Role = null;
             CurrentWorkspace = WorkspaceContext.Default;
-            RequestPath = "/Home/Index";
 
             UserWorkspaces = new List<string>
             {
@@ -65,7 +63,6 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         {
             CurrentWorkspace = Workspace.Admin.AsContext();
             Role = UserRoles.Administrator;
-            RequestPath = "/Workspaces";
 
             // act
             var context = Act();
@@ -298,183 +295,6 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             ClassicAssert.Null(context.Result);
         }
 
-        [Test]
-        public void admin_workspace_should_allow_access_to_account_paths()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Administrator;
-            RequestPath = "/Account/Login";
-
-            var context = Act();
-
-            ClassicAssert.Null(context.Result);
-        }
-
-        [Test]
-        public void admin_workspace_should_return_404_for_workspace_specific_reports_page()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Administrator;
-            RequestPath = "/Reports/SurveysAndStatuses";
-
-            var context = Act();
-
-            Assert.That(context.Result, Is.InstanceOf<NotFoundResult>());
-        }
-
-        [Test]
-        public void admin_workspace_should_return_404_for_workspace_specific_api()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Administrator;
-            RequestPath = "/api/ReportDataApi/HeadquarterSurveysAndStatusesReport";
-
-            var context = Act();
-
-            Assert.That(context.Result, Is.InstanceOf<NotFoundResult>());
-        }
-
-        [Test]
-        public void admin_workspace_should_return_404_for_empty_path()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Administrator;
-            RequestPath = "/";
-
-            var context = Act();
-
-            Assert.That(context.Result, Is.InstanceOf<NotFoundResult>());
-        }
-
-        [Test]
-        public void admin_workspace_should_allow_api_v1_workspaces()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Administrator;
-            RequestPath = "/api/v1/workspaces";
-
-            var context = Act();
-
-            ClassicAssert.Null(context.Result);
-        }
-
-        [Test]
-        public void admin_workspace_should_allow_api_v1_users()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Administrator;
-            RequestPath = "/api/v1/users";
-
-            var context = Act();
-
-            ClassicAssert.Null(context.Result);
-        }
-
-        [Test]
-        public void admin_workspace_should_allow_account_path_case_insensitive()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Administrator;
-            RequestPath = "/ACCOUNT/Login";
-
-            var context = Act();
-
-            ClassicAssert.Null(context.Result);
-        }
-
-        [TestCase("/Administration/Diagnostics")]
-        [TestCase("/Diagnostics/AuditLog")]
-        [TestCase("/Diagnostics/TabletInfos")]
-        [TestCase("/diagnostics/auditlog/")]
-        [TestCase("/api/AdminSettings/GetSystemLog")]
-        [TestCase("/api/ControlPanelApi/TabletInfos")]
-        [TestCase("/api/ControlPanelApi/Download/tablet-info.zip")]
-        [TestCase("/api/ControlPanelApi/GetHealthResult")]
-        [TestCase("/api/ControlPanelApi/GetMetricsState")]
-        [TestCase("/api/ControlPanelApi/GetServerResponseByStatusCode")]
-        public void when_requesting_server_diagnostics_in_admin_workspace_should_allow_access(string path)
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Administrator;
-            RequestPath = path;
-
-            var context = Act();
-
-            ClassicAssert.Null(context.Result);
-        }
-
-        [TestCase("/Diagnostics/Logs")]
-        [TestCase("/Diagnostics/InterviewPackages")]
-        [TestCase("/api/AdminSettings/WorkspaceSettings")]
-        [TestCase("/api/ControlPanelApi/InterviewPackages")]
-        [TestCase("/api/ControlPanelApi/ExceptionTypes")]
-        [TestCase("/api/ControlPanelApi/ExpectedExceptionTypes")]
-        [TestCase("/api/ControlPanelApi/DownloadSyncPackage/1")]
-        [TestCase("/api/ControlPanelApi/ReprocessSelectedBrokenPackages")]
-        [TestCase("/api/ControlPanelApi/MarkReasonAsKnown")]
-        [TestCase("/Diagnostics/AuditLogOther")]
-        [TestCase("/api/AdminSettings/GetSystemLogOther")]
-        public void when_requesting_other_diagnostics_in_admin_workspace_should_return_404(string path)
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            Role = UserRoles.Administrator;
-            RequestPath = path;
-
-            var context = Act();
-
-            Assert.That(context.Result, Is.InstanceOf<NotFoundResult>());
-        }
-
-        [Test]
-        public void when_anonymous_workspace_specific_endpoint_requested_in_admin_workspace_should_return_404()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            AuthenticationType = null;
-            Attributes.Add(new AllowAnonymousAttribute());
-            RequestPath = "/api/v1/interviews/11111111111111111111111111111111/pdf";
-
-            var context = Act();
-
-            Assert.That(context.Result, Is.InstanceOf<NotFoundResult>());
-        }
-
-        [Test]
-        public void when_anonymous_account_endpoint_requested_in_admin_workspace_should_allow_access()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            AuthenticationType = null;
-            Attributes.Add(new AllowAnonymousAttribute());
-            RequestPath = "/Account/Login";
-
-            var context = Act();
-
-            ClassicAssert.Null(context.Result);
-        }
-
-        [Test]
-        public void when_tenant_token_requests_workspace_specific_endpoint_in_admin_workspace_should_return_404()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            AuthenticationType = AuthType.TenantToken;
-            RequestPath = "/api/v1/interviews";
-
-            var context = Act();
-
-            Assert.That(context.Result, Is.InstanceOf<NotFoundResult>());
-        }
-
-        [Test]
-        public void when_tenant_token_requests_workspaces_endpoint_in_admin_workspace_should_allow_access()
-        {
-            CurrentWorkspace = Workspace.Admin.AsContext();
-            AuthenticationType = AuthType.TenantToken;
-            RequestPath = "/api/v1/workspaces";
-
-            var context = Act();
-
-            ClassicAssert.Null(context.Result);
-        }
-
         private AuthorizationFilterContext Act()
         {
             var sut = CreateSut();
@@ -508,7 +328,6 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var identity = new ClaimsIdentity(claims, AuthenticationType);
             var user = new ClaimsPrincipal(identity);
             httpContext.User = user;
-            httpContext.Request.Path = RequestPath;
 
             var actionDescriptor = new ActionDescriptor
             {

@@ -1,5 +1,4 @@
 #nullable enable
-using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authentication;
@@ -34,20 +33,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
             var hasAuthorization = ContextHasAttribute<AuthorizeAttribute>() || ContextHasAttribute<AuthorizeByRoleAttribute>();
             
             var workspace = workspaceContextAccessor.CurrentWorkspace();
-
-            if (workspace.IsAdministrationWorkspace())
-            {
-                // Only allow access to administration-appropriate paths in the admin workspace.
-                // Workspace-specific pages and APIs should not be accessible here.
-                var requestPath = context.HttpContext.Request.Path;
-                bool isAdminSafePath = AdministrationWorkspaceAllowedPaths
-                    .Any(p => requestPath.StartsWithSegments(p, StringComparison.OrdinalIgnoreCase));
-                if (!isAdminSafePath)
-                {
-                    context.Result = new NotFoundResult();
-                    return;
-                }
-            }
 
             if (context.HttpContext.User.Identity?.AuthenticationType == AuthType.TenantToken)
             {
@@ -99,27 +84,5 @@ namespace WB.UI.Headquarters.Code.Workspaces
             bool ContextHasAttribute<T>() where T: class => context.ActionDescriptor.EndpointMetadata.Any(m => m is T);
         }
 
-        // Paths (relative to the /administration prefix) that are valid within the administration workspace.
-        // Any request path not starting with one of these segments will receive a 404 response,
-        // preventing workspace-specific HQ pages from being served under /administration.
-        internal static readonly string[] AdministrationWorkspaceAllowedPaths =
-        {
-            "/Account",          // login, logout, 2FA, password change
-            "/" + WorkspaceConstants.WorkspaceNames.AdminWorkspaceName, // server diagnostics (AdministrationController)
-            "/Workspaces",       // workspace management UI (WorkspacesController)
-            "/" + WorkspaceConstants.WorkspaceNames.UsersWorkspaceName, // user management UI
-            "/Profile",          // user profile pages
-            "/error",            // error pages served by the error handler
-            "/Diagnostics/AuditLog",
-            "/Diagnostics/TabletInfos",
-            "/api/AdminSettings/GetSystemLog",
-            "/api/ControlPanelApi/TabletInfos",
-            "/api/ControlPanelApi/Download",
-            "/api/ControlPanelApi/GetHealthResult",
-            "/api/ControlPanelApi/GetMetricsState",
-            "/api/ControlPanelApi/GetServerResponseByStatusCode",
-            "/api/v1/workspaces", // workspace management REST API (WorkspacesPublicApiController)
-            "/api/v1/users",     // user management REST API
-        };
     }
 }
