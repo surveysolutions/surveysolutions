@@ -191,13 +191,12 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             StringAssert.StartsWith("/primary", location);
         }
 
-        [TestCase("", "")]
-        [TestCase("/", "/hq")]
         [TestCase("/NewPage", "")]
+        [TestCase("/NewPage", "/hq")]
         [TestCase("/api/v1/workspaces", "")]
         [TestCase("/Account/LogOn", "")]
         [TestCase("/UnderConstruction/request", "")]
-        public async Task when_anonymous_user_requests_administration_should_redirect_to_login(
+        public async Task when_anonymous_user_requests_administration_subpage_should_return_404(
             string path, string applicationPathBase)
         {
             var context = CreateHttpContext(path,
@@ -208,14 +207,12 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             await middleware.Invoke(context);
 
-            var returnUrl = $"{context.Request.PathBase}{path}?test=value";
-            context.Response.StatusCode.Should().Be(StatusCodes.Status302Found);
-            context.Response.Headers[HeaderNames.Location].ToString().Should().Be(
-                $"{applicationPathBase}/Account/LogOn?ReturnUrl={Uri.EscapeDataString(returnUrl)}");
+            context.Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            context.Response.Headers.Should().NotContainKey(HeaderNames.Location);
         }
 
-        [TestCase(UserRoles.Headquarter, "", "Cookie")]
-        [TestCase(UserRoles.Supervisor, "/", "Cookie")]
+        [TestCase(UserRoles.Headquarter, "/Workspaces", "Cookie")]
+        [TestCase(UserRoles.Supervisor, "/Workspaces", "Cookie")]
         [TestCase(UserRoles.Interviewer, "/Workspaces", "Cookie")]
         [TestCase(UserRoles.Observer, "/NewPage", "Cookie")]
         [TestCase(UserRoles.ApiUser, "/api/v1/workspaces", "Cookie")]
@@ -237,16 +234,15 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             context.Response.Headers.Should().NotContainKey(HeaderNames.Location);
         }
 
-        [TestCase("", "")]
-        [TestCase("/", "")]
-        [TestCase("", "/hq")]
-        [TestCase("/", "/hq")]
-        public async Task when_admin_requests_administration_root_should_redirect_to_workspaces(
-            string path, string applicationPathBase)
+        [Test]
+        public async Task when_user_requests_administration_root_should_redirect_to_workspaces(
+            [Values("", "/")] string path,
+            [Values("", "/hq")] string applicationPathBase,
+            [Values(null, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)] UserRoles? role)
         {
             var context = CreateHttpContext(path,
                 currentWorkspace: WorkspaceConstants.WorkspaceNames.AdminWorkspaceName,
-                authenticationType: "Cookie", role: UserRoles.Administrator,
+                authenticationType: role.HasValue ? "Cookie" : null, role: role,
                 applicationPathBase: applicationPathBase);
             var middleware = CreateMiddleware(_ => throw new AssertionException("The home page must not execute."));
 
@@ -306,7 +302,7 @@ namespace WB.Tests.Web.Headquarters.Workspaces
         [Test]
         public async Task when_reexecuting_denied_administration_request_should_render_error_page()
         {
-            var context = CreateHttpContext("/",
+            var context = CreateHttpContext("/Workspaces",
                 currentWorkspace: WorkspaceConstants.WorkspaceNames.AdminWorkspaceName,
                 authenticationType: "Cookie", role: UserRoles.Headquarter);
             using var body = new MemoryStream();
