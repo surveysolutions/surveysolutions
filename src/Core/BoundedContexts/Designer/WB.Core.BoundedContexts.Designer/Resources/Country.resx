@@ -208,7 +208,7 @@
     <value>Bermuda</value>
   </data>
   <data name="BOL" xml:space="preserve">
-    <value>Bolivia</value>
+    <value>Plurinational State of Bolivia</value>
   </data>
   <data name="BRA" xml:space="preserve">
     <value>Brazil</value>
@@ -253,10 +253,10 @@
     <value>Cameroon</value>
   </data>
   <data name="COD" xml:space="preserve">
-    <value>Congo, Dem. Rep.</value>
+    <value>Democratic Republic of the Congo (the)</value>
   </data>
   <data name="COG" xml:space="preserve">
-    <value>Congo, Rep.</value>
+    <value>Republic of the Congo (the)</value>
   </data>
   <data name="COK" xml:space="preserve">
     <value>Cook Island</value>
@@ -268,7 +268,7 @@
     <value>Comoros</value>
   </data>
   <data name="CPV" xml:space="preserve">
-    <value>Republic of Cabo Verde</value>
+    <value>Republic of Cabo Verde (the)</value>
   </data>
   <data name="CRI" xml:space="preserve">
     <value>Costa Rica</value>
@@ -286,7 +286,7 @@
     <value>Cyprus</value>
   </data>
   <data name="CZE" xml:space="preserve">
-    <value>Czech Republic</value>
+    <value>Czechia</value>
   </data>
   <data name="DEU" xml:space="preserve">
     <value>Germany</value>
@@ -346,7 +346,7 @@
     <value>Faeroe Isld.</value>
   </data>
   <data name="FSM" xml:space="preserve">
-    <value>Micronesia</value>
+    <value>Federated States of Micronesia</value>
   </data>
   <data name="FXX" xml:space="preserve">
     <value>France, Metrop.</value>
@@ -355,7 +355,7 @@
     <value>Gabon</value>
   </data>
   <data name="GBR" xml:space="preserve">
-    <value>United Kingdom</value>
+    <value>United Kingdom of Great Britain and Northern Ireland</value>
   </data>
   <data name="GEO" xml:space="preserve">
     <value>Georgia</value>
@@ -475,10 +475,10 @@
     <value>Kiribati</value>
   </data>
   <data name="KNA" xml:space="preserve">
-    <value>St.Kitts and Nevis</value>
+    <value>St. Kitts and Nevis</value>
   </data>
   <data name="KOR" xml:space="preserve">
-    <value>Korea, Rep.</value>
+    <value>Republic of Korea</value>
   </data>
   <data name="KSV" xml:space="preserve">
     <value>Kosovo</value>
@@ -532,7 +532,7 @@
     <value>Monaco</value>
   </data>
   <data name="MDA" xml:space="preserve">
-    <value>Moldova</value>
+    <value>Republic of Moldova</value>
   </data>
   <data name="MDG" xml:space="preserve">
     <value>Madagascar</value>
@@ -547,7 +547,7 @@
     <value>Marshall Isld.</value>
   </data>
   <data name="MKD" xml:space="preserve">
-    <value>Macedonia, FYR</value>
+    <value>North Macedonia</value>
   </data>
   <data name="MLI" xml:space="preserve">
     <value>Mali</value>
@@ -658,7 +658,7 @@
     <value>Puerto Rico</value>
   </data>
   <data name="PRK" xml:space="preserve">
-    <value>Korea, Dem. Rep.</value>
+    <value>The Democratic People's Republic of Korea</value>
   </data>
   <data name="PRT" xml:space="preserve">
     <value>Portugal</value>
@@ -721,7 +721,7 @@
     <value>San Marino</value>
   </data>
   <data name="SOM" xml:space="preserve">
-    <value>Somalia</value>
+    <value>Federal Republic of Somalia</value>
   </data>
   <data name="SPM" xml:space="preserve">
     <value>St. Pierre and Miquelon</value>
@@ -748,7 +748,7 @@
     <value>Sweden</value>
   </data>
   <data name="SWZ" xml:space="preserve">
-    <value>Swaziland</value>
+    <value>Kingdom of Eswatini</value>
   </data>
   <data name="SYC" xml:space="preserve">
     <value>Seychelles</value>
@@ -790,7 +790,7 @@
     <value>Tunisia</value>
   </data>
   <data name="TUR" xml:space="preserve">
-    <value>Turkey</value>
+    <value>Republic of Türkiye</value>
   </data>
   <data name="TUV" xml:space="preserve">
     <value>Tuvalu</value>
@@ -799,7 +799,7 @@
     <value>Taiwan</value>
   </data>
   <data name="TZA" xml:space="preserve">
-    <value>Tanzania</value>
+    <value>United Republic of Tanzania</value>
   </data>
   <data name="UGA" xml:space="preserve">
     <value>Uganda</value>
@@ -814,7 +814,7 @@
     <value>Uruguay</value>
   </data>
   <data name="USA" xml:space="preserve">
-    <value>United States</value>
+    <value>United States of America</value>
   </data>
   <data name="UZB" xml:space="preserve">
     <value>Uzbekistan</value>
@@ -826,7 +826,7 @@
     <value>St. Vincent &amp; Grenadines</value>
   </data>
   <data name="VEN" xml:space="preserve">
-    <value>Venezuela, RB</value>
+    <value>Bolivarian Republic of Venezuela</value>
   </data>
   <data name="VGB" xml:space="preserve">
     <value>British Virgin Islands</value>

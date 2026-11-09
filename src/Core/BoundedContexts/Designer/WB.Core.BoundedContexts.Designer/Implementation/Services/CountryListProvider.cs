@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -24,7 +25,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 var item = new CountryItem (code, Resources.Country.ResourceManager.GetString(code));
                 return item;
-            }).ToList();
+            })
+            .OrderBy(item => item.Title ?? string.Empty, StringComparer.CurrentCulture)
+            .ThenBy(item => item.Code)
+            .ToList();
         }
 
         public static string? GetCountryTitleByCode(string code)
