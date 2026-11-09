@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -136,7 +135,19 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private static bool IsCompleteScreenTextTooLong(WebInterviewUserMessages type, string text) =>
             type == WebInterviewUserMessages.CompleteScreenText &&
             (text is { Length: > CompleteScreenTextMaxStoredLength } ||
-             text is not null && WebUtility.HtmlDecode(text).Length > CompleteScreenTextMaxLength);
+             text is not null && DecodeLodashHtmlEntities(text).Length > CompleteScreenTextMaxLength);
+
+        private static string DecodeLodashHtmlEntities(string text) =>
+            System.Text.RegularExpressions.Regex.Replace(text, @"&(?:amp|lt|gt|quot|#39);", match =>
+                match.Value switch
+                {
+                    "&amp;" => "&",
+                    "&lt;" => "<",
+                    "&gt;" => ">",
+                    "&quot;" => "\"",
+                    "&#39;" => "'",
+                    _ => match.Value
+                });
 
         public class UpdateAdditionalSettingsModel
         {

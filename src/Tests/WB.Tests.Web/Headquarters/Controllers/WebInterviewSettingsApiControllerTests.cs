@@ -130,5 +130,22 @@ namespace WB.Tests.Web.Headquarters.Controllers
 
             Assert.That(result, Is.TypeOf<BadRequestResult>());
         }
+
+        [Test]
+        public void when_complete_screen_text_contains_an_entity_not_decoded_by_lodash_and_exceeds_limit_should_reject_page_message()
+        {
+            var controller = new WebInterviewSettingsApiController(
+                Mock.Of<IWebInterviewConfigProvider>(),
+                Mock.Of<IQuestionnaireBrowseViewFactory>());
+            var model = new WebInterviewSettingsApiController.UpdatePageMessageModel
+            {
+                Type = WebInterviewUserMessages.CompleteScreenText,
+                Message = string.Concat(Enumerable.Repeat("&eacute;", 1500))
+            };
+
+            var result = controller.UpdatePageMessage("invalid-id", model);
+
+            Assert.That(result, Is.TypeOf<BadRequestResult>());
+        }
     }
 }

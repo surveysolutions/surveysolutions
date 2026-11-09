@@ -125,6 +125,7 @@
 import settings from './settingsMixin'
 import { Form, Field } from 'vee-validate'
 import { escape, unescape } from 'lodash-es'
+import { marked } from 'marked'
 
 export default {
     components: {
@@ -144,7 +145,9 @@ export default {
     },
     methods: {
         previewCompleteScreenText(text) {
-            return this.previewHtml(unescape(text))
+            const renderer = new marked.Renderer()
+            renderer.html = ({ text }) => escape(text)
+            return marked(this.previewText(unescape(text)), { renderer })
         },
         updateCompleteScreenText(value, handleChange) {
             handleChange(unescape(value))

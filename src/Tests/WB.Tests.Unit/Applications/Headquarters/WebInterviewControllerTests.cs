@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Main.Core.Documents;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -119,6 +120,63 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var model = getResumeModel?.Invoke(controller, new object[] { interviewId }) as ResumeWebInterview;
             Assert.That(model, Is.Not.Null);
             Assert.That(model!.UseRecaptchaV3, Is.True);
+        }
+
+        [Test]
+        public void when_rendering_custom_message_should_preserve_placeholder_in_config()
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+            var questionnaire = new QuestionnaireDocument { Title = "Survey title" };
+            var message = "Welcome to %SURVEYNAME%";
+            var config = new WebInterviewConfig
+            {
+                CustomMessages = new Dictionary<WebInterviewUserMessages, string>
+                {
+                    { WebInterviewUserMessages.CompleteScreenText, message }
+                }
+            };
+            var configProvider = Mock.Of<IWebInterviewConfigProvider>(p =>
+                p.Get(questionnaireIdentity) == config);
+            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s =>
+                s.GetQuestionnaireDocument(questionnaireIdentity) == questionnaire);
+            var webInterviewLinkProvider = Mock.Of<IWebInterviewLinkProvider>(p =>
+                p.WebInterviewRequestLink(It.IsAny<string>(), It.IsAny<string>()) == "url");
+            var interviewId = Guid.NewGuid();
+            var interview = Mock.Of<IStatefulInterview>(i =>
+                i.QuestionnaireIdentity == questionnaireIdentity
+                && i.Mode == InterviewMode.CAWI
+                && i.Id == interviewId
+                && i.GetAssignmentId() == 0);
+            var controller = new WebInterviewController(
+                Mock.Of<ICommandService>(),
+                configProvider,
+                Mock.Of<IStatefulInterviewRepository>(),
+                Mock.Of<IUserViewFactory>(),
+                Mock.Of<IInterviewUniqueKeyGenerator>(),
+                Mock.Of<ICaptchaProvider>(),
+                Mock.Of<IAssignmentsService>(),
+                Mock.Of<IInvitationService>(),
+                Mock.Of<INativeReadSideStorage<InterviewSummary>>(),
+                Mock.Of<IInvitationMailingService>(),
+                Mock.Of<IPlainKeyValueStorage<EmailProviderSettings>>(),
+                Mock.Of<IOptions<RecaptchaSettings>>(),
+                Mock.Of<IOptions<CaptchaConfig>>(),
+                Mock.Of<IServiceLocator>(),
+                questionnaireStorage,
+                Mock.Of<IInScopeExecutor>(),
+                Mock.Of<IMemoryCache>(),
+                Mock.Of<ICalendarEventService>(),
+                configProvider,
+                webInterviewLinkProvider);
+            var getInterviewModel = typeof(WebInterviewController).GetMethod(
+                "GetInterviewModel", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            var model = getInterviewModel?.Invoke(controller, new object[] { interviewId.ToString(), interview, config })
+                as WebInterviewIndexPageModel;
+
+            Assert.That(model, Is.Not.Null);
+            Assert.That(model!.CustomMessages[WebInterviewUserMessages.CompleteScreenText], Is.EqualTo("Welcome to Survey title"));
+            Assert.That(config.CustomMessages[WebInterviewUserMessages.CompleteScreenText], Is.EqualTo(message));
         }
 
         [Test]

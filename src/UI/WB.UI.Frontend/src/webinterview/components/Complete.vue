@@ -355,7 +355,7 @@
 
 <script lang="js">
 import { marked } from 'marked'
-import { unescape } from 'lodash-es'
+import { escape, unescape } from 'lodash-es'
 import modal from '@/shared/modal'
 import SectionProgress from './SectionLoadProgress'
 
@@ -499,7 +499,12 @@ export default {
         },
         completeScreenTextHtml() {
             const text = this.$config.customTexts.completeScreenText
-            return text ? marked(unescape(text)) : ''
+            if (!text)
+                return ''
+
+            const renderer = new marked.Renderer()
+            renderer.html = ({ text }) => escape(text)
+            return marked(unescape(text), { renderer })
         },
         noteToSupervisor() {
             return this.$config.customTexts.noteToSupervisor
