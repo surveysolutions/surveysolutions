@@ -31,5 +31,12 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview.Base
         }
 
         public DateTimeOffset OriginDate { get; set; }
+
+        public InterviewCommand CopyForInterview(Guid interviewId)
+        {
+            var copy = (InterviewCommand)this.MemberwiseClone();
+            copy.InterviewId = interviewId;
+            return copy;
+        }
     }
 }

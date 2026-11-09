@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.FileSystem;
@@ -13,6 +13,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly string assemblyStorageDirectory;
+        private readonly HashSet<Guid> initializedQuestionnaires = new HashSet<Guid>();
+        private readonly object sync = new object();
 
         public TesterQuestionnaireAssemblyAccessor(string assemblyStorageDirectory, IFileSystemAccessor fileSystemAccessor)
         {
@@ -46,34 +48,26 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
             string folderName = this.GetFolderNameForTemplate(questionnaireId);
             string pathToFolder = this.fileSystemAccessor.CombinePath(this.assemblyStorageDirectory, folderName);
 
-            //version doesn't have sense to the tester
-            //we are trying to delete old versions before saving the last one
-            if (!this.fileSystemAccessor.IsDirectoryExists(pathToFolder))
+            lock (this.sync)
             {
-                this.fileSystemAccessor.CreateDirectory(pathToFolder);
-            }
-            else
-            {
-                foreach (var file in this.fileSystemAccessor.GetFilesInDirectory(pathToFolder))
+                if (!this.fileSystemAccessor.IsDirectoryExists(pathToFolder))
                 {
-                    try
+                    this.fileSystemAccessor.CreateDirectory(pathToFolder);
+                }
+                else if (!this.initializedQuestionnaires.Contains(questionnaireId))
+                {
+                    foreach (var file in this.fileSystemAccessor.GetFilesInDirectory(pathToFolder))
                     {
                         this.fileSystemAccessor.DeleteFile(file);
                     }
-                    catch
-                    {
-                        //ignore locked files
-                    }
                 }
+
+                var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(pathToFolder, $"{questionnaireVersion}.dll");
+                this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, Convert.FromBase64String(assemblyAsBase64String));
+                this.fileSystemAccessor.MarkFileAsReadonly(pathToSaveAssembly);
+
+                this.initializedQuestionnaires.Add(questionnaireId);
             }
-
-            //generate unique new file name due to version is not valid for tester
-            var fileName = string.Format("{0}.dll", Guid.NewGuid());
-            var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(pathToFolder, fileName);
-
-            this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, Convert.FromBase64String(assemblyAsBase64String));
-
-            this.fileSystemAccessor.MarkFileAsReadonly(pathToSaveAssembly);
         }
 
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
@@ -99,7 +93,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
             var assemblyPath = this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
-            if (!this.fileSystemAccessor.IsFileExists(assemblyPath))
+            if (string.IsNullOrEmpty(assemblyPath) || !this.fileSystemAccessor.IsFileExists(assemblyPath))
                 return null;
 
             return this.fileSystemAccessor.ReadAllBytes(assemblyPath);
@@ -114,15 +108,14 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
         {
             var folderName = this.GetFolderNameForTemplate(questionnaireId);
             var assemblySearchPath = this.fileSystemAccessor.CombinePath(this.assemblyStorageDirectory, folderName);
-            var filesInDirectory = this.fileSystemAccessor.GetFilesInDirectory(assemblySearchPath);
-
-            return filesInDirectory.OrderByDescending(f => this.fileSystemAccessor.GetCreationTime(f)).First();
+            var path = this.fileSystemAccessor.CombinePath(assemblySearchPath, $"{questionnaireVersion}.dll");
+            return this.fileSystemAccessor.IsFileExists(path) ? path : null;
         }
 
         public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
         {
             var assemblyPath = this.CheckAndGetFullPathToAssemblyOrEmpty(questionnaireId, questionnaireVersion);
-            return this.fileSystemAccessor.IsFileExists(assemblyPath);
+            return !string.IsNullOrEmpty(assemblyPath);
         }
     }
 }
