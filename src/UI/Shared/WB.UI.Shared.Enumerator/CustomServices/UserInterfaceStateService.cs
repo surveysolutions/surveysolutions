@@ -1,4 +1,5 @@
-﻿using System.Threading;
+using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -9,17 +10,26 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private static int count = 0;
         private static int throttledActionsCount = 0;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public void NotifyRefreshStarted()
         {
-            Interlocked.Increment(ref count);
+            if (Interlocked.Increment(ref count) == 1)
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.IsUserInterfaceLocked)));
         }
 
         public void NotifyRefreshFinished()
         {
-            if (count > 0)
+            int currentCount;
+            do
             {
-                Interlocked.Decrement(ref count);
-            }
+                currentCount = Volatile.Read(ref count);
+                if (currentCount == 0)
+                    return;
+            } while (Interlocked.CompareExchange(ref count, currentCount - 1, currentCount) != currentCount);
+
+            if (currentCount == 1)
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.IsUserInterfaceLocked)));
         }
 
         public Task WaitWhileUserInterfaceIsRefreshingAsync()

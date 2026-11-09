@@ -52,7 +52,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IUserInteractionService, UserInteractionService>();
             registry.Bind<IStringFormat, StringFormat>();
             registry.Bind<IGoogleApiService, GoogleApiService>();
-            registry.Bind<IUserInterfaceStateService, UserInterfaceStateService>();
+            registry.BindAsSingleton<IUserInterfaceStateService, UserInterfaceStateService>();
             registry.Bind<IExternalAppLauncher, ExternalAppLauncher>();
             registry.Bind<IPermissionsService, PermissionsService>();
             registry.Bind<IImageHelper, BitmapHelper>();

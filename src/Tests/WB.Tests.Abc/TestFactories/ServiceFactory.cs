@@ -308,7 +308,7 @@ namespace WB.Tests.Abc.TestFactories
             liteEventRegistry = liteEventRegistry ?? LiteEventRegistry();
 
             var viewModelEventPublisher = new AsyncEventDispatcher(liteEventRegistry, Mock.Of<ILogger>(),
-                Mock.Of<ICurrentViewModelPresenter>());
+                Mock.Of<ICurrentViewModelPresenter>(), Mock.Of<IUserInterfaceStateService>());
 
             var mockOfViewModelEventQueue = new Mock<IAsyncEventQueue>();
             mockOfViewModelEventQueue.Setup(x => x.Enqueue(Moq.It.IsAny<IReadOnlyCollection<CommittedEvent>>()))
@@ -334,7 +334,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public AsyncEventQueue ViewModelEventQueue(IViewModelEventRegistry liteEventRegistry) =>
             new AsyncEventQueue(new AsyncEventDispatcher(liteEventRegistry,
-                Mock.Of<ILogger>(), Mock.Of<ICurrentViewModelPresenter>()), Mock.Of<ILogger>());
+                Mock.Of<ILogger>(), Mock.Of<ICurrentViewModelPresenter>(), Mock.Of<IUserInterfaceStateService>()), Mock.Of<ILogger>());
 
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
             ILogger logger = null,
@@ -1223,7 +1223,8 @@ namespace WB.Tests.Abc.TestFactories
             ILogger logger = null,
             ICurrentViewModelPresenter currentViewModelPresenter = null) =>
             new AsyncEventDispatcher(viewModelEventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
-                logger ?? Mock.Of<ILogger>(), currentViewModelPresenter ?? Mock.Of<ICurrentViewModelPresenter>());
+                logger ?? Mock.Of<ILogger>(), currentViewModelPresenter ?? Mock.Of<ICurrentViewModelPresenter>(),
+                Mock.Of<IUserInterfaceStateService>());
         
         public IServiceLocator ServiceLocatorService(params object[] instances)
         {

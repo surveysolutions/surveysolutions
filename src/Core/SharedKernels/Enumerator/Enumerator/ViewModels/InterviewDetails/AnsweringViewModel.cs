@@ -48,6 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             private set => this.RaiseAndSetIfChanged(ref this.inProgress, value);
         }
 
+        public IUserInterfaceStateService UserInterfaceStateService => this.userInterfaceStateService;
+
         public virtual async Task SendQuestionCommandAsync(QuestionCommand answerCommand)
         {
             Stopwatch commandTime = Stopwatch.StartNew();
