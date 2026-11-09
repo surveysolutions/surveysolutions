@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.Composite;
 using Ncqrs.Eventing;
 using NUnit.Framework;
@@ -41,7 +42,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.Review
         {
             var interviewId = Guid.NewGuid();
             var questionnaireId = Guid.NewGuid();
-            var questionIds = new[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
+            var questionIds = new[]
+            {
+                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(),
+                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()
+            };
             var interview = CreateInterview(interviewId, questionnaireId, questionIds);
             var userId = Guid.NewGuid();
             var rejectionIdentifier = Guid.NewGuid();
@@ -50,6 +55,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.Review
             var olderCheckpoint = CreateAnswer(questionIds[1], olderRejectionIdentifier);
             var noRejectionCheckpoint = CreateAnswer(questionIds[2], Guid.Empty);
             var unavailableCheckpoint = CreateAnswer(questionIds[3], null);
+            var replacedWithOlderCheckpoint = CreateAnswer(questionIds[4], rejectionIdentifier);
+            var olderReplacement = CreateAnswer(questionIds[4], olderRejectionIdentifier);
+            var replacedWithNoRejectionCheckpoint = CreateAnswer(questionIds[5], rejectionIdentifier);
+            var noRejectionReplacement = CreateAnswer(questionIds[5], Guid.Empty);
+            var replacedWithUnavailableCheckpoint = CreateAnswer(questionIds[6], rejectionIdentifier);
+            var unavailableReplacement = CreateAnswer(questionIds[6], null);
             var synchronizedEvents = new[]
             {
                 Create.Event.InterviewCreated(questionnaireId, 1)
@@ -59,7 +70,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.Review
                 currentCheckpoint.ToAggregateRootEvent(eventSourceId: interviewId),
                 olderCheckpoint.ToAggregateRootEvent(eventSourceId: interviewId),
                 noRejectionCheckpoint.ToAggregateRootEvent(eventSourceId: interviewId),
-                unavailableCheckpoint.ToAggregateRootEvent(eventSourceId: interviewId)
+                unavailableCheckpoint.ToAggregateRootEvent(eventSourceId: interviewId),
+                replacedWithOlderCheckpoint.ToAggregateRootEvent(eventSourceId: interviewId),
+                olderReplacement.ToAggregateRootEvent(eventSourceId: interviewId),
+                replacedWithNoRejectionCheckpoint.ToAggregateRootEvent(eventSourceId: interviewId),
+                noRejectionReplacement.ToAggregateRootEvent(eventSourceId: interviewId),
+                replacedWithUnavailableCheckpoint.ToAggregateRootEvent(eventSourceId: interviewId),
+                unavailableReplacement.ToAggregateRootEvent(eventSourceId: interviewId)
             };
             var command = new SynchronizeInterviewEventsCommand(
                 interviewId,
@@ -78,10 +95,63 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.Review
             Assert.That(olderCheckpoint.LastRejectionEventIdentifier, Is.EqualTo(olderRejectionIdentifier));
             Assert.That(noRejectionCheckpoint.LastRejectionEventIdentifier, Is.EqualTo(Guid.Empty));
             Assert.That(unavailableCheckpoint.LastRejectionEventIdentifier, Is.Null);
+            Assert.That(replacedWithOlderCheckpoint.LastRejectionEventIdentifier, Is.EqualTo(rejectionIdentifier));
+            Assert.That(olderReplacement.LastRejectionEventIdentifier, Is.EqualTo(olderRejectionIdentifier));
+            Assert.That(replacedWithNoRejectionCheckpoint.LastRejectionEventIdentifier, Is.EqualTo(rejectionIdentifier));
+            Assert.That(noRejectionReplacement.LastRejectionEventIdentifier, Is.EqualTo(Guid.Empty));
+            Assert.That(replacedWithUnavailableCheckpoint.LastRejectionEventIdentifier, Is.EqualTo(rejectionIdentifier));
+            Assert.That(unavailableReplacement.LastRejectionEventIdentifier, Is.Null);
+            var synchronizedEventIds = synchronizedEvents.Select(e => e.EventIdentifier).ToHashSet();
+            var synchronizedEventSequences = interview.GetUnCommittedChanges()
+                .Where(e => synchronizedEventIds.Contains(e.EventIdentifier))
+                .Select(e => e.EventSequence);
+            Assert.That(synchronizedEventSequences, Is.EqualTo(Enumerable.Range(1, synchronizedEvents.Length)));
             Assert.That(interview.IsQuestionChangedSinceLastRejection(Create.Entity.Identity(questionIds[0])), Is.True);
             Assert.That(interview.IsQuestionChangedSinceLastRejection(Create.Entity.Identity(questionIds[1])), Is.False);
             Assert.That(interview.IsQuestionChangedSinceLastRejection(Create.Entity.Identity(questionIds[2])), Is.False);
             Assert.That(interview.IsQuestionChangedSinceLastRejection(Create.Entity.Identity(questionIds[3])), Is.False);
+            Assert.That(interview.IsQuestionChangedSinceLastRejection(Create.Entity.Identity(questionIds[4])), Is.False);
+            Assert.That(interview.IsQuestionChangedSinceLastRejection(Create.Entity.Identity(questionIds[5])), Is.False);
+            Assert.That(interview.IsQuestionChangedSinceLastRejection(Create.Entity.Identity(questionIds[6])), Is.False);
+        }
+
+        [Test]
+        public void when_replaying_successive_answers_should_recompute_change_detection()
+        {
+            var interviewId = Guid.NewGuid();
+            var questionnaireId = Guid.NewGuid();
+            var questionId = Guid.NewGuid();
+            var interview = CreateInterview(interviewId, questionnaireId, questionId);
+            var rejectionIdentifier = Guid.NewGuid();
+            var olderRejectionIdentifier = Guid.NewGuid();
+            var history = new List<CommittedEvent>
+            {
+                CreateHistoryEvent(interviewId, 1, Create.Event.InterviewCreated(questionnaireId, 1)),
+                CreateHistoryEvent(
+                    interviewId,
+                    2,
+                    new InterviewRejectedByHQ(Guid.NewGuid(), "", DateTimeOffset.UtcNow),
+                    rejectionIdentifier),
+                CreateHistoryEvent(interviewId, 3, CreateAnswer(questionId, rejectionIdentifier))
+            };
+
+            interview.InitializeFromHistory(interviewId, history);
+            var identity = Create.Entity.Identity(questionId);
+            Assert.That(interview.IsQuestionChangedSinceLastRejection(identity), Is.True);
+
+            history.Add(CreateHistoryEvent(interviewId, 4, CreateAnswer(questionId, olderRejectionIdentifier)));
+            interview.InitializeFromHistory(interviewId, new[] { history[^1] });
+            Assert.That(interview.IsQuestionChangedSinceLastRejection(identity), Is.False);
+
+            history.Add(CreateHistoryEvent(interviewId, 5, CreateAnswer(questionId, rejectionIdentifier)));
+            interview.InitializeFromHistory(interviewId, new[] { history[^1] });
+            Assert.That(interview.IsQuestionChangedSinceLastRejection(identity), Is.True);
+
+            var unavailableCheckpoint = CreateAnswer(questionId, null);
+            history.Add(CreateHistoryEvent(interviewId, 6, unavailableCheckpoint));
+            interview.InitializeFromHistory(interviewId, new[] { history[^1] });
+            Assert.That(unavailableCheckpoint.LastRejectionEventIdentifier, Is.Null);
+            Assert.That(interview.IsQuestionChangedSinceLastRejection(identity), Is.False);
         }
 
         private static StatefulInterview CreateInterview(Guid interviewId, Guid questionnaireId, params Guid[] questionIds)

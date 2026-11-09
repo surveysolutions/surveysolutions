@@ -221,18 +221,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         this.questionsChangedSinceLastRejection.Clear();
                         this.lastRejectionEventIdentifier = this.applyingEventIdentifier;
                         break;
-                    case QuestionAnswered questionAnswered
-                        when !questionAnswered.LastRejectionEventIdentifier.HasValue:
-                        break;
-                    case QuestionAnswered questionAnswered
-                        when questionAnswered.LastRejectionEventIdentifier.HasValue &&
-                             questionAnswered.LastRejectionEventIdentifier != Guid.Empty &&
-                             questionAnswered.LastRejectionEventIdentifier == this.lastRejectionEventIdentifier:
+                    case QuestionAnswered questionAnswered:
                         {
-                            this.questionsChangedSinceLastRejection.Add(
-                                Identity.Create(questionAnswered.QuestionId, questionAnswered.RosterVector));
+                            var identity = Identity.Create(questionAnswered.QuestionId, questionAnswered.RosterVector);
+                            this.questionsChangedSinceLastRejection.Remove(identity);
+                            if (questionAnswered.LastRejectionEventIdentifier.HasValue &&
+                                questionAnswered.LastRejectionEventIdentifier != Guid.Empty &&
+                                questionAnswered.LastRejectionEventIdentifier == this.lastRejectionEventIdentifier)
+                            {
+                                this.questionsChangedSinceLastRejection.Add(identity);
+                            }
+                            break;
                         }
-                        break;
                     case AnswerRemoved answerRemoved
                         when this.lastRejectionEventIdentifier.HasValue &&
                              this.lastRejectionEventIdentifier != Guid.Empty:
