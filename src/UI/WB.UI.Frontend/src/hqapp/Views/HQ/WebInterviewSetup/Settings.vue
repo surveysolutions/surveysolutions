@@ -1087,7 +1087,8 @@ export default {
                         toastr.warning(this.$t('WebInterviewSettings.TotalWithErrors', {
                             withErrorsCount: status.failedCount,
                         }))
-                    } else {
+                    }
+                    if (status.unconfirmedCount > 0 || status.failedCount === 0) {
                         toastr.warning(status.error || this.$t('WebInterviewSettings.SendingFailed'),
                             undefined, { escapeHtml: true })
                     }
