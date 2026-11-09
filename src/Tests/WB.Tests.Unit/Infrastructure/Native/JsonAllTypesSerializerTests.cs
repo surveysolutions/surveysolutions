@@ -61,13 +61,20 @@ namespace WB.Tests.Unit.Infrastructure.Native
             Assert.That(deserialized[0].Value[0], Is.EqualTo(failedValidationCondition));
         }
 
-        [Test]
-        public void When_deserializing_payload_with_disallowed_type_Should_throw()
+        [TestCase(typeof(System.Diagnostics.Process))]
+        [TestCase(typeof(List<System.Diagnostics.Process>))]
+        [TestCase(typeof(System.Diagnostics.Process[]))]
+        public void When_deserializing_payload_with_disallowed_type_Should_throw(Type disallowedType)
         {
             var serializer = new JsonAllTypesSerializer();
-            var payload = "{\"$type\":\"System.Diagnostics.Process, System.Diagnostics.Process\"}";
+            var payload = disallowedType.IsArray || disallowedType.IsGenericType
+                ? $"{{\"$type\":\"{disallowedType.AssemblyQualifiedName}\",\"$values\":[]}}"
+                : $"{{\"$type\":\"{disallowedType.AssemblyQualifiedName}\"}}";
 
-            Assert.Throws<Newtonsoft.Json.JsonSerializationException>(() => serializer.Deserialize<object>(payload));
+            var exception = Assert.Throws<Newtonsoft.Json.JsonSerializationException>(() => serializer.Deserialize<object>(payload));
+
+            Assert.That(exception?.GetBaseException().Message,
+                Is.EqualTo("Type 'System.Diagnostics.Process' is not allowed for deserialization"));
         }
     }
 }
