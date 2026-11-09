@@ -551,6 +551,21 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return null;
             }
 
+            if (this.substitutionService.IsRosterServiceVariable(substitutionReference))
+            {
+                bool isCheckedEntityaRoster = translatedEntityWithSubstitution.Entity is IGroup group2 && group2.IsRoster;
+                if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0 ||
+                    vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 1 && isCheckedEntityaRoster)
+                {
+                    return QuestionnaireVerificationMessage.Error("WB0059",
+                        VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
+                        translatedEntityWithSubstitution.TranslationName,
+                        referenceToEntityWithSubstitution);
+                }
+
+                return null;
+            }
+
             var entityToSubstitute = GetEntityByVariable(substitutionReference, questionnaire);
             if (entityToSubstitute == null)
             {
