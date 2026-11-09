@@ -222,6 +222,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         this.lastRejectionEventIdentifier = this.applyingEventIdentifier;
                         break;
                     case QuestionAnswered questionAnswered
+                        when !questionAnswered.LastRejectionEventIdentifier.HasValue:
+                        break;
+                    case QuestionAnswered questionAnswered
                         when questionAnswered.LastRejectionEventIdentifier.HasValue &&
                              questionAnswered.LastRejectionEventIdentifier != Guid.Empty &&
                              questionAnswered.LastRejectionEventIdentifier == this.lastRejectionEventIdentifier:

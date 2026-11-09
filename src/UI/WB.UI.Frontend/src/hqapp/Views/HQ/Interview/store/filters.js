@@ -50,9 +50,10 @@ export default {
             const skip = state.search.needToClear ? 0 : state.search.skip
             const limit = state.search.pageSize
             const res = await api.get('search', { flags, skip, limit })
-            if (requestVersion !== state.search.requestVersion) return
+            if (requestVersion !== state.search.requestVersion) return false
             commit('LOG_LAST_ACTIVITY')
             commit('SET_SEARCH_RESULT', res)
+            return true
         },
 
         applyFiltering({ commit, state, dispatch }, filter) {
@@ -84,7 +85,7 @@ export default {
 
         refreshSearchResults({ dispatch, commit }) {
             commit('SEARCH_NEED_TO_CLEAR')
-            dispatch('fetchSearchResults')
+            return dispatch('fetchSearchResults')
         },
     },
 

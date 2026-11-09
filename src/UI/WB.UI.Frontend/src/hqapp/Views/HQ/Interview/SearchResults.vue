@@ -46,10 +46,11 @@ export default {
             const maxAutoLoadIterations = 5
             try {
                 do {
-                    await this.$store.dispatch('fetchSearchResults')
+                    const refreshed = await this.fetchLatestSearchResults()
                     await this.waitForRenderAndLayout()
                     autoLoadIterations += 1
 
+                    if (refreshed) previousSkip = 0
                     if (this.searchResult.skip <= previousSkip) break
                     previousSkip = this.searchResult.skip
                 } while (
@@ -60,6 +61,18 @@ export default {
             } finally {
                 this._loading = false
             }
+        },
+        async fetchLatestSearchResults() {
+            let refreshed = false
+            let applied = false
+            while (!applied) {
+                applied = await this.$store.dispatch('fetchSearchResults')
+                if (!applied) {
+                    refreshed = true
+                    applied = await this.$store.dispatch('refreshSearchResults')
+                }
+            }
+            return refreshed
         },
         async waitForRenderAndLayout() {
             await this.$nextTick()
@@ -109,7 +122,7 @@ export default {
 
         this._loading = true
         try {
-            await this.$store.dispatch('fetchSearchResults')
+            await this.fetchLatestSearchResults()
         } finally {
             this._loading = false
         }
