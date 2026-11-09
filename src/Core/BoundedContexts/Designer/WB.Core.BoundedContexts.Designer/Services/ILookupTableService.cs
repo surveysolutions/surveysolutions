@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         void DeleteAllByQuestionnaireId(Guid questionnaireId);
         LookupTableContent? GetLookupTableContent(Guid questionnaireId, Guid lookupTableId);
         LookupTableContentFile? GetLookupTableContentFile(QuestionnaireRevision questionnaireId, Guid lookupTableId);
+        string[]? GetLookupTableHeaders(QuestionnaireRevision questionnaireId, Guid lookupTableId);
         Dictionary<Guid, string> GetQuestionnairesLookupTables(Guid questionnaireId);
         Dictionary<Guid, string> GetQuestionnairesLookupTables(QuestionnaireRevision questionnaireId);
         void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, Guid newQuestionnaireId, Guid newLookupTableId);

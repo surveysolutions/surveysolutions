@@ -1,17 +1,16 @@
 import path from 'path';
 import { defineConfig } from 'vite';
-import inject from '@rollup/plugin-inject';
 import Vue from '@vitejs/plugin-vue';
 import Vuetify from 'vite-plugin-vuetify';
-import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
+import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization.js';
 import { normalizePath } from 'vite';
 import fs from 'fs';
 import { globSync } from 'glob';
 
-const baseDir = path.resolve(__dirname, './');
+const baseDir = path.resolve(import.meta.dirname, './');
 const join = path.join.bind(path, baseDir);
 
-const outDir = path.resolve(__dirname, './wwwroot');
+const outDir = path.resolve(import.meta.dirname, './wwwroot');
 
 const pages = {
     logon: {
@@ -300,11 +299,11 @@ export default defineConfig(({ mode, command }) => {
             alias: [
                 {
                     find: '@',
-                    replacement: path.resolve(__dirname, './questionnare/src'),
+                    replacement: path.resolve(import.meta.dirname, './questionnare/src'),
                 },
                 {
                     find: '~',
-                    replacement: path.resolve(__dirname, './'),
+                    replacement: path.resolve(import.meta.dirname, './'),
                 },
                 {
                     find: 'jquery',
@@ -334,12 +333,12 @@ export default defineConfig(({ mode, command }) => {
                 //external: ['jquery'],
                 //preserveEntrySignatures: true,
                 //maxParallelFileOps: 2,
-                plugins: [
-                    inject({
+                transform: {
+                    inject: {
                         $: 'jquery',
                         jQuery: 'jquery',
-                    }),
-                ],
+                    },
+                },
                 input: inputPages,
                 output: {
                     //inlineDynamicImports: false,

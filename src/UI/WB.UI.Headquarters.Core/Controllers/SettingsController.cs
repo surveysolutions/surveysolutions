@@ -6,7 +6,7 @@ using Amazon;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SixLabors.ImageSharp;
+using WB.Core.Infrastructure.Exceptions;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -91,7 +91,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 return Ok();
             }
-            catch (UnknownImageFormatException)
+            catch (InvalidImageException)
             {
                 return BadRequest();
             }

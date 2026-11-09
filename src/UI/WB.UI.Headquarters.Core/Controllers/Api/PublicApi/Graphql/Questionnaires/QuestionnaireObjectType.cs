@@ -27,6 +27,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                     var questionnaire = questionnaireStorage.GetQuestionnaire(browseItem.Identity(), null);
                     return questionnaire?.DefaultLanguageName;
                 });
+            descriptor.Field("defaultTranslationId")
+                .Type<UuidType>()
+                .Resolve(ctx =>
+                {
+                    var questionnaireStorage = ctx.Service<IQuestionnaireStorage>();
+                    var browseItem = ctx.Parent<QuestionnaireBrowseItem>();
+                    var questionnaire = questionnaireStorage.GetQuestionnaire(browseItem.Identity(), null);
+                    return questionnaire?.GetDefaultTranslationId();
+                });
             descriptor.Field("translations")
                 .Type<NonNullType<ListType<NonNullType<Translation>>>>()
                 .Resolve(ctx =>

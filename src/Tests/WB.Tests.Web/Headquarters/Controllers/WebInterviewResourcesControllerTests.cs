@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SixLabors.ImageSharp;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.Infrastructure.Exceptions;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -41,7 +41,7 @@ namespace WB.Tests.Web.Headquarters.Controllers
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
                 .Setup(x => x.ResizeImage(It.IsAny<byte[]>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Throws(new UnknownImageFormatException("Unsupported image format"));
+                .Throws(new InvalidImageException("Unsupported image format"));
 
             var controller = CreateController(imageProcessingService.Object, attachmentStorage.Object);
 
@@ -71,7 +71,7 @@ namespace WB.Tests.Web.Headquarters.Controllers
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
                 .Setup(x => x.Validate(It.IsAny<byte[]>()))
-                .Throws(new UnknownImageFormatException("Unsupported image format"));
+                .Throws(new InvalidImageException("Unsupported image format"));
 
             var controller = CreateController(imageProcessingService.Object, attachmentStorage.Object);
             controller.ControllerContext.HttpContext.Request.QueryString = new QueryString("?fullSize=1");
@@ -96,7 +96,7 @@ namespace WB.Tests.Web.Headquarters.Controllers
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
                 .Setup(x => x.ResizeImage(It.IsAny<byte[]>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Throws(new UnknownImageFormatException("Unsupported image format"));
+                .Throws(new InvalidImageException("Unsupported image format"));
 
             var controller = CreateController(
                 imageProcessingService.Object,
@@ -124,7 +124,7 @@ namespace WB.Tests.Web.Headquarters.Controllers
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
                 .Setup(x => x.Validate(It.IsAny<byte[]>()))
-                .Throws(new UnknownImageFormatException("Unsupported image format"));
+                .Throws(new InvalidImageException("Unsupported image format"));
 
             var controller = CreateController(
                 imageProcessingService.Object,
@@ -156,7 +156,7 @@ namespace WB.Tests.Web.Headquarters.Controllers
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
                 .Setup(x => x.Validate(It.IsAny<byte[]>()))
-                .Throws(new InvalidImageContentException("Image content is corrupted"));
+                .Throws(new InvalidImageException("Image content is corrupted"));
 
             var controller = CreateController(
                 imageProcessingService.Object,

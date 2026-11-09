@@ -1,0 +1,51 @@
+name: "Copilot issue analysis"
+on:
+  issues:
+    types: [assigned, labeled]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  needs-human:
+    if: github.event.action == 'assigned' && github.event.assignee.login == 'Copilot' && contains(github.event.issue.labels.*.name, 'copilot:analyze')
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          gh issue edit "$ISSUE" --repo "$REPO" --remove-label "copilot:analyze" --add-label "needs-human"
+          gh issue comment "$ISSUE" --repo "$REPO" --body "Copilot is analyzing this issue; questions will be in the linked draft PR. Answer here, then add \`copilot:ready\` (the analysis PR closes automatically) and reassign Copilot (default agent)."
+
+  close-analysis:
+    if: github.event.action == 'labeled' && github.event.label.name == 'copilot:ready'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      ISSUE: ${{ github.event.issue.number }}
+    steps:
+      - name: Close open issue-analyst PRs linked to the issue
+        run: |
+          prs=$(gh api graphql -F owner="${REPO%/*}" -F name="${REPO#*/}" -F number="$ISSUE" -f query='
+            query($owner: String!, $name: String!, $number: Int!, $endCursor: String) {
+              repository(owner: $owner, name: $name) {
+                issue(number: $number) {
+                  closedByPullRequestsReferences(first: 100, after: $endCursor, includeClosedPrs: false) {
+                    nodes { number isDraft author { login } body }
+                    pageInfo { hasNextPage endCursor }
+                  }
+                }
+              }
+            }' --paginate --jq '.data.repository.issue.closedByPullRequestsReferences.nodes[]?
+              | select(.author.login == "copilot-swe-agent" and .isDraft and (.body | contains("## Assessment")))
+              | .number')
+          for pr in $prs; do
+            gh pr close "$pr" --repo "$REPO" --comment "Closed automatically: analysis answered, issue marked \`copilot:ready\`."
+          done
+      - name: Remove needs-human
+        if: contains(github.event.issue.labels.*.name, 'needs-human')
+        run: gh issue edit "$ISSUE" --repo "$REPO" --remove-label "needs-human"
