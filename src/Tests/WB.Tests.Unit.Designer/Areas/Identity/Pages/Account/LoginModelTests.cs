@@ -164,11 +164,35 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
                 It.IsAny<DesignerIdentityUser>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Never);
         }
 
+        [TestCase(CaptchaProviderType.None)]
+        [TestCase(CaptchaProviderType.Hosted)]
+        public async Task when_captcha_is_disabled_and_failed_attempts_exceeded_should_not_validate_captcha(CaptchaProviderType captchaType)
+        {
+            var user = new DesignerIdentityUser { EmailConfirmed = true, UserName = "tester" };
+            var userManagerMock = CreateUserManager();
+            userManagerMock.Setup(x => x.FindByNameAsync("tester")).ReturnsAsync(user);
+            var signInManagerMock = CreateSignInManager(userManagerMock.Object);
+            signInManagerMock.Setup(x => x.PasswordSignInAsync(user, "pwd", false, false))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+            var recaptchaService = new Mock<IRecaptchaService>();
+            var model = CreateLoginModel(signInManagerMock.Object, userManagerMock.Object,
+                shouldShowCaptcha: true,
+                captchaType: captchaType,
+                recaptchaService: recaptchaService);
+
+            await model.OnPostAsync("/manage");
+
+            Assert.That(model.ShouldShowCaptcha, Is.False);
+            recaptchaService.Verify(x => x.Validate(It.IsAny<HttpRequest>(), It.IsAny<bool>()), Times.Never);
+            signInManagerMock.Verify(x => x.PasswordSignInAsync(user, "pwd", false, false), Times.Once);
+        }
+
         private static LoginModel CreateLoginModel(SignInManager<DesignerIdentityUser> signInManager,
             UserManager<DesignerIdentityUser> userManager,
             bool shouldShowCaptcha = false,
             CaptchaProviderType captchaType = CaptchaProviderType.None,
-            RecaptchaResponse recaptchaResponse = null)
+            RecaptchaResponse recaptchaResponse = null,
+            Mock<IRecaptchaService> recaptchaService = null)
         {
             var urlHelper = new Mock<IUrlHelper>();
             urlHelper.Setup(x => x.IsLocalUrl(It.IsAny<string>()))
@@ -179,7 +203,7 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
             var captchaService = new Mock<ICaptchaService>();
             captchaService.Setup(x => x.ShouldShowCaptcha(It.IsAny<string>()))
                 .Returns(shouldShowCaptcha);
-            var recaptchaService = new Mock<IRecaptchaService>();
+            recaptchaService ??= new Mock<IRecaptchaService>();
             recaptchaService.Setup(x => x.Validate(It.IsAny<HttpRequest>(), It.IsAny<bool>()))
                 .ReturnsAsync(recaptchaResponse ?? new RecaptchaResponse { success = true, score = 0.9, action = "login" });
 
