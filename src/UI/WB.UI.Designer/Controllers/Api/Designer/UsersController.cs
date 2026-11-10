@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Implementation;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
@@ -13,12 +14,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     {
         private readonly UserManager<DesignerIdentityUser> users;
         private readonly IPlainKeyValueStorage<AssistantSettings> appSettingsStorage;
+        private readonly IGlobalNoticeService globalNoticeService;
 
         public UsersController(UserManager<DesignerIdentityUser> users,
-            IPlainKeyValueStorage<AssistantSettings> appSettingsStorage)
+            IPlainKeyValueStorage<AssistantSettings> appSettingsStorage,
+            IGlobalNoticeService globalNoticeService)
         {
             this.users = users;
             this.appSettingsStorage = appSettingsStorage;
+            this.globalNoticeService = globalNoticeService;
         }
 
         [Route("api/users/CurrentLogin")]
@@ -34,8 +38,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 UserName = User.GetUserNameOrNull(),
                 Email = user?.Email,
                 IsAuthenticated = isAuthenticated,
-                AIAvailable = isAuthenticated && settings != null && settings.IsEnabled && (settings.IsAvailableToAllUsers || user?.AssistantEnabled == true)
+                AIAvailable = isAuthenticated && settings != null && settings.IsEnabled && (settings.IsAvailableToAllUsers || user?.AssistantEnabled == true),
                 //check if AI assistant is enabled for current user
+                GlobalNotice = isAuthenticated ? globalNoticeService.GetMessage() : null
             };
             return Ok(response);
         }

@@ -333,4 +333,22 @@
   <data name="IncludeScenarios" xml:space="preserve">
     <value>Inclure les scénarios</value>
   </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>Avis global</value>
+  </data>
+  <data name="GlobalNoticeDescription" xml:space="preserve">
+    <value>Le message s'affiche en haut des pages pour tous les utilisateurs de Designer. Enregistrez un message vide pour le supprimer.</value>
+  </data>
+  <data name="GlobalNoticeMessage" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="GlobalNoticeMessageTooLong" xml:space="preserve">
+    <value>Le message ne doit pas dépasser {1} caractères.</value>
+  </data>
+  <data name="GlobalNoticeUpdated" xml:space="preserve">
+    <value>Avis global mis à jour avec succès</value>
+  </data>
+  <data name="GlobalNoticeRemoved" xml:space="preserve">
+    <value>Avis global supprimé avec succès</value>
+  </data>
 </root>

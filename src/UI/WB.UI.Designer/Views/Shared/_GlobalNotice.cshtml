@@ -1,0 +1,13 @@
+@using WB.Core.BoundedContexts.Designer.Services
+@using WB.UI.Designer.Resources
+@inject IGlobalNoticeService GlobalNoticeService
+@{
+    var globalNotice = GlobalNoticeService.GetMessage();
+}
+@if (globalNotice != null)
+{
+    <div class="alert alert-info alert-dismissible text-center global-notice" role="alert" style="margin: 0;">
+        <button type="button" class="close" data-bs-dismiss="alert" aria-label="@QuestionnaireController.Close"><span aria-hidden="true">&times;</span></button>
+        <span style="white-space: pre-line;">@globalNotice</span>
+    </div>
+}

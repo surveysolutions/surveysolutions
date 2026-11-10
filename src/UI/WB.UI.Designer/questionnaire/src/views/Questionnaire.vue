@@ -12,6 +12,13 @@
         <v-progress-linear :active="progressStore.getIsRunning" indeterminate color="#29d" height="3"
             style="position:fixed;top:0;left:0;right:0;z-index:9999" />
     </div>
+    <div v-if="globalNotice" class="alert alert-info alert-dismissible editor-global-notice" role="alert">
+        <button type="button" class="close" :aria-label="$t('QuestionnaireEditor.Close')"
+            @click="globalNoticeDismissed = true">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <span class="global-notice-text">{{ globalNotice }}</span>
+    </div>
     <div id="loading-logo" v-if="isActionRunning"></div>
     <confirm-dialog></confirm-dialog>
     <notifications position="top right">
@@ -80,6 +87,21 @@
         padding-right: 36px;
     }
 }
+
+.editor-global-notice {
+    position: fixed;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050;
+    max-width: 60%;
+    margin: 0;
+    text-align: center;
+
+    .global-notice-text {
+        white-space: pre-line;
+    }
+}
 </style>
 
 <script>
@@ -118,7 +140,8 @@ export default {
     },
     data() {
         return {
-            showCheatSheet: false
+            showCheatSheet: false,
+            globalNoticeDismissed: false
         };
     },
     setup() {
@@ -203,6 +226,9 @@ export default {
         },
         cheatSheetVisible() {
             return this.showCheatSheet;
+        },
+        globalNotice() {
+            return this.globalNoticeDismissed ? null : this.currentUser.globalNotice;
         }
     },
     methods: {
