@@ -11,8 +11,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
+using NJsonSchema;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ImportExport;
@@ -312,10 +311,11 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             
             questionnaireDocument.Should().BeEquivalentTo(newQuestionnaire, CompareOptions());
             newQuestionnaire.Should().BeEquivalentTo(questionnaireDocument, CompareOptions());
-            errors.Count.Should().Be(3);
-            errors.First().Should().Be("Required properties are missing from object: Name, FileName.");
-            errors.Second().Should().Be("Required properties are missing from object: FileName.");
-            errors.Last().Should().Be("Required properties are missing from object: FileName.");
+            errors.Should().Equal(
+                "PropertyRequired: #/Translations.Items[0].Name",
+                "PropertyRequired: #/Translations.Items[0].FileName",
+                "PropertyRequired: #/Translations.Items[1].FileName",
+                "PropertyRequired: #/Translations.Items[2].FileName");
         }
         
         [Test]
@@ -1067,11 +1067,9 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             using StreamReader reader = new StreamReader(stream);
             string schemaText = reader.ReadToEnd();
 
-            var schema = JSchema.Parse(schemaText);
+            var schema = JsonSchema.FromJsonAsync(schemaText).GetAwaiter().GetResult();
 
-            JToken jToken = JToken.Parse(json);
-            jToken.IsValid(schema, out IList<ValidationError> errors);
-            return errors.Select(e => e.Message).ToList();
+            return schema.Validate(json).Flatten().Select(e => $"{e.Kind}: {e.Path}").ToList();
         }
         
         // freeze 7.2 version for non-commercial users

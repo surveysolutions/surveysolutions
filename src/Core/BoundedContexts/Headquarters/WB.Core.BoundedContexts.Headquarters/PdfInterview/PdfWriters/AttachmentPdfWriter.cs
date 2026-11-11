@@ -1,7 +1,6 @@
 ﻿using System;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
-using SixLabors.ImageSharp;
+using MigraDoc.DocumentObjectModel;
+using WB.Core.Infrastructure.Exceptions;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 
@@ -44,15 +43,12 @@ public class AttachmentPdfWriter : IPdfWriter
 
             try
             {
-                ImageSource.IImageSource imageSource = ImageSource.FromBinary(attachment.FileName,
-                    () => attachment.Content);
-
-                var image = paragraph.AddImage(imageSource);
+                var image = paragraph.AddImage(PdfImageSource.FromBinary(attachment.Content));
                 image.LockAspectRatio = true;
                 image.Width = Unit.FromPoint(300);
                 image.Height = Unit.FromPoint(300);
             }
-            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            catch (Exception exception) when (exception is InvalidImageException || exception is NotSupportedException)
             {
                 paragraph.AddWrapFormattedText($"{attachment.FileName}", PdfStyles.QuestionAnswer);
             }
