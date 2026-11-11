@@ -60,6 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             using (var client = new SmtpClient())
             {
                 SecureSocketOptions tls = settings.SmtpTlsEncryption ? SecureSocketOptions.Auto : SecureSocketOptions.None;
+                string? emailId = null;
 
                 try
                 {
@@ -70,8 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                         await client.AuthenticateAsync(settings.SmtpUsername, settings.SmtpPassword);
                     }
 
-                    await client.SendAsync(message);
-                    return message.MessageId ?? string.Empty;
+                    emailId = await client.SendAsync(message);
                 }
                 catch (AggregateException ae)
                 {
@@ -84,8 +84,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 }
                 finally
                 {
-                    await client.DisconnectAsync(true);
+                    try
+                    {
+                        await client.DisconnectAsync(true);
+                    }
+                    catch
+                    {
+                    }
                 }
+
+                return emailId ?? string.Empty;
             }
         }
 

@@ -9,17 +9,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     public static class ReminderEmailSendLock
     {
         public static async Task<bool> TryAcquireDeliveryAsync(IUnitOfWork unitOfWork,
-            QuestionnaireIdentity questionnaireIdentity, EmailTextTemplateType reminderType)
+            QuestionnaireIdentity questionnaireIdentity)
         {
-            var lockKey = SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, reminderType);
+            var lockKey = questionnaireIdentity.ToString();
             return await TryAcquireAsync(unitOfWork, $"ReminderDelivery-{lockKey}").ConfigureAwait(false);
         }
 
         public static async Task AcquireRequestAsync(IUnitOfWork unitOfWork,
-            QuestionnaireIdentity questionnaireIdentity, EmailTextTemplateType reminderType)
+            QuestionnaireIdentity questionnaireIdentity, Guid requestId)
         {
-            var lockKey = SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, reminderType);
-            while (!await TryAcquireAsync(unitOfWork, $"ReminderRequest-{lockKey}").ConfigureAwait(false))
+            while (!await TryAcquireAsync(unitOfWork, $"ReminderRequest-{questionnaireIdentity}").ConfigureAwait(false))
+                await Task.Delay(50).ConfigureAwait(false);
+
+            while (!await TryAcquireAsync(unitOfWork, $"ReminderRequestId-{requestId:N}").ConfigureAwait(false))
                 await Task.Delay(50).ConfigureAwait(false);
         }
 

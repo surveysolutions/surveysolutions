@@ -15,8 +15,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     public interface ISendRemindersNowService
     {
         Task<SendRemindersNowStatus> SendAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
-            EmailTextTemplateType type);
+            EmailTextTemplateType type, Guid requestId);
         Task<SendRemindersNowStatus> GetStatusAsync(QuestionnaireIdentity questionnaireIdentity, Guid requestId);
+    }
+
+    public class ReminderRequestIdConflictException : Exception
+    {
+        public ReminderRequestIdConflictException()
+            : base("The request ID has already been used for a different reminder request.")
+        {
+        }
     }
 
     public class SendRemindersNowService : ISendRemindersNowService
@@ -36,30 +44,68 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         }
 
         public async Task<SendRemindersNowStatus> SendAsync(QuestionnaireIdentity questionnaireIdentity,
-            string questionnaireTitle, EmailTextTemplateType type)
+            string questionnaireTitle, EmailTextTemplateType type, Guid requestId)
         {
+            if (requestId == Guid.Empty)
+                throw new ArgumentException("A request ID is required.", nameof(requestId));
+
             var status = await rootScopeExecutor.ExecuteAsync(async locator =>
             {
                 var unitOfWork = locator.GetInstance<IUnitOfWork>();
-                await ReminderEmailSendLock.AcquireRequestAsync(unitOfWork, questionnaireIdentity, type)
+                await ReminderEmailSendLock.AcquireRequestAsync(unitOfWork, questionnaireIdentity, requestId)
                     .ConfigureAwait(false);
 
                 var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
+                var requestStatusKey = SendRemindersNowRequest.GetStatusStorageKey(requestId);
+                var requestStatus = storage.GetByIdUncached(requestStatusKey);
+                if (requestStatus != null)
+                {
+                    if (requestStatus.QuestionnaireIdentity != questionnaireIdentity || requestStatus.Type != type)
+                        throw new ReminderRequestIdConflictException();
+
+                    return requestStatus;
+                }
+
+                var aliases = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowRequestIdAlias>>();
+                var aliasKey = SendRemindersNowRequestIdAlias.GetStorageKey(requestId);
+                var alias = aliases.GetByIdUncached(aliasKey);
+                if (alias != null)
+                {
+                    if (alias.QuestionnaireIdentity != questionnaireIdentity || alias.Type != type)
+                        throw new ReminderRequestIdConflictException();
+
+                    var aliasedStatus = storage.GetByIdUncached(
+                        SendRemindersNowRequest.GetStatusStorageKey(alias.RequestId));
+                    return aliasedStatus ?? throw new ReminderRequestIdConflictException();
+                }
+
                 var activeStatusKey = SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, type);
-                var activeStatus = storage.GetById(activeStatusKey);
+                var activeStatus = storage.GetByIdUncached(activeStatusKey);
                 if (activeStatus?.State is SendRemindersNowState.Queued or SendRemindersNowState.InProgress)
+                {
+                    if (activeStatus.RequestId != requestId)
+                    {
+                        aliases.Store(new SendRemindersNowRequestIdAlias
+                        {
+                            RequestId = activeStatus.RequestId,
+                            QuestionnaireIdentity = questionnaireIdentity,
+                            Type = type
+                        }, aliasKey);
+                    }
+
                     return activeStatus;
+                }
 
                 var status = new SendRemindersNowStatus
                 {
-                    RequestId = Guid.NewGuid(),
+                    RequestId = requestId,
                     QuestionnaireIdentity = questionnaireIdentity,
                     QuestionnaireTitle = questionnaireTitle,
                     Type = type,
                     State = SendRemindersNowState.Queued
                 };
                 storage.Store(status, activeStatusKey);
-                storage.Store(status, SendRemindersNowRequest.GetStatusStorageKey(status.RequestId));
+                storage.Store(status, requestStatusKey);
                 return status;
             }).ConfigureAwait(false);
 
@@ -73,7 +119,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var status = await rootScopeExecutor.ExecuteAsync(locator =>
             {
                 var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
-                return Task.FromResult(storage.GetById(SendRemindersNowRequest.GetStatusStorageKey(requestId)));
+                var status = storage.GetByIdUncached(SendRemindersNowRequest.GetStatusStorageKey(requestId));
+                if (status == null)
+                {
+                    var alias = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowRequestIdAlias>>()
+                        .GetByIdUncached(SendRemindersNowRequestIdAlias.GetStorageKey(requestId));
+                    if (alias?.QuestionnaireIdentity == questionnaireIdentity)
+                        status = storage.GetByIdUncached(
+                            SendRemindersNowRequest.GetStatusStorageKey(alias.RequestId));
+                }
+
+                return Task.FromResult(status);
             }).ConfigureAwait(false);
 
             if (status?.QuestionnaireIdentity != questionnaireIdentity)
@@ -96,7 +152,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
                 var statusStorageKey = SendRemindersNowRequest.GetStatusStorageKey(status.RequestId);
-                var currentStatus = storage.GetById(statusStorageKey);
+                var currentStatus = storage.GetByIdUncached(statusStorageKey);
                 if (currentStatus?.State is not (SendRemindersNowState.Queued or SendRemindersNowState.InProgress))
                     return true;
 
@@ -118,7 +174,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 }
                 catch (Exception)
                 {
-                    var latestStatus = storage.GetById(statusStorageKey);
+                    var latestStatus = storage.GetByIdUncached(statusStorageKey);
                     if (latestStatus?.State is not (SendRemindersNowState.Queued or SendRemindersNowState.InProgress)
                         || latestStatus.StartedAtUtc != startedAtUtc
                         || await IsScheduledOrRunningAsync(request).ConfigureAwait(false))

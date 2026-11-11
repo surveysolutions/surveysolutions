@@ -216,6 +216,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         public class SendRemindersNowModel
         {
             [Required] public EmailTextTemplateType? Type { get; set; }
+            [Required] public System.Guid? RequestId { get; set; }
         }
 
         [ValidateAntiForgeryToken]
@@ -226,17 +227,31 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
-                return NotFound();
+            if (model.RequestId == System.Guid.Empty)
+                return BadRequest(new { error = "A request ID is required." });
 
-            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-            if (questionnaire == null)
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
             if (model.Type is not (EmailTextTemplateType.Reminder_NoResponse
                 or EmailTextTemplateType.Reminder_PartialResponse
                 or EmailTextTemplateType.RejectEmail))
                 return BadRequest(new { error = "Only reminder and rejected-interview templates can be sent now." });
+
+            var existingStatus = await sendRemindersNowService.GetStatusAsync(questionnaireIdentity, model.RequestId.Value)
+                .ConfigureAwait(false);
+            if (existingStatus != null)
+            {
+                if (existingStatus.Type != model.Type.Value)
+                    return Conflict(new { error = "The request ID has already been used for a different reminder request." });
+
+                return AcceptedAtAction(nameof(SendRemindersNowStatus),
+                    new { id, requestId = existingStatus.RequestId }, existingStatus);
+            }
+
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaire == null)
+                return NotFound();
 
             var config = this.webInterviewConfigProvider.GetUncached(questionnaireIdentity);
             if (config == null || !config.Started)
@@ -245,8 +260,17 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             if (!emailService.IsConfigured())
                 return BadRequest(new { error = "Email sending is not configured." });
 
-            var status = await sendRemindersNowService.SendAsync(questionnaireIdentity, questionnaire.Title,
-                model.Type.Value).ConfigureAwait(false);
+            SendRemindersNowStatus status;
+            try
+            {
+                status = await sendRemindersNowService.SendAsync(questionnaireIdentity, questionnaire.Title,
+                    model.Type.Value, model.RequestId.Value).ConfigureAwait(false);
+            }
+            catch (ReminderRequestIdConflictException exception)
+            {
+                return Conflict(new { error = exception.Message });
+            }
+
             return AcceptedAtAction(nameof(SendRemindersNowStatus), new { id, requestId = status.RequestId }, status);
         }
 

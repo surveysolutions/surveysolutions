@@ -44,6 +44,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public DateTime? StartedAtUtc { get; set; }
     }
 
+    public class SendRemindersNowRequestIdAlias : AppSetting
+    {
+        public Guid RequestId { get; set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+        public EmailTextTemplateType Type { get; set; }
+
+        public static string GetStorageKey(Guid operationId) => $"SendRemindersNowOperation-{operationId:N}";
+    }
+
     public enum SendRemindersNowState
     {
         Queued,
@@ -55,10 +64,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
     public class ReminderEmailDeliveryOutcomes : AppSetting
     {
+        public const int InvitationChunkSize = 100;
+
         public int SentCount { get; set; }
         public int FailedCount { get; set; }
         public int UnconfirmedCount { get; set; }
-        public List<int> InvitationIds { get; set; } = new List<int>();
+        public int InvitationCount { get; set; }
+        public int InvitationChunkCount { get; set; }
 
         public static string GetStorageKey(Guid requestId) => $"ReminderDeliveryOutcomes-{requestId:N}";
 
@@ -70,6 +82,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         };
     }
 
+    public class ReminderEmailDeliveryInvitationChunk : AppSetting
+    {
+        public List<int> InvitationIds { get; set; } = new List<int>();
+
+        public static string GetStorageKey(Guid requestId, int chunkIndex) =>
+            $"ReminderDeliveryInvitationChunk-{requestId:N}-{chunkIndex}";
+    }
+
     public class ReminderEmailDeliveryCheckpoint : AppSetting
     {
         public bool Sent { get; set; }
@@ -78,6 +98,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public static string GetStorageKey(Guid requestId, int invitationId) =>
             $"ReminderDeliveryCheckpoint-{requestId:N}-{invitationId}";
+    }
+
+    public class ReminderEmailUnresolvedDelivery : AppSetting
+    {
+        public static string GetStorageKey(QuestionnaireIdentity questionnaireIdentity, int invitationId) =>
+            $"ReminderUnresolvedDelivery-{questionnaireIdentity}-{invitationId}";
     }
 
     public class SendRemindersNowJob : IJob<SendRemindersNowRequest>
@@ -134,7 +160,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 var result = await rootScopeExecutor.ExecuteAsync(locator =>
                     locator.GetInstance<IReminderEmailSender>().SendRemindersAsync(request.QuestionnaireIdentity,
                         request.QuestionnaireTitle, request.Type, 0, request.RequestId)).ConfigureAwait(false);
-                result = await GetDeliveryResultAsync(request.RequestId, result).ConfigureAwait(false);
+                result = await GetDeliveryResultAsync(request.RequestId, request.QuestionnaireIdentity, result)
+                    .ConfigureAwait(false);
                 status.SentCount = result.SentCount;
                 status.FailedCount = result.FailedCount;
                 status.UnconfirmedCount = result.UnconfirmedCount;
@@ -152,7 +179,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }
             catch (Exception exception)
             {
-                var result = await GetDeliveryResultAsync(request.RequestId, new ReminderEmailSendResult())
+                var result = await GetDeliveryResultAsync(request.RequestId, request.QuestionnaireIdentity,
+                        new ReminderEmailSendResult())
                     .ConfigureAwait(false);
                 status.SentCount = result.SentCount;
                 status.FailedCount = result.FailedCount;
@@ -176,7 +204,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         }
 
         private async Task<ReminderEmailSendResult> GetDeliveryResultAsync(Guid requestId,
-            ReminderEmailSendResult currentResult)
+            QuestionnaireIdentity questionnaireIdentity, ReminderEmailSendResult currentResult)
         {
             return await rootScopeExecutor.ExecuteAsync(locator =>
             {
@@ -186,20 +214,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 if (outcomes == null)
                     return Task.FromResult(currentResult);
 
-                if (outcomes.InvitationIds is { Count: > 0 })
+                if (outcomes.InvitationChunkCount > 0)
                 {
                     var checkpoints = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>();
-                    foreach (var invitationId in outcomes.InvitationIds)
+                    var chunks = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryInvitationChunk>>();
+                    var unresolvedDeliveries =
+                        locator.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery>>();
+                    for (var chunkIndex = 0; chunkIndex < outcomes.InvitationChunkCount; chunkIndex++)
                     {
-                        var checkpointKey = ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId, invitationId);
-                        var checkpoint = checkpoints.GetByIdUncached(checkpointKey);
-                        if (checkpoint?.AttemptInProgress != true)
+                        var chunk = chunks.GetByIdUncached(
+                            ReminderEmailDeliveryInvitationChunk.GetStorageKey(requestId, chunkIndex));
+                        if (chunk?.InvitationIds == null)
                             continue;
 
-                        checkpoint.AttemptInProgress = false;
-                        checkpoint.Unconfirmed = true;
-                        checkpoints.Store(checkpoint, checkpointKey);
-                        outcomes.UnconfirmedCount++;
+                        foreach (var invitationId in chunk.InvitationIds)
+                        {
+                            var checkpointKey = ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId, invitationId);
+                            var checkpoint = checkpoints.GetByIdUncached(checkpointKey);
+                            if (checkpoint?.AttemptInProgress != true)
+                                continue;
+
+                            checkpoint.AttemptInProgress = false;
+                            checkpoint.Unconfirmed = true;
+                            checkpoints.Store(checkpoint, checkpointKey);
+                            unresolvedDeliveries.Store(new ReminderEmailUnresolvedDelivery(),
+                                ReminderEmailUnresolvedDelivery.GetStorageKey(questionnaireIdentity, invitationId));
+                            outcomes.UnconfirmedCount++;
+                        }
                     }
 
                     outcomesStorage.Store(outcomes, outcomesKey);
@@ -220,11 +261,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 var outcomesStorage = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>();
                 var outcomesKey = ReminderEmailDeliveryOutcomes.GetStorageKey(requestId);
                 var outcomes = outcomesStorage.GetByIdUncached(outcomesKey);
-                if (outcomes?.InvitationIds is { Count: > 0 })
+                if (outcomes?.InvitationChunkCount > 0)
                 {
                     var checkpoints = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>();
-                    foreach (var invitationId in outcomes.InvitationIds)
-                        checkpoints.Remove(ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId, invitationId));
+                    var chunks = locator.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryInvitationChunk>>();
+                    for (var chunkIndex = 0; chunkIndex < outcomes.InvitationChunkCount; chunkIndex++)
+                    {
+                        var chunkKey = ReminderEmailDeliveryInvitationChunk.GetStorageKey(requestId, chunkIndex);
+                        var chunk = chunks.GetByIdUncached(chunkKey);
+                        if (chunk?.InvitationIds != null)
+                        {
+                            foreach (var invitationId in chunk.InvitationIds)
+                                checkpoints.Remove(ReminderEmailDeliveryCheckpoint.GetStorageKey(requestId, invitationId));
+                        }
+
+                        chunks.Remove(chunkKey);
+                    }
                 }
 
                 outcomesStorage.Remove(outcomesKey);

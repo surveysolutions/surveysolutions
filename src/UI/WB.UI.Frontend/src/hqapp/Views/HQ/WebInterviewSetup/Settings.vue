@@ -669,6 +669,7 @@ export default {
             hasLogo: false,
             emailTemplateData: [],
             pendingReminderTypes: {},
+            pendingReminderRequestIds: {},
             reminderAbortController: new AbortController(),
         }
     },
@@ -1030,6 +1031,8 @@ export default {
             if (signal.aborted || this.pendingReminderTypes[emailTemplate.value]) return
 
             this.pendingReminderTypes[emailTemplate.value] = true
+            const requestId = this.pendingReminderRequestIds[emailTemplate.value] || crypto.randomUUID()
+            this.pendingReminderRequestIds[emailTemplate.value] = requestId
             try {
                 this.$store.dispatch('showProgress')
                 let response
@@ -1037,6 +1040,7 @@ export default {
                     response = await this.$hq.WebInterviewSettings.sendRemindersNow(
                         this.questionnaireId,
                         emailTemplate.value,
+                        requestId,
                         signal
                     )
                 } finally {
@@ -1044,7 +1048,7 @@ export default {
                 }
                 if (signal.aborted) return
 
-                const requestId = response.data.requestId
+                const statusRequestId = response.data.requestId
                 let status = response.data
                 const terminalStates = [2, 3, 4, 'Completed', 'Failed', 'PartiallyFailed']
 
@@ -1063,7 +1067,7 @@ export default {
                     try {
                         status = (await this.$hq.WebInterviewSettings.sendRemindersNowStatus(
                             this.questionnaireId,
-                            requestId,
+                            statusRequestId,
                             signal
                         )).data
                     } catch (error) {
@@ -1095,6 +1099,9 @@ export default {
                 } else {
                     toastr.error(status.error || this.$t('WebInterviewSettings.SendingFailed'),
                         undefined, { escapeHtml: true })
+                }
+                if (this.pendingReminderRequestIds[emailTemplate.value] === requestId) {
+                    this.pendingReminderRequestIds[emailTemplate.value] = null
                 }
             } catch (error) {
                 if (!signal.aborted) this.$errorHandler(error, this)

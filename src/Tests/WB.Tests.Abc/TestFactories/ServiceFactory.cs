@@ -1187,7 +1187,9 @@ namespace WB.Tests.Abc.TestFactories
             IUnitOfWork unitOfWork = null,
             IPlainKeyValueStorage<WebInterviewConfig> webInterviewConfigs = null,
             IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes> deliveryOutcomes = null,
-            IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint> deliveryCheckpoints = null)
+            IPlainKeyValueStorage<ReminderEmailDeliveryInvitationChunk> deliveryInvitationChunks = null,
+            IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint> deliveryCheckpoints = null,
+            IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery> unresolvedDeliveries = null)
         {
             var invitationServiceActual = invitationService ?? Mock.Of<IInvitationService>();
             var linkProvider = new WebInterviewLinkProvider(
@@ -1220,9 +1222,17 @@ namespace WB.Tests.Abc.TestFactories
             var actualDeliveryOutcomes = deliveryOutcomes ?? new TestInMemoryKeyValueStorage<ReminderEmailDeliveryOutcomes>();
             serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>())
                 .Returns(actualDeliveryOutcomes);
+            var actualDeliveryInvitationChunks = deliveryInvitationChunks ??
+                                                 new TestInMemoryKeyValueStorage<ReminderEmailDeliveryInvitationChunk>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryInvitationChunk>>())
+                .Returns(actualDeliveryInvitationChunks);
             var actualDeliveryCheckpoints = deliveryCheckpoints ?? new TestInMemoryKeyValueStorage<ReminderEmailDeliveryCheckpoint>();
             serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>())
                 .Returns(actualDeliveryCheckpoints);
+            var actualUnresolvedDeliveries = unresolvedDeliveries ??
+                                             new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDelivery>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery>>())
+                .Returns(actualUnresolvedDeliveries);
             var configs = new Mock<IPlainKeyValueStorage<WebInterviewConfig>>();
             configs.Setup(x => x.GetByIdUncached(It.IsAny<string>()))
                 .Returns((string id) => webInterviewConfigProvider?.Get(QuestionnaireIdentity.Parse(id)));
@@ -1233,7 +1243,9 @@ namespace WB.Tests.Abc.TestFactories
                 emailService ?? Mock.Of<IEmailService>(),
                 webInterviewConfigs ?? configs.Object,
                 actualDeliveryOutcomes,
+                actualDeliveryInvitationChunks,
                 actualDeliveryCheckpoints,
+                actualUnresolvedDeliveries,
                 webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>(),
                 inScopeExecutor ?? Create.Service.InScopeExecutor(serviceLocator.Object),
                 linkProvider,

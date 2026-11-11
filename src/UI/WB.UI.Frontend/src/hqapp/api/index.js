@@ -549,13 +549,13 @@ class WebInterviewSettingsApi {
             })
     }
 
-    sendRemindersNow(questionnaireId, type, signal) {
+    sendRemindersNow(questionnaireId, type, requestId, signal) {
         var url = `${this.base}/${questionnaireId}/sendReminders`
         return this.http(
             {
                 method: 'post',
                 url: url,
-                data: { type: type },
+                data: { type: type, requestId: requestId },
                 signal: signal,
                 headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
