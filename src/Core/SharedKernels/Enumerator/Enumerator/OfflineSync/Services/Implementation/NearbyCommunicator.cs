@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
@@ -37,6 +38,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         private readonly ConcurrentDictionary<long, IPayload> outgoingPayloads =
             new ConcurrentDictionary<long, IPayload>();
+
+        private readonly ConcurrentDictionary<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue> deferredTransferUpdates =
+            new ConcurrentDictionary<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>();
 
         private readonly IRequestHandler requestHandler;
 
@@ -194,10 +198,18 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
         }
 
-        public async void ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint,
+        public async Task ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint,
             NearbyPayloadTransferUpdate update)
+        {
+            await ReceivePayloadTransferUpdateInternal(connection, endpoint, update);
+        }
+
+        private async Task ReceivePayloadTransferUpdateInternal(INearbyConnection connection, string endpoint,
+            NearbyPayloadTransferUpdate update, bool allowDeferral = true)
         {
             var isIncoming = false;
             if (incomingPayloads.TryGetValue(update.Id, out var payload))
@@ -211,7 +223,47 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
             else
             {
-                throw new Exception("Receive payload transfer update before ReceivePayload call");
+                if (allowDeferral && (update.Status == TransferStatus.Success || update.Status == TransferStatus.Failure))
+                {
+                    var key = (endpoint, update.Id);
+                    while (true)
+                    {
+                        var newDeferredUpdates = new DeferredTransferUpdatesQueue();
+                        var deferredUpdates = deferredTransferUpdates.GetOrAdd(key, newDeferredUpdates);
+                        if (ReferenceEquals(deferredUpdates, newDeferredUpdates))
+                        {
+                            deferredUpdates.StartExpirationTimer(MessageAwaitingTimeout,
+                                () => ExpireDeferredTransferUpdates(key, deferredUpdates));
+                        }
+
+                        var shouldRetryWithNewQueue = false;
+
+                        lock (deferredUpdates.SyncRoot)
+                        {
+                            if (deferredUpdates.IsDetached)
+                            {
+                                shouldRetryWithNewQueue = true;
+                            }
+                            else
+                            {
+                                deferredUpdates.Updates.Enqueue(update);
+                            }
+                        }
+
+                        if (shouldRetryWithNewQueue)
+                            continue;
+
+                        break;
+                    }
+
+                    logger.Warn(
+                        $"Deferring payload transfer update until payload is registered. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
+                    return;
+                }
+
+                logger.Warn(
+                    $"Ignoring payload transfer update for an unregistered payload. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
+                return;
             }
 
             PayloadHeader header;
@@ -224,6 +276,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     if (isIncoming)
                     {
                         var bytes = payload.BytesFromStream;
+                        if (bytes == null)
+                        {
+                            payload.ReadStream();
+                            bytes = payload.BytesFromStream;
+                        }
+
                         var payloadContent = payloadSerializer.FromPayload<PayloadContent>(bytes);
                         await HandlePayloadContent(connection, endpoint, payloadContent);
                         //logger.Verbose(
@@ -296,6 +354,97 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 }
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private async Task<bool> ReplayDeferredTransferUpdatesAsync(INearbyConnection connection, string endpoint, long payloadId)
+        {
+            var key = (endpoint, payloadId);
+            var handledDeferredUpdate = false;
+
+            while (true)
+            {
+                if (!deferredTransferUpdates.TryGetValue(key, out var deferredUpdates))
+                    return handledDeferredUpdate;
+
+                NearbyPayloadTransferUpdate deferredUpdate = null;
+                var shouldRemoveDetachedQueue = false;
+                var shouldDetachQueue = false;
+
+                lock (deferredUpdates.SyncRoot)
+                {
+                    if (deferredUpdates.IsDetached)
+                    {
+                        shouldRemoveDetachedQueue = true;
+                    }
+
+                    else if (deferredUpdates.Updates.Count > 0)
+                    {
+                        deferredUpdate = deferredUpdates.Updates.Dequeue();
+                    }
+                    else
+                    {
+                        deferredUpdates.DetachUnderLock();
+                        shouldDetachQueue = true;
+                    }
+                }
+
+                if (shouldRemoveDetachedQueue)
+                {
+                    deferredTransferUpdates.TryRemove(new KeyValuePair<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>(key, deferredUpdates));
+                    return handledDeferredUpdate;
+                }
+
+                if (shouldDetachQueue)
+                {
+                    deferredTransferUpdates.TryRemove(new KeyValuePair<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>(key, deferredUpdates));
+                    return handledDeferredUpdate;
+                }
+
+                handledDeferredUpdate = true;
+                await ReceivePayloadTransferUpdateInternal(connection, endpoint, deferredUpdate, allowDeferral: false);
+            }
+        }
+
+        private void ExpireDeferredTransferUpdates((string Endpoint, long PayloadId) key,
+            DeferredTransferUpdatesQueue deferredUpdates)
+        {
+            lock (deferredUpdates.SyncRoot)
+            {
+                if (deferredUpdates.IsDetached)
+                    return;
+
+                deferredUpdates.DetachUnderLock();
+                deferredTransferUpdates.TryRemove(
+                    new KeyValuePair<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>(key, deferredUpdates));
+            }
+
+            logger.Warn(
+                $"Discarding expired deferred payload transfer updates. Endpoint: {key.Endpoint}, PayloadId: {key.PayloadId}");
+        }
+
+        private sealed class DeferredTransferUpdatesQueue
+        {
+            public object SyncRoot { get; } = new object();
+            public Queue<NearbyPayloadTransferUpdate> Updates { get; } = new Queue<NearbyPayloadTransferUpdate>();
+            public bool IsDetached { get; set; }
+
+            private Timer expirationTimer;
+
+            public void StartExpirationTimer(TimeSpan timeout, Action expire)
+            {
+                lock (SyncRoot)
+                {
+                    if (!IsDetached)
+                        expirationTimer = new Timer(_ => expire(), null, timeout, Timeout.InfiniteTimeSpan);
+                }
+            }
+
+            public void DetachUnderLock()
+            {
+                IsDetached = true;
+                Updates.Clear();
+                expirationTimer?.Dispose();
             }
         }
 
