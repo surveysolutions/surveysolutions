@@ -303,7 +303,7 @@ export default {
             this.calendarAssinmentId = assignmentId
             this.calendarEventId = calendarEvent?.publicKey
             this.editCalendarComment = calendarEvent?.comment
-            this.newCalendarStart = calendarEvent?.startUtc ?? moment().add(1, 'days').hours(10).startOf('hour').format(DateFormats.dateTime)
+            this.newCalendarStart = calendarEvent?.startUtc ?? moment().add(1, 'days').hour(10).startOf('hour').format(DateFormats.dateTime)
             this.newCalendarStarTimezone = calendarEvent?.startTimezone
             this.$refs.editCalendarModal.modal({ keyboard: false })
         },
