@@ -16,7 +16,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
         protected override void CacheItemRemoved(Guid id, EvictionReason reason)
         {
-            if (reason != EvictionReason.Replaced)
+            if (reason != EvictionReason.Replaced && reason != EvictionReason.Removed)
             {
                 notify.Evict(id);
             }

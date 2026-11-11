@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -1643,11 +1643,11 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
   <data name="EditorShowComments" xml:space="preserve">
     <value>Afișați comentariile ({{count}})</value>
   </data>
-  
+
   <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
     <value>următorii utilizatori au acces la acest chestionar</value>
   </data>
-  
+
   <data name="AccessSettings" xml:space="preserve">
     <value>Acces</value>
   </data>
@@ -1655,7 +1655,7 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
   <data name="PublicAccessDescriptionSettings" xml:space="preserve">
     <value>Chestionarele publice sunt vizibile în modul numai pentru citire tuturor utilizatorilor care au un cont în acest sistem.</value>
   </data>
-  
+
   <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
     <value>Chestionarul este partajat în prezent ca public.</value>
   </data>
@@ -1663,7 +1663,7 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
   <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
     <value>Chestionarul nu este partajat în prezent ca public.</value>
   </data>
-  
+
   <data name="PublicAccessSettingsOn" xml:space="preserve">
     <value>Activați accesul public.</value>
   </data>
@@ -1675,11 +1675,11 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
   <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
     <value>Partajare prin link</value>
   </data>
-  
+
   <data name="AnonymousLink" xml:space="preserve">
     <value>Link anonim:</value>
   </data>
-  
+
   <data name="CopyLink" xml:space="preserve">
     <value>Copiați linkul</value>
   </data>
@@ -1746,5 +1746,11 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
 
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Comutați la va schimba limba de afișare a chestionarului. Traducerea trebuie să includă text pentru toate elementele.</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+      <value>Editare</value>
+  </data>
+  <data name="Stick" xml:space="preserve">
+      <value>Atașare</value>
   </data>
 </root>

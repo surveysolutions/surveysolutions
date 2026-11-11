@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Configs;
@@ -118,6 +120,87 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
 
             Assert.That(result, Has.One.Property(nameof(FileObject.Path)).EqualTo("one"));
             Assert.That(result, Has.One.Property(nameof(FileObject.Path)).EqualTo("two"));
+        }
+
+        [Test]
+        public async Task should_list_all_pages()
+        {
+            var continuationTokens = new List<string>();
+            client.Setup(c => c.ListObjectsV2Async(It.IsAny<ListObjectsV2Request>(), It.IsAny<CancellationToken>()))
+                .Returns((ListObjectsV2Request request, CancellationToken _) =>
+                {
+                    continuationTokens.Add(request.ContinuationToken);
+                    return Task.FromResult(continuationTokens.Count == 1
+                        ? new ListObjectsV2Response
+                        {
+                            IsTruncated = true,
+                            NextContinuationToken = "next",
+                            S3Objects = new List<S3Object> { new() { Key = bucketInfo.PathTo("/one") } }
+                        }
+                        : new ListObjectsV2Response
+                        {
+                            S3Objects = new List<S3Object> { new() { Key = bucketInfo.PathTo("/two") } }
+                        });
+                });
+
+            var result = await storage.ListAsync("maps/");
+
+            Assert.That(result, Has.Count.EqualTo(2));
+            Assert.That(continuationTokens, Is.EqualTo(new string[] { null, "next" }));
+        }
+
+        [Test]
+        public async Task should_list_and_delete_more_than_1000_objects_in_batches()
+        {
+            var listCalls = 0;
+            client.Setup(c => c.ListObjectsV2Async(It.IsAny<ListObjectsV2Request>(), It.IsAny<CancellationToken>()))
+                .Returns((ListObjectsV2Request _, CancellationToken _) =>
+                {
+                    listCalls++;
+                    if (listCalls == 1)
+                    {
+                        var firstPage = new List<S3Object>();
+                        for (var i = 0; i < 1000; i++)
+                            firstPage.Add(new S3Object { Key = bucketInfo.PathTo($"/maps/{i}") });
+
+                        return Task.FromResult(new ListObjectsV2Response
+                        {
+                            IsTruncated = true,
+                            NextContinuationToken = "next",
+                            S3Objects = firstPage
+                        });
+                    }
+
+                    if (listCalls == 2)
+                    {
+                        return Task.FromResult(new ListObjectsV2Response
+                        {
+                            S3Objects = new List<S3Object> { new() { Key = bucketInfo.PathTo("/maps/1000") } }
+                        });
+                    }
+
+                    return Task.FromResult(new ListObjectsV2Response
+                    {
+                        S3Objects = new List<S3Object>()
+                    });
+                });
+
+            var deletedBatches = new List<List<string>>();
+            client.Setup(c => c.DeleteObjectsAsync(It.IsAny<DeleteObjectsRequest>(), It.IsAny<CancellationToken>()))
+                .Returns((DeleteObjectsRequest request, CancellationToken _) =>
+                {
+                    deletedBatches.Add(request.Objects.Select(key => key.Key).ToList());
+                    return Task.FromResult(new DeleteObjectsResponse
+                    {
+                        DeleteErrors = new List<DeleteError>()
+                    });
+                });
+
+            await storage.RemoveAllUnderPrefixAsync("maps/");
+
+            Assert.That(listCalls, Is.EqualTo(3));
+            Assert.That(deletedBatches.Select(batch => batch.Count), Is.EqualTo(new[] { 1000, 1 }));
+            Assert.That(deletedBatches.SelectMany(batch => batch).Distinct().Count(), Is.EqualTo(1001));
         }
 
         [Test]

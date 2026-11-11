@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -39,6 +40,7 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Controllers
@@ -48,6 +50,7 @@ namespace WB.UI.Designer.Controllers
     [QuestionnairePermissions]
     public partial class QuestionnaireController : QControllerBase
     {
+        private const int AnonymousSharingEmailTimeoutSeconds = 30;
         public class QuestionnaireCloneModel
         {
             [Key]
@@ -101,6 +104,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IWebHostEnvironment webHost;
         private readonly IOptions<ViteTagOptions> options;
         private readonly IMemoryCache memoryCache;
+        private readonly ITransactionRollbackState transactionRollbackState;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -121,7 +125,8 @@ namespace WB.UI.Designer.Controllers
             ITagHelperComponentManager tagHelperComponentManager,
             IWebHostEnvironment webHost,
             IOptions<ViteTagOptions> options,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
+            ITransactionRollbackState transactionRollbackState)
             : base(dbContext, questionnaireViewFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -141,6 +146,7 @@ namespace WB.UI.Designer.Controllers
             this.webHost = webHost;
             this.options = options;
             this.memoryCache = memoryCache;
+            this.transactionRollbackState = transactionRollbackState;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
@@ -258,6 +264,8 @@ namespace WB.UI.Designer.Controllers
                     var domainException = e.GetSelfOrInnerAs<QuestionnaireException>();
                     if (domainException != null)
                     {
+                        // The failed command may have staged partial writes; the handler returns a view, so mark the transaction.
+                        this.transactionRollbackState.MarkRollbackOnly();
                         this.Error(domainException.Message);
                         logger.LogError(domainException, "Questionnaire controller -> clone: " + domainException.Message);
                     }
@@ -302,6 +310,8 @@ namespace WB.UI.Designer.Controllers
                 }
                 catch (QuestionnaireException e)
                 {
+                    // The failed command may have staged partial writes; the handler returns a view, so mark the transaction.
+                    this.transactionRollbackState.MarkRollbackOnly();
                     this.Error(e.Message);
                     logger.LogError(e, "Error on questionnaire creation.");
                 }
@@ -474,24 +484,31 @@ namespace WB.UI.Designer.Controllers
         [QuestionnairePermissions(true)]
         [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
         [ValidateAntiForgeryToken]
+        // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
+        [NoTransaction]
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
+            var questionnaireView = GetQuestionnaireView(id);
+            if (questionnaireView == null)
+                return NotFound();
+
             bool isActive = postModel.IsActive;
-            var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
+            var anonymousQuestionnaire = await dbContext.AnonymousQuestionnaires.FirstOrDefaultAsync(a => a.QuestionnaireId == id);
             if (anonymousQuestionnaire == null)
             {
                 anonymousQuestionnaire = new AnonymousQuestionnaire()
                     { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive, GeneratedAtUtc = DateTime.UtcNow };
                 dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
-                await dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                anonymousQuestionnaire.IsActive = isActive;
             }
 
-            anonymousQuestionnaire.IsActive = isActive;
-            dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
             await dbContext.SaveChangesAsync();
 
             if (isActive)
-                await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+                await TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId, questionnaireView);
             
             return Json(new
             {
@@ -506,9 +523,14 @@ namespace WB.UI.Designer.Controllers
         [QuestionnairePermissions(true)]
         [Route("questionnaire/regenerateAnonymousQuestionnaireLink/{id}")]
         [ValidateAntiForgeryToken]
+        // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
+        [NoTransaction]
         public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
         {
-            var existedRecord = dbContext.AnonymousQuestionnaires.First(a => a.QuestionnaireId == id);
+            var existedRecord = await dbContext.AnonymousQuestionnaires.FirstOrDefaultAsync(a => a.QuestionnaireId == id);
+            if (existedRecord == null)
+                return NotFound();
+
             dbContext.Remove(existedRecord);
            
             var anonymousQuestionnaire = new AnonymousQuestionnaire()
@@ -516,7 +538,7 @@ namespace WB.UI.Designer.Controllers
             await dbContext.AnonymousQuestionnaires.AddAsync(anonymousQuestionnaire);
             await dbContext.SaveChangesAsync();
 
-            await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+            await TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId, questionnaireView: null);
             
             return Json(new
             {
@@ -526,28 +548,95 @@ namespace WB.UI.Designer.Controllers
             });
         }
 
-        private async Task SendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId)
+        private async Task TrySendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId, QuestionnaireView? questionnaireView)
         {
-            var user = await this.users.GetUserAsync(User);
-            if(user?.Email == null)
-                return;
-            
-            var questionnaireView = GetQuestionnaireView(id);
-            if (questionnaireView == null)
-                throw new ArgumentException($"Questionnaire not found {id}");
-            
-            var userName = User.GetUserName();
-            var questionnaire = questionnaireView.Title;
-            var sharingLink = Url.Action("Details", "Q", new { id = anonymousQuestionnaireId }, Request.Scheme);
-            if (sharingLink == null)
-                throw new ArgumentNullException("sharingLink is null");
+            var requestAborted = CancellationToken.None;
+            try
+            {
+                requestAborted = HttpContext.RequestAborted;
+                // Resolve all request-scoped data eagerly before launching the email task.
+                // This ensures the background task does not access HttpContext or request-scoped
+                // services after the action returns (e.g. on timeout).
+                var user = await this.users.GetUserAsync(User);
+                if (user?.Email == null)
+                    return;
 
-            var model = new AnonymousSharingEmailModel(userName, sharingLink, questionnaire);
+                questionnaireView ??= GetQuestionnaireView(id);
+                if (questionnaireView == null)
+                {
+                    logger.LogWarning("Anonymous sharing email skipped: questionnaire {QuestionnaireId} not found", id);
+                    return;
+                }
 
+                var questionnaireTitle = questionnaireView.Title;
+                var sharingLink = Url.Action("Details", "Q", new { id = anonymousQuestionnaireId }, Request.Scheme);
+                if (sharingLink == null)
+                {
+                    logger.LogWarning("Anonymous sharing email skipped: could not generate sharing link for questionnaire {QuestionnaireId}", id);
+                    return;
+                }
+
+                // Only Razor rendering and SMTP send are potentially long-running and are launched
+                // as a timed task. They do not use request-scoped services: ViewRenderService
+                // creates its own DefaultHttpContext, and MailSender uses only singleton options.
+                var userName = User.GetUserNameOrNull() ?? user.UserName ?? string.Empty;
+                var sendTask = SendEmailAsync(user.Email, userName, sharingLink, questionnaireTitle);
+                using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(requestAborted);
+                timeoutCts.CancelAfter(TimeSpan.FromSeconds(AnonymousSharingEmailTimeoutSeconds));
+
+                var completedTask = await Task.WhenAny(
+                    sendTask,
+                    Task.Delay(Timeout.InfiniteTimeSpan, timeoutCts.Token));
+
+                if (completedTask == sendTask)
+                {
+                    // Propagate any exception from the send task into the catch blocks below.
+                    await sendTask;
+                    return;
+                }
+
+                if (requestAborted.IsCancellationRequested)
+                {
+                    // Client disconnected; no need to log, but still observe any eventual fault
+                    // so the task does not become an unobserved task exception.
+                    _ = sendTask.ContinueWith(
+                        t => _ = t.Exception,
+                        CancellationToken.None,
+                        TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously,
+                        TaskScheduler.Default);
+                    return;
+                }
+
+                // Timeout: the send task may still be running. Attach a fault-observing
+                // continuation so any eventual exception is logged and not left unobserved.
+                _ = sendTask.ContinueWith(
+                    t => logger.LogError(
+                        t.Exception,
+                        "Failed to send anonymous sharing notification email for questionnaire {QuestionnaireId} after timeout",
+                        id),
+                    CancellationToken.None,
+                    TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously,
+                    TaskScheduler.Default);
+
+                logger.LogWarning("Anonymous sharing email notification timed out for questionnaire {QuestionnaireId}", id);
+            }
+            catch (OperationCanceledException) when (requestAborted.IsCancellationRequested)
+            {
+                // Client disconnected; no need to log.
+            }
+            catch (Exception ex)
+            {
+                // Email notification failure should not break the main operation.
+                // SMTP may be misconfigured or unavailable in some environments.
+                logger.LogError(ex, "Failed to send anonymous sharing notification email for questionnaire {QuestionnaireId}", id);
+            }
+        }
+
+        private async Task SendEmailAsync(string userEmail, string userName, string sharingLink, string questionnaireTitle)
+        {
+            var model = new AnonymousSharingEmailModel(userName, sharingLink, questionnaireTitle);
             var messageBody = await viewRenderService.RenderToStringAsync("Emails/AnonymousSharingEmail", model);
-
-            
-            await emailSender.SendEmailAsync(user.Email,
+            await emailSender.SendEmailAsync(userEmail,
                 NotificationResources.SystemMailer_AnonymousSharingEmail_Subject,
                 messageBody);
         }

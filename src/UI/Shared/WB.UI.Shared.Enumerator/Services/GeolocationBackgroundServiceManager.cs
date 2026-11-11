@@ -14,7 +14,13 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     private Dictionary<string, IGeolocationListener> listeners = new();
     private ServiceConnection<GeolocationBackgroundService> serviceConnection;
 
-    private Intent GetGeolocationServiceIntent() => new Intent(ServiceContext, typeof(GeolocationBackgroundService));
+    private Intent GetGeolocationServiceIntent()
+    {
+        var intent = new Intent(ServiceContext, typeof(GeolocationBackgroundService));
+        intent.PutExtra(GeolocationBackgroundService.AcceptableGpsLocationSourceExtra,
+            (int)settings.AcceptableGpsLocationSource);
+        return intent;
+    }
     public event EventHandler<LocationReceivedEventArgs> LocationReceived;
     
     public GeolocationBackgroundServiceManager(IEnumeratorSettings settings)

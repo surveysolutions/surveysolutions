@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -63,6 +64,34 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
 
         public int? ReminderAfterDaysIfNoResponse { get; set; }
         public int? ReminderAfterDaysIfPartialResponse { get; set; }
+
+        public WebInterviewConfig CopyFor(QuestionnaireIdentity identity) => new WebInterviewConfig
+        {
+            QuestionnaireId = identity,
+            Started = this.Started,
+            UseCaptcha = this.UseCaptcha,
+            SingleResponse = this.SingleResponse,
+            EmailOnComplete = this.EmailOnComplete,
+            AttachAnswersInEmail = this.AttachAnswersInEmail,
+            AllowSwitchToCawiForInterviewer = this.AllowSwitchToCawiForInterviewer,
+            AllowTranscriptDownloading = this.AllowTranscriptDownloading,
+            ReminderAfterDaysIfNoResponse = this.ReminderAfterDaysIfNoResponse,
+            ReminderAfterDaysIfPartialResponse = this.ReminderAfterDaysIfPartialResponse,
+            CustomMessages = this.CustomMessages != null
+                ? new Dictionary<WebInterviewUserMessages, string>(this.CustomMessages)
+                : new Dictionary<WebInterviewUserMessages, string>(),
+            EmailTemplates = this.EmailTemplates != null
+                ? this.EmailTemplates
+                    .Where(template => template.Value != null)
+                    .ToDictionary(
+                        template => template.Key,
+                        template => new EmailTextTemplate(
+                            template.Value.Subject,
+                            template.Value.Message,
+                            template.Value.PasswordDescription,
+                            template.Value.LinkText))
+                : new Dictionary<EmailTextTemplateType, EmailTextTemplate>(),
+        };
 
         public virtual WebInterviewEmailTemplate GetEmailTemplate(EmailTextTemplateType type)
         {

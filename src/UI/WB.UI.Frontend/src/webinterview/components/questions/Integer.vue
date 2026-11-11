@@ -4,7 +4,7 @@
             <div class="options-group">
                 <div class="form-group" v-if="$me.isProtected">
                     <div class="field locked-option unavailable-option answered">
-                        <input type="number" class="field-to-fill" placeholder="Tap to enter number"
+                        <input type="number" class="field-to-fill" :placeholder="$t('WebInterviewUI.RealQuestion_Hint')"
                             :value="$me.protectedAnswer" disabled />
                         <button type="submit" class="btn btn-link btn-clear">
                             <span></span>
