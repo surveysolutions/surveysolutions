@@ -84,6 +84,10 @@ export function updateQuestion(
             }
             command.showAsListThreshold = question.showAsListThreshold;
             command.showAsList = question.showAsList;
+            command.randomizeAnswerOptions =
+                !command.isFilteredCombobox &&
+                !command.cascadeFromQuestionId &&
+                (question.randomizeAnswerOptions || false);
             break;
         case 'MultyOption':
             command.areAnswersOrdered = question.areAnswersOrdered;
@@ -93,6 +97,9 @@ export function updateQuestion(
             command.yesNoView = question.yesNoView;
             command.isFilteredCombobox = question.isFilteredCombobox || false;
             command.categoriesId = question.categoriesId;
+            command.randomizeAnswerOptions =
+                !command.isFilteredCombobox &&
+                (question.randomizeAnswerOptions || false);
 
             if (
                 shouldGetOptionsOnServer ||

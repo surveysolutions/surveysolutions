@@ -1046,6 +1046,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 categoriesId: command.CategoriesId);
 
             newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
+            newQuestion.RandomizeAnswerOptions = command.RandomizeAnswerOptions && !command.IsFilteredCombobox;
             this.innerDocument.ReplaceEntity(question, newQuestion);
             
         }
@@ -1122,6 +1123,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 categoriesId: command.CategoriesId);
 
             newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
+            newQuestion.RandomizeAnswerOptions = command.RandomizeAnswerOptions 
+                                                 && !command.IsFilteredCombobox 
+                                                 && !command.CascadeFromQuestionId.HasValue;
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 

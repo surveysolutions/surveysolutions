@@ -421,6 +421,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     (
                         hasQuestionnaire : questionnaire => questionnaire.Find<IConditional>(c => c.RandomizeOrder).Any(),
                         description : "Randomized order of questionnaire items"
+                    ),
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire : questionnaire => questionnaire.Find<IQuestion>(q => q.RandomizeAnswerOptions).Any(),
+                        description : "Randomized order of answer options"
                     )
                 }
             },

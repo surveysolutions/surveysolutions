@@ -158,6 +158,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public int? OptionsCount { get; set; }
         public bool HideIfDisabled { get; set; }
         public bool RandomizeOrder { get; set; }
+        public bool RandomizeAnswerOptions { get; set; }
         public int? Quality { get; set; }
         public List<QualityOption> QualityOptions { get; set; }
 

@@ -524,6 +524,9 @@
                 "null",
                 "string"
               ]
+            },
+            "RandomizeAnswerOptions": {
+              "type": "boolean"
             }
           }
         }
@@ -638,6 +641,9 @@
                 "null",
                 "string"
               ]
+            },
+            "RandomizeAnswerOptions": {
+              "type": "boolean"
             }
           }
         }

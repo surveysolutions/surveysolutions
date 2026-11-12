@@ -406,7 +406,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 DisplayMode = displayMode,
                 CascadeFromQuestion = GetVarName(q.CascadeFromQuestionId, idToVarMap),
                 LinkedTo = linkedTo,
-                FilterExpression = filterExpression
+                FilterExpression = filterExpression,
+                RandomizeAnswerOptions = q.RandomizeAnswerOptions
             };
             MapAbstractQuestionToModel(q, dst, idToVarMap);
             return dst;
@@ -431,7 +432,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 Answers = q.Answers.Select(MapAnswerToAnswer).ToList(),
                 DisplayMode = displayMode,
                 LinkedTo = linkedTo,
-                FilterExpression = filterExpression
+                FilterExpression = filterExpression,
+                RandomizeAnswerOptions = q.RandomizeAnswerOptions
             };
             MapAbstractQuestionToModel(q, dst, idToVarMap);
             return dst;
@@ -730,7 +732,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 IsFilteredCombobox = src.DisplayMode == Models.Question.SingleOptionDisplayMode.Combobox ? true : (bool?)null,
                 LinkedToQuestionId = GetId(src.LinkedTo, varToIdMap),
                 LinkedToRosterId = GetId(src.LinkedTo, varToIdMap),
-                CascadeFromQuestionId = GetId(src.CascadeFromQuestion, varToIdMap)
+                CascadeFromQuestionId = GetId(src.CascadeFromQuestion, varToIdMap),
+                RandomizeAnswerOptions = src.RandomizeAnswerOptions
             };
             MapAbstractQuestionFromModel(src, q, varToIdMap);
             if (!src.LinkedTo.IsNullOrEmpty())
@@ -751,7 +754,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 YesNoView = src.DisplayMode == Models.Question.MultiOptionsDisplayMode.YesNo,
                 IsFilteredCombobox = src.DisplayMode == Models.Question.MultiOptionsDisplayMode.Combobox ? true : (bool?)null,
                 LinkedToQuestionId = GetId(src.LinkedTo, varToIdMap),
-                LinkedToRosterId = GetId(src.LinkedTo, varToIdMap)
+                LinkedToRosterId = GetId(src.LinkedTo, varToIdMap),
+                RandomizeAnswerOptions = src.RandomizeAnswerOptions
             };
             MapAbstractQuestionFromModel(src, q, varToIdMap);
             if (!src.LinkedTo.IsNullOrEmpty())

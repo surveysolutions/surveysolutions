@@ -261,6 +261,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool HasRandomizedChildren(Guid groupId);
 
+        bool ShouldRandomizeAnswerOptions(Guid questionId);
+
         string GetValidationMessage(Guid questionId, int conditionIndex);
         string[] GetValidationMessages(Guid entityId);
 

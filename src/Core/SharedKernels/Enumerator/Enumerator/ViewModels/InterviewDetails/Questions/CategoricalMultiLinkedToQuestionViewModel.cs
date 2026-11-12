@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -71,7 +72,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected override IEnumerable<CategoricalMultiOptionViewModel<RosterVector>> GetOptions(IStatefulInterview interview)
         {
-            foreach (var answeredOption in interview.GetLinkedMultiOptionQuestion(this.Identity).Options)
+            var options = RandomizedItemsOrder.OrderLinkedAnswerOptionsForDisplay(this.GetQuestionnaire(interview),
+                RandomizedItemsOrder.GetSeed(interview.Id), this.Identity, interview.GetLinkedMultiOptionQuestion(this.Identity).Options, x => x);
+
+            foreach (var answeredOption in options)
             {
                 var vm = interviewViewModelFactory.GetNew<CategoricalMultiOptionViewModel<RosterVector>>();
                 base.InitViewModel(interview.GetLinkedOptionTitle(this.Identity, answeredOption), answeredOption, interview, vm, null);

@@ -1720,4 +1720,10 @@
   <data name="RandomizeOrderTooltip" xml:space="preserve">
       <value>Порядок відображення цього елемента перемішується разом із сусідніми елементами, позначеними 'Випадковий порядок'</value>
   </data>
+  <data name="RandomizeAnswerOptions" xml:space="preserve">
+      <value>Випадковий порядок варіантів відповіді</value>
+  </data>
+  <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+      <value>Варіанти відповіді відображаються у випадковому порядку, який не змінюється в межах інтерв'ю</value>
+  </data>
 </root>

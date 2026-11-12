@@ -1634,4 +1634,10 @@ Silakan periksa koneksi jaringan Anda atau hubungi dukungan TI Anda.</value>
     <data name="RandomizeOrderTooltip" xml:space="preserve">
         <value>Urutan tampilan item ini diacak bersama item di sekitarnya yang ditandai 'Acak urutan'</value>
     </data>
+    <data name="RandomizeAnswerOptions" xml:space="preserve">
+        <value>Acak urutan pilihan jawaban</value>
+    </data>
+    <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+        <value>Pilihan jawaban ditampilkan dalam urutan acak yang tetap sama dalam satu wawancara</value>
+    </data>
 </root>

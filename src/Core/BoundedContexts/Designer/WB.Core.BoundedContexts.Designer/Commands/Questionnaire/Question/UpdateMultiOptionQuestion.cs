@@ -47,6 +47,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 
         public bool IsFilteredCombobox { get; set; }
 
+        public bool RandomizeAnswerOptions { get; set; }
+
         public QuestionScope Scope { get; set; }
 
         public bool? AreAnswersOrdered { get; set; }

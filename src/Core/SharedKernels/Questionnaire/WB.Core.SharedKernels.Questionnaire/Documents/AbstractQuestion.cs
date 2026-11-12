@@ -42,6 +42,8 @@ namespace Main.Core.Entities.SubEntities
 
         public bool RandomizeOrder { get; set; }
 
+        public bool RandomizeAnswerOptions { get; set; }
+
         public bool Featured { get; set; }
 
         public string? Instructions { get; set; }

@@ -19,6 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
         private const ulong AlgorithmVersion = 1;
         private const ulong ItemsDomain = 1;
         private const ulong RosterInstancesDomain = 2;
+        private const ulong AnswerOptionsDomain = 3;
+        private const ulong LinkedAnswerOptionsDomain = 4;
         private const ulong Gamma = 0x9E3779B97F4A7C15UL;
 
         public static ulong GetItemSortKey(double seed, Guid randomizationGroupId, RosterVector parentRosterVector, Guid itemId)
@@ -37,6 +39,80 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             hash = Combine(hash, rosterInstanceVector);
             return hash;
         }
+
+        public static ulong GetAnswerOptionSortKey(double seed, Guid questionId, RosterVector questionRosterVector, int optionValue)
+        {
+            var hash = Start(seed, AnswerOptionsDomain);
+            hash = Combine(hash, questionId);
+            hash = Combine(hash, questionRosterVector);
+            hash = Combine(hash, unchecked((ulong)(uint)optionValue));
+            return hash;
+        }
+
+        public static ulong GetLinkedAnswerOptionSortKey(double seed, Guid questionId, RosterVector questionRosterVector, RosterVector linkedOption)
+        {
+            var hash = Start(seed, LinkedAnswerOptionsDomain);
+            hash = Combine(hash, questionId);
+            hash = Combine(hash, questionRosterVector);
+            hash = Combine(hash, linkedOption);
+            return hash;
+        }
+
+        public static double GetSeed(Guid interviewId) => new InterviewProperties(interviewId).IRnd();
+
+        /// <summary>
+        /// Sorts available answer options of categorical question in display order if question has "Randomize answer options" flag.
+        /// Order of each option depends only on interview, question identity (including roster vector) and option code,
+        /// so adding or removing (filtering) options does not change relative order of remaining options.
+        /// </summary>
+        public static IEnumerable<T> OrderAnswerOptionsForDisplay<T>(IQuestionnaire questionnaire, double seed, Identity questionIdentity,
+            IEnumerable<T> options, Func<T, int> getOptionValue)
+        {
+            if (questionnaire == null || questionIdentity == null || !questionnaire.ShouldRandomizeAnswerOptions(questionIdentity.Id))
+                return options;
+
+            var context = questionIdentity.RosterVector ?? RosterVector.Empty;
+            return options
+                .Select(option => (option, value: getOptionValue(option)))
+                .Select(x => (x.option, x.value, key: GetAnswerOptionSortKey(seed, questionIdentity.Id, context, x.value)))
+                .OrderBy(x => x.key)
+                .ThenBy(x => x.value)
+                .Select(x => x.option)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Sorts available answer options of question linked to roster or question in roster in display order 
+        /// if question has "Randomize answer options" flag. Stable identity of linked option (roster vector) is used.
+        /// </summary>
+        public static IEnumerable<T> OrderLinkedAnswerOptionsForDisplay<T>(IQuestionnaire questionnaire, double seed, Identity questionIdentity,
+            IEnumerable<T> options, Func<T, RosterVector> getLinkedOption)
+        {
+            if (questionnaire == null || questionIdentity == null || !questionnaire.ShouldRandomizeAnswerOptions(questionIdentity.Id))
+                return options;
+
+            var context = questionIdentity.RosterVector ?? RosterVector.Empty;
+            return options
+                .Select(option => (option, vector: getLinkedOption(option) ?? RosterVector.Empty))
+                .Select(x => (x.option, x.vector, key: GetLinkedAnswerOptionSortKey(seed, questionIdentity.Id, context, x.vector)))
+                .OrderBy(x => x.key)
+                .ThenBy(x => x.vector, RosterVectorComparer)
+                .Select(x => x.option)
+                .ToList();
+        }
+
+        private static readonly IComparer<RosterVector> RosterVectorComparer = Comparer<RosterVector>.Create((x, y) =>
+        {
+            var left = x.Array;
+            var right = y.Array;
+            for (int i = 0; i < Math.Min(left.Length, right.Length); i++)
+            {
+                var result = left[i].CompareTo(right[i]);
+                if (result != 0) return result;
+            }
+
+            return left.Length.CompareTo(right.Length);
+        });
 
         /// <summary>
         /// Returns all child entity ids of <paramref name="parentId"/> (questionnaire root, section, sub-section or roster)

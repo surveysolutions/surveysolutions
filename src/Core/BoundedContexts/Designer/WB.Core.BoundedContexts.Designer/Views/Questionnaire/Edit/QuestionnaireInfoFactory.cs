@@ -577,6 +577,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             );
             questionView.ValidationConditions.AddRange(question.ValidationConditions);
             questionView.RandomizeOrder = question.RandomizeOrder;
+            questionView.RandomizeAnswerOptions = question.RandomizeAnswerOptions;
 
             questionView.RosterScopeIds = new Guid[0];
             questionView.ParentGroupsIds = new Guid[0];
