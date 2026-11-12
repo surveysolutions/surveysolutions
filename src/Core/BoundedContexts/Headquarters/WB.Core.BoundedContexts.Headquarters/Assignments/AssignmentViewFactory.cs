@@ -362,15 +362,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.IdentifyingQuestions))
                 {
                     textSearchExpression = textSearchExpression
-                        .OrCondition(x => x.IdentifyingData.Any(a => a.AnswerAsString.ToLower().Contains(lowerSearchBy)));
+                        .OrCondition(x => x.IdentifyingData.Any(a => a.AnswerAsString.ToLower().StartsWith(lowerSearchBy)));
                 }
 
                 if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.ResponsibleId))
                 {
-                    textSearchExpression = textSearchExpression.OrCondition(x => x.Responsible.Name.ToLower().Contains(lowerSearchBy));
+                    textSearchExpression = textSearchExpression.OrCondition(x => x.Responsible.Name.ToLower().StartsWith(lowerSearchBy));
                 }
 
-                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.ResponsibleId))
+                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.QuestionnaireTitle))
                 {
                     textSearchExpression = textSearchExpression.OrCondition(x => x.Questionnaire.Title.ToLower().Contains(lowerSearchBy));
                 }
@@ -381,6 +381,51 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 }
 
                 items = items.Where(textSearchExpression);
+            }
+
+            if (input.Conditions != null && input.Conditions.Length > 0)
+            {
+                var questionnaire = input.QuestionnaireId.HasValue && input.QuestionnaireVersion.HasValue
+                    ? this.questionnaireStorage.GetQuestionnaire(
+                        new QuestionnaireIdentity(input.QuestionnaireId.Value, input.QuestionnaireVersion.Value), null)
+                    : null;
+
+                foreach (var condition in input.Conditions)
+                {
+                    if (condition?.Variable == null || condition.Field == null || condition.Value == null)
+                        continue;
+
+                    var questionId = questionnaire?.GetQuestionIdByVariable(condition.Variable);
+                    if (!questionId.HasValue)
+                        continue;
+
+                    var fieldParts = condition.Field.Split('|');
+                    if (fieldParts.Length != 2) continue;
+
+                    var fieldName = fieldParts[0];
+                    var operation = fieldParts[1];
+                    var value = condition.Value;
+                    var id = questionId.Value;
+
+                    switch (fieldName, operation)
+                    {
+                        case ("valueLowerCase", "startsWith"):
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.Identity.Id == id && a.AnswerAsString.ToLower().StartsWith(value)));
+                            break;
+                        case ("valueLowerCase", "eq"):
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.Identity.Id == id && a.AnswerAsString.ToLower() == value));
+                            break;
+                        case ("answerCode", "eq"):
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.Identity.Id == id && a.Answer == value));
+                            break;
+                        case ("answerCode", "neq"):
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.Identity.Id == id && a.Answer != null && a.Answer != value));
+                            break;
+                        case ("value", "eq"):
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.Identity.Id == id && a.Answer == value));
+                            break;
+                    }
+                }
             }
 
             if (input.ReceivedByTablet != AssignmentReceivedState.All)
