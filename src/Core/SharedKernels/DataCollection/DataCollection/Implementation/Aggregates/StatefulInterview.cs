@@ -150,6 +150,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
         private InterviewTree sourceInterview;
+        private readonly HashSet<Identity> questionsChangedSinceLastRejection = new HashSet<Identity>();
+        private readonly object reviewStateLock = new object();
+        private Guid? lastRejectionEventIdentifier;
+        private Guid applyingEventIdentifier;
 
         public DateTimeOffset? StartedDate => this.properties.StartedDate;
         public DateTimeOffset? CompletedDate => this.properties.CompletedDate;
@@ -174,6 +178,42 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return variable.GetValueAsString();
         }
 
+        public bool IsQuestionChangedSinceLastRejection(Identity identity)
+        {
+            lock (this.reviewStateLock)
+                return this.questionsChangedSinceLastRejection.Contains(identity);
+        }
+
+        protected override void HandleEvent(object evnt)
+        {
+            base.HandleEvent(evnt);
+            this.UpdateReviewState(evnt);
+        }
+
+        protected override void OnEventApplying(Guid eventIdentifier, object payload, bool isHistorical, bool isSynchronized)
+        {
+            base.OnEventApplying(eventIdentifier, payload, isHistorical, isSynchronized);
+            lock (this.reviewStateLock)
+            {
+                this.applyingEventIdentifier = eventIdentifier;
+                if (!isHistorical && !isSynchronized)
+                {
+                    switch (payload)
+                    {
+                        case InterviewRejected rejected:
+                            rejected.PreviousRejectionEventIdentifier ??= this.lastRejectionEventIdentifier ?? Guid.Empty;
+                            break;
+                        case InterviewRejectedByHQ rejectedByHq:
+                            rejectedByHq.PreviousRejectionEventIdentifier ??= this.lastRejectionEventIdentifier ?? Guid.Empty;
+                            break;
+                        case QuestionAnswered questionAnswered:
+                            questionAnswered.LastRejectionEventIdentifier ??= this.lastRejectionEventIdentifier ?? Guid.Empty;
+                            break;
+                    }
+                }
+            }
+        }
+
         protected override void OnEventApplied(UncommittedEvent appliedEvent)
         {
             base.OnEventApplied(appliedEvent);
@@ -181,6 +221,53 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.properties.LastAnswerDate = questionAnswered.OriginDate;
             }
+        }
+
+        private void UpdateReviewState(object payload)
+        {
+            lock (this.reviewStateLock)
+            {
+                switch (payload)
+                {
+                    case InterviewRejected rejected
+                        when IsCurrentRejectionCheckpoint(rejected.PreviousRejectionEventIdentifier):
+                    case InterviewRejectedByHQ rejectedByHq
+                        when IsCurrentRejectionCheckpoint(rejectedByHq.PreviousRejectionEventIdentifier):
+                        this.questionsChangedSinceLastRejection.Clear();
+                        this.lastRejectionEventIdentifier = this.applyingEventIdentifier;
+                        break;
+                    case QuestionAnswered questionAnswered:
+                        {
+                            var identity = Identity.Create(questionAnswered.QuestionId, questionAnswered.RosterVector);
+                            this.questionsChangedSinceLastRejection.Remove(identity);
+                            if (questionAnswered.LastRejectionEventIdentifier.HasValue &&
+                                questionAnswered.LastRejectionEventIdentifier != Guid.Empty &&
+                                questionAnswered.LastRejectionEventIdentifier == this.lastRejectionEventIdentifier)
+                            {
+                                this.questionsChangedSinceLastRejection.Add(identity);
+                            }
+                            break;
+                        }
+                    case AnswerRemoved answerRemoved
+                        when this.lastRejectionEventIdentifier.HasValue &&
+                             this.lastRejectionEventIdentifier != Guid.Empty:
+                        this.questionsChangedSinceLastRejection.Remove(
+                            Identity.Create(answerRemoved.QuestionId, answerRemoved.RosterVector));
+                        break;
+                    case AnswersRemoved answersRemoved
+                        when this.lastRejectionEventIdentifier.HasValue &&
+                             this.lastRejectionEventIdentifier != Guid.Empty:
+                        foreach (var identity in answersRemoved.Questions)
+                            this.questionsChangedSinceLastRejection.Remove(identity);
+                        break;
+                }
+            }
+        }
+
+        private bool IsCurrentRejectionCheckpoint(Guid? previousRejectionEventIdentifier)
+        {
+            return !previousRejectionEventIdentifier.HasValue ||
+                   previousRejectionEventIdentifier == (this.lastRejectionEventIdentifier ?? Guid.Empty);
         }
 
         public bool HasErrors { get; private set; }

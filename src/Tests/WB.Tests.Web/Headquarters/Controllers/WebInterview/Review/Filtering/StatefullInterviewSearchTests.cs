@@ -109,6 +109,56 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
             }
         }
 
+        [Test]
+        public void ShouldFilterAnswersChangedSinceRejection()
+        {
+            var changedQuestion = TextCommentFlaggedAnswered;
+            var document = Create.Entity.QuestionnaireDocument(Guid.NewGuid(), null,
+                Create.Entity.Group(Id.IdentityA.Id, "Group A", children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(changedQuestion.Id, text: "Changed question", variable: "changed")
+                }));
+            var changedInterview = Create.AggregateRoot.StatefulInterview(Guid.NewGuid(), questionnaire: document);
+            var interviewerId = Guid.NewGuid();
+            var timestamp = DateTimeOffset.UtcNow;
+            changedInterview.AnswerTextQuestion(interviewerId, changedQuestion.Id, RosterVector.Empty, timestamp, "before");
+            changedInterview.Complete(interviewerId, "", timestamp.AddMinutes(1), null);
+            changedInterview.Reject(Guid.NewGuid(), "reject", timestamp.AddMinutes(2));
+            changedInterview.AnswerTextQuestion(interviewerId, changedQuestion.Id, RosterVector.Empty, timestamp.AddMinutes(3), "after");
+            Assert.That(changedInterview.IsQuestionChangedSinceLastRejection(changedQuestion), Is.True);
+
+            var results = Subject.Search(changedInterview, Create.Entity.PlainQuestionnaire(document),
+                new[] { FilterOption.Changed }, 0, 100);
+
+            AssertSearchReturnFollowingIds(results, changedQuestion);
+            Assert.That(results.Stats[FilterOption.Changed], Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ShouldIncludeChangedAnswersThatAreDisabled()
+        {
+            var changedQuestion = TextCommentFlaggedAnswered;
+            var document = Create.Entity.QuestionnaireDocument(Guid.NewGuid(), null,
+                Create.Entity.Group(Id.IdentityA.Id, "Group A", children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(changedQuestion.Id, text: "Changed question", variable: "changed")
+                }));
+            var changedInterview = Create.AggregateRoot.StatefulInterview(Guid.NewGuid(), questionnaire: document);
+            var interviewerId = Guid.NewGuid();
+            var timestamp = DateTimeOffset.UtcNow;
+            changedInterview.AnswerTextQuestion(interviewerId, changedQuestion.Id, RosterVector.Empty, timestamp, "before");
+            changedInterview.Complete(interviewerId, "", timestamp.AddMinutes(1), null);
+            changedInterview.Reject(Guid.NewGuid(), "reject", timestamp.AddMinutes(2));
+            changedInterview.AnswerTextQuestion(interviewerId, changedQuestion.Id, RosterVector.Empty, timestamp.AddMinutes(3), "after");
+            changedInterview.Apply(Create.Event.QuestionsDisabled(new[] { changedQuestion }));
+
+            var results = Subject.Search(changedInterview, Create.Entity.PlainQuestionnaire(document),
+                new[] { FilterOption.Changed }, 0, 100);
+
+            AssertSearchReturnFollowingIds(results, changedQuestion);
+            Assert.That(results.Stats[FilterOption.Changed], Is.EqualTo(1));
+        }
+
         public static FilterTestCase[] TestCaseData =
         {
             new FilterTestCase(FilterOption.Flagged)
@@ -127,6 +177,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
             new FilterTestCase(FilterOption.ForInterviewer)
                 .ExpectedQuestions(AllQuestionsBut(TextSupervisor, TextSuper, StaticTextInvalid, StaticText)),
             new FilterTestCase(FilterOption.WithComments).ExpectedQuestions(TextComment, TextCommentFlaggedAnswered),
+            new FilterTestCase(FilterOption.Changed)
+                .ExpectedStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
             new FilterTestCase(FilterOption.Flagged, FilterOption.WithComments)
                 .ExpectedQuestions(TextCommentFlaggedAnswered)
                 .ExpectedStats(1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0),

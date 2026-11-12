@@ -620,4 +620,5 @@ Veuillez vérifier que toutes les informations sont correctes.</value>
   <data name="RealQuestion_Hint" xml:space="preserve">
       <value>Appuyez pour saisir un nombre</value>
   </data>
+  <data name="AnswerChangedSinceLastRejection" xml:space="preserve"><value>Cette réponse a été modifiée depuis le dernier rejet.</value></data>
 </root>
