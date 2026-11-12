@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Quartz;
@@ -33,12 +34,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.preparationExecutor = preparationExecutor;
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken = default)
         {
+            var executionCancellationToken = cancellationToken == default
+                ? context.CancellationToken
+                : cancellationToken;
+
             try
             {
-                var cancellationToken = context.CancellationToken;
-                cancellationToken.ThrowIfCancellationRequested();
+                executionCancellationToken.ThrowIfCancellationRequested();
                 if (!emailService.IsConfigured())
                     return;
 
@@ -49,15 +53,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 // A fixed snapshot bounds the run even when new completions arrive continuously.
                 foreach (var interviewId in interviewIds)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    executionCancellationToken.ThrowIfCancellationRequested();
                     if (sw.Elapsed >= RunBudget)
                         break;
 
                     try
                     {
                         var email = await preparationExecutor.ExecuteAsync(builder =>
-                            builder.PrepareAsync(interviewId, senderInfo, cancellationToken)).ConfigureAwait(false);
-                        cancellationToken.ThrowIfCancellationRequested();
+                            builder.PrepareAsync(interviewId, senderInfo, executionCancellationToken)).ConfigureAwait(false);
+                        executionCancellationToken.ThrowIfCancellationRequested();
 
                         // The preparation scope is already disposed, including its transaction.
                         if (email != null)
@@ -69,7 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                         // Acknowledge a successful send even if cancellation arrived during SMTP.
                         queueExecutor.Execute(queue => queue.Remove(interviewId));
                     }
-                    catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                    catch (OperationCanceledException) when (executionCancellationToken.IsCancellationRequested)
                     {
                         throw;
                     }
