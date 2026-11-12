@@ -78,6 +78,10 @@ export default {
             await this.$nextTick()
             await new Promise(resolve => requestAnimationFrame(resolve))
         },
+        async resumeLoadMoreIfNeeded() {
+            await this.waitForRenderAndLayout()
+            if (this.isSentinelInLoadingRange()) this.loadMore()
+        },
         isSentinelInLoadingRange() {
             if (!this.$refs.sentinel) return false
 
@@ -99,6 +103,9 @@ export default {
     },
 
     watch: {
+        'searchResult.needToClear'(needToClear, wasClearing) {
+            if (wasClearing && !needToClear) this.resumeLoadMoreIfNeeded()
+        },
         searchResultsAreVisible(val) {
             if (val) {
                 this.$nextTick(() => {

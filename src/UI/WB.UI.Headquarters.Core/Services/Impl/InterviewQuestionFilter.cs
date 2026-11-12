@@ -57,7 +57,7 @@ namespace WB.UI.Headquarters.Services.Impl
 
         public bool Evaluate(FilterOption option, bool @default)
         {
-            if (node.IsDisabled()) return false;
+            if (node.IsDisabled() && option != FilterOption.Changed) return false;
 
             switch (node)
             {

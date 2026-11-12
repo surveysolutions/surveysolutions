@@ -154,6 +154,48 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.Review
             Assert.That(interview.IsQuestionChangedSinceLastRejection(identity), Is.False);
         }
 
+        [Test]
+        public void when_synchronizing_a_late_older_rejection_and_its_answer_should_preserve_newer_checkpoint()
+        {
+            var interviewId = Guid.NewGuid();
+            var questionnaireId = Guid.NewGuid();
+            var questionId = Guid.NewGuid();
+            var interview = CreateInterview(interviewId, questionnaireId, questionId);
+            var userId = Guid.NewGuid();
+            var newerRejectionIdentifier = Guid.NewGuid();
+            var olderRejectionIdentifier = Guid.NewGuid();
+            var olderRejection = new InterviewRejected(userId, "", DateTimeOffset.UtcNow)
+            {
+                PreviousRejectionEventIdentifier = Guid.Empty
+            };
+            var answer = CreateAnswer(questionId, olderRejectionIdentifier);
+            var synchronizedEvents = new[]
+            {
+                Create.Event.InterviewCreated(questionnaireId, 1)
+                    .ToAggregateRootEvent(eventSourceId: interviewId),
+                new InterviewRejectedByHQ(userId, "", DateTimeOffset.UtcNow)
+                {
+                    PreviousRejectionEventIdentifier = Guid.Empty
+                }.ToAggregateRootEvent(eventSourceId: interviewId, eventId: newerRejectionIdentifier),
+                olderRejection.ToAggregateRootEvent(eventSourceId: interviewId, eventId: olderRejectionIdentifier),
+                answer.ToAggregateRootEvent(eventSourceId: interviewId)
+            };
+            var command = new SynchronizeInterviewEventsCommand(
+                interviewId,
+                userId,
+                questionnaireId,
+                1,
+                synchronizedEvents,
+                InterviewStatus.Completed,
+                createdOnClient: true,
+                interviewKey: null,
+                newSupervisorId: null);
+
+            interview.SynchronizeInterviewEvents(command);
+
+            Assert.That(interview.IsQuestionChangedSinceLastRejection(Create.Entity.Identity(questionId)), Is.False);
+        }
+
         private static StatefulInterview CreateInterview(Guid interviewId, Guid questionnaireId, params Guid[] questionIds)
         {
             var questions = new List<IComposite>();

@@ -196,8 +196,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             lock (this.reviewStateLock)
             {
                 this.applyingEventIdentifier = eventIdentifier;
-                if (!isHistorical && !isSynchronized && payload is QuestionAnswered questionAnswered)
-                    questionAnswered.LastRejectionEventIdentifier ??= this.lastRejectionEventIdentifier ?? Guid.Empty;
+                if (!isHistorical && !isSynchronized)
+                {
+                    switch (payload)
+                    {
+                        case InterviewRejected rejected:
+                            rejected.PreviousRejectionEventIdentifier ??= this.lastRejectionEventIdentifier ?? Guid.Empty;
+                            break;
+                        case InterviewRejectedByHQ rejectedByHq:
+                            rejectedByHq.PreviousRejectionEventIdentifier ??= this.lastRejectionEventIdentifier ?? Guid.Empty;
+                            break;
+                        case QuestionAnswered questionAnswered:
+                            questionAnswered.LastRejectionEventIdentifier ??= this.lastRejectionEventIdentifier ?? Guid.Empty;
+                            break;
+                    }
+                }
             }
         }
 
@@ -216,8 +229,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 switch (payload)
                 {
-                    case InterviewRejected:
-                    case InterviewRejectedByHQ:
+                    case InterviewRejected rejected
+                        when IsCurrentRejectionCheckpoint(rejected.PreviousRejectionEventIdentifier):
+                    case InterviewRejectedByHQ rejectedByHq
+                        when IsCurrentRejectionCheckpoint(rejectedByHq.PreviousRejectionEventIdentifier):
                         this.questionsChangedSinceLastRejection.Clear();
                         this.lastRejectionEventIdentifier = this.applyingEventIdentifier;
                         break;
@@ -247,6 +262,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
                 }
             }
+        }
+
+        private bool IsCurrentRejectionCheckpoint(Guid? previousRejectionEventIdentifier)
+        {
+            return !previousRejectionEventIdentifier.HasValue ||
+                   previousRejectionEventIdentifier == (this.lastRejectionEventIdentifier ?? Guid.Empty);
         }
 
         public bool HasErrors { get; private set; }
