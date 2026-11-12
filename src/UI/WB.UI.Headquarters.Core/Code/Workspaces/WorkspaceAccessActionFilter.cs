@@ -83,5 +83,6 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
             bool ContextHasAttribute<T>() where T: class => context.ActionDescriptor.EndpointMetadata.Any(m => m is T);
         }
+
     }
 }

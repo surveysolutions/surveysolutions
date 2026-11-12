@@ -1,18 +1,23 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Infrastructure.Native.Workspaces;
+using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Services.Impl;
 
@@ -186,6 +191,140 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             StringAssert.StartsWith("/primary", location);
         }
 
+        [TestCase("/NewPage", "")]
+        [TestCase("/NewPage", "/hq")]
+        [TestCase("/api/v1/workspaces", "")]
+        [TestCase("/Account/LogOn", "")]
+        [TestCase("/UnderConstruction/request", "")]
+        public async Task when_anonymous_user_requests_administration_subpage_should_return_404(
+            string path, string applicationPathBase)
+        {
+            var context = CreateHttpContext(path,
+                currentWorkspace: WorkspaceConstants.WorkspaceNames.AdminWorkspaceName,
+                applicationPathBase: applicationPathBase);
+            context.Request.QueryString = new QueryString("?test=value");
+            var middleware = CreateMiddleware(_ => throw new AssertionException("The endpoint must not execute."));
+
+            await middleware.Invoke(context);
+
+            context.Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            context.Response.Headers.Should().NotContainKey(HeaderNames.Location);
+        }
+
+        [TestCase(UserRoles.Headquarter, "/Workspaces", "Cookie")]
+        [TestCase(UserRoles.Supervisor, "/Workspaces", "Cookie")]
+        [TestCase(UserRoles.Interviewer, "/Workspaces", "Cookie")]
+        [TestCase(UserRoles.Observer, "/NewPage", "Cookie")]
+        [TestCase(UserRoles.ApiUser, "/api/v1/workspaces", "Cookie")]
+        [TestCase(null, "/api/v1/workspaces", AuthType.TenantToken)]
+        [TestCase(UserRoles.Headquarter, "/UnderConstruction/request", "Cookie")]
+        public async Task when_non_admin_requests_administration_should_return_404(
+            UserRoles? role, string path, string authenticationType)
+        {
+            var context = CreateHttpContext(path,
+                currentWorkspace: WorkspaceConstants.WorkspaceNames.AdminWorkspaceName,
+                authenticationType: authenticationType, role: role);
+            context.SetEndpoint(new Endpoint(_ => Task.CompletedTask,
+                new EndpointMetadataCollection(new AllowAnonymousAttribute()), null));
+            var middleware = CreateMiddleware(_ => throw new AssertionException("The endpoint must not execute."));
+
+            await middleware.Invoke(context);
+
+            context.Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            context.Response.Headers.Should().NotContainKey(HeaderNames.Location);
+        }
+
+        [Test]
+        public async Task when_user_requests_administration_root_should_redirect_to_workspaces(
+            [Values("", "/")] string path,
+            [Values("", "/hq")] string applicationPathBase,
+            [Values(null, UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)] UserRoles? role)
+        {
+            var context = CreateHttpContext(path,
+                currentWorkspace: WorkspaceConstants.WorkspaceNames.AdminWorkspaceName,
+                authenticationType: role.HasValue ? "Cookie" : null, role: role,
+                applicationPathBase: applicationPathBase);
+            var middleware = CreateMiddleware(_ => throw new AssertionException("The home page must not execute."));
+
+            await middleware.Invoke(context);
+
+            context.Response.StatusCode.Should().Be(StatusCodes.Status302Found);
+            context.Response.Headers[HeaderNames.Location].ToString().Should().Be(
+                $"{applicationPathBase}/administration/Workspaces");
+        }
+
+        [TestCase("/Workspaces")]
+        [TestCase("/Administration/Diagnostics")]
+        [TestCase("/Diagnostics/AuditLog")]
+        [TestCase("/Diagnostics/TabletInfos")]
+        [TestCase("/api/AdminSettings/GetSystemLog")]
+        [TestCase("/api/v1/workspaces")]
+        [TestCase("/NewPage")]
+        [TestCase("/api/NewAction")]
+        public async Task when_admin_requests_administration_subpage_should_continue_without_allowlist(string path)
+        {
+            var context = CreateHttpContext(path,
+                currentWorkspace: WorkspaceConstants.WorkspaceNames.AdminWorkspaceName,
+                authenticationType: "Cookie", role: UserRoles.Administrator);
+            var nextCalled = false;
+            var middleware = CreateMiddleware(_ =>
+            {
+                nextCalled = true;
+                return Task.CompletedTask;
+            });
+
+            await middleware.Invoke(context);
+
+            nextCalled.Should().BeTrue();
+            context.Response.StatusCode.Should().Be(StatusCodes.Status200OK);
+            context.Response.Headers.Should().NotContainKey(HeaderNames.Location);
+        }
+
+        [TestCase("primary")]
+        [TestCase("users")]
+        public async Task when_non_admin_requests_other_workspace_root_should_continue(string workspace)
+        {
+            var context = CreateHttpContext("/", currentWorkspace: workspace,
+                authenticationType: "Cookie", role: UserRoles.Headquarter);
+            var nextCalled = false;
+            var middleware = CreateMiddleware(_ =>
+            {
+                nextCalled = true;
+                return Task.CompletedTask;
+            });
+
+            await middleware.Invoke(context);
+
+            nextCalled.Should().BeTrue();
+            context.Response.Headers.Should().NotContainKey(HeaderNames.Location);
+        }
+
+        [Test]
+        public async Task when_reexecuting_denied_administration_request_should_render_error_page()
+        {
+            var context = CreateHttpContext("/Workspaces",
+                currentWorkspace: WorkspaceConstants.WorkspaceNames.AdminWorkspaceName,
+                authenticationType: "Cookie", role: UserRoles.Headquarter);
+            using var body = new MemoryStream();
+            context.Response.Body = body;
+            using var services = new ServiceCollection().AddLogging().BuildServiceProvider();
+            var app = new ApplicationBuilder(services);
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
+            app.Use(next => CreateMiddleware(next).Invoke);
+            app.Run(async httpContext =>
+            {
+                httpContext.Request.Path.Value.Should().Be("/error/404");
+                httpContext.Response.ContentType = "text/html";
+                await httpContext.Response.WriteAsync("Not found");
+            });
+
+            await app.Build()(context);
+
+            Encoding.UTF8.GetString(body.ToArray()).Should().Be("Not found");
+            context.Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            context.Response.Headers.Should().NotContainKey(HeaderNames.Location);
+        }
+
         class EndpointFeature : IEndpointFeature
         {
             public Endpoint Endpoint { get; set; }
@@ -196,6 +335,9 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             string[] serverWorkspaces = null,
             string[] disabledWorkspaces = null,
             string currentWorkspace = null,
+            string authenticationType = null,
+            UserRoles? role = null,
+            string applicationPathBase = "",
             params (string name, string value)[] cookies)
         {
             serverWorkspaces ??= userClaimWorkspaces;
@@ -203,6 +345,9 @@ namespace WB.Tests.Web.Headquarters.Workspaces
 
             var result = new DefaultHttpContext();
             result.Request.Path = requestPath;
+            result.Request.PathBase = currentWorkspace == null
+                ? applicationPathBase
+                : $"{applicationPathBase}/{currentWorkspace}";
 
             if (cookies != null)
             {
@@ -212,7 +357,9 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             var workspaces = userClaimWorkspaces ?? new[] { WorkspaceConstants.DefaultWorkspaceName };
 
             var claims = workspaces.Select(x => new Claim(WorkspaceConstants.ClaimType, x)).ToList();
-            result.User = new ClaimsPrincipal(new ClaimsIdentity(claims));
+            if (role.HasValue)
+                claims.Add(new Claim(ClaimTypes.Role, role.Value.ToString()));
+            result.User = new ClaimsPrincipal(new ClaimsIdentity(claims, authenticationType));
 
             var authorizedUser = new AuthorizedUser(Mock.Of<IHttpContextAccessor>(x => x.HttpContext == result), workspacesCache);
 
@@ -220,7 +367,10 @@ namespace WB.Tests.Web.Headquarters.Workspaces
                                                                              (currentWorkspace == null
                                                                                  ? null
                                                                                  : new WorkspaceContext(
-                                                                                     currentWorkspace, String.Empty, null)));
+                                                                                     currentWorkspace, String.Empty, null)
+                                                                                  {
+                                                                                     PathBase = applicationPathBase
+                                                                                  }));
 
             result.RequestServices = Mock.Of<IServiceProvider>(
                 x => x.GetService(typeof(IWorkspaceContextAccessor)) == workspacesAccessor

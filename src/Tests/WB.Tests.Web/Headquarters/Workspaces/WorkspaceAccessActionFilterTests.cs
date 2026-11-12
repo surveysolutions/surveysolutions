@@ -295,7 +295,6 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             ClassicAssert.Null(context.Result);
         }
 
-
         private AuthorizationFilterContext Act()
         {
             var sut = CreateSut();

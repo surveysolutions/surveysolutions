@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,15 +27,35 @@ namespace WB.UI.Headquarters.Code.Workspaces
 
         public async Task Invoke(HttpContext context)
         {
+            var contextAccessor = context.RequestServices.GetRequiredService<IWorkspaceContextAccessor>();
+
+            var currentWorkspace = contextAccessor.CurrentWorkspace();
+
+            // Let status-code re-execution render the error page after access is denied.
+            if (currentWorkspace != null && currentWorkspace.IsAdministrationWorkspace()
+                && context.Features.Get<IStatusCodeReExecuteFeature>() == null)
+            {
+                if (!context.Request.Path.HasValue || context.Request.Path == "/")
+                {
+                    context.Response.Redirect($"{context.Request.PathBase}/Workspaces");
+                    return;
+                }
+                else
+                {
+                    var authorizedUser = context.RequestServices.GetRequiredService<IAuthorizedUser>();
+                    if (!authorizedUser.IsAdministrator)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status404NotFound;
+                        return;
+                    }
+                }
+            }
+
             if (context.Request.Path.StartsWithSegments("/UnderConstruction"))
             {
                 await next(context).ConfigureAwait(false);
                 return;
             }
-
-            var contextAccessor = context.RequestServices.GetRequiredService<IWorkspaceContextAccessor>();
-
-            var currentWorkspace = contextAccessor.CurrentWorkspace();
 
             if (currentWorkspace == null
                 && !NotScopedToWorkspacePaths
