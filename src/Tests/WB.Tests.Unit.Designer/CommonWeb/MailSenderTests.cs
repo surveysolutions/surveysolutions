@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.CommonWeb
             var sendTask = mailSender.SendEmailAsync("to@example.com", "subject", "<p>body</p>");
             using var connection = await listener.AcceptTcpClientAsync().WaitAsync(TimeSpan.FromSeconds(10));
 
-            Assert.CatchAsync<OperationCanceledException>(
+            await Assert.CatchAsync<OperationCanceledException>(
                 async () => await sendTask.WaitAsync(TimeSpan.FromSeconds(10)));
             var bytesRead = await connection.GetStream().ReadAsync(new byte[1]).AsTask()
                 .WaitAsync(TimeSpan.FromSeconds(10));

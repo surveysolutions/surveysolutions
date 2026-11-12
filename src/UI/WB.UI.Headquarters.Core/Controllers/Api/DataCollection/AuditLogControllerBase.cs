@@ -9,6 +9,7 @@ using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
+    [RequestSizeLimit(1L * 1024 * 1024 * 1024)]
     public abstract class AuditLogControllerBase : DataCollectionControllerBase
     {
         private readonly IPlainStorageAccessor<AuditLogRecord> auditLogStorage;
