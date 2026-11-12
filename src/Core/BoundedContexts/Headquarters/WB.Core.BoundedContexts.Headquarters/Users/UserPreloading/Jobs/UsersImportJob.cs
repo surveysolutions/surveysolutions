@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
     [DisallowConcurrentExecution]
     [RetryFailedJob]
     [DisplayName("Users import"), Category("Import")]
-    public class UsersImportJob : IJob<Unit>
+    public class UsersImportJob : IJobWithData<Unit>
     {
         private readonly IInScopeExecutor<IMediator> inScopeExecutor;
         private readonly ILogger<UsersImportJob> logger;

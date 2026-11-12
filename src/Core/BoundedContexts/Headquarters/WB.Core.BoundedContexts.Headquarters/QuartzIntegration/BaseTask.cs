@@ -29,40 +29,42 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
         public virtual async Task Schedule(int repeatIntervalInSeconds)
         {
-            IJobDetail job = JobBuilder.Create(jobType)
+            IJobDetail job = JobBuilder.Create()
+                .OfType(jobType)
                 .WithIdentity(jobKey)
                 .StoreDurably()
                 .Build();
             var scheduler = await this.schedulerFactory.GetScheduler();
 
-            await scheduler.AddJob(job, true);
+            await scheduler.AddJob(job, new AddJobOptions { Replace = true });
 
             var trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
                 .ForJob(jobKey)
-                .StartAt(DateBuilder.FutureDate(rnd.Next(2,15), IntervalUnit.Second))
-                .WithSimpleSchedule(x => x.WithIntervalInSeconds(repeatIntervalInSeconds).RepeatForever())
+                .StartAt(DateTimeOffset.Now.AddSeconds(rnd.Next(2, 15)))
+                .WithSimpleSchedule(x => x.WithInterval(TimeSpan.FromSeconds(repeatIntervalInSeconds)).RepeatForever())
                 .Build();
 
-            if (!await scheduler.CheckExists(triggerKey))
+            if (!await scheduler.Exists(triggerKey))
                 await scheduler.ScheduleJob(trigger);
         }
 
         public virtual async Task ScheduleRunAsync(int startAtInSeconds = 1)
         {
-            IJobDetail job = JobBuilder.Create(jobType)
+            IJobDetail job = JobBuilder.Create()
+                .OfType(jobType)
                 .WithIdentity(jobKey)
                 .StoreDurably()
                 .Build();
             
             var scheduler = await this.schedulerFactory.GetScheduler();
 
-            await scheduler.AddJob(job, true);
+            await scheduler.AddJob(job, new AddJobOptions { Replace = true });
 
             var trigger = TriggerBuilder.Create()
                 .WithDescription(jobKey.ToString())
                 .ForJob(jobKey)
-                .StartAt(DateBuilder.FutureDate(startAtInSeconds, IntervalUnit.Second))
+                .StartAt(DateTimeOffset.Now.AddSeconds(startAtInSeconds))
                 .Build();
 
             await scheduler.ScheduleJob(trigger);

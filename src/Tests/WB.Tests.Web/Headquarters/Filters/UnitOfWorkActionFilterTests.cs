@@ -55,7 +55,7 @@ namespace WB.Tests.Web.Headquarters.Filters
         }
 
         [Test]
-        public void should_propagate_commit_failure_without_executing_success_result()
+        public async Task should_propagate_commit_failure_without_executing_success_result()
         {
             var failure = new InvalidOperationException("Commit failed");
             var unitOfWork = new Mock<IUnitOfWork>();
@@ -65,7 +65,7 @@ namespace WB.Tests.Web.Headquarters.Filters
             var resultExecuted = false;
             var result = new WritingResult(() => resultExecuted = true);
 
-            var thrown = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            var thrown = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
                 await new UnitOfWorkActionFilter().OnActionExecutionAsync(context, () =>
                     Task.FromResult(new ActionExecutedContext(context, context.Filters, context.Controller)
@@ -100,14 +100,14 @@ namespace WB.Tests.Web.Headquarters.Filters
         }
 
         [Test]
-        public void should_discard_when_action_delegate_throws()
+        public async Task should_discard_when_action_delegate_throws()
         {
             var unitOfWork = new Mock<IUnitOfWork>();
             using var services = new ServiceCollection().AddSingleton(unitOfWork.Object).BuildServiceProvider();
             var context = Context(services);
             var failure = new InvalidOperationException("Action failed");
 
-            var thrown = Assert.ThrowsAsync<InvalidOperationException>(() =>
+            var thrown = await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 new UnitOfWorkActionFilter().OnActionExecutionAsync(context, () => throw failure));
 
             Assert.That(thrown, Is.SameAs(failure));
