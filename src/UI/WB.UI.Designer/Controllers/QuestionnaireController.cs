@@ -489,6 +489,9 @@ namespace WB.UI.Designer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
+            if (GetQuestionnaireView(id) == null)
+                return NotFound();
+
             bool isActive = postModel.IsActive;
             if (isActive)
                 this.commandService.Execute(new EnableAnonymousSharing(id, User.GetId(), User.IsAdmin()));
