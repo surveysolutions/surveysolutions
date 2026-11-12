@@ -76,12 +76,12 @@ namespace WB.Services.Export.Storage
 
                 ListObjectsV2Response response = await client.ListObjectsV2Async(listObjects);
 
-                return response.S3Objects.Select(s3 => new FileObject
+                return response.S3Objects?.Select(s3 => new FileObject
                 {
                     Path = s3.Key.Substring(StorageBasePath.Length),
                     Size = s3.Size.GetValueOrDefault(),
                     LastModified = s3.LastModified.GetValueOrDefault()
-                }).ToList();
+                }).ToList() ?? new List<FileObject>();
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
