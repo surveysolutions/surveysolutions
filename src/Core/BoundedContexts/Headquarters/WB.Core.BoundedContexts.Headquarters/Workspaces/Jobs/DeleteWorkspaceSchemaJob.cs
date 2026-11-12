@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs
     [DisallowConcurrentExecution]
     [DisplayName("Delete Workspace Schema")]
     [Category("Cleanup")]
-    public class DeleteWorkspaceSchemaJob : IJob<DeleteWorkspaceJobData>
+    public class DeleteWorkspaceSchemaJob : IJobWithData<DeleteWorkspaceJobData>
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IWorkspacesStorage workspaces;

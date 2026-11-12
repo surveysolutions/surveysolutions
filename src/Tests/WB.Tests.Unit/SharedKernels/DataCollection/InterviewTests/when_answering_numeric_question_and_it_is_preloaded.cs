@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview.Apply(Create.Event.QuestionsMarkedAsReadonly(DateTimeOffset.Now, Create.Identity(Id.g1)));
 
-            TestDelegate act = () => interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: Id.g1));
+           Action act = () => interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: Id.g1));
 
             Assert.That(act, Throws.Exception.InstanceOf<InterviewException>()
                                    .And.Message.EqualTo("Answer cannot be changed for preloaded question."));

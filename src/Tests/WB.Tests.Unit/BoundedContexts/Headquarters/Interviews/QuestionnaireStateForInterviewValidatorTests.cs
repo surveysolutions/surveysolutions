@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Interviews
 
             var validator = Create.Service.QuestionnaireStateForInterviewValidator(questionnaireBrowseItemRepository);
 
-            TestDelegate act = () =>
+           Action act = () =>
                 validator.Validate(null, Create.Command.CreateInterview(questionnaireIdentity:questionnaireIdentity, userId: Id.gA));
 
             Assert.That(act, Throws.Exception.InstanceOf<InterviewException>()
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Interviews
 
             var validator = Create.Service.QuestionnaireStateForInterviewValidator(questionnaireBrowseItemRepository);
 
-            TestDelegate act = () =>
+           Action act = () =>
                 validator.Validate(null, Create.Command.CreateInterview(questionnaireIdentity:questionnaireIdentity, userId: Id.gA));
 
             Assert.That(act, Throws.Exception.InstanceOf<InterviewException>()
@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Interviews
 
             statefulInterview.QuestionnaireIdentity = questionnaireIdentity;
             
-            TestDelegate act = () =>
+           Action act = () =>
                 validator.Validate(statefulInterview, Create.Command.ResumeInterview(Id.g1));
 
             Assert.That(act, Throws.Exception.InstanceOf<InterviewException>()

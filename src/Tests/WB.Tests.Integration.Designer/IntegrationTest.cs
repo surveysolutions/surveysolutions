@@ -18,13 +18,14 @@ namespace WB.Tests.Integration.Designer
     public class IntegrationTest
     {
         private IServiceLocator serviceLocator;
+        private string connectionString;
 
         protected IServiceLocator ServiceLocator => this.serviceLocator;
 
         [SetUp]
         public void InitEnvironment()
         {
-            var connectionString = string.Format(TestsConfigurationManager.TestConnectionStringFormat, Guid.NewGuid().ToString("N"));
+            connectionString = string.Format(TestsConfigurationManager.TestConnectionStringFormat, Guid.NewGuid().ToString("N"));
 
             var migration = typeof(M001_Init);
             var schemaName = "plainstore";
@@ -43,8 +44,13 @@ namespace WB.Tests.Integration.Designer
         }
 
         [TearDown]
-        public void DropEnvironment() => 
-            this.serviceLocator.GetInstance<DesignerDbContext>().Database.EnsureDeleted();
+        public void DropEnvironment()
+        {
+            // The shared context may hold an already completed transaction; use a fresh one for cleanup
+            var options = new DbContextOptionsBuilder<DesignerDbContext>().UseNpgsql(connectionString).Options;
+            using var dbContext = new DesignerDbContext(options);
+            dbContext.Database.EnsureDeleted();
+        }
 
         protected void RunActionInScope(Action<IServiceLocator> action)
         {
