@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
     public static class QuartzRegistrationHelpers
     {
         public static void BindScheduledJob<TJ, TD>(this IIocRegistry registry)
-            where TJ: IJob<TD>
+            where TJ: IJobWithData<TD>
         {
             registry.Bind<TJ>();
             registry.Bind<IScheduledTask<TJ, TD>, ScheduledTask<TJ, TD>>();

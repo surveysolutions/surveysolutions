@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Quartz;
 using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -28,7 +29,7 @@ public class ExportDataRetentionJob : IJob
         this.exportSettings = exportSettings;
     }
     
-    public async Task Execute(IJobExecutionContext context)
+    public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken = default)
     {
         try
         {
