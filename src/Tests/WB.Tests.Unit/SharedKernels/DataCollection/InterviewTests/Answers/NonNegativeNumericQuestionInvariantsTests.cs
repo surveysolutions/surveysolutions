@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         {
             var interview = CreateNonNegativeIntegerInterview();
 
-            TestDelegate act = () => interview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, -5);
+           Action act = () => interview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, -5);
 
             Assert.That(act, Throws.TypeOf<AnswerNotAcceptedException>());
         }
@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         {
             var interview = CreateNonNegativeRealInterview();
 
-            TestDelegate act = () => interview.AnswerNumericRealQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, -3.5);
+           Action act = () => interview.AnswerNumericRealQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, -3.5);
 
             Assert.That(act, Throws.TypeOf<AnswerNotAcceptedException>());
         }
@@ -125,7 +125,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         {
             var interview = CreateNonNegativeRealInterview();
 
-            TestDelegate act = () => interview.AnswerNumericRealQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, -1e100);
+           Action act = () => interview.AnswerNumericRealQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, -1e100);
 
             Assert.That(act, Throws.TypeOf<AnswerNotAcceptedException>());
         }
@@ -133,7 +133,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         [Test]
         public void when_preloading_non_negative_integer_question_with_negative_value_should_throw()
         {
-            TestDelegate act = () =>
+           Action act = () =>
                 Create.AggregateRoot.StatefulInterview(
                     shouldBeInitialized: true,
                     questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(
@@ -167,7 +167,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         [Test]
         public void when_preloading_non_negative_real_question_with_negative_value_should_throw()
         {
-            TestDelegate act = () =>
+           Action act = () =>
                 Create.AggregateRoot.StatefulInterview(
                     shouldBeInitialized: true,
                     questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(

@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             RestService service = Create.Service.RestService(settings);
 
             // Act
-            AsyncTestDelegate act = async () => await service.PostAsync("someUrl", new Progress<TransferProgress>());
+           Func<Task> act = async () => await service.PostAsync("someUrl", new Progress<TransferProgress>());
 
             // Assert
             Assert.That(act, Throws.InstanceOf<RestException>().And.Property(nameof(RestException.Type)).EqualTo(RestExceptionType.InvalidUrl));
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             RestService service = Create.Service.RestService(networkService: networkService);
 
             // Act
-            AsyncTestDelegate act = async () => await service.PostAsync("someUrl", new Progress<TransferProgress>());
+            Func<Task> act = async () => await service.PostAsync("someUrl", new Progress<TransferProgress>());
 
             // Assert
             Assert.That(act, Throws.InstanceOf<RestException>().And.Property(nameof(RestException.Type)).EqualTo(RestExceptionType.NoNetwork));
@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             RestService service = Create.Service.RestService(settings, networkService: networkService);
 
             // Act
-            AsyncTestDelegate act = async () => await service.PostAsync("someUrl", new Progress<TransferProgress>());
+            Func<Task> act = async () => await service.PostAsync("someUrl", new Progress<TransferProgress>());
 
             // Assert
             Assert.That(act, Throws.InstanceOf<RestException>().And.Property(nameof(RestException.Type)).EqualTo(RestExceptionType.HostUnreachable));
@@ -157,7 +157,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
                 integrityService: integrityService);
 
             // Act
-            AsyncTestDelegate act = async () => await service.GetAsync("q", null, null, false, null, CancellationToken.None);
+            Func<Task> act = async () => await service.GetAsync("q", null, null, false, null, CancellationToken.None);
 
             // Assert
             Assert.That(act, Throws.InstanceOf<RestException>());
@@ -187,7 +187,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
                 integrityService: integrityService);
 
             // Act
-            AsyncTestDelegate act = async () => await service.GetAsync("q", null, null, false, null, CancellationToken.None);
+            Func<Task> act = async () => await service.GetAsync("q", null, null, false, null, CancellationToken.None);
 
             // Assert
             Assert.That(act, Throws.InstanceOf<RestException>());
