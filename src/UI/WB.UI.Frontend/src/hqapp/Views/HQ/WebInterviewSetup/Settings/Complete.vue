@@ -12,6 +12,7 @@
                                 :class="{ 'answered': webInterviewPageMessages['completeScreenText'].text }">
                                 <Field v-slot="{ handleChange }"
                                     v-model="completeScreenTextMarkdown"
+                                    :label="$t('WebInterviewSettings.CompleteScreenText')"
                                     name="completeScreenText"
                                     rules="max:2000">
                                     <md-editor
@@ -126,6 +127,7 @@ import settings from './settingsMixin'
 import { Form, Field } from 'vee-validate'
 import { escape, unescape } from 'lodash-es'
 import { marked } from 'marked'
+import { escapeMarkdownTitle } from '~/shared/markdown'
 
 export default {
     components: {
@@ -147,7 +149,8 @@ export default {
         previewCompleteScreenText(text) {
             const renderer = new marked.Renderer()
             renderer.html = ({ text }) => escape(text)
-            return marked(this.previewText(unescape(text)), { renderer })
+            const markdown = this.previewText(unescape(text))
+            return marked(escapeMarkdownTitle(markdown, this.questionnaireTitle), { renderer })
         },
         updateCompleteScreenText(value, handleChange) {
             handleChange(unescape(value))

@@ -355,6 +355,7 @@
 
 <script lang="js">
 import { marked } from 'marked'
+import { escapeMarkdownTitle } from '~/shared/markdown'
 import { escape, unescape } from 'lodash-es'
 import modal from '@/shared/modal'
 import SectionProgress from './SectionLoadProgress'
@@ -504,7 +505,9 @@ export default {
 
             const renderer = new marked.Renderer()
             renderer.html = ({ text }) => escape(text)
-            return marked(unescape(text), { renderer })
+            const markdown = unescape(text)
+            const title = this.$store.state.webinterview.questionnaireTitle
+            return marked(escapeMarkdownTitle(markdown, title), { renderer, breaks: true })
         },
         noteToSupervisor() {
             return this.$config.customTexts.noteToSupervisor
