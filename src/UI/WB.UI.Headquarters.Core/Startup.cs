@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -423,11 +422,7 @@ namespace WB.UI.Headquarters
                 options.Providers.Add<BrotliCompressionProvider>();
             });
 
-            services.AddRequestDecompression(o =>
-            {
-                o.Providers.Add<GzipDecompressionProvider>();
-                o.Providers.Add<BrotliDecompressionProvider>();
-            });
+            services.AddRequestDecompression();
             
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
             services.AddAppMetrics();
@@ -459,8 +454,6 @@ namespace WB.UI.Headquarters
                 }
             });
 
-            //resolve ambiguity
-            RequestDecompressionApplicationBuilderExtensions.UseRequestDecompression(app);
             app.UseResponseCompression();
             
             app.UseRequestLocalization(opt =>
@@ -553,6 +546,7 @@ namespace WB.UI.Headquarters
             
             app.UseAppMetrics(Configuration);
             app.UseRouting();
+            app.UseRequestDecompression();
             app.UseCors();
 
             app.UseCookiePolicy();

@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
                 authorizedUser: authorizedUser);
             
             // Act
-            TestDelegate act = () => service.AddUserToMap(mapName, userName);
+           Action act = () => service.AddUserToMap(mapName, userName);
             service.AddUserToMap(mapName, userNameFromTeam);
             
             // Assert
@@ -148,7 +148,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
                 authorizedUser: authorizedUser);
             
             // Act
-            TestDelegate act = () => service.DeleteMapUserLink(mapName, userName);
+           Action act = () => service.DeleteMapUserLink(mapName, userName);
             service.DeleteMapUserLink(mapName, userNameFromTeam);
             
             // Assert

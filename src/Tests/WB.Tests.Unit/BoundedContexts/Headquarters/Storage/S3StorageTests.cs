@@ -254,7 +254,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         }
 
         [Test]
-        public void should_throw_when_s3_delete_objects_returns_errors()
+        public async Task should_throw_when_s3_delete_objects_returns_errors()
         {
             client.Setup(c => c.DeleteObjectsAsync(It.IsAny<DeleteObjectsRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new DeleteObjectsResponse
@@ -265,7 +265,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
                     }
                 });
 
-            Assert.ThrowsAsync<InvalidOperationException>(() => this.storage.RemoveAsync(new[] { "somePath" }));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => this.storage.RemoveAsync(new[] { "somePath" }));
         }
 
         [Test]
