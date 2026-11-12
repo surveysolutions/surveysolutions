@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Quartz;
@@ -27,11 +28,11 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             this.jobType = jobType;
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken = default)
         {
             if (jobType.GetCustomAttribute<NoWorkspaceJobAttribute>() != null)
             {
-                await ExecuteJobAsync(context);
+                await ExecuteJobAsync(context, cancellationToken: cancellationToken);
                 return;
             }
 
@@ -41,17 +42,20 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
             if (!string.IsNullOrWhiteSpace(jobWorkspace))
             {
-                await ExecuteJobAsync(context, jobWorkspace);
+                await ExecuteJobAsync(context, jobWorkspace, cancellationToken);
                 return;
             }
 
             foreach (var workspace in this.workspacesCache.AllEnabledWorkspaces())
             {
-                await ExecuteJobAsync(context, workspace.Name);
+                await ExecuteJobAsync(context, workspace.Name, cancellationToken);
             }
         }
 
-        private Task ExecuteJobAsync(IJobExecutionContext context, string? workspace = null)
+        private Task ExecuteJobAsync(
+            IJobExecutionContext context,
+            string? workspace = null,
+            CancellationToken cancellationToken = default)
         {
             return inScopeExecutor.ExecuteAsync(async scope =>
             {
@@ -64,8 +68,8 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                     logger.LogDebug("Executing job {jobType} in workspace {workspace}",
                         jobType.Name, workspace);
                     
-                    context.Put("workspace", workspace ?? "");
-                    await job.Execute(context);
+                    context.MergedJobDataMap["workspace"] = workspace ?? "";
+                    await job.Execute(context, cancellationToken);
                 }
                 catch (Exception e)
                 {
@@ -73,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                     {
                         logger.LogError(e, "Exception during job {jobType} run in workspace {workspace}."
                                            + " Scheduling for retry", jobType, workspace);
-                        throw new JobExecutionException(e, true);
+                        throw new JobExecutionException(e) { RefireImmediately = true };
                     }
 
                     logger.LogError(e, "Exception during job {jobType} run in workspace {workspace}", 

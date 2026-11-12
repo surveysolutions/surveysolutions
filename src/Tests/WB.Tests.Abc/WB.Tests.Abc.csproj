@@ -32,7 +32,7 @@
     <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.9.0" />
     <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.8.0" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.10" />
-    <PackageReference Include="Quartz" Version="3.13.1" />
+    <PackageReference Include="Quartz" Version="4.7.2" />
     <PackageReference Include="ReflectionMagic" Version="6.0.0" />
     <PackageReference Include="Remotion.Linq" Version="2.2.0" />
     <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.2.0" />
