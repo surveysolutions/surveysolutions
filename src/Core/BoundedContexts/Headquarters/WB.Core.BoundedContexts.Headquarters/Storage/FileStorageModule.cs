@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using Amazon;
-using Amazon.Extensions.NETCore.Setup;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using Microsoft.Extensions.Configuration;
@@ -12,8 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.Configs;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Workspaces;
 
@@ -26,7 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
 
         public static void Setup(IServiceCollection services, IConfiguration configuration)
         {
-            AWSConfigsS3.UseSignatureVersion4 = true;
             var awsOptions = configuration.GetAWSOptions();
             services.AddDefaultAWSOptions(awsOptions);
 

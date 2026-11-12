@@ -7,10 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
-using Microsoft.Security.Application;
+using System.Text.Encodings.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using UAParser;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -68,7 +67,7 @@ namespace WB.UI.Headquarters.Code
 
         public static IHtmlContent ToSafeJavascriptMessage(this IHtmlHelper page, string sourceMessage)
         {
-            var html = Encoder.JavaScriptEncode(sourceMessage, false);
+            var html = JavaScriptEncoder.Default.Encode(sourceMessage ?? string.Empty);
 
             return page.Raw(html);
         }
@@ -154,27 +153,9 @@ namespace WB.UI.Headquarters.Code
  
             if (userAgentString?.StartsWith(productName, StringComparison.OrdinalIgnoreCase) ?? false)
             {
-                var parser = Parser.GetDefault();
-                var userAgent = parser.ParseUserAgent(userAgentString);
-
-                if (userAgent.Family == Parser.Other)
-                {
-                    var match = tabletVersionRegex.Match(userAgentString);
-                    if (match.Success)
-                    {
-                        var versionString = match.Groups["version"].Value;
-                        return new Version(versionString);
-                    }
-                }
-
-                if (int.TryParse(userAgent.Major, out int major)
-                    && int.TryParse(userAgent.Minor, out int minor))
-                {
-                    if (int.TryParse(userAgent.Patch, out int patch))
-                        return new Version(major, minor, patch);
-                    else 
-                        return new Version(major, minor);
-                }
+                var match = tabletVersionRegex.Match(userAgentString);
+                if (match.Success && Version.TryParse(match.Groups["version"].Value, out var version))
+                    return version;
             }
 
             return null;

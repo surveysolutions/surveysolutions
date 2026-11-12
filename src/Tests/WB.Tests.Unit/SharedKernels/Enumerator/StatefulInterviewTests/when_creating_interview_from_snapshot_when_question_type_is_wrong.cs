@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
@@ -40,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             command = Create.Command.CreateInterviewFromSnapshot(userId, synchronizationDto);
 
-            Assert.That((TestDelegate)(() => interview.CreateInterviewFromSnapshot(command)), Throws.Exception);
+            Assert.That((() => interview.CreateInterviewFromSnapshot(command)), Throws.Exception);
         }
 
         static InterviewSynchronizationDto synchronizationDto;

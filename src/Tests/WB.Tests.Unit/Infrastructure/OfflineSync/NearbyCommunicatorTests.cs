@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
         //}
 
         [Test]
-        public void should_throw_communication_exception_if_failed_response_recieved()
+        public async Task should_throw_communication_exception_if_failed_response_recieved()
         {
             // setup server
             var serverhandler = Create.Service.GoogleConnectionsRequestHandler()
@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             // act
             var id = Guid.NewGuid();
 
-            Assert.ThrowsAsync<CommunicationException>(async () => await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server",
+            await Assert.ThrowsAsync<CommunicationException>(async () => await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server",
                 new PingMessage { Id = id }, null, CancellationToken.None));
 
         }
