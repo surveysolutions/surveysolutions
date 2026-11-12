@@ -108,11 +108,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                     files.AddRange(response.S3Objects.Select(s3 => new FileObject
                     {
                         Path = s3.Key.Substring(BucketInfo.PathPrefix.Length),
-                        Size = s3.Size,
-                        LastModified = s3.LastModified,
+                        Size = s3.Size.GetValueOrDefault(),
+                        LastModified = s3.LastModified.GetValueOrDefault(),
                     }));
                     listObjects.ContinuationToken = response.NextContinuationToken;
-                } while (response.IsTruncated);
+                } while (response.IsTruncated == true);
 
                 logger.LogTrace("Got list of objects from S3. Prefix: [{prefix}] {request_prefix}, Count: {count}",
                     prefix, listObjects.Prefix, files.Count);
