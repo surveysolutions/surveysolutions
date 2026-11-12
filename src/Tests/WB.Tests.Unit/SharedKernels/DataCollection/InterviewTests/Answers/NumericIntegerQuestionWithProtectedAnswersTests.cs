@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         [Test]
         public void should_throw_when_protected_answer_is_reduced()
         {
-            TestDelegate act = () => interview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, preloadedAnswer - 1); ;
+           Action act = () => interview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, preloadedAnswer - 1); ;
 
             Assert.That(act, Throws.Exception.TypeOf<InterviewException>().With.Message.EqualTo("Reduce value of protected answer is not allowed"));
         }
@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         [Test]
         public void should_not_allow_removing_protected_answer()
         {
-            TestDelegate act = () => interview.RemoveAnswer(questionId, RosterVector.Empty, userId, DateTime.UtcNow);
+           Action act = () => interview.RemoveAnswer(questionId, RosterVector.Empty, userId, DateTime.UtcNow);
 
             Assert.That(act, Throws.Exception.TypeOf<InterviewException>().With.Message.EqualTo("Removing protected answer is not allowed"));
         }

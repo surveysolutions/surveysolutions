@@ -5,11 +5,11 @@ using Quartz;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
-    public interface IJob<in T> : IJob
+    public interface IJobWithData<in T> : Quartz.IJob
     {
         Task Execute(T data, IJobExecutionContext context);
         
-        async Task IJob.Execute(IJobExecutionContext context)
+        async ValueTask Quartz.IJob.Execute(IJobExecutionContext context, System.Threading.CancellationToken cancellationToken)
         {
             var dataValue = context.MergedJobDataMap.ContainsKey(BaseTask.TaskDataKey) 
                 ? context.MergedJobDataMap.GetString(BaseTask.TaskDataKey)

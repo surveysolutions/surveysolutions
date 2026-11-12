@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Comments
             var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
             // Act
-            TestDelegate act = () => interview.ResolveComment(Create.Command.ResolveCommentAnswer(interview.Id, Create.Identity(Id.gA)));
+           Action act = () => interview.ResolveComment(Create.Command.ResolveCommentAnswer(interview.Id, Create.Identity(Id.gA)));
 
             // Assert
             Assert.That(act, Throws.Exception.InstanceOf<InterviewException>().With.Message.EqualTo("All question comments are already resolved"));
