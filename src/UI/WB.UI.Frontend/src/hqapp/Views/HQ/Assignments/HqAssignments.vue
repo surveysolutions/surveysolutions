@@ -88,7 +88,7 @@
                 <template v-slot:additional>
                     <InterviewFilter
                         :questionnaireId="questionnaireId ? questionnaireId.key : null"
-                        :questionnaireVersion="questionnaireVersion ? questionnaireVersion.key : null"
+                        :questionnaireVersion="questionnaireVersion ? Number(questionnaireVersion.key) : null"
                         :showAdvancedFilter="false"
                         :questionsOnly="true"
                         :value="conditions"
