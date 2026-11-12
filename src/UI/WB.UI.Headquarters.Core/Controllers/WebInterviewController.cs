@@ -50,7 +50,6 @@ namespace WB.UI.Headquarters.Controllers
 {
     [AllowPrimaryWorkspaceFallback]
     [AllowAnonymousAttribute]
-    [BrowsersRestriction]
     [TypeFilter(typeof(WebInterviewErrorFilterAttribute))]
     [Route("WebInterview")]
     public class WebInterviewController : Controller

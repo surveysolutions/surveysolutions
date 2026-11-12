@@ -531,7 +531,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             if (interview.LastResumeEventUtcTimestamp.HasValue)
             {
+                // Origin dates come from client devices and are not guaranteed to be monotonic
+                // (e.g. clock skew between devices used by different responsibles). Clamp negative
+                // deltas to zero so an out of order timestamp cannot shrink the recorded duration.
                 TimeSpan timeDiffWithLastEvent = endTimestamp - interview.LastResumeEventUtcTimestamp.Value;
+                if (timeDiffWithLastEvent < TimeSpan.Zero)
+                {
+                    timeDiffWithLastEvent = TimeSpan.Zero;
+                }
+
                 if (interview.InterviewDuration.HasValue)
                 {
                     interview.InterviewDuration += timeDiffWithLastEvent;

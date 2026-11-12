@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 using Quartz;
-using Quartz.Impl.Matchers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -202,14 +201,13 @@ namespace WB.UI.Headquarters.Controllers.Api
             //get all Quartz scheduled tasks
             var scheduler = await this.schedulerFactory.GetScheduler();
             //get all registered Quartz triggers
-            var triggers = await scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup());
+            var triggers = await scheduler.QueryTriggers(new TriggerQuery { Take = PagedQuery.All });
             
             var jobs = new SortedList<string, KeyValuePair<string, string>>();
-            foreach (var trigger in triggers)
+            foreach (var trigger in triggers.Items)
             {
-                var triggerValue = await scheduler.GetTrigger(trigger);
-                var triggerState = await scheduler.GetTriggerState(trigger);
-                jobs.Add(trigger.Name, new KeyValuePair<string, string>(trigger.Name, $"State: {triggerState.Humanize()}; Next Fire UTC: {triggerValue.GetNextFireTimeUtc()}"));
+                jobs.Add(trigger.Key.Name, new KeyValuePair<string, string>(trigger.Key.Name,
+                    $"State: {trigger.State.Humanize()}; Next Fire UTC: {trigger.NextFireTimeUtc}"));
             }
 
             return jobs;

@@ -188,7 +188,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         }
 
         [Test]
-        public void when_interview_data_cleanup_fails_should_propagate_exception_to_the_job()
+        public async Task when_interview_data_cleanup_fails_should_propagate_exception_to_the_job()
         {
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
             long questionnaireVersion = 5;
@@ -220,11 +220,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                                 Version = questionnaireVersion
                             }));
 
-            Assert.ThrowsAsync<InvalidOperationException>(() =>
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(questionnaireId, questionnaireVersion, userId));
 
             // the failed deletion should not stay registered as in progress, otherwise the retry would be skipped
-            Assert.ThrowsAsync<InvalidOperationException>(() =>
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(questionnaireId, questionnaireVersion, userId));
 
             commandServiceMock.DidNotReceive()

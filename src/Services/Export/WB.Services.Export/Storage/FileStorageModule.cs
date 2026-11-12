@@ -21,7 +21,6 @@ namespace WB.Services.Export.Storage
 
             if (isS3Enabled)
             {
-                AWSConfigsS3.UseSignatureVersion4 = true;
                 var awsOptions = configuration.GetAWSOptions();
                 services.AddDefaultAWSOptions(awsOptions);
                 services.AddTransient<IAmazonS3>(s =>
