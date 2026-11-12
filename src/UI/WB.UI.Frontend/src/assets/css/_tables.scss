@@ -45,33 +45,33 @@
 
             input.checkbox-filter {
                 &~label .tick {
-                    background-position: -43px 0;
+                    @include sprite-position(-43px 0);
                 }
 
                 &~label:hover .tick,
                 &~label:focus .tick {
-                    background-position: -43px -36px;
+                    @include sprite-position(-43px -36px);
                 }
 
                 &:checked~label .tick {
-                    background-position: -43px -72px;
+                    @include sprite-position(-43px -72px);
                 }
 
                 &:checked~label:hover .tick,
                 &:checked~label:focus .tick {
-                    background-position: -43px -108px;
+                    @include sprite-position(-43px -108px);
                 }
 
                 &:disabled~label .tick,
                 &:checked:disabled~label .tick {
-                    background-position: -43px -144px;
+                    @include sprite-position(-43px -144px);
                 }
 
                 &:disabled~label:hover .tick,
                 &:checked:disabled~label:hover .tick,
                 &:disabled~label:focus .tick,
                 &:checked:disabled~label:focus .tick {
-                    background-position: -43px -180px;
+                    @include sprite-position(-43px -180px);
                 }
             }
         }

@@ -8,9 +8,10 @@
             <a class="cell-content has-tooltip"
                 type="primary"
                 data-role="trigger">
-                <span v-if="(questionType == 'Integer' || questionType == 'Double') && question.useFormatting">
-                    {{ formattedAnswer }}
-                </span>
+                <bdi v-if="isNumeric"
+                    dir="ltr">
+                    {{ question.useFormatting ? formattedAnswer : question.answer }}
+                </bdi>
                 <span v-else>{{ question.answer }}</span>
             </a>
 
@@ -63,6 +64,9 @@ export default {
         },
     },
     computed: {
+        isNumeric() {
+            return this.questionType === 'Integer' || this.questionType === 'Double'
+        },
         $watchedQuestion() {
             return this.$store.state.webinterview.entityDetails[this.questionId]
         },

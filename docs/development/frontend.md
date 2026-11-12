@@ -56,7 +56,10 @@ directions for `markup.scss` and `markup-web-interview.scss`. RTL rules only app
 to `html.web-interview-page[dir="rtl"]`; other HQ pages retain LTR. Zero-specificity
 prefixes preserve the existing CSS cascade. Vendor CSS is not transformed:
 AG Grid uses its native RTL option, while exceptions and toast adjustments live in
-`_web-interview-rtl.scss`. Sprite background coordinates must not be mirrored.
+`_web-interview-rtl.scss`. Use the `sprite-position` Sass mixin for physical
+coordinates within sprite sheets. Other background positions (including roster
+error and warning markers) mirror with their tooltip targets. Saved numeric
+roster answers use `<bdi dir="ltr">` to preserve sign and digit order.
 The date picker retains LTR day order and native arrow-key navigation, with
 localized month/day labels. Numeric inputs, URLs and coordinates also retain LTR.
 Scoped Vue styles are not processed by the RTL generator. Completion-page labels,

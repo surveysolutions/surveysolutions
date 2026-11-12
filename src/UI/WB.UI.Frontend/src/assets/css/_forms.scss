@@ -97,35 +97,35 @@ input.wb-checkbox {
     &~label:hover .tick,
     &:focus~label .tick,
     &~label:focus .tick {
-        background-position: -37px 2px;
+        @include sprite-position(-37px 2px);
     }
 
     &:checked~label .tick {
-        background-position: -78px 2px;
+        @include sprite-position(-78px 2px);
     }
 
     &:checked~label:hover .tick,
     &:checked~label:focus .tick,
     &:checked:focus~label .tick {
-        background-position: -119px 2px;
+        @include sprite-position(-119px 2px);
     }
 
     &:disabled~label .tick {
-        background-position: -160px 2px;
+        @include sprite-position(-160px 2px);
     }
 
     &:disabled~label:hover .tick,
     &:disabled~label:focus .tick {
-        background-position: -201px 2px;
+        @include sprite-position(-201px 2px);
     }
 
     &:checked:disabled~label .tick {
-        background-position: -242px 2px;
+        @include sprite-position(-242px 2px);
     }
 
     &:checked:disabled~label:hover .tick,
     &:checked:disabled~label:focus .tick {
-        background-position: -283px 2px;
+        @include sprite-position(-283px 2px);
     }
 }
 
@@ -143,7 +143,7 @@ input.checkbox-filter {
         @include absolute(0, null, null, -5px);
         background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
         background-size: 68px 350px;
-        background-position: 0 0;
+        @include sprite-position(0 0);
         margin-right: 10px;
         @include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
     }
@@ -151,29 +151,29 @@ input.checkbox-filter {
     &:focus~label .tick,
     &~label:hover .tick,
     &~label:focus .tick {
-        background-position: 0px -36px;
+        @include sprite-position(0px -36px);
     }
 
     &:checked~label .tick {
-        background-position: 0px -72px;
+        @include sprite-position(0px -72px);
     }
 
     &:checked~label:hover .tick,
     &:checked~label:focus .tick,
     &:checked:focus~label .tick {
-        background-position: 0px -108px;
+        @include sprite-position(0px -108px);
     }
 
     &:disabled~label .tick,
     &:checked:disabled~label .tick {
-        background-position: 0px -144px;
+        @include sprite-position(0px -144px);
     }
 
     &:disabled~label:hover .tick,
     &:checked:disabled~label:hover .tick,
     &:disabled~label:focus .tick,
     &:checked:disabled~label:focus .tick {
-        background-position: 0px -180px;
+        @include sprite-position(0px -180px);
     }
 }
 
@@ -190,24 +190,24 @@ input.double-checkbox {
         vertical-align: middle;
         background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
         background-size: 68px 350px;
-        background-position: 0 -216px;
+        @include sprite-position(0 -216px);
         @include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
     }
 
     &~label:hover .tick,
     &:focus~label .tick,
     &~label:focus .tick {
-        background-position: 0px -254px;
+        @include sprite-position(0px -254px);
     }
 
     &:checked~label .tick {
-        background-position: 0px -292px;
+        @include sprite-position(0px -292px);
     }
 
     &:checked~label:hover .tick,
     &:checked~label:focus .tick,
     &:checked:focus~label .tick {
-        background-position: 0px -330px;
+        @include sprite-position(0px -330px);
     }
 }
 
@@ -224,24 +224,24 @@ input.double-checkbox-white {
         vertical-align: middle;
         background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
         background-size: 68px 350px;
-        background-position: -44px -216px;
+        @include sprite-position(-44px -216px);
         @include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
     }
 
     &:focus~label .tick,
     &~label:hover .tick,
     &~label:focus .tick {
-        background-position: -44px -254px;
+        @include sprite-position(-44px -254px);
     }
 
     &:checked~label .tick {
-        background-position: -44px -292px;
+        @include sprite-position(-44px -292px);
     }
 
     &:checked~label:hover .tick,
     &:checked~label:focus .tick,
     &:checked:focus~label .tick {
-        background-position: -44px -330px;
+        @include sprite-position(-44px -330px);
     }
 }
 
@@ -263,41 +263,41 @@ input.double-checkbox-white {
         }
 
         &+label .tick {
-            background-position: -326px 2px;
+            @include sprite-position(-326px 2px);
         }
 
         &+label:hover .tick,
         &:focus+label .tick,
         &+label:focus .tick {
-            background-position: -367px 2px;
+            @include sprite-position(-367px 2px);
         }
 
         &:checked+label .tick {
-            background-position: -408px 2px;
+            @include sprite-position(-408px 2px);
         }
 
         &:checked+label:hover .tick,
         &:checked+label:focus .tick,
         &:checked:focus+label .tick {
-            background-position: -449px 2px;
+            @include sprite-position(-449px 2px);
         }
 
         &:disabled+label .tick {
-            background-position: -572px 2px;
+            @include sprite-position(-572px 2px);
         }
 
         &:disabled+label:hover .tick,
         &:disabled+label:focus .tick {
-            background-position: -613px 2px;
+            @include sprite-position(-613px 2px);
         }
 
         &:checked:disabled+label .tick {
-            background-position: -490px 2px;
+            @include sprite-position(-490px 2px);
         }
 
         &:checked:disabled+label:hover .tick,
         &:checked:disabled+label:focus .tick {
-            background-position: -531px 2px;
+            @include sprite-position(-531px 2px);
         }
     }
 }
@@ -318,23 +318,23 @@ input.radio-row {
     }
 
     &+label .tick {
-        background-position: -326px 2px;
+        @include sprite-position(-326px 2px);
     }
 
     &+label:hover .tick,
     &:focus+label .tick,
     &+label:focus .tick {
-        background-position: -367px 2px;
+        @include sprite-position(-367px 2px);
     }
 
     &:checked+label .tick {
-        background-position: -735px 2px;
+        @include sprite-position(-735px 2px);
     }
 
     &:checked+label:hover .tick,
     &:checked+label:focus .tick,
     &:checked:focus+label .tick {
-        background-position: -449px 2px;
+        @include sprite-position(-449px 2px);
     }
 }
 
@@ -618,14 +618,14 @@ ul.typeahead.dropdown-menu {
         display: inline-block;
         padding: 10px;
         background: url('#{$assetsPath}/img/search.png') no-repeat;
-        background-position: 0 8px;
+        @include sprite-position(0 8px);
         background-size: 80px 20px;
         @include image-2x("#{$assetsPath}/img/search2k.png", 80px, 20px);
         cursor: pointer;
         @include transition(none);
 
         &:hover {
-            background-position: -40px 8px;
+            @include sprite-position(-40px 8px);
         }
     }
 
@@ -673,10 +673,10 @@ ul.typeahead.dropdown-menu {
             left: auto;
             right: 0;
             margin: 0 10px;
-            background-position: -40px 10px;
+            @include sprite-position(-40px 10px);
 
             &:hover {
-                background-position: -60px 10px;
+                @include sprite-position(-60px 10px);
             }
         }
 

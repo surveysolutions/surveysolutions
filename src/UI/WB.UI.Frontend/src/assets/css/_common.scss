@@ -431,7 +431,7 @@ table {
         color: $gray-text;
 
         &:before {
-            background-position: 1px 0;
+            @include sprite-position(1px 0);
         }
     }
 
@@ -444,12 +444,12 @@ table {
         &:hover,
         &:focus {
             &:before {
-                background-position: -57px 0;
+                @include sprite-position(-57px 0);
             }
         }
 
         &:before {
-            background-position: -57px 0;
+            @include sprite-position(-57px 0);
         }
     }
 
@@ -459,7 +459,7 @@ table {
         text-decoration: none;
 
         &:before {
-            background-position: -18px 0;
+            @include sprite-position(-18px 0);
         }
     }
 }

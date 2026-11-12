@@ -5,6 +5,8 @@ import { test } from 'node:test'
 import postcss from 'postcss'
 import * as sass from 'sass'
 import { compileStyleAsync, parse } from 'vue/compiler-sfc'
+import { createSSRApp } from 'vue'
+import { renderToString } from 'vue/server-renderer'
 import webInterviewRtl from '../../tools/postcss-webinterview-rtl.js'
 
 const frontend = new URL('../../', import.meta.url)
@@ -98,12 +100,18 @@ test('preserves reset order and media queries', async () => {
     assert.deepEqual(declarations(media, `${rtl} .question`, 'padding-right'), ['5px'])
 })
 
-test('preserves sprite coordinates, image URLs and non-directional resets', async () => {
-    const { root } = await transform(`
-        .tick { left: 2px; background-image: url("questionnaire-sprite.png"); background-position: 0 0 }
-        .checked { background-position: -78px 2px }
-        .flag { background-position: 1px 0 }
-    `)
+test('preserves explicitly marked sprite coordinates without freezing other declarations', async () => {
+    const css = sass.compileString(`
+        @import "variables";
+        @import "mixins";
+        .tick { left: 2px; background-image: url("questionnaire-sprite.png"); @include sprite-position(0 0); }
+        .checked { @include sprite-position(-78px 2px); }
+        .flag { @include sprite-position(1px 0); }
+    `, {
+        loadPaths: [fileURLToPath(new URL('src/assets/css', frontend))],
+        logger: sass.Logger.silent,
+    }).css
+    const { root } = await transform(css)
     assert.deepEqual(declarations(root, '.tick', 'background-position'), ['0 0'])
     assert.deepEqual(declarations(root, '.checked', 'background-position'), ['-78px 2px'])
     assert.deepEqual(declarations(root, '.flag', 'background-position'), ['1px 0'])
@@ -144,11 +152,74 @@ test('actual styles mirror desktop and mobile sidebar positions and retain numer
             assert.ok(declarations(root, `${rtl} .web-interview .content`, 'right').some(value => value.startsWith('-')))
             assert.ok(declarations(root, `${rtl} .web-interview .content`, 'left').length === 0)
             assert.ok(declarations(root, `${ltr} .content`, 'left').includes('12px'))
+            for (const state of ['has-error', 'has-warnings']) {
+                const selector = `.table-view .ag-theme-customStyles .cell-unit.${state}`
+                assert.deepEqual(declarations(root, `${rtl} ${selector}`, 'background-position'), ['100% 0'])
+                assert.deepEqual(declarations(root, `${ltr} ${selector}`, 'background-position'), ['0 0'])
+            }
+            const trigger = '.table-view .ag-theme-customStyles.roster-matrix .ag-cell .tooltip-wrapper'
+            assert.deepEqual(declarations(root, `${rtl} ${trigger}`, 'right'), ['0'])
+            assert.deepEqual(declarations(root, `${ltr} ${trigger}`, 'left'), ['0'])
         } else {
+            const spritePositions = []
+            postcss.parse(compiled.css).walkDecls('background-position', declaration => {
+                if (declaration.prev()?.type === 'comment' && declaration.prev().text === 'rtl:ignore') {
+                    spritePositions.push(declaration)
+                }
+            })
+            assert.ok(spritePositions.length >= 50, 'all existing sprite positions must be protected')
+            for (const declaration of spritePositions) {
+                for (const selector of declaration.parent.selectors) {
+                    assert.ok(declarations(root, selector, declaration.prop).includes(declaration.value),
+                        `sprite position changed for ${selector}`)
+                    assert.deepEqual(declarations(root, `${rtl} ${selector}`, declaration.prop), [])
+                }
+            }
             assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] input[inputmode=decimal]', 'direction'), ['ltr'])
             assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .flatpickr-calendar', 'direction'), ['ltr'])
             assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .btn-back::before', 'transform'), ['scaleX(-1)'])
             assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .table-view .ag-theme-customStyles .ag-grid-pinned-right-cells .ag-header-cell', 'border-left'), ['1px solid rgba(0, 0, 0, 0.3)'])
+        }
+    }
+})
+
+test('saved numeric roster answers are isolated in LTR while text answers inherit direction', async () => {
+    const filename = fileURLToPath(new URL('src/webinterview/components/questions/TableRoster.ViewAnswer.vue', frontend))
+    const { descriptor, errors } = parse(readFileSync(filename, 'utf8'), { filename })
+    assert.deepEqual(errors, [])
+    const { default: component } = await import(`data:text/javascript;base64,${Buffer.from(descriptor.script.content).toString('base64')}`)
+    for (const type of ['Integer', 'Double', 'Text']) {
+        for (const useFormatting of [false, true]) {
+            const answer = type === 'Text' ? 'مرحبا ABC' : type === 'Integer' ? -1234 : -1234.5
+            const app = createSSRApp({
+                ...component,
+                template: descriptor.template.content,
+                props: ['params'],
+            }, { params: { value: { identity: 'q1', type } } })
+            app.config.globalProperties.$store = {
+                state: { webinterview: {
+                    entityDetails: { q1: {
+                        answer,
+                        useFormatting,
+                        validity: { isValid: true, messages: [], warnings: [] },
+                    } },
+                    fetch: { state: {} },
+                } },
+            }
+            app.component('popover', { template: '<div><slot /></div>' })
+            app.component('wb-progress', { template: '<span />' })
+            app.directive('dateTimeFormatting', {})
+            app.directive('dompurify-html', {})
+            const html = await renderToString(app)
+            if (type === 'Text') {
+                assert.doesNotMatch(html, /<bdi|dir="ltr"/)
+                assert.ok(html.includes(answer))
+            } else {
+                const expected = useFormatting ? answer.toLocaleString(undefined, {
+                    style: 'decimal', maximumFractionDigits: 15, minimumFractionDigits: 0,
+                }) : String(answer)
+                assert.ok(html.includes(`<bdi dir="ltr">${expected}</bdi>`), html)
+            }
         }
     }
 })

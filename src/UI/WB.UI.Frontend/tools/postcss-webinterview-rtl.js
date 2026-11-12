@@ -12,15 +12,6 @@ export default function webInterviewRtl() {
                 ltrPrefix: ':where(html:not(.web-interview-page[dir="rtl"]))',
                 rtlPrefix: ':where(html.web-interview-page[dir="rtl"])',
                 bothPrefix: ':where(html)',
-                processDeclarationPlugins: [{
-                    name: 'preserve-sprite-positions',
-                    priority: 99,
-                    processors: [{
-                        // Background coordinates select physical pixels in checkbox and flag sprites.
-                        expr: /^background-position(?:-x)?$/i,
-                        action: (prop, value) => ({ prop, value }),
-                    }],
-                }],
             })]).process(root, { from: result.opts.from, map: false })
         },
     }
