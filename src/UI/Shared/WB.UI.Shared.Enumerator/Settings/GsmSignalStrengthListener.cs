@@ -7,8 +7,7 @@ namespace WB.UI.Shared.Enumerator.Settings
     {
         private readonly TelephonyManager telephonyManager;
         public int SignalStrength { get; private set; }
-
-        [Obsolete]
+        
         public GsmSignalStrengthListener(TelephonyManager telephonyManager)
         {
             this.telephonyManager = telephonyManager;
