@@ -47,18 +47,18 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="4.0.102.18" />
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.102.9" />
-    <PackageReference Include="AWSSDK.S3" Version="4.0.104.10" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="4.0.100.23" />
+    <PackageReference Include="AWSSDK.Core" Version="4.1.0" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.1.0" />
+    <PackageReference Include="AWSSDK.S3" Version="4.1.0" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="4.1.0" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
     <PackageReference Include="GeoJSON.Net" Version="1.4.1" />
     <PackageReference Include="Iesi.Collections" Version="4.1.1" />
-    <PackageReference Include="MediatR" Version="12.5.0" />
-    <PackageReference Include="MailKit" Version="4.18.1" />
+    <PackageReference Include="MediatR" Version="14.3.0" />
+    <PackageReference Include="MailKit" Version="4.18.2" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.3.0" />
     
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.11" />
@@ -70,9 +70,9 @@
     <PackageReference Include="NewId" Version="4.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NHibernate" Version="5.5.2" />
-    <PackageReference Include="NodaTime" Version="3.3.2" />
-    <PackageReference Include="PasswordGenerator" Version="2.1.0" />
-    <PackageReference Include="Polly" Version="8.7.0" />
+    <PackageReference Include="NodaTime" Version="3.3.7" />
+    <PackageReference Include="PasswordGenerator" Version="3.0.0" />
+    <PackageReference Include="Polly" Version="8.9.0" />
     <PackageReference Include="Quartz" Version="4.7.2" />
     <PackageReference Include="refit" Version="8.0.0" />
     <PackageReference Include="Sendgrid" Version="9.29.3" />
@@ -80,7 +80,6 @@
     <PackageReference Include="SkiaSharp" Version="4.153.1" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="4.153.1" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
-    <PackageReference Include="SuperclusterBox" Version="0.1.18" />
     <PackageReference Include="PDFsharp-MigraDoc" Version="6.2.4" />
     <PackageReference Include="PDFsharp" Version="6.2.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.1" />

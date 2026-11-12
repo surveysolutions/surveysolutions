@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -77,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var generator = GetGenerator(summaries, randomSource);
 
             // Act
-            TestDelegate act = () => generator.Get();
+           Action act = () => generator.Get();
 
             // Assert
             Assert.That(act, Throws.InstanceOf<InterviewUniqueKeyGeneratorException>());

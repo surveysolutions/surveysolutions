@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -134,37 +135,37 @@ namespace WB.Tests.Unit.Applications.Headquarters
         }
 
         [Test]
-        public void when_posting_start_for_closed_assignment_should_throw_expired_for_stale_cached_invitation()
+        public async Task when_posting_start_for_closed_assignment_should_throw_expired_for_stale_cached_invitation()
         {
             var controller = CreateController(100, null,
                 invitationAssignmentStatus: AssignmentStatus.Open,
                 currentAssignmentStatus: AssignmentStatus.Closed);
 
-            var exception = Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
+            var exception = await Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
 
-            Assert.That(exception?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewExpired));
+            Assert.That(exception.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewExpired));
         }
 
         [Test]
-        public void when_posting_start_and_password_resolved_invitation_is_missing_should_throw_not_found()
+        public async Task when_posting_start_and_password_resolved_invitation_is_missing_should_throw_not_found()
         {
             var controller = CreateController(100, null, returnNullInvitationByPassword: true);
 
-            var exception = Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
+            var exception = await Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
 
-            Assert.That(exception?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewNotFound));
+            Assert.That(exception.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewNotFound));
         }
 
         [Test]
-        public void when_posting_start_and_live_and_cached_assignment_are_missing_should_throw_not_found()
+        public async Task when_posting_start_and_live_and_cached_assignment_are_missing_should_throw_not_found()
         {
             var controller = CreateController(100, null,
                 includeInvitationAssignment: false,
                 includeCurrentAssignment: false);
 
-            var exception = Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
+            var exception = await Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
 
-            Assert.That(exception?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewNotFound));
+            Assert.That(exception.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewNotFound));
         }
 
         private WebInterviewController CreateController(int quantity, string interviewId,
