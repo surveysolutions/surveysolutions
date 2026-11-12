@@ -15,6 +15,10 @@
             </div>
         </div>
 
+        <div class="wrapper-info" v-if="completeScreenTextHtml">
+            <div class="container-info complete-screen-text" v-dompurify-html="completeScreenTextHtml"></div>
+        </div>
+
         <div class="wrapper-info" v-if="!hasAnyIssue">
             <div class="container-info info-block">
                 <div class="gray-uppercase success-text" v-dompurify-html="$t('WebInterviewUI.Complete_AllGood')">
@@ -350,6 +354,9 @@
 </style>
 
 <script lang="js">
+import { marked } from 'marked'
+import { escapeMarkdownTitle } from '~/shared/markdown'
+import { escape, unescape } from 'lodash-es'
 import modal from '@/shared/modal'
 import SectionProgress from './SectionLoadProgress'
 
@@ -490,6 +497,17 @@ export default {
         },
         competeButtonTitle() {
             return this.$config.customTexts.completeButton
+        },
+        completeScreenTextHtml() {
+            const text = this.$config.customTexts.completeScreenText
+            if (!text)
+                return ''
+
+            const renderer = new marked.Renderer()
+            renderer.html = ({ text }) => escape(text)
+            const markdown = unescape(text)
+            const title = this.$store.state.webinterview.questionnaireTitle
+            return marked(escapeMarkdownTitle(markdown, title), { renderer, breaks: true })
         },
         noteToSupervisor() {
             return this.$config.customTexts.noteToSupervisor

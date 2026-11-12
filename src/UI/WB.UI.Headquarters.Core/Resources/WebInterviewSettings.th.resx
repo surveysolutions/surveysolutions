@@ -190,4 +190,7 @@
     <data name="AddressDescription" xml:space="preserve">
       <value>ที่นี่จะแสดงที่อยู่ขององค์กรของคุณตามที่ระบุไว้ในบัญชีของคุณบนเซิร์ฟเวอร์ส่งอีเมลจำนวนมาก</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>ข้อความบนหน้าจอเสร็จสิ้น (ไม่บังคับ)</value>
+  </data>
 </root>

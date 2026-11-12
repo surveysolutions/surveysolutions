@@ -316,4 +316,7 @@
   <data name="AddressDescription" xml:space="preserve">
       <value>Тут буде відображено адресу вашої організації, вказану у вашому обліковому записі на сервері масової розсилки.</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>Текст на екрані завершення (необов’язково)</value>
+  </data>
 </root>
