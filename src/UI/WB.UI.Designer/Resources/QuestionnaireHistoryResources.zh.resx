@@ -381,6 +381,17 @@
   <data name="MigratedNewCoverSupport" xml:space="preserve">
     <value>已生成封面页</value>
   </data>
+  <data name="AnonymousSharingEnabled" xml:space="preserve">
+    <value>已为 {0} 启用匿名分享</value>
+  </data>
+
+  <data name="AnonymousSharingDisabled" xml:space="preserve">
+    <value>已为 {0} 禁用匿名分享</value>
+  </data>
+
+  <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+    <value>已为 {0} 重新生成匿名分享链接</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>搜索</value>
   </data>
