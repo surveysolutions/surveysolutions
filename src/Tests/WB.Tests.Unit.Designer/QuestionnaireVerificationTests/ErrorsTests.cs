@@ -218,6 +218,27 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 .ExpectError("WB0128");
 
         [Test]
+        public void real_question_with_zero_decimal_places()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.NumericRealQuestion(Id2, variable: "q1", decimalPlaces: 0),
+                })
+                .ExpectNoError("WB0128");
+
+        [Test]
+        public void real_question_with_decimal_places_not_in_range_reports_range_from_1_to_15()
+        {
+            var messages = Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.NumericRealQuestion(Id2, variable: "q1", decimalPlaces: 16),
+                })
+                .ExpectError("WB0128");
+
+            Assert.That(messages.First(m => m.Code == "WB0128").Message,
+                Is.EqualTo("Number of decimal places is not in the range from 1 to 15."));
+        }
+
+        [Test]
         public void identifying_question_with_sunstitution()
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
