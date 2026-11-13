@@ -147,6 +147,15 @@
   <data name="CustomizeEmailsText" xml:space="preserve">
     <value>Personalizați textul e-mailurilor</value>
   </data>
+  <data name="CustomizeAndSendEmailsText" xml:space="preserve">
+    <value>Personalizați textul e-mailurilor și trimiteți-le</value>
+  </data>
+  <data name="SendNow" xml:space="preserve">
+    <value>TRIMITE ACUM</value>
+  </data>
+  <data name="SendNowTooltip" xml:space="preserve">
+    <value>Mementourile de tip {{reminderType}} pentru toate sarcinile și interviurile vor fi trimise chiar acum, fără perioadă de așteptare.</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Descriere:</value>
   </data>

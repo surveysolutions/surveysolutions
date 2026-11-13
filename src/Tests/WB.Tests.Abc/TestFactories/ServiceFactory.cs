@@ -1163,6 +1163,36 @@ namespace WB.Tests.Abc.TestFactories
 
             var webInterviewConfigProvider1 = webInterviewConfigProvider ?? settingsMock.Object;
 
+            var actualEmailService = emailService ?? emailServiceMock.Object;
+            var reminderEmailSender = ReminderEmailSender(invService, actualEmailService,
+                webInterviewConfigProvider1, emailParamsStorage, webInterviewEmailRenderer);
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IReminderEmailSender>()).Returns(reminderEmailSender);
+
+            return new SendRemindersJob(
+                Mock.Of<ILogger<SendRemindersJob>>(),
+                invService,
+                actualEmailService,
+                webInterviewConfigProvider1,
+                new NoScopeInScopeExecutor(serviceLocator.Object));
+        }
+
+        public ReminderEmailSender ReminderEmailSender(
+            IInvitationService invitationService = null,
+            IEmailService emailService = null,
+            IWebInterviewConfigProvider webInterviewConfigProvider = null,
+            IPlainKeyValueStorage<EmailParameters> emailParamsStorage = null,
+            IWebInterviewEmailRenderer webInterviewEmailRenderer = null,
+            IInScopeExecutor inScopeExecutor = null,
+            IUnitOfWork unitOfWork = null,
+            IPlainKeyValueStorage<WebInterviewConfig> webInterviewConfigs = null,
+            IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes> deliveryOutcomes = null,
+            IPlainKeyValueStorage<ReminderEmailDeliveryInvitationChunk> deliveryInvitationChunks = null,
+            IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint> deliveryCheckpoints = null,
+            IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery> unresolvedDeliveries = null,
+            IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex> unresolvedDeliveryIndexes = null)
+        {
+            var invitationServiceActual = invitationService ?? Mock.Of<IInvitationService>();
             var linkProvider = new WebInterviewLinkProvider(
                 new VirtualPathService(Options.Create(new HeadquartersConfig
                 {
@@ -1170,16 +1200,64 @@ namespace WB.Tests.Abc.TestFactories
                     BaseAppUrl = "http://localhost"
                 }), Mock.Of<IWorkspaceContextAccessor>()));
 
-            return new SendRemindersJob(
-                Mock.Of<ILogger<SendRemindersJob>>(),
-                invService,
-                emailService ?? emailServiceMock.Object,
-                webInterviewConfigProvider1,
-                emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>(),
+            if (unitOfWork == null)
+            {
+                var sqlQuery = new Mock<ISQLQuery>();
+                sqlQuery.Setup(x => x.SetString(It.IsAny<string>(), It.IsAny<string>())).Returns(sqlQuery.Object);
+                sqlQuery.Setup(x => x.ExecuteUpdateAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
+                sqlQuery.Setup(x => x.UniqueResultAsync<bool>(It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+                var session = new Mock<ISession>();
+                session.Setup(x => x.CreateSQLQuery(It.IsAny<string>())).Returns(sqlQuery.Object);
+
+                var unitOfWorkMock = new Mock<IUnitOfWork>();
+                unitOfWorkMock.Setup(x => x.Session).Returns(session.Object);
+                unitOfWork = unitOfWorkMock.Object;
+            }
+
+            var actualEmailParamsStorage = emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>();
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IInvitationService>()).Returns(invitationServiceActual);
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<EmailParameters>>())
+                .Returns(actualEmailParamsStorage);
+            var actualDeliveryOutcomes = deliveryOutcomes ?? new TestInMemoryKeyValueStorage<ReminderEmailDeliveryOutcomes>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes>>())
+                .Returns(actualDeliveryOutcomes);
+            var actualDeliveryInvitationChunks = deliveryInvitationChunks ??
+                                                 new TestInMemoryKeyValueStorage<ReminderEmailDeliveryInvitationChunk>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryInvitationChunk>>())
+                .Returns(actualDeliveryInvitationChunks);
+            var actualDeliveryCheckpoints = deliveryCheckpoints ?? new TestInMemoryKeyValueStorage<ReminderEmailDeliveryCheckpoint>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint>>())
+                .Returns(actualDeliveryCheckpoints);
+            var actualUnresolvedDeliveries = unresolvedDeliveries ??
+                                             new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDelivery>();
+            var actualUnresolvedDeliveryIndexes = unresolvedDeliveryIndexes ??
+                                                  new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>();
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery>>())
+                .Returns(actualUnresolvedDeliveries);
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>>())
+                .Returns(actualUnresolvedDeliveryIndexes);
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>>())
+                .Returns(new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>());
+            var configs = new Mock<IPlainKeyValueStorage<WebInterviewConfig>>();
+            configs.Setup(x => x.GetByIdUncached(It.IsAny<string>()))
+                .Returns((string id) => webInterviewConfigProvider?.Get(QuestionnaireIdentity.Parse(id)));
+
+            return new ReminderEmailSender(
+                Mock.Of<ILogger<ReminderEmailSender>>(),
+                invitationServiceActual,
+                emailService ?? Mock.Of<IEmailService>(),
+                webInterviewConfigs ?? configs.Object,
+                actualDeliveryOutcomes,
+                actualDeliveryInvitationChunks,
+                actualDeliveryCheckpoints,
+                actualUnresolvedDeliveries,
+                actualUnresolvedDeliveryIndexes,
                 webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>(),
-                Create.Service.InScopeExecutor(Mock.Of<IServiceLocator>(sl => sl.GetInstance<IInvitationService>() ==
-                                                                              invService)),
-                linkProvider);
+                inScopeExecutor ?? Create.Service.InScopeExecutor(serviceLocator.Object),
+                linkProvider,
+                unitOfWork);
         }
 
         public SendInvitationsJob SendInvitationsJob(

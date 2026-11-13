@@ -10,9 +10,17 @@ namespace WB.Core.Infrastructure.PlainStorage
     {
         TEntity? GetById(TKey id);
 
+        TEntity? GetByIdUncached(TKey id) => GetById(id);
+
         bool HasNotEmptyValue(TKey id);
 
         void Remove(TKey id);
+
+        void Remove(System.Collections.Generic.IEnumerable<TKey> ids)
+        {
+            foreach (var id in ids)
+                Remove(id);
+        }
 
         void Store(TEntity entity, TKey id);
     }
