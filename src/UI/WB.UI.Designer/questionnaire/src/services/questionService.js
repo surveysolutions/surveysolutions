@@ -147,6 +147,9 @@ export function updateQuestion(
 
     return commandCall(commandName, command).then(async response => {
         //TODO: check if everything is published
+        if (question.type === 'SingleOption' || question.type === 'MultyOption') {
+            question.randomizeAnswerOptions = command.randomizeAnswerOptions;
+        }
         emitter.emit('questionUpdated', question);
     });
 }
