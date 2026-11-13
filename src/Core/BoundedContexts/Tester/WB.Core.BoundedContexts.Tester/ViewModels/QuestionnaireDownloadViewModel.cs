@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class QuestionnaireDownloadViewModel : MvxNotifyPropertyChanged
     {
+        private static long questionnaireVersion;
         private readonly ITesterPrincipal principal;
         private readonly IDesignerApiService designerApiService;
         private readonly ICommandService commandService;
@@ -114,15 +115,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         ? NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup)
                         : null;
 
+                    await this.commandService.WaitPendingCommandsAsync();
                     var existingInterviewCommands = this.executedCommandsStorage.Get(currentInterviewId);
                     foreach (var existingInterviewCommand in existingInterviewCommands)
                     {
-                        if (existingInterviewCommand is CreateInterview createCommand)
+                        var command = existingInterviewCommand.CopyForInterview(interviewId);
+                        if (command is CreateInterview createCommand)
                         {
                             createCommand.QuestionnaireId = questionnaireIdentity;
                         }
-                        existingInterviewCommand.InterviewId = interviewId;
-                        await this.commandService.ExecuteAsync(existingInterviewCommand, cancellationToken: cancellationToken);
+                        await this.commandService.ExecuteAsync(command, cancellationToken: cancellationToken);
                     }
 
                     return await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), targetGroup);
@@ -133,10 +135,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await userInteractionService.AlertAsync(TesterUIResources.ReloadInterviewErrorMessage);
                     var newInterviewId = await this.CreateInterview(questionnaireIdentity, progress);
                     await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(newInterviewId.FormatGuid());
-                }
-                finally
-                {
-                    this.executedCommandsStorage.Clear(currentInterviewId);
                 }
             }
 
@@ -209,7 +207,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         private static QuestionnaireIdentity GenerateDummyQuestionnaireIdentity(string questionnaireId)
-            => new QuestionnaireIdentity(Guid.Parse(questionnaireId), 1);
+            => new QuestionnaireIdentity(Guid.Parse(questionnaireId), Interlocked.Increment(ref questionnaireVersion));
 
         private async Task<Guid> CreateInterview(QuestionnaireIdentity questionnaireIdentity, IProgress<string> progress)
         {
@@ -264,8 +262,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var attachments = questionnaire.Document.Attachments;
 
-            var requiredAttachments = new HashSet<string>();
-
             foreach (var attachment in attachments)
             {
                 var attachmentContentId = attachment.ContentId;
@@ -283,14 +279,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     await this.attachmentContentStorage.StoreAsync(attachmentContent);
                 }
-
-                requiredAttachments.Add(attachment.ContentId);
-            }
-
-            foreach (var contentId in await this.attachmentContentStorage.EnumerateCacheAsync())
-            {
-                if (!requiredAttachments.Contains(contentId))
-                    await this.attachmentContentStorage.RemoveAsync(contentId);
             }
         }
     }

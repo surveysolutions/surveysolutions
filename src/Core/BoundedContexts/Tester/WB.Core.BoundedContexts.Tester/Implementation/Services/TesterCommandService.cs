@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
     public class TesterCommandService : SequentialCommandService
     {
         private readonly IExecutedCommandsStorage executedCommandsStorage;
+        private readonly object executionLock = new object();
 
         public TesterCommandService(IServiceLocator serviceLocator,
             IAggregateLock aggregateLock,
@@ -25,11 +26,14 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            base.ExecuteImpl(command, origin, cancellationToken);
-
-            if (command is InterviewCommand interviewCommand)
+            lock (this.executionLock)
             {
-                this.executedCommandsStorage.Add(interviewCommand.InterviewId, interviewCommand);
+                base.ExecuteImpl(command, origin, cancellationToken);
+
+                if (command is InterviewCommand interviewCommand)
+                {
+                    this.executedCommandsStorage.Add(interviewCommand.InterviewId, interviewCommand);
+                }
             }
         }
     }
