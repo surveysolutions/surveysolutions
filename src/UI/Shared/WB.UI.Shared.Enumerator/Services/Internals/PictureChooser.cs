@@ -1,9 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
+using Android.Graphics;
 using Android.Media;
 using Android.OS;
-using MvvmCross.Base;
-using Plugin.Media;
-using Plugin.Media.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -15,27 +14,24 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 {
     internal class PictureChooser : IPictureChooser
     {
-        private readonly IMedia media;
-        private readonly IPermissionsService permissions;
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
+        private const int ExifOrientationNormal = 1;
+        private const int ExifOrientationFlipHorizontal = 2;
+        private const int ExifOrientationRotate180 = 3;
+        private const int ExifOrientationFlipVertical = 4;
+        private const int ExifOrientationTranspose = 5;
+        private const int ExifOrientationRotate90 = 6;
+        private const int ExifOrientationTransverse = 7;
+        private const int ExifOrientationRotate270 = 8;
 
-        public PictureChooser(IMedia media, IPermissionsService permissions, IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
+        private readonly IPermissionsService permissions;
+
+        public PictureChooser(IPermissionsService permissions)
         {
-            this.media = media;
             this.permissions = permissions;
-            this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
         }
 
         public async Task<Stream> TakePicture()
         {
-            await this.media.Initialize().ConfigureAwait(false);
-            var storeCameraMediaOptions = new StoreCameraMediaOptions()
-            {
-                CompressionQuality = 70,
-                PhotoSize = PhotoSize.MaxWidthHeight,
-                MaxWidthHeight = 1024
-            };
-
             FileResult photo = null;
             try
             {
@@ -51,26 +47,77 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
             if (photo == null)
                 return null;
-            
-            //process image
-            //using Media plugin
-            MediaImplementation androidMedia = new MediaImplementation();
-            using (var originalMetadata = new ExifInterface(photo.FullPath))
+
+            try
             {
-                var isProcessed = await androidMedia.FixOrientationAndResizeAsync(photo.FullPath, storeCameraMediaOptions, originalMetadata)
-                    .ConfigureAwait(false);
-
-                if (!isProcessed)
-                    throw new PictureProcessingException(UIResources.Multimedia_PhotoProcessingFailed);
+                try
+                {
+                    return ProcessCapturedPhoto(photo.FullPath);
+                }
+                catch (PictureProcessingException)
+                {
+                    throw;
+                }
+                catch (System.Exception e)
+                {
+                    throw new PictureProcessingException(UIResources.Multimedia_PhotoProcessingFailed, e);
+                }
             }
+            finally
+            {
+                try
+                {
+                    File.Delete(photo.FullPath);
+                }
+                catch (System.Exception e) when (e is IOException || e is UnauthorizedAccessException)
+                {
+                    NLog.LogManager.GetCurrentClassLogger().Warn(e, "Unable to delete captured photo");
+                }
+            }
+        }
 
-            return await photo.OpenReadAsync();
+        internal static Stream ProcessCapturedPhoto(string photoPath)
+        {
+            using (var originalMetadata = new ExifInterface(photoPath))
+            {
+                var boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true };
+                BitmapFactory.DecodeFile(photoPath, boundsOptions);
+                var sampleSize = BitmapHelper.CalculateInSampleSize(boundsOptions, 1024, 1024);
+                using var bitmap = BitmapFactory.DecodeFile(photoPath, new BitmapFactory.Options { InSampleSize = sampleSize });
+                if (bitmap == null)
+                    throw new PictureProcessingException(UIResources.Multimedia_PhotoProcessingFailed);
+
+                var orientation = originalMetadata.GetAttributeInt(ExifInterface.TagOrientation, ExifOrientationNormal);
+                var processedBitmap = bitmap;
+                if (orientation != ExifOrientationNormal)
+                {
+                    using var matrix = GetOrientationMatrix(orientation);
+                    processedBitmap = Bitmap.CreateBitmap(bitmap, 0, 0, bitmap.Width, bitmap.Height, matrix, true);
+                }
+
+                try
+                {
+                    if (Math.Max(processedBitmap.Width, processedBitmap.Height) > 1024)
+                    {
+                        var scale = 1024.0 / Math.Max(processedBitmap.Width, processedBitmap.Height);
+                        var width = (int)(processedBitmap.Width * scale);
+                        var height = (int)(processedBitmap.Height * scale);
+                        using var resizedBitmap = Bitmap.CreateScaledBitmap(processedBitmap, width, height, true);
+                        return CompressBitmap(resizedBitmap);
+                    }
+
+                    return CompressBitmap(processedBitmap);
+                }
+                finally
+                {
+                    if (processedBitmap != bitmap)
+                        processedBitmap.Dispose();
+                }
+            }
         }
 
         public async Task<ChoosePictureResult> ChoosePictureGallery()
         {
-            await this.media.Initialize().ConfigureAwait(false);
-
             FileResult photo = null;
             
             try
@@ -87,6 +134,48 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             return photo == null 
                 ? null 
                 : new ChoosePictureResult(photo.FileName, await photo.OpenReadAsync());
+        }
+
+        private static Matrix GetOrientationMatrix(int orientation)
+        {
+            var matrix = new Matrix();
+            switch (orientation)
+            {
+                case ExifOrientationFlipHorizontal:
+                    matrix.SetScale(-1, 1);
+                    break;
+                case ExifOrientationRotate180:
+                    matrix.SetRotate(180);
+                    break;
+                case ExifOrientationFlipVertical:
+                    matrix.SetScale(1, -1);
+                    break;
+                case ExifOrientationTranspose:
+                    matrix.SetRotate(90);
+                    matrix.PostScale(-1, 1);
+                    break;
+                case ExifOrientationRotate90:
+                    matrix.SetRotate(90);
+                    break;
+                case ExifOrientationTransverse:
+                    matrix.SetRotate(-90);
+                    matrix.PostScale(-1, 1);
+                    break;
+                case ExifOrientationRotate270:
+                    matrix.SetRotate(-90);
+                    break;
+            }
+
+            return matrix;
+        }
+
+        private static Stream CompressBitmap(Bitmap bitmap)
+        {
+            using var outputStream = new MemoryStream();
+            if (!bitmap.Compress(Bitmap.CompressFormat.Jpeg, 70, outputStream))
+                throw new PictureProcessingException(UIResources.Multimedia_PhotoProcessingFailed);
+
+            return new MemoryStream(outputStream.ToArray());
         }
     }
 }

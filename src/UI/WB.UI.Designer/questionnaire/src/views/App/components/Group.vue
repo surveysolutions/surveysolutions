@@ -165,7 +165,7 @@ export default {
             };
         });
 
-        const ctrl_s = useKeyShortcut(e => e.ctrlKey && e.key === 's');
+        const ctrl_s = useKeyShortcut(e => e.ctrlKey && !e.altKey && !e.shiftKey && e.code === 'KeyS');
 
         return {
             groupStore, commentsStore, ctrl_s
