@@ -1759,4 +1759,10 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
   <data name="RandomizeOrderTooltip" xml:space="preserve">
       <value>Ordinea de afișare a acestui element este aleatorie împreună cu elementele vecine marcate cu 'Ordine aleatorie'</value>
   </data>
+  <data name="RandomizeAnswerOptions" xml:space="preserve">
+      <value>Ordine aleatorie a opțiunilor de răspuns</value>
+  </data>
+  <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+      <value>Opțiunile de răspuns sunt afișate într-o ordine aleatorie care rămâne aceeași în cadrul unui interviu</value>
+  </data>
 </root>

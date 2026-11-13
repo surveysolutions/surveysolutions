@@ -1694,4 +1694,10 @@ Zkontrolujte prosím své síťové připojení nebo se obraťte na vaši IT pod
   <data name="RandomizeOrderTooltip" xml:space="preserve">
       <value>Pořadí zobrazení této položky je náhodně zamícháno spolu se sousedními položkami označenými 'Náhodné pořadí'</value>
   </data>
+  <data name="RandomizeAnswerOptions" xml:space="preserve">
+      <value>Náhodné pořadí možností odpovědi</value>
+  </data>
+  <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+      <value>Možnosti odpovědi se zobrazují v náhodném pořadí, které zůstává v rámci rozhovoru stejné</value>
+  </data>
 </root>

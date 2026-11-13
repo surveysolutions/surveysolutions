@@ -366,6 +366,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         }
 
         [Test]
+        public void should_return_38_when_question_has_randomized_answer_options()
+        {
+            var question = Create.SingleOptionQuestion(Id.g1);
+            question.RandomizeAnswerOptions = true;
+
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(question);
+
+            var service = CreateDesignerEngineVersionService();
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(38));
+        }
+
+        [Test]
         public void should_not_return_38_when_there_is_no_randomized_order()
         {
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(Create.TextQuestion(Id.g1));

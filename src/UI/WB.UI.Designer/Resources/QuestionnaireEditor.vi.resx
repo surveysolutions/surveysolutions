@@ -1634,4 +1634,10 @@ Vui lòng kiểm tra kết nối mạng của bạn hoặc liên hệ với bộ
     <data name="RandomizeOrderTooltip" xml:space="preserve">
         <value>Thứ tự hiển thị của mục này được xáo trộn ngẫu nhiên cùng với các mục lân cận được đánh dấu 'Thứ tự ngẫu nhiên'</value>
     </data>
+    <data name="RandomizeAnswerOptions" xml:space="preserve">
+        <value>Thứ tự ngẫu nhiên của các phương án trả lời</value>
+    </data>
+    <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+        <value>Các phương án trả lời được hiển thị theo thứ tự ngẫu nhiên và giữ nguyên trong một cuộc phỏng vấn</value>
+    </data>
 </root>

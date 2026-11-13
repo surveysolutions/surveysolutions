@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -388,11 +389,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             if (listOptions == null || filteredOptions == null) yield break;
 
-            foreach (var textListAnswerRow in listOptions)
-            {
-                if (filteredOptions.Contains(textListAnswerRow.Value))
-                    yield return textListAnswerRow;
-            }
+            var questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
+            var options = RandomizedItemsOrder.OrderAnswerOptionsForDisplay(questionnaire, RandomizedItemsOrder.GetSeed(interview.Id),
+                this.Identity, listOptions.Where(row => filteredOptions.Contains(row.Value)), row => row.Value);
+
+            foreach (var textListAnswerRow in options)
+                yield return textListAnswerRow;
         }
 
         private SingleOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)

@@ -1634,4 +1634,10 @@
     <data name="RandomizeOrderTooltip" xml:space="preserve">
         <value>ลำดับการแสดงของรายการนี้จะถูกสุ่มร่วมกับรายการข้างเคียงที่ทำเครื่องหมาย 'สุ่มลำดับ'</value>
     </data>
+    <data name="RandomizeAnswerOptions" xml:space="preserve">
+        <value>สุ่มลำดับตัวเลือกคำตอบ</value>
+    </data>
+    <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+        <value>ตัวเลือกคำตอบจะแสดงในลำดับแบบสุ่มซึ่งคงเดิมตลอดการสัมภาษณ์</value>
+    </data>
 </root>

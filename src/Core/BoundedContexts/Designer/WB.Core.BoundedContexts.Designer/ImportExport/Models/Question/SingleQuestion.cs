@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models.Question
         public string? CascadeFromQuestion { get; set; }
         public string? LinkedTo { get; set; }
         public string? FilterExpression { get; set; }
+        public bool RandomizeAnswerOptions { get; set; }
     }
     
     public enum SingleOptionDisplayMode

@@ -1106,6 +1106,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             => this.cacheOfHasRandomizedChildren.GetOrAdd(groupId, id =>
                 !IsCoverPage(id) && this.GetChildEntityIds(id).Any(this.IsOrderRandomized));
 
+        public bool ShouldRandomizeAnswerOptions(Guid questionId)
+        {
+            if (!this.EntityCache.TryGetValue(questionId, out var entity))
+                return false;
+
+            return entity is IQuestion { RandomizeAnswerOptions: true } question
+                   && question.QuestionType is QuestionType.SingleOption or QuestionType.MultyOption
+                   && question.IsFilteredCombobox != true
+                   && !question.CascadeFromQuestionId.HasValue;
+        }
+
         public bool IsFlatRoster(Guid entityId)
         {
             return this.GetGroup(entityId)?.DisplayMode == RosterDisplayMode.Flat;

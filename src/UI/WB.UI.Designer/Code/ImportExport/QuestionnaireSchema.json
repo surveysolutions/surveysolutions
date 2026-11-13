@@ -447,7 +447,8 @@
         "Answers": { "$ref": "#/definitions/Answers" },
         "CascadeFromQuestion": { "$ref": "#/definitions/VariableName" },
         "FilterExpression": { "type": "string" },
-        "LinkedTo": { "$ref": "#/definitions/VariableName" }
+        "LinkedTo": { "$ref": "#/definitions/VariableName" },
+        "RandomizeAnswerOptions": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
       "required": ["Type"]
@@ -543,7 +544,8 @@
         "Answers": { "$ref": "#/definitions/Answers" },
         "CascadeFromQuestion": { "$ref": "#/definitions/VariableName" },
         "LinkedTo": { "$ref": "#/definitions/VariableName" },
-        "FilterExpression": { "type": "string" }
+        "FilterExpression": { "type": "string" },
+        "RandomizeAnswerOptions": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
       "required": ["Type"]

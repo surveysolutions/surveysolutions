@@ -3182,5 +3182,17 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("RandomizeOrderTooltip", resourceCulture);
             }
         }
+        
+        public static string RandomizeAnswerOptions {
+            get {
+                return ResourceManager.GetString("RandomizeAnswerOptions", resourceCulture);
+            }
+        }
+        
+        public static string RandomizeAnswerOptionsTooltip {
+            get {
+                return ResourceManager.GetString("RandomizeAnswerOptionsTooltip", resourceCulture);
+            }
+        }
     }
 }

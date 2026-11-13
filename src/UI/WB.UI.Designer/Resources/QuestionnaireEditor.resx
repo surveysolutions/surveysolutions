@@ -1696,4 +1696,10 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   <data name="RandomizeOrderTooltip" xml:space="preserve">
       <value>Display order of this item is randomized together with neighboring items marked with 'Randomize order'</value>
   </data>
+  <data name="RandomizeAnswerOptions" xml:space="preserve">
+      <value>Randomize answer options</value>
+  </data>
+  <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+      <value>Answer options are displayed in a random order that stays the same within an interview</value>
+  </data>
 </root>

@@ -1871,4 +1871,10 @@
   <data name="RandomizeOrderTooltip" xml:space="preserve">
       <value>此项的显示顺序将与标记为“随机顺序”的相邻项一起随机排列</value>
   </data>
+  <data name="RandomizeAnswerOptions" xml:space="preserve">
+      <value>随机排列答案选项</value>
+  </data>
+  <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+      <value>答案选项以随机顺序显示，该顺序在同一访谈中保持不变</value>
+  </data>
 </root>
