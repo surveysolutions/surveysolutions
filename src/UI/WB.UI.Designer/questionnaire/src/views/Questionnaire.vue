@@ -135,7 +135,7 @@ export default {
             !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName?.toUpperCase() ?? '')
         );
 
-        const ctrl_p = useKeyShortcut(e => e.ctrlKey && !e.altKey && e.code === 'KeyP');
+        const ctrl_p = useKeyShortcut(e => e.ctrlKey && !e.altKey && !e.shiftKey && e.code === 'KeyP');
 
         return {
             questionnaireStore,

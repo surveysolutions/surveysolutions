@@ -198,8 +198,8 @@ export default {
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
 
-        const ctrl_b = useKeyShortcut(e => e.ctrlKey && !e.altKey && e.code === 'KeyB');
-        const ctrl_i = useKeyShortcut(e => e.ctrlKey && !e.altKey && e.code === 'KeyI' &&
+        const ctrl_b = useKeyShortcut(e => e.ctrlKey && !e.altKey && !e.shiftKey && e.code === 'KeyB');
+        const ctrl_i = useKeyShortcut(e => e.ctrlKey && !e.altKey && !e.shiftKey && e.code === 'KeyI' &&
             questionnaire.value?.webTestAvailable && questionnaire.value?.questionnaireRevision === null);
 
         return {
