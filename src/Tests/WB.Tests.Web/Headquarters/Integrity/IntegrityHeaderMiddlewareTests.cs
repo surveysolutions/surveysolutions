@@ -76,19 +76,19 @@ namespace WB.Tests.Web.Headquarters.Integrity
         }
 
         [Test]
-        public void when_non_api_request_throws_should_rethrow_original_exception()
+        public async Task when_non_api_request_throws_should_rethrow_original_exception()
         {
             var context = CreateHttpContext("/Reports/Index");
             var expected = new InvalidOperationException("boom");
             var middleware = CreateMiddleware(_ => throw expected);
 
-            var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await middleware.InvokeAsync(context));
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () => await middleware.InvokeAsync(context));
 
             exception.Should().BeSameAs(expected);
         }
 
         [Test]
-        public void when_response_has_started_and_request_throws_should_rethrow_original_exception()
+        public async Task when_response_has_started_and_request_throws_should_rethrow_original_exception()
         {
             var context = CreateHttpContext("/api/fail-after-start");
             var expected = new InvalidOperationException("boom");
@@ -98,7 +98,7 @@ namespace WB.Tests.Web.Headquarters.Integrity
                 throw expected;
             });
 
-            var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await middleware.InvokeAsync(context));
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () => await middleware.InvokeAsync(context));
 
             exception.Should().BeSameAs(expected);
         }

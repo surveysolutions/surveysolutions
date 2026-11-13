@@ -49,9 +49,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             factory.Setup(f => f.OpenSession()).Returns(() =>
             {
                 var transaction = new Mock<ITransaction>();
-                transaction.SetupGet(t => t.IsActive).Returns(() => true);
-                transaction.Setup(t => t.Commit()).Callback(() => commits++);
-                transaction.Setup(t => t.Rollback()).Callback(() => rollbacks++);
+                var isActive = true;
+                transaction.SetupGet(t => t.IsActive).Returns(() => isActive);
+                transaction.Setup(t => t.Commit()).Callback(() =>
+                {
+                    commits++;
+                    isActive = false;
+                });
+                transaction.Setup(t => t.Rollback()).Callback(() =>
+                {
+                    rollbacks++;
+                    isActive = false;
+                });
                 var session = new Mock<ISession>();
                 session.Setup(s => s.BeginTransaction(IsolationLevel.ReadCommitted)).Returns(() =>
                 {

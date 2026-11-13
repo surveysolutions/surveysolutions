@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 {
     public class AmazonS3ExternalFileStorage : IExternalFileStorage
     {
+        private const int MaxDeleteObjectsPerRequest = 1000;
         private readonly IAmazonS3Configuration s3Configuration;
         private readonly IAmazonS3 client;
         private readonly ITransferUtility transferUtility;
@@ -99,16 +100,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
             try
             {
-                ListObjectsV2Response response = await client.ListObjectsV2Async(listObjects).ConfigureAwait(false);
-                logger.LogTrace("Got list of objects from S3. Prefix: [{prefix}] {request_prefix}, Count: {count}",
-                    prefix, listObjects.Prefix, response.S3Objects.Count);
-
-                return response.S3Objects.Select(s3 => new FileObject
+                var files = new List<FileObject>();
+                ListObjectsV2Response response;
+                do
                 {
-                    Path = s3.Key.Substring(BucketInfo.PathPrefix.Length),
-                    Size = s3.Size,
-                    LastModified = s3.LastModified,
-                }).ToList();
+                    response = await client.ListObjectsV2Async(listObjects).ConfigureAwait(false);
+                    files.AddRange(response.S3Objects?.Select(s3 => new FileObject
+                    {
+                        Path = s3.Key.Substring(BucketInfo.PathPrefix.Length),
+                        Size = s3.Size.GetValueOrDefault(),
+                        LastModified = s3.LastModified.GetValueOrDefault(),
+                    }) ?? Enumerable.Empty<FileObject>());
+                    listObjects.ContinuationToken = response.NextContinuationToken;
+                } while (response.IsTruncated == true);
+
+                logger.LogTrace("Got list of objects from S3. Prefix: [{prefix}] {request_prefix}, Count: {count}",
+                    prefix, listObjects.Prefix, files.Count);
+
+                return files;
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
@@ -247,24 +256,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         {
             try
             {
-                var deleteRequest = new DeleteObjectsRequest();
-                deleteRequest.BucketName = BucketInfo.BucketName;
-                deleteRequest.Quiet = true; 
-
-                foreach (var path in paths)
-                    deleteRequest.AddKey(BucketInfo.PathTo(path));
-
-                if (deleteRequest.Objects.Any())
+                foreach (var batch in paths.Chunk(MaxDeleteObjectsPerRequest))
                 {
-                    var response = await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
-                    if (response.DeleteErrors.Count > 0)
+                    var deleteRequest = new DeleteObjectsRequest
                     {
-                        foreach (var error in response.DeleteErrors)
+                        BucketName = BucketInfo.BucketName,
+                        Quiet = true
+                    };
+
+                    foreach (var path in batch)
+                        deleteRequest.AddKey(BucketInfo.PathTo(path));
+
+                    var response = await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
+                    var deleteErrors = response.DeleteErrors;
+                    if (deleteErrors is { Count: > 0 })
+                    {
+                        foreach (var error in deleteErrors)
                             logger.LogError("S3 delete error for key {Key}: {Code} {Message}", error.Key, error.Code, error.Message);
 
                         throw new InvalidOperationException(
-                            $"Failed to delete {response.DeleteErrors.Count} object(s) from S3. " +
-                            $"First error: {response.DeleteErrors[0].Key}: {response.DeleteErrors[0].Code} {response.DeleteErrors[0].Message}");
+                            $"Failed to delete {deleteErrors.Count} object(s) from S3. " +
+                            $"First error: {deleteErrors[0].Key}: {deleteErrors[0].Code} {deleteErrors[0].Message}");
                     }
 
                     var objects = string.Join(", ", deleteRequest.Objects.Select(kl => kl.Key));

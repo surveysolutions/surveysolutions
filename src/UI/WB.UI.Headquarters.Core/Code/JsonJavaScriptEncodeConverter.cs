@@ -1,4 +1,5 @@
 using System;
+using System.Text.Encodings.Web;
 using Newtonsoft.Json;
 
 namespace WB.UI.Headquarters.Code
@@ -23,7 +24,9 @@ namespace WB.UI.Headquarters.Code
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            writer.WriteRawValue(Microsoft.Security.Application.Encoder.JavaScriptEncode((string)value, true));
+            writer.WriteRawValue(value == null
+                ? "null"
+                : $"\"{System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode((string)value)}\"");
         }
     }
 }

@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs
     [DisallowConcurrentExecution]
     [RetryFailedJob]
     [DisplayName("Delete questionnaire job"), Category("Cleanup")]
-    public class DeleteQuestionnaireJob : IJob<DeleteQuestionnaireRequest>
+    public class DeleteQuestionnaireJob : IJobWithData<DeleteQuestionnaireRequest>
     {
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader;

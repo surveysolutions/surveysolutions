@@ -1,5 +1,5 @@
 ﻿using HotChocolate.Types;
-using Supercluster;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Clustering;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Reports.Map
 {

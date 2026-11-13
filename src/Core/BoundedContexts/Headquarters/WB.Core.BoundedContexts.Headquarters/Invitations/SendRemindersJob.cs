@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Quartz;
@@ -51,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.interviewLinkProvider = interviewLinkProvider;
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -94,7 +95,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"Reminders distribution job for workspace {context.Get("workspace")}: FAILED");
+                this.logger.LogError(ex,
+                    $"Reminders distribution job for workspace {context.MergedJobDataMap.GetString("workspace")}: FAILED");
             }
         }
 

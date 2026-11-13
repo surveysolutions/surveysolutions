@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Security
     internal class UserArchiveServiceTests
     {
         [Test]
-        public void when_unarchive_interviewer_and_supervisor_is_archived_should_throw_UserArchiveException()
+        public async Task when_unarchive_interviewer_and_supervisor_is_archived_should_throw_UserArchiveException()
         {
             var supervisor = Create.Entity.HqUser(Guid.NewGuid(), role: UserRoles.Supervisor, isArchived: true);
             var interviewer = Create.Entity.HqUser(Guid.NewGuid(), supervisorId: supervisor.Id, isArchived: true);
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Security
 
             var userManager = Create.Service.UserArchiveService(userRepository);
 
-            Assert.ThrowsAsync<UserArchiveException>(() => 
+            await Assert.ThrowsAsync<UserArchiveException>(() =>
                 userManager.UnarchiveUsersAsync(new[] {interviewer.Id}));
         }
 

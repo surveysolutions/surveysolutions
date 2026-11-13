@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Amazon.Runtime.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,14 +9,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using Quartz;
-using Quartz.Impl.Matchers;
-using Quartz.Listener;
-using Quartz.Logging;
-using Quartz.Spi;
 using Serilog;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
@@ -45,10 +41,11 @@ namespace WB.UI.Headquarters.Services.Quartz
 
             services.AddQuartz(q =>
             {
-                q.SchedulerId = Environment.MachineName + "-" + Process.GetCurrentProcess().Id;
-                // q.SchedulerId = "AUTO"; - disabled because fail in prod environment on resolve DNS name
-
-                q.SchedulerName = "Headquarters Background Services";
+                q.ConfigureScheduler(options =>
+                {
+                    options.InstanceName = "Headquarters Background Services";
+                    options.InstanceId = Environment.MachineName + "-" + Process.GetCurrentProcess().Id;
+                });
                 
                 q.UseJobFactory<AsyncScopedJobFactory>();
                 q.UseDefaultThreadPool();
@@ -62,17 +59,18 @@ namespace WB.UI.Headquarters.Services.Quartz
                         connectionBuilder.SetApplicationPostfix("quartz");
 
                         a.ConnectionString = connectionBuilder.ConnectionString;
-                        a.TablePrefix = "quartz.";
                     });
 
-                    c.UseProperties = true;
+                    c.ConfigureStore(options =>
+                    {
+                        options.TablePrefix = "quartz.";
+                        options.StoreJobDataAsStrings = true;
+                    });
                     c.UseClustering();
                     c.UseNewtonsoftJsonSerializer();
                 });
             });
 
-            global::Quartz.Logging.LogProvider.IsDisabled = false;//.SetCurrentLogProvider(new QuartzLogProvider());
-          
             if (configuration["no-quartz"].ToBool(false) == false)
             {
                 services.AddQuartzHostedService(q => { q.WaitForJobsToComplete = false; });
@@ -113,6 +111,7 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
             
             await services.GetRequiredService<ExportDataRetentionTask>().Schedule(repeatIntervalInSeconds: 60 * 60 * 6);
+            await services.GetRequiredService<MapFileCleanupTask>().Schedule(repeatIntervalInSeconds: 60);
             
             var scheduler = await services.GetRequiredService<ISchedulerFactory>().GetScheduler();
             
@@ -124,15 +123,12 @@ namespace WB.UI.Headquarters.Services.Quartz
                 await schedule.RegisterJob();
             }
 
-            var tiggers = await scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup());
-            foreach (var triggerKey in tiggers)
+            var triggers = await scheduler.QueryTriggers(
+                new TriggerQuery { State = TriggerState.Error, Take = PagedQuery.All });
+            foreach (var trigger in triggers.Items)
             {
-                var triggerState = await scheduler.GetTriggerState(triggerKey);
-                if (triggerState == TriggerState.Error)
-                {
-                    Log.Information($"Reseting Error state for trigger {triggerKey}.");
-                    await scheduler.ResetTriggerFromErrorState(triggerKey);
-                }
+                Log.Information($"Reseting Error state for trigger {trigger.Key}.");
+                await scheduler.ResetTriggerFromErrorState(trigger.Key);
             }
         }
 
@@ -161,30 +157,6 @@ namespace WB.UI.Headquarters.Services.Quartz
             public Task StopAsync(CancellationToken cancellationToken)
             {
                 return Task.CompletedTask;
-            }
-        }
-        
-        private class QuartzLogProvider : ILogProvider
-        {
-            public Logger GetLogger(string name)
-            {
-                return (level, func, exception, parameters) =>
-                {
-                    Log.Error(exception, "QuartzLogProvider exception");
-                    //var messageTemplate = "[" + DateTime.Now.ToLongTimeString() + "] [" + level + "] " + func();
-                    //Log.Error(exception, messageTemplate, parameters);
-                    return true;
-                };
-            }
-
-            public IDisposable OpenNestedContext(string message)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IDisposable OpenMappedContext(string key, object value, bool destructure = false)
-            {
-                throw new NotImplementedException();
             }
         }
     }
