@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
@@ -8,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
@@ -32,15 +34,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IRootScopeExecutor rootScopeExecutor;
         private readonly IScheduledTask<SendRemindersNowJob, SendRemindersNowRequest> sendRemindersTask;
         private readonly ISchedulerFactory schedulerFactory;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
         public SendRemindersNowService(
             IRootScopeExecutor rootScopeExecutor,
             IScheduledTask<SendRemindersNowJob, SendRemindersNowRequest> sendRemindersTask,
-            ISchedulerFactory schedulerFactory)
+            ISchedulerFactory schedulerFactory,
+            IWorkspaceContextAccessor workspaceContextAccessor)
         {
             this.rootScopeExecutor = rootScopeExecutor;
             this.sendRemindersTask = sendRemindersTask;
             this.schedulerFactory = schedulerFactory;
+            this.workspaceContextAccessor = workspaceContextAccessor;
         }
 
         public async Task<SendRemindersNowStatus> SendAsync(QuestionnaireIdentity questionnaireIdentity,
@@ -196,16 +201,48 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private async Task<bool> IsScheduledOrRunningAsync(SendRemindersNowRequest request)
         {
             var scheduler = await schedulerFactory.GetScheduler().ConfigureAwait(false);
-            var executingJobs = await scheduler.GetCurrentlyExecutingJobs().ConfigureAwait(false);
-            if (executingJobs.Any(job => HasRequestId(job.MergedJobDataMap.GetString(BaseTask.TaskDataKey),
-                    request.RequestId)))
-                return true;
+            var jobKey = ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key;
+            var workspaceName = workspaceContextAccessor.CurrentWorkspace()?.Name;
+            var executingJobs = await scheduler.QueryFireInstances(new FireInstanceQuery { Job = jobKey },
+                CancellationToken.None).ConfigureAwait(false);
+            foreach (var executingJob in executingJobs.Items)
+            {
+                if (!executingJob.JobKey.Equals(jobKey))
+                    continue;
 
-            var triggers = await scheduler.GetTriggersOfJob(
-                ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key).ConfigureAwait(false);
-            return triggers.Any(trigger =>
-                HasRequestId(trigger.JobDataMap.GetString(BaseTask.TaskDataKey), request.RequestId));
+                var trigger = await scheduler.GetTrigger(executingJob.TriggerKey).ConfigureAwait(false);
+                if (trigger != null && HasWorkspace(trigger.JobDataMap, workspaceName) &&
+                    HasRequestId(trigger.JobDataMap.GetString(BaseTask.TaskDataKey), request.RequestId))
+                    return true;
+            }
+
+            const int pageSize = 100;
+            for (var skip = 0; ; skip += pageSize)
+            {
+                var triggerPage = await scheduler.QueryTriggers(new TriggerQuery
+                {
+                    Job = jobKey,
+                    Skip = skip,
+                    Take = pageSize
+                }, CancellationToken.None).ConfigureAwait(false);
+                if (triggerPage.Items.Count == 0)
+                    return false;
+
+                var triggers = await scheduler.GetTriggers(triggerPage.Items.Select(trigger => trigger.Key).ToArray(),
+                    CancellationToken.None).ConfigureAwait(false);
+                if (triggers.Any(trigger =>
+                        HasWorkspace(trigger.JobDataMap, workspaceName) &&
+                        HasRequestId(trigger.JobDataMap.GetString(BaseTask.TaskDataKey), request.RequestId)))
+                    return true;
+
+                if (!triggerPage.HasMore)
+                    return false;
+            }
         }
+
+        private static bool HasWorkspace(JobDataMap jobData, string workspaceName) =>
+            string.Equals(jobData.GetString(WorkspaceConstants.QuartzJobKey), workspaceName,
+                StringComparison.Ordinal);
 
         private static bool HasRequestId(string serializedRequest, Guid requestId)
         {

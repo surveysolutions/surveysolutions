@@ -1189,7 +1189,8 @@ namespace WB.Tests.Abc.TestFactories
             IPlainKeyValueStorage<ReminderEmailDeliveryOutcomes> deliveryOutcomes = null,
             IPlainKeyValueStorage<ReminderEmailDeliveryInvitationChunk> deliveryInvitationChunks = null,
             IPlainKeyValueStorage<ReminderEmailDeliveryCheckpoint> deliveryCheckpoints = null,
-            IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery> unresolvedDeliveries = null)
+            IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery> unresolvedDeliveries = null,
+            IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex> unresolvedDeliveryIndexes = null)
         {
             var invitationServiceActual = invitationService ?? Mock.Of<IInvitationService>();
             var linkProvider = new WebInterviewLinkProvider(
@@ -1231,8 +1232,14 @@ namespace WB.Tests.Abc.TestFactories
                 .Returns(actualDeliveryCheckpoints);
             var actualUnresolvedDeliveries = unresolvedDeliveries ??
                                              new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDelivery>();
+            var actualUnresolvedDeliveryIndexes = unresolvedDeliveryIndexes ??
+                                                  new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>();
             serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery>>())
                 .Returns(actualUnresolvedDeliveries);
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>>())
+                .Returns(actualUnresolvedDeliveryIndexes);
+            serviceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>>())
+                .Returns(new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>());
             var configs = new Mock<IPlainKeyValueStorage<WebInterviewConfig>>();
             configs.Setup(x => x.GetByIdUncached(It.IsAny<string>()))
                 .Returns((string id) => webInterviewConfigProvider?.Get(QuestionnaireIdentity.Parse(id)));
@@ -1246,6 +1253,7 @@ namespace WB.Tests.Abc.TestFactories
                 actualDeliveryInvitationChunks,
                 actualDeliveryCheckpoints,
                 actualUnresolvedDeliveries,
+                actualUnresolvedDeliveryIndexes,
                 webInterviewEmailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>(),
                 inScopeExecutor ?? Create.Service.InScopeExecutor(serviceLocator.Object),
                 linkProvider,

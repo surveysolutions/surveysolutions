@@ -20,6 +20,7 @@ using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -141,6 +142,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 .Returns(delivery.Checkpoints);
             locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery>>())
                 .Returns(delivery.UnresolvedDeliveries);
+            locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>>())
+                .Returns(delivery.UnresolvedIndexes);
+            locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>>())
+                .Returns(delivery.UnresolvedChunks);
             var executor = new Mock<IInScopeExecutor>();
             var scopeCount = 0;
             executor.Setup(x => x.ExecuteAsync(It.IsAny<Func<IServiceLocator, Task>>(), It.IsAny<string>()))
@@ -230,8 +235,30 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             Assert.That(firstResult.UnconfirmedCount, Is.EqualTo(1));
             Assert.That(secondResult.SentCount, Is.Zero);
             Assert.That(secondResult.FailedCount, Is.Zero);
+            Assert.That(secondResult.UnconfirmedCount, Is.EqualTo(1));
             delivery.Email.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(),
                 It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public async Task when_definite_failure_is_retried_then_the_recipient_is_sent_again()
+        {
+            var delivery = new DeliveryContext();
+            delivery.Email.SetupSequence(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(),
+                    It.IsAny<string>(), It.IsAny<string>()))
+                .ThrowsAsync(new EmailServiceException("recipient@email.com", System.Net.HttpStatusCode.BadRequest))
+                .ReturnsAsync("email-id");
+            delivery.SetRecipients(EmailTextTemplateType.Reminder_NoResponse, 1);
+
+            var failed = await delivery.Sender.SendRemindersAsync(delivery.Identity, "Survey",
+                EmailTextTemplateType.Reminder_NoResponse, 0);
+            var retried = await delivery.Sender.SendRemindersAsync(delivery.Identity, "Survey",
+                EmailTextTemplateType.Reminder_NoResponse, 0);
+
+            Assert.That(failed.FailedCount, Is.EqualTo(1));
+            Assert.That(retried.SentCount, Is.EqualTo(1));
+            delivery.Email.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(2));
         }
 
         private class DeliveryContext
@@ -250,6 +277,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 new TestInMemoryKeyValueStorage<ReminderEmailDeliveryCheckpoint>();
             public readonly TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDelivery> UnresolvedDeliveries =
                 new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDelivery>();
+            public readonly TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex> UnresolvedIndexes =
+                new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>();
+            public readonly TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk> UnresolvedChunks =
+                new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>();
             public readonly Invitation Invitation = Create.Entity.Invitation(1,
                 Create.Entity.Assignment(email: "respondent@email.com"), token: "token");
 
@@ -299,6 +330,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                     webInterviewEmailRenderer: Renderer.Object, webInterviewConfigs: Configs.Object,
                     deliveryOutcomes: Outcomes, deliveryCheckpoints: Checkpoints,
                     deliveryInvitationChunks: InvitationChunks, unresolvedDeliveries: UnresolvedDeliveries,
+                    unresolvedDeliveryIndexes: UnresolvedIndexes,
                     inScopeExecutor: executor, emailParamsStorage: parameters);
 
             public void SetRecipients(EmailTextTemplateType type, params int[] ids)
@@ -364,6 +396,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var invitationChunks = new TestInMemoryKeyValueStorage<ReminderEmailDeliveryInvitationChunk>();
             var checkpoints = new TestInMemoryKeyValueStorage<ReminderEmailDeliveryCheckpoint>();
             var unresolvedDeliveries = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDelivery>();
+            var unresolvedIndexes = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>();
+            var unresolvedChunks = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>();
             var scopedServiceLocator = new Mock<IServiceLocator>();
             scopedServiceLocator.Setup(x => x.GetInstance<IInvitationService>()).Returns(invitationService.Object);
             scopedServiceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<EmailParameters>>())
@@ -376,6 +410,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 .Returns(checkpoints);
             scopedServiceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery>>())
                 .Returns(unresolvedDeliveries);
+            scopedServiceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>>())
+                .Returns(unresolvedIndexes);
+            scopedServiceLocator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>>())
+                .Returns(unresolvedChunks);
             var inScopeExecutor = new Mock<IInScopeExecutor>();
             inScopeExecutor.Setup(x => x.ExecuteAsync(It.IsAny<Func<IServiceLocator, Task>>(), It.IsAny<string>()))
                 .Returns((Func<IServiceLocator, Task> action, string _) => action(scopedServiceLocator.Object));
@@ -386,6 +424,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 webInterviewConfigProvider: configProvider.Object,
                 webInterviewEmailRenderer: emailRenderer.Object,
                 emailParamsStorage: emailParamsStorage.Object,
+                unresolvedDeliveries: unresolvedDeliveries,
+                unresolvedDeliveryIndexes: unresolvedIndexes,
                 inScopeExecutor: inScopeExecutor.Object);
 
             var result = await sender.SendRemindersAsync(questionnaireIdentity, "Web Survey",
@@ -398,6 +438,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             Assert.That(unresolvedDeliveries.GetById(ReminderEmailUnresolvedDelivery.GetStorageKey(
                 questionnaireIdentity, invitation.Id)), Is.Not.Null);
+            Assert.That(ReminderEmailUnresolvedDeliveryStorage.GetCount(unresolvedIndexes, questionnaireIdentity),
+                Is.EqualTo(1));
             emailParamsStorage.Verify(x => x.Store(It.IsAny<EmailParameters>(), It.IsAny<string>()), Times.Once);
             inScopeExecutor.Verify(x => x.ExecuteAsync(It.IsAny<Func<IServiceLocator, Task>>(), It.IsAny<string>()),
                 Times.Exactly(2));
@@ -421,6 +463,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 delivery.Invitation.Assignment.Email, It.IsAny<string>()), Times.Once);
             Assert.That(delivery.UnresolvedDeliveries.GetById(ReminderEmailUnresolvedDelivery.GetStorageKey(
                 delivery.Identity, 1)), Is.Null);
+            Assert.That(ReminderEmailUnresolvedDeliveryStorage.GetCount(delivery.UnresolvedIndexes, delivery.Identity),
+                Is.Zero);
         }
 
         [Test]
@@ -1101,7 +1145,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var statuses = new TestInMemoryKeyValueStorage<SendRemindersNowStatus>();
             var outcomes = new TestInMemoryKeyValueStorage<ReminderEmailDeliveryOutcomes>();
             var invitationChunks = new TestInMemoryKeyValueStorage<ReminderEmailDeliveryInvitationChunk>();
-            outcomes.Store(new ReminderEmailDeliveryOutcomes { InvitationCount = 1, InvitationChunkCount = 1 },
+            outcomes.Store(new ReminderEmailDeliveryOutcomes
+                { InvitationCount = 1, InvitationChunkCount = 1, InFlightInvitationId = 1 },
                 ReminderEmailDeliveryOutcomes.GetStorageKey(request.RequestId));
             invitationChunks.Store(new ReminderEmailDeliveryInvitationChunk { InvitationIds = new List<int> { 1 } },
                 ReminderEmailDeliveryInvitationChunk.GetStorageKey(request.RequestId, 0));
@@ -1117,8 +1162,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailDeliveryInvitationChunk>>())
                 .Returns(invitationChunks);
             var unresolvedDeliveries = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDelivery>();
+            var unresolvedIndexes = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>();
+            var unresolvedChunks = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>();
             locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery>>())
                 .Returns(unresolvedDeliveries);
+            locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>>())
+                .Returns(unresolvedIndexes);
+            locator.Setup(x => x.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>>())
+                .Returns(unresolvedChunks);
             locator.Setup(x => x.GetInstance<IUnitOfWork>()).Returns(CreateExecutionUnitOfWork());
             var sender = new Mock<IReminderEmailSender>();
             sender.Setup(x => x.SendRemindersAsync(request.QuestionnaireIdentity, It.IsAny<string>(), request.Type,
@@ -1273,10 +1324,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var trigger = new Mock<ITrigger>();
             trigger.SetupGet(x => x.JobDataMap).Returns(new JobDataMap
             {
-                [BaseTask.TaskDataKey] = JsonSerializer.Serialize(request)
+                [BaseTask.TaskDataKey] = JsonSerializer.Serialize(request),
+                [WorkspaceConstants.QuartzJobKey] = "test"
             });
-            scheduler.Setup(x => x.GetTriggersOfJob(It.IsAny<JobKey>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new[] { trigger.Object });
+            var triggerKey = new TriggerKey("queued-trigger");
+            scheduler.Setup(x => x.QueryTriggers(It.IsAny<TriggerQuery>(), It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask<PagedResult<TriggerHeader>>(
+                    CreateTriggerPage(ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key, triggerKey)));
+            scheduler.Setup(x => x.GetTriggers(It.Is<IReadOnlyCollection<TriggerKey>>(keys =>
+                    keys.Contains(triggerKey)), It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask<List<ITrigger>>(new List<ITrigger> { trigger.Object }));
 
             var returnedStatus = await service.SendAsync(questionnaireIdentity, "Web Survey", status.Type,
                 Guid.NewGuid());
@@ -1286,20 +1343,92 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
         }
 
         [Test]
+        public async Task when_quartz_request_is_for_another_workspace_or_job_then_request_is_scheduled()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
+            var (service, storage, scheduledTask, scheduler) = CreateService();
+            scheduledTask.Setup(x => x.Schedule(It.IsAny<SendRemindersNowRequest>()))
+                .Returns(Task.CompletedTask);
+            var activeStatus = new SendRemindersNowStatus
+            {
+                RequestId = Guid.NewGuid(),
+                QuestionnaireIdentity = questionnaireIdentity,
+                QuestionnaireTitle = "Web Survey",
+                Type = EmailTextTemplateType.Reminder_NoResponse,
+                State = SendRemindersNowState.Queued
+            };
+            storage.Store(activeStatus, SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, activeStatus.Type));
+            storage.Store(activeStatus, SendRemindersNowRequest.GetStatusStorageKey(activeStatus.RequestId));
+            var request = new SendRemindersNowRequest
+            {
+                RequestId = activeStatus.RequestId,
+                QuestionnaireIdentity = questionnaireIdentity,
+                Type = activeStatus.Type
+            };
+            var executionTrigger = new Mock<ITrigger>();
+            executionTrigger.SetupGet(x => x.JobDataMap).Returns(new JobDataMap
+            {
+                [BaseTask.TaskDataKey] = JsonSerializer.Serialize(request),
+                [WorkspaceConstants.QuartzJobKey] = "other"
+            });
+            var executionTriggerKey = new TriggerKey("executing-trigger");
+            scheduler.Setup(x => x.GetTrigger(executionTriggerKey, It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask<ITrigger>(executionTrigger.Object));
+            scheduler.Setup(x => x.QueryFireInstances(It.IsAny<FireInstanceQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask<PagedResult<FireInstance>>(new PagedResult<FireInstance>(
+                    new[]
+                    {
+                        new FireInstance("fire-instance", executionTriggerKey,
+                            ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key, "test",
+                            default, DateTimeOffset.UtcNow, null, null)
+                    }, false, 1)));
+            var trigger = new Mock<ITrigger>();
+            trigger.SetupGet(x => x.JobDataMap).Returns(new JobDataMap
+            {
+                [BaseTask.TaskDataKey] = JsonSerializer.Serialize(request),
+                [WorkspaceConstants.QuartzJobKey] = "other"
+            });
+            var triggerKey = new TriggerKey("other-workspace-trigger");
+            scheduler.Setup(x => x.QueryTriggers(It.IsAny<TriggerQuery>(), It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask<PagedResult<TriggerHeader>>(
+                    CreateTriggerPage(ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key, triggerKey)));
+            scheduler.Setup(x => x.GetTriggers(It.Is<IReadOnlyCollection<TriggerKey>>(keys =>
+                    keys.Contains(triggerKey)), It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask<List<ITrigger>>(new List<ITrigger> { trigger.Object }));
+
+            await service.SendAsync(questionnaireIdentity, "Web Survey", activeStatus.Type, Guid.NewGuid());
+
+            scheduledTask.Verify(x => x.Schedule(It.IsAny<SendRemindersNowRequest>()), Times.Once);
+        }
+
+        [Test]
         public async Task when_scheduling_throws_after_request_was_published_then_request_is_not_failed()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
             var (service, storage, scheduledTask, scheduler) = CreateService();
             ITrigger publishedTrigger = null;
-            scheduler.Setup(x => x.GetTriggersOfJob(It.IsAny<JobKey>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => publishedTrigger == null ? Array.Empty<ITrigger>() : new[] { publishedTrigger });
+            TriggerKey publishedTriggerKey = null;
+            var jobKey = ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key;
+            scheduler.Setup(x => x.QueryTriggers(It.IsAny<TriggerQuery>(), It.IsAny<CancellationToken>()))
+                .Returns(() => new ValueTask<PagedResult<TriggerHeader>>(publishedTriggerKey == null
+                    ? new PagedResult<TriggerHeader>(Array.Empty<TriggerHeader>(), false, 0)
+                    : CreateTriggerPage(jobKey, publishedTriggerKey)));
+            scheduler.Setup(x => x.GetTriggers(It.IsAny<IReadOnlyCollection<TriggerKey>>(),
+                    It.IsAny<CancellationToken>()))
+                .Returns((IReadOnlyCollection<TriggerKey> keys, CancellationToken _) =>
+                    new ValueTask<List<ITrigger>>(publishedTrigger != null && keys.Contains(publishedTriggerKey)
+                        ? new List<ITrigger> { publishedTrigger }
+                        : new List<ITrigger>()));
             scheduledTask.Setup(x => x.Schedule(It.IsAny<SendRemindersNowRequest>()))
                 .Callback<SendRemindersNowRequest>(request =>
                 {
                     publishedTrigger = new Mock<ITrigger>().Object;
+                    publishedTriggerKey = new TriggerKey("published-trigger");
                     Mock.Get(publishedTrigger).SetupGet(x => x.JobDataMap).Returns(new JobDataMap
                     {
-                        [BaseTask.TaskDataKey] = JsonSerializer.Serialize(request)
+                        [BaseTask.TaskDataKey] = JsonSerializer.Serialize(request),
+                        [WorkspaceConstants.QuartzJobKey] = "test"
                     });
                 })
                 .ThrowsAsync(new InvalidOperationException("Request was already published"));
@@ -1380,18 +1509,94 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 .Returns((Func<IServiceLocator, Task<bool>> action) => action(serviceLocator.Object));
 
             var scheduler = new Mock<IScheduler>();
-            scheduler.Setup(x => x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Array.Empty<IJobExecutionContext>());
-            scheduler.Setup(x => x.GetTriggersOfJob(It.IsAny<JobKey>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Array.Empty<ITrigger>());
+            scheduler.Setup(x => x.QueryFireInstances(It.IsAny<FireInstanceQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask<PagedResult<FireInstance>>(
+                    new PagedResult<FireInstance>(Array.Empty<FireInstance>(), false, 0)));
+            scheduler.Setup(x => x.QueryTriggers(It.IsAny<TriggerQuery>(), It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask<PagedResult<TriggerHeader>>(
+                    new PagedResult<TriggerHeader>(Array.Empty<TriggerHeader>(), false, 0)));
+            scheduler.Setup(x => x.GetTriggers(It.IsAny<IReadOnlyCollection<TriggerKey>>(),
+                    It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask<List<ITrigger>>(new List<ITrigger>()));
             var schedulerFactory = new Mock<ISchedulerFactory>();
             schedulerFactory.Setup(x => x.GetScheduler(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(scheduler.Object);
 
             var scheduledTask = new Mock<IScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>>();
+            var workspaceContextAccessor = new Mock<IWorkspaceContextAccessor>();
+            workspaceContextAccessor.Setup(x => x.CurrentWorkspace())
+                .Returns(new WorkspaceContext("test", "Test"));
             var service = new SendRemindersNowService(rootScopeExecutor.Object, scheduledTask.Object,
-                schedulerFactory.Object);
+                schedulerFactory.Object, workspaceContextAccessor.Object);
             return (service, storage, scheduledTask, scheduler);
         }
+
+        private static PagedResult<TriggerHeader> CreateTriggerPage(JobKey jobKey, TriggerKey triggerKey) =>
+            new PagedResult<TriggerHeader>(new[]
+            {
+                new TriggerHeader(triggerKey, jobKey, null, null, default, DateTimeOffset.UtcNow, null, null, null,
+                    null, 0, null, null, 0)
+            }, false, 1);
+    }
+
+    [TestOf(typeof(ReminderEmailDeliveryReconciliationService))]
+    public class ReminderEmailDeliveryReconciliationServiceTests
+    {
+        [Test]
+        public async Task when_listing_unresolved_deliveries_then_paged_claims_are_returned()
+        {
+            var identity = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var deliveries = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDelivery>();
+            var indexes = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>();
+            var chunks = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>();
+            for (var invitationId = 1; invitationId <= 3; invitationId++)
+                ReminderEmailUnresolvedDeliveryStorage.Store(deliveries, indexes, chunks, identity, invitationId,
+                    EmailTextTemplateType.Reminder_NoResponse, null);
+            ReminderEmailUnresolvedDeliveryStorage.Remove(deliveries, indexes, chunks, identity, 1);
+
+            var service = CreateService(deliveries, indexes, chunks, Mock.Of<IInvitationService>());
+            var page = await service.GetUnresolvedAsync(identity, 1, 1);
+
+            Assert.That(page.TotalCount, Is.EqualTo(2));
+            Assert.That(page.Items, Has.Count.EqualTo(1));
+            Assert.That(page.Items[0].InvitationId, Is.EqualTo(3));
+        }
+
+        [TestCase(EmailTextTemplateType.Reminder_NoResponse, false)]
+        [TestCase(EmailTextTemplateType.Reminder_NoResponse, true)]
+        [TestCase(EmailTextTemplateType.RejectEmail, true)]
+        public async Task when_reconciling_unresolved_delivery_then_claim_is_released(
+            EmailTextTemplateType type, bool delivered)
+        {
+            var identity = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var deliveries = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDelivery>();
+            var indexes = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>();
+            var chunks = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>();
+            ReminderEmailUnresolvedDeliveryStorage.Store(deliveries, indexes, chunks, identity, 1, type, null);
+            var invitationService = new Mock<IInvitationService>();
+            invitationService.Setup(x => x.GetInvitation(1)).Returns(Create.Entity.Invitation(1,
+                Create.Entity.Assignment(email: "respondent@email.com")));
+            var service = CreateService(deliveries, indexes, chunks, invitationService.Object);
+
+            var reconciled = await service.ReconcileAsync(identity, 1, delivered);
+
+            Assert.That(reconciled, Is.True);
+            Assert.That(deliveries.GetById(ReminderEmailUnresolvedDelivery.GetStorageKey(identity, 1)), Is.Null);
+            Assert.That(ReminderEmailUnresolvedDeliveryStorage.GetCount(indexes, identity), Is.Zero);
+            invitationService.Verify(x => x.MarkInvitationAsReminded(1, string.Empty),
+                delivered && type != EmailTextTemplateType.RejectEmail ? Times.Once : Times.Never);
+            invitationService.Verify(x => x.MarkRejectedInterviewReminderSent(1, string.Empty),
+                delivered && type == EmailTextTemplateType.RejectEmail ? Times.Once : Times.Never);
+        }
+
+        private static ReminderEmailDeliveryReconciliationService CreateService(
+            IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery> deliveries,
+            IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex> indexes,
+            IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk> chunks,
+            IInvitationService invitationService) =>
+            new ReminderEmailDeliveryReconciliationService(deliveries, indexes, chunks,
+                new TestInMemoryKeyValueStorage<SendRemindersNowStatus>(), invitationService,
+                SendRemindersNowJobTests.CreateExecutionUnitOfWork());
     }
 }

@@ -564,6 +564,20 @@ class WebInterviewSettingsApi {
     sendRemindersNowStatus(questionnaireId, requestId, signal) {
         return this.http.get(`${this.base}/${questionnaireId}/sendReminders/${requestId}`, { signal })
     }
+
+    unresolvedReminderDeliveries(questionnaireId, offset = 0, limit = 100) {
+        return this.http.get(`${this.base}/${questionnaireId}/unresolvedReminderDeliveries`, {
+            params: { offset, limit },
+        })
+    }
+
+    reconcileUnresolvedReminderDelivery(questionnaireId, invitationId, delivered) {
+        return this.http.post(
+            `${this.base}/${questionnaireId}/unresolvedReminderDeliveries/${invitationId}`,
+            { delivered },
+            { headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() } }
+        )
+    }
 }
 
 class ExportSettings {

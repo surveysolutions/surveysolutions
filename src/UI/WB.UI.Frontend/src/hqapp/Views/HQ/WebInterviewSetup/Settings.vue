@@ -682,6 +682,10 @@ export default {
         this.reminderAbortController.abort()
     },
 
+    mounted() {
+        this.resumePendingReminderRequests()
+    },
+
     beforeMount() {
         var self = this
         self.questionnaireId = this.$config.model.questionnaireIdentity.id
@@ -1019,6 +1023,51 @@ export default {
         isMessageSupportedInterviewData(emailTemplate) {
             return emailTemplate.value == 'completeInterviewEmail'
         },
+        reminderRequestStorageKey(type) {
+            const identity = this.$config.model.questionnaireIdentity
+            const workspace = this.$store.getters.workspace || ''
+            const questionnaire = identity
+                ? `${identity.id}:${identity.version ?? ''}`
+                : this.questionnaireId
+            return `sendRemindersNow:${workspace}:${questionnaire}:${type}`
+        },
+        readPendingReminderRequest(type) {
+            try {
+                return window.localStorage.getItem(this.reminderRequestStorageKey(type))
+            } catch {
+                return null
+            }
+        },
+        storePendingReminderRequest(type, requestId) {
+            try {
+                window.localStorage.setItem(this.reminderRequestStorageKey(type), requestId)
+            } catch {
+                // Continue tracking the request in memory if browser storage is unavailable.
+            }
+        },
+        clearPendingReminderRequest(type) {
+            try {
+                window.localStorage.removeItem(this.reminderRequestStorageKey(type))
+            } catch {
+                // The terminal result was observed; stale local state is harmless on next load.
+            }
+        },
+        createReminderRequestId() {
+            const bytes = new Uint8Array(16)
+            window.crypto.getRandomValues(bytes)
+            bytes[6] = (bytes[6] & 0x0f) | 0x40
+            bytes[8] = (bytes[8] & 0x3f) | 0x80
+            const hex = Array.from(bytes, value => value.toString(16).padStart(2, '0')).join('')
+            return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
+        },
+        async resumePendingReminderRequests() {
+            for (const type of ['reminder_NoResponse', 'reminder_PartialResponse', 'rejectEmail']) {
+                const requestId = this.readPendingReminderRequest(type)
+                if (!requestId) continue
+                this.pendingReminderRequestIds[type] = requestId
+                await this.sendRemindersNow({ value: type })
+            }
+        },
         isReminderTemplate(emailTemplate) {
             return (
                 emailTemplate.value === 'reminder_NoResponse' ||
@@ -1031,9 +1080,13 @@ export default {
             if (signal.aborted || this.pendingReminderTypes[emailTemplate.value]) return
 
             this.pendingReminderTypes[emailTemplate.value] = true
-            const requestId = this.pendingReminderRequestIds[emailTemplate.value] || crypto.randomUUID()
-            this.pendingReminderRequestIds[emailTemplate.value] = requestId
+            let requestId = this.pendingReminderRequestIds[emailTemplate.value]
             try {
+                if (!requestId) {
+                    requestId = this.createReminderRequestId()
+                    this.pendingReminderRequestIds[emailTemplate.value] = requestId
+                }
+                this.storePendingReminderRequest(emailTemplate.value, requestId)
                 this.$store.dispatch('showProgress')
                 let response
                 try {
@@ -1102,6 +1155,7 @@ export default {
                 }
                 if (this.pendingReminderRequestIds[emailTemplate.value] === requestId) {
                     this.pendingReminderRequestIds[emailTemplate.value] = null
+                    this.clearPendingReminderRequest(emailTemplate.value)
                 }
             } catch (error) {
                 if (!signal.aborted) this.$errorHandler(error, this)

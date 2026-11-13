@@ -21,18 +21,21 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IEmailService emailService;
         private readonly ISendRemindersNowService sendRemindersNowService;
+        private readonly IReminderEmailDeliveryReconciliationService deliveryReconciliationService;
 
 
         public WebInterviewSettingsApiController(
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IEmailService emailService,
-            ISendRemindersNowService sendRemindersNowService)
+            ISendRemindersNowService sendRemindersNowService,
+            IReminderEmailDeliveryReconciliationService deliveryReconciliationService)
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.emailService = emailService;
             this.sendRemindersNowService = sendRemindersNowService;
+            this.deliveryReconciliationService = deliveryReconciliationService;
         }
 
         public class UpdatePageTemplateModel
@@ -287,6 +290,64 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
                 return NotFound();
 
             return Ok(status);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [Route(@"{id}/unresolvedReminderDeliveries")]
+        [HttpGet]
+        public async Task<IActionResult> GetUnresolvedReminderDeliveries(string id, int offset = 0, int limit = 100)
+        {
+            if (offset < 0 || limit < 1 || limit > 100)
+                return BadRequest();
+
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            if (questionnaireBrowseViewFactory.GetById(questionnaireIdentity) == null)
+                return NotFound();
+
+            var result = await deliveryReconciliationService.GetUnresolvedAsync(questionnaireIdentity, offset, limit)
+                .ConfigureAwait(false);
+            return Ok(result);
+        }
+
+        public class ReconcileReminderDeliveryModel
+        {
+            [Required] public bool? Delivered { get; set; }
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [ValidateAntiForgeryToken]
+        [Route(@"{id}/unresolvedReminderDeliveries/{invitationId:int}")]
+        [HttpPost]
+        public async Task<IActionResult> ReconcileUnresolvedReminderDelivery(string id, int invitationId,
+            [FromBody] ReconcileReminderDeliveryModel model)
+        {
+            if (!ModelState.IsValid || model?.Delivered == null)
+                return BadRequest(ModelState);
+
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            if (questionnaireBrowseViewFactory.GetById(questionnaireIdentity) == null)
+                return NotFound();
+
+            try
+            {
+                if (!await deliveryReconciliationService.ReconcileAsync(questionnaireIdentity, invitationId,
+                        model.Delivered.Value).ConfigureAwait(false))
+                    return NotFound();
+            }
+            catch (ReminderDeliveryInProgressException exception)
+            {
+                return Conflict(new { error = exception.Message });
+            }
+            catch (ReminderDeliveryReconciliationInProgressException exception)
+            {
+                return Conflict(new { error = exception.Message });
+            }
+
+            return NoContent();
         }
     }
 }

@@ -16,6 +16,12 @@ namespace WB.Core.Infrastructure.PlainStorage
 
         void Remove(TKey id);
 
+        void Remove(System.Collections.Generic.IEnumerable<TKey> ids)
+        {
+            foreach (var id in ids)
+                Remove(id);
+        }
+
         void Store(TEntity entity, TKey id);
     }
 }

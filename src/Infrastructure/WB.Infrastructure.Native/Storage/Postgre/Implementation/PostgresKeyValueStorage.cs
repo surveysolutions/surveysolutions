@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using System.Collections.Generic;
 using System.Data;
 using Humanizer;
 using WB.Core.Infrastructure.PlainStorage;
@@ -79,6 +80,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 throw new Exception(
                     $"Unexpected row count of deleted records. Expected to delete 1 row, but affected {queryResult} number of rows");
             }
+        }
+
+        public virtual void Remove(IEnumerable<string> ids)
+        {
+            var keys = ids.ToArray();
+            if (keys.Length > 0)
+                Connection.Execute($"DELETE FROM {TableName} WHERE id = ANY(@ids)", new { ids = keys });
         }
 
         public virtual void Store(TEntity view, string id)
