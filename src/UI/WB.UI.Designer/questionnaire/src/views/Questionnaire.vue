@@ -12,6 +12,13 @@
         <v-progress-linear :active="progressStore.getIsRunning" indeterminate color="#29d" height="3"
             style="position:fixed;top:0;left:0;right:0;z-index:9999" />
     </div>
+    <div v-if="globalNotice" class="designer-global-notice" role="status">
+        <span class="designer-global-notice-text">{{ globalNotice }}</span>
+        <button type="button" class="designer-global-notice-close" :aria-label="$t('QuestionnaireEditor.Close')"
+            @click="globalNoticeDismissed = true">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <div id="loading-logo" v-if="isActionRunning"></div>
     <confirm-dialog></confirm-dialog>
     <notifications position="top right">
@@ -80,6 +87,55 @@
         padding-right: 36px;
     }
 }
+
+.designer-global-notice {
+    position: fixed;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1060;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 300px;
+    max-width: 40%;
+    max-height: 30vh;
+    padding: 8px 12px 8px 16px;
+    background-color: #fff8d6;
+    border: 1px solid #fad540;
+    border-left: 4px solid #f0ad00;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    color: #333;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 20px;
+    letter-spacing: normal;
+    text-align: left;
+    text-transform: none;
+
+    .designer-global-notice-text {
+        flex: 1;
+        overflow-y: auto;
+        overflow-wrap: anywhere;
+        white-space: pre-line;
+    }
+
+    .designer-global-notice-close {
+        flex: none;
+        padding: 0;
+        border: 0;
+        background: none;
+        color: #666;
+        font-size: 20px;
+        line-height: 20px;
+        cursor: pointer;
+
+        &:hover {
+            color: #000;
+        }
+    }
+}
 </style>
 
 <script>
@@ -118,7 +174,8 @@ export default {
     },
     data() {
         return {
-            showCheatSheet: false
+            showCheatSheet: false,
+            globalNoticeDismissed: false
         };
     },
     setup() {
@@ -203,6 +260,9 @@ export default {
         },
         cheatSheetVisible() {
             return this.showCheatSheet;
+        },
+        globalNotice() {
+            return this.globalNoticeDismissed ? null : this.currentUser.globalNotice;
         }
     },
     methods: {

@@ -274,4 +274,22 @@
   <data name="IncludeScenarios" xml:space="preserve">
       <value>تضمين السيناريوهات</value>
   </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>إشعار عام</value>
+  </data>
+  <data name="GlobalNoticeDescription" xml:space="preserve">
+    <value>تُعرض الرسالة أعلى الصفحات لجميع مستخدمي Designer. احفظ رسالة فارغة لإزالتها.</value>
+  </data>
+  <data name="GlobalNoticeMessage" xml:space="preserve">
+    <value>الرسالة</value>
+  </data>
+  <data name="GlobalNoticeMessageTooLong" xml:space="preserve">
+    <value>يجب ألا تتجاوز الرسالة {1} حرفًا.</value>
+  </data>
+  <data name="GlobalNoticeUpdated" xml:space="preserve">
+    <value>تم تحديث الإشعار العام بنجاح</value>
+  </data>
+  <data name="GlobalNoticeRemoved" xml:space="preserve">
+    <value>تمت إزالة الإشعار العام بنجاح</value>
+  </data>
 </root>

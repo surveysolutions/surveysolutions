@@ -109,6 +109,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected abstract IEnumerable<CategoricalMultiOptionViewModel<TOptionValue>> GetOptions(IStatefulInterview interview);
         protected abstract bool IsInterviewAnswer(TInterviewAnswer interviewAnswer, TOptionValue optionValue);
         protected virtual void Init(IStatefulInterview interview, IQuestionnaire questionnaire) { }
+
+        protected IQuestionnaire GetQuestionnaire(IStatefulInterview interview)
+            => this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
         protected virtual TInterviewAnswer[] FilterAnsweredOptions(TInterviewAnswer[] answeredOptions) => answeredOptions;
         protected virtual void AddCustomViewModels(CompositeCollection<ICompositeEntity> compositeCollection) { }
 

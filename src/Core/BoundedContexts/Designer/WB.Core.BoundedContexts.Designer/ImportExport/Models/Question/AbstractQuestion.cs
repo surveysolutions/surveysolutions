@@ -14,6 +14,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models.Question
 
         public bool HideIfDisabled { get; set; }
 
+        public bool RandomizeOrder { get; set; }
+
         public string? Instructions { get; set; }
 
         public bool HideInstructions { get; set; }

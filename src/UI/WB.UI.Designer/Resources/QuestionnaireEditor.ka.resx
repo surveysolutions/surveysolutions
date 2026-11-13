@@ -1628,4 +1628,16 @@
     <data name="Stick" xml:space="preserve">
         <value>მიმაგრება</value>
     </data>
+    <data name="RandomizeOrder" xml:space="preserve">
+        <value>შემთხვევითი რიგი</value>
+    </data>
+    <data name="RandomizeOrderTooltip" xml:space="preserve">
+        <value>ამ ელემენტის ჩვენების რიგი შემთხვევითია მეზობელ ელემენტებთან ერთად, რომლებიც მონიშნულია 'შემთხვევითი რიგი'</value>
+    </data>
+    <data name="RandomizeAnswerOptions" xml:space="preserve">
+        <value>პასუხის ვარიანტების შემთხვევითი რიგი</value>
+    </data>
+    <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+        <value>პასუხის ვარიანტები ნაჩვენებია შემთხვევითი რიგით, რომელიც ინტერვიუს ფარგლებში უცვლელი რჩება</value>
+    </data>
 </root>

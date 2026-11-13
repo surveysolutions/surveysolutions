@@ -40,6 +40,10 @@ namespace Main.Core.Entities.SubEntities
 
         public bool HideIfDisabled { get; set; }
 
+        public bool RandomizeOrder { get; set; }
+
+        public bool RandomizeAnswerOptions { get; set; }
+
         public bool Featured { get; set; }
 
         public string? Instructions { get; set; }

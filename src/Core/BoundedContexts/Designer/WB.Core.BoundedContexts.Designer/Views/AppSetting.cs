@@ -8,6 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Views
     public class AppSetting : IStorableEntity
     {
         public static readonly string AssistantSettingsKey = "assistantsettings";
+        public static readonly string GlobalNoticeKey = "globalnotice";
     }
     
     

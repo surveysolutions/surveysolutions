@@ -1835,4 +1835,16 @@ Pamijet Tabelë dhe Matricë mbështeten vetëm në sondazhin në internet, tabl
   <data name="Stick" xml:space="preserve">
       <value>Bashkëngjit</value>
   </data>
+  <data name="RandomizeOrder" xml:space="preserve">
+      <value>Rend i rastësishëm</value>
+  </data>
+  <data name="RandomizeOrderTooltip" xml:space="preserve">
+      <value>Rendi i shfaqjes së këtij elementi përzihet rastësisht së bashku me elementet fqinje të shënuara me 'Rend i rastësishëm'</value>
+  </data>
+  <data name="RandomizeAnswerOptions" xml:space="preserve">
+      <value>Rend i rastësishëm i opsioneve të përgjigjes</value>
+  </data>
+  <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+      <value>Opsionet e përgjigjes shfaqen në një rend të rastësishëm që mbetet i njëjtë brenda një interviste</value>
+  </data>
 </root>

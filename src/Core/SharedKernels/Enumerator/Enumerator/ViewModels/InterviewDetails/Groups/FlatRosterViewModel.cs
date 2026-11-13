@@ -67,7 +67,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             
             var statefulInterview = this.interviewRepository.GetOrThrow(this.interviewId);
             var interviewRosterInstances = statefulInterview
-                .GetRosterInstances(this.navigationState.CurrentGroup, this.Identity.Id)
+                .OrderForDisplay(this.navigationState.CurrentGroup,
+                    statefulInterview.GetRosterInstances(this.navigationState.CurrentGroup, this.Identity.Id))
                 .ToList();
 
             var rosterIdentitiesByViewModels = this.shownRosterInstances.Select(kv => kv.Key).ToList();

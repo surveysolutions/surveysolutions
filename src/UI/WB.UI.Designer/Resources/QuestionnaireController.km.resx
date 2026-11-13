@@ -274,4 +274,22 @@
     <data name="IncludeScenarios" xml:space="preserve">
         <value>រួមបញ្ចូលសេណារីយ៉ូ</value>
     </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>សេចក្តីជូនដំណឹងទូទៅ</value>
+  </data>
+  <data name="GlobalNoticeDescription" xml:space="preserve">
+    <value>សារនេះត្រូវបានបង្ហាញនៅផ្នែកខាងលើនៃទំព័រសម្រាប់អ្នកប្រើប្រាស់ Designer ទាំងអស់។ រក្សាទុកសារទទេដើម្បីលុបវាចេញ។</value>
+  </data>
+  <data name="GlobalNoticeMessage" xml:space="preserve">
+    <value>សារ</value>
+  </data>
+  <data name="GlobalNoticeMessageTooLong" xml:space="preserve">
+    <value>សារមិនត្រូវលើសពី {1} តួអក្សរទេ។</value>
+  </data>
+  <data name="GlobalNoticeUpdated" xml:space="preserve">
+    <value>បានធ្វើបច្ចុប្បន្នភាពសេចក្តីជូនដំណឹងទូទៅដោយជោគជ័យ</value>
+  </data>
+  <data name="GlobalNoticeRemoved" xml:space="preserve">
+    <value>បានលុបសេចក្តីជូនដំណឹងទូទៅដោយជោគជ័យ</value>
+  </data>
 </root>

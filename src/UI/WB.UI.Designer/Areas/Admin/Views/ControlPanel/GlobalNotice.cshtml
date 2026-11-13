@@ -1,0 +1,36 @@
+@using WB.UI.Shared.Web.Extensions
+@using WB.Core.BoundedContexts.Designer.Implementation.Services
+@using WB.UI.Designer.Resources
+@model WB.UI.Designer.Models.ControlPanel.GlobalNoticeModel
+@{
+    Layout = "Layout.ControlPanel";
+    ViewBag.Title = $"{QuestionnaireController.ControlPanel}: {QuestionnaireController.GlobalNotice}";
+}
+
+<h1 class="page-header">@QuestionnaireController.GlobalNotice</h1>
+<p>@QuestionnaireController.GlobalNoticeDescription</p>
+
+@if (TempData.ContainsKey(Alerts.SUCCESS))
+{
+    <div class="alert alert-success">@TempData[Alerts.SUCCESS]</div>
+}
+
+<form method="post">
+    @Html.AntiForgeryToken()
+    <fieldset class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Message, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-6">
+                @Html.TextAreaFor(x => x.Message, 6, 0, new { @class = "form-control", maxlength = GlobalNoticeService.MaxMessageLength })
+            </div>
+            <div class="col-sm-4">
+                @Html.ValidationMessageFor(x => x.Message, null, new { @class = "help-block" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2">
+                <button type="submit" class="btn btn-primary">@QuestionnaireEditor.Save</button>
+            </div>
+        </div>
+    </fieldset>
+</form>

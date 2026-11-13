@@ -1747,4 +1747,16 @@
   <data name="Stick" xml:space="preserve">
       <value>Прикрепить</value>
   </data>
+  <data name="RandomizeOrder" xml:space="preserve">
+      <value>Случайный порядок</value>
+  </data>
+  <data name="RandomizeOrderTooltip" xml:space="preserve">
+      <value>Порядок отображения этого элемента перемешивается вместе с соседними элементами, отмеченными 'Случайный порядок'</value>
+  </data>
+  <data name="RandomizeAnswerOptions" xml:space="preserve">
+      <value>Случайный порядок вариантов ответа</value>
+  </data>
+  <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+      <value>Варианты ответа отображаются в случайном порядке, который не меняется в рамках интервью</value>
+  </data>
 </root>

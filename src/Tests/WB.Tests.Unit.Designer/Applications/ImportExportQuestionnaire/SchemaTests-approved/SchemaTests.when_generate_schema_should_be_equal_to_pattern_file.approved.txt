@@ -204,6 +204,9 @@
             "HideIfDisabled": {
               "type": "boolean"
             },
+            "RandomizeOrder": {
+              "type": "boolean"
+            },
             "Instructions": {
               "type": [
                 "null",
@@ -521,6 +524,9 @@
                 "null",
                 "string"
               ]
+            },
+            "RandomizeAnswerOptions": {
+              "type": "boolean"
             }
           }
         }
@@ -635,6 +641,9 @@
                 "null",
                 "string"
               ]
+            },
+            "RandomizeAnswerOptions": {
+              "type": "boolean"
             }
           }
         }
@@ -702,6 +711,9 @@
               ]
             },
             "HideIfDisabled": {
+              "type": "boolean"
+            },
+            "RandomizeOrder": {
               "type": "boolean"
             },
             "Title": {
@@ -832,6 +844,9 @@
               ]
             },
             "HideIfDisabled": {
+              "type": "boolean"
+            },
+            "RandomizeOrder": {
               "type": "boolean"
             }
           }

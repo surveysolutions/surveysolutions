@@ -1690,4 +1690,16 @@ Ingresaste una entrada no válida. Cada línea debe seguir el formato: "Título.
   <data name="Stick" xml:space="preserve">
       <value>Adherir</value>
   </data>
+  <data name="RandomizeOrder" xml:space="preserve">
+      <value>Orden aleatorio</value>
+  </data>
+  <data name="RandomizeOrderTooltip" xml:space="preserve">
+      <value>El orden de visualización de este elemento se aleatoriza junto con los elementos vecinos marcados con 'Orden aleatorio'</value>
+  </data>
+  <data name="RandomizeAnswerOptions" xml:space="preserve">
+      <value>Orden aleatorio de opciones de respuesta</value>
+  </data>
+  <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+      <value>Las opciones de respuesta se muestran en un orden aleatorio que se mantiene igual dentro de una entrevista</value>
+  </data>
 </root>

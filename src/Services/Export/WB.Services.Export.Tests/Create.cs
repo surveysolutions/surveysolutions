@@ -338,6 +338,7 @@ namespace WB.Services.Export.Tests
             return new InterviewsExporter(new ExportQuestionService(new GeographySerializer(NullLogger<GeographySerializer>.Instance)),
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 Create.InterviewErrorsExporter(),
+                new InterviewItemsOrderExporter(csvWriter ?? Mock.Of<ICsvWriter>()),
                 csvWriter ?? Mock.Of<ICsvWriter>(),
                 Mock.Of<IOptions<ExportServiceSettings>>(s => s.Value == new ExportServiceSettings()),
                 Mock.Of<ILogger<InterviewsExporter>>());

@@ -38,6 +38,7 @@ export function updateQuestion(
             variableLabel: question.variableLabel,
             enablementCondition: question.enablementCondition,
             hideIfDisabled: question.hideIfDisabled,
+            randomizeOrder: question.randomizeOrder,
             instructions: question.instructions,
             hideInstructions: question.hideInstructions,
             optionsFilterExpression: question.optionsFilterExpression,
@@ -83,6 +84,10 @@ export function updateQuestion(
             }
             command.showAsListThreshold = question.showAsListThreshold;
             command.showAsList = question.showAsList;
+            command.randomizeAnswerOptions =
+                !command.isFilteredCombobox &&
+                !command.cascadeFromQuestionId &&
+                (question.randomizeAnswerOptions || false);
             break;
         case 'MultyOption':
             command.areAnswersOrdered = question.areAnswersOrdered;
@@ -92,6 +97,9 @@ export function updateQuestion(
             command.yesNoView = question.yesNoView;
             command.isFilteredCombobox = question.isFilteredCombobox || false;
             command.categoriesId = question.categoriesId;
+            command.randomizeAnswerOptions =
+                !command.isFilteredCombobox &&
+                (question.randomizeAnswerOptions || false);
 
             if (
                 shouldGetOptionsOnServer ||
@@ -139,6 +147,9 @@ export function updateQuestion(
 
     return commandCall(commandName, command).then(async response => {
         //TODO: check if everything is published
+        if (question.type === 'SingleOption' || question.type === 'MultyOption') {
+            question.randomizeAnswerOptions = command.randomizeAnswerOptions;
+        }
         emitter.emit('questionUpdated', question);
     });
 }

@@ -326,6 +326,12 @@
                         @click="showEnablingConditions = false; activeRoster.enablementCondition = ''; activeRoster.hideIfDisabled = false;"></button>
                 </div>
             </div>
+            <div class="form-group" v-if="!currentChapter.isCover">
+                <input id="cb-randomizeOrder" type="checkbox" class="wb-checkbox"
+                    v-model="activeRoster.randomizeOrder" />
+                <label for="cb-randomizeOrder" :title="$t('QuestionnaireEditor.RandomizeOrderTooltip')"><span></span>{{
+                    $t('QuestionnaireEditor.RandomizeOrder') }}</label>
+            </div>
         </div>
         <div class="form-buttons-holder">
             <div class="pull-left">

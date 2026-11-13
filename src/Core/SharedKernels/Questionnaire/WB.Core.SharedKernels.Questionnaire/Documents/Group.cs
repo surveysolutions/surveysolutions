@@ -50,6 +50,8 @@ namespace Main.Core.Entities.SubEntities
 
         public bool HideIfDisabled { get; set; }
 
+        public bool RandomizeOrder { get; set; }
+
         [Obsolete("Use DisplayMode property")]
         public bool IsFlatMode
         {
@@ -186,6 +188,7 @@ namespace Main.Core.Entities.SubEntities
                 IsRoster = this.IsRoster,
                 CustomRosterTitle = this.CustomRosterTitle,
                 HideIfDisabled = this.HideIfDisabled,
+                RandomizeOrder = this.RandomizeOrder,
                 DisplayMode = this.DisplayMode,
                 RosterSizeQuestionId = this.RosterSizeQuestionId,
                 RosterSizeSource = this.RosterSizeSource,

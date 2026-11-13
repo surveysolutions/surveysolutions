@@ -133,6 +133,16 @@
             </CategoricalFilterExpression>
         </div>
     </div>
+    <div class="row" v-if="!activeQuestion.isFilteredCombobox">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <input id="cb-randomizeAnswerOptions" type="checkbox" class="wb-checkbox"
+                    v-model="activeQuestion.randomizeAnswerOptions" />
+                <label for="cb-randomizeAnswerOptions" :title="$t('QuestionnaireEditor.RandomizeAnswerOptionsTooltip')"><span></span>{{
+                    $t('QuestionnaireEditor.RandomizeAnswerOptions') }}</label>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-5">
             <div class="checkbox checkbox-in-column">

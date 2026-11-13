@@ -63,6 +63,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfParentsStartingFromTop = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildStaticTexts = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly ConcurrentDictionary<Guid, bool> cacheOfHasRandomizedChildren = new ConcurrentDictionary<Guid, bool>();
 
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<int>> cacheOfMultiSelectAnswerOptionsAsValues = new ConcurrentDictionary<Guid, ReadOnlyCollection<int>>();
 
@@ -1088,6 +1089,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
 
             return ((entity as IConditional)?.HideIfDisabled ?? false) || shouldBeHiddenByParentHideIfDisabled;
+        }
+
+        public bool IsOrderRandomized(Guid entityId)
+        {
+            if (!this.EntityCache.TryGetValue(entityId, out var entity))
+                return false;
+
+            if (entity is not IConditional { RandomizeOrder: true })
+                return false;
+
+            return !IsCoverPage(entityId) && !(entity.GetParent() is { } parent && IsCoverPage(parent.PublicKey));
+        }
+
+        public bool HasRandomizedChildren(Guid groupId)
+            => this.cacheOfHasRandomizedChildren.GetOrAdd(groupId, id =>
+                !IsCoverPage(id) && this.GetChildEntityIds(id).Any(this.IsOrderRandomized));
+
+        public bool ShouldRandomizeAnswerOptions(Guid questionId)
+        {
+            if (!this.EntityCache.TryGetValue(questionId, out var entity))
+                return false;
+
+            return entity is IQuestion { RandomizeAnswerOptions: true } question
+                   && question.QuestionType is QuestionType.SingleOption or QuestionType.MultyOption
+                   && question.IsFilteredCombobox != true
+                   && !question.CascadeFromQuestionId.HasValue;
         }
 
         public bool IsFlatRoster(Guid entityId)

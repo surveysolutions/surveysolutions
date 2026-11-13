@@ -274,4 +274,22 @@
     <data name="IncludeScenarios" xml:space="preserve">
         <value>სცენარების ჩართვა</value>
         </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>გლობალური შეტყობინება</value>
+  </data>
+  <data name="GlobalNoticeDescription" xml:space="preserve">
+    <value>შეტყობინება გამოჩნდება გვერდების ზედა ნაწილში Designer-ის ყველა მომხმარებლისთვის. მის წასაშლელად შეინახეთ ცარიელი შეტყობინება.</value>
+  </data>
+  <data name="GlobalNoticeMessage" xml:space="preserve">
+    <value>შეტყობინება</value>
+  </data>
+  <data name="GlobalNoticeMessageTooLong" xml:space="preserve">
+    <value>შეტყობინება არ უნდა აღემატებოდეს {1} სიმბოლოს.</value>
+  </data>
+  <data name="GlobalNoticeUpdated" xml:space="preserve">
+    <value>გლობალური შეტყობინება წარმატებით განახლდა</value>
+  </data>
+  <data name="GlobalNoticeRemoved" xml:space="preserve">
+    <value>გლობალური შეტყობინება წარმატებით წაიშალა</value>
+  </data>
 </root>

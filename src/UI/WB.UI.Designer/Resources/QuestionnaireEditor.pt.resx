@@ -1629,4 +1629,16 @@ Por favor, verifique sua conexão de rede ou entre em contato com o suporte de T
     <data name="Stick" xml:space="preserve">
         <value>Anexar</value>
     </data>
+    <data name="RandomizeOrder" xml:space="preserve">
+        <value>Ordem aleatória</value>
+    </data>
+    <data name="RandomizeOrderTooltip" xml:space="preserve">
+        <value>A ordem de exibição deste item é aleatória juntamente com os itens vizinhos marcados com 'Ordem aleatória'</value>
+    </data>
+    <data name="RandomizeAnswerOptions" xml:space="preserve">
+        <value>Ordem aleatória das opções de resposta</value>
+    </data>
+    <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+        <value>As opções de resposta são exibidas em uma ordem aleatória que permanece a mesma dentro de uma entrevista</value>
+    </data>
 </root>

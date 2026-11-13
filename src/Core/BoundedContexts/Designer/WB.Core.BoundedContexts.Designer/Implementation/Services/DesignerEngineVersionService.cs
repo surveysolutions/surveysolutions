@@ -402,13 +402,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion,
+                Version = 37,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
                     (
                         hasQuestionnaire : questionnaire => questionnaire.Find<NumericQuestion>(q => q.IsNonNegative).Any(),
                         description : "Non-negative numeric question"
+                    )
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion,
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire : questionnaire => questionnaire.Find<IConditional>(c => c.RandomizeOrder).Any(),
+                        description : "Randomized order of questionnaire items"
+                    ),
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire : questionnaire => questionnaire.Find<IQuestion>(q => q.RandomizeAnswerOptions).Any(),
+                        description : "Randomized order of answer options"
                     )
                 }
             },
