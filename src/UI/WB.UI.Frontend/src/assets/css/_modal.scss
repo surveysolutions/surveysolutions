@@ -97,7 +97,7 @@
 
 .modal-dialog {
     display: inline-block;
-    text-align: left;
+    text-align: start;
     vertical-align: middle;
     width: 660px;
 }
@@ -186,7 +186,7 @@
 
     .modal-footer {
         border: none;
-        text-align: left;
+        text-align: start;
         padding: 20px;
 
         .btn-link {

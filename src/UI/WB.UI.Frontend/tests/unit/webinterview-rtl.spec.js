@@ -178,6 +178,8 @@ test('actual styles mirror desktop and mobile sidebar positions and retain numer
             assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] input[inputmode=decimal]', 'direction'), ['ltr'])
             assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .flatpickr-calendar', 'direction'), ['ltr'])
             assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .btn-back::before', 'transform'), ['scaleX(-1)'])
+            assert.deepEqual(declarations(root, '.modal-dialog', 'text-align'), ['start'])
+            assert.deepEqual(declarations(root, '.modal-content .modal-footer', 'text-align'), ['start'])
             assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .table-view .ag-theme-customStyles .ag-grid-pinned-right-cells .ag-header-cell', 'border-left'), ['1px solid rgba(0, 0, 0, 0.3)'])
         }
     }

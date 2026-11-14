@@ -69,6 +69,8 @@ HQ review opts into this page scope through `ViewData["WebInterviewPage"]` in it
 Razor view, before the app and roster grids initialize. The shared HQ layout
 leaves other pages unchanged. Review filters, search results and navigation mirror
 with the questionnaire; the audio-audit panel uses logical positioning.
+Shared dialogs use logical text alignment so their content and action buttons
+follow the inherited direction even when appended or teleported to `body`.
 
 Run `npm run test:rtl` and `npm run build` from `src/UI/WB.UI.Frontend`.
 Check Arabic and English on desktop and mobile, including start/resume/finish,
