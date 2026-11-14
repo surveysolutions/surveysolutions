@@ -1,7 +1,12 @@
 ﻿@using WB.UI.Shared.Web.Extensions
 @using System.Globalization
+@{
+    var isWebInterviewPage = ViewData["WebInterviewPage"] is true;
+}
 <!DOCTYPE html>
-<html lang="@CultureInfo.CurrentUICulture.Name">
+<html lang="@CultureInfo.CurrentUICulture.Name"
+      dir="@(isWebInterviewPage ? (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr") : null)"
+      class="@(isWebInterviewPage ? "web-interview-page" : null)">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,8 +15,7 @@
     <title>@ViewBag.Title</title>
     <partial name="GlobalSettings" />
     <locale component="hq"></locale>
-    @RenderSection("scripts", false)
-  <script type="module" crossorigin src="/js/markup.js"></script>
+    @RenderSection("scripts", false)  <script type="module" crossorigin src="/js/markup.js"></script>
   <script type="module" crossorigin src="/js/vendor-jquery.js"></script>
   <script type="module" crossorigin src="/js/vendor-bootstrap.js"></script>
   <script type="module" crossorigin src="/js/vendor-markdown-sanitize.js"></script>

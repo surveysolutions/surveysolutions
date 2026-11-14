@@ -28,8 +28,8 @@ function declarations(root, selector, property) {
     return values
 }
 
-async function componentStyles(name) {
-    const filename = fileURLToPath(new URL(`src/webinterview/components/${name}.vue`, frontend))
+async function componentStyles(name, folder = 'webinterview/components') {
+    const filename = fileURLToPath(new URL(`src/${folder}/${name}.vue`, frontend))
     const { descriptor, errors } = parse(readFileSync(filename, 'utf8'), { filename })
     assert.deepEqual(errors, [])
     const style = descriptor.styles[0]
@@ -222,6 +222,60 @@ test('saved numeric roster answers are isolated in LTR while text answers inheri
             }
         }
     }
+})
+
+test('HQ review mirrors filters, navigation and flags while preserving readonly sprite coordinates', async () => {
+    const file = 'src/assets/css/markup-interview-review.scss'
+    const compiled = sass.compile(fileURLToPath(new URL(file, frontend)), { logger: sass.Logger.silent })
+    const { root } = await transform(compiled.css, file)
+    for (const [selector, positions] of [
+        ['.web-interview-for-supervisor .content', ['342px', '282px', '-330px']],
+        ['.web-interview-for-supervisor .filters', ['-282px']],
+        ['.web-interview-for-supervisor.show-filters .filters', ['0']],
+        ['.web-interview-for-supervisor.show-content .content', ['12px']],
+        ['.web-interview-for-supervisor.fullscreen-hidden-content .content', ['-330px']],
+        ['.web-interview-for-supervisor.fullscreen-hidden-filters .filters', ['-282px']],
+        ['.filters-results.active', ['342px']],
+        ['.web-interview-for-supervisor .filters-results.active', ['282px']],
+    ]) {
+        for (const position of positions) {
+            assert.ok(declarations(root, `${ltr} ${selector}`, 'left').includes(position), `${selector}: ${position}`)
+            assert.ok(declarations(root, `${rtl} ${selector}`, 'right').includes(position), `${selector}: ${position}`)
+        }
+        assert.deepEqual(declarations(root, `${rtl} ${selector}`, 'left'), [])
+    }
+    assert.deepEqual(declarations(root, `${rtl} .question.with-flag`, 'background-position'), ['right top'])
+    assert.deepEqual(declarations(root, `${ltr} .question.with-flag`, 'background-position'), ['left top'])
+    let spriteCount = 0
+    postcss.parse(compiled.css).walkDecls('background-position', declaration => {
+        if (declaration.prev()?.type !== 'comment' || declaration.prev().text !== 'rtl:ignore') return
+        spriteCount++
+        for (const selector of declaration.parent.selectors) {
+            assert.ok(declarations(root, selector, declaration.prop).includes(declaration.value))
+            assert.deepEqual(declarations(root, `${rtl} ${selector}`, declaration.prop), [])
+        }
+    })
+    assert.equal(spriteCount, 6)
+})
+
+test('HQ review audio panel uses logical edges and text alignment', async () => {
+    const root = await componentStyles('AudioAuditPanel', 'hqapp/Views/HQ/Interview')
+    const panel = '.audio-audit-panel[data-v-rtl-test]'
+    assert.deepEqual(declarations(root, panel, 'inset-inline-end'), ['0'])
+    assert.deepEqual(declarations(root, panel, 'inset-inline-start'), ['0'])
+    assert.deepEqual(declarations(root, panel, 'right'), [])
+    assert.deepEqual(declarations(root, panel, 'border-inline-start'), ['1px solid #d9d9d9', '0'])
+    assert.deepEqual(declarations(root, '.playlist-item[data-v-rtl-test]', 'text-align'), ['start'])
+})
+
+test('only HQ review opts into culture-based RTL in the shared layout before scripts load', () => {
+    const view = readFileSync(new URL('../WB.UI.Headquarters.Core/Views/Interview/Review.cshtml', frontend), 'utf8')
+    assert.match(view, /ViewData\["WebInterviewPage"\] = true;/)
+    const layout = readFileSync(new URL('../WB.UI.Headquarters.Core/Views/Shared/_Layout.Template.cshtml', frontend), 'utf8')
+    assert.match(layout, /var isWebInterviewPage = ViewData\["WebInterviewPage"\] is true;/)
+    assert.match(layout, /dir="@\(isWebInterviewPage \? \(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft \? "rtl" : "ltr"\) : null\)"/)
+    assert.match(layout, /class="@\(isWebInterviewPage \? "web-interview-page" : null\)"/)
+    assert.ok(layout.indexOf('dir=') < layout.indexOf('<script'))
 })
 
 test('all interview page templates select direction from UI culture before the app mounts', () => {

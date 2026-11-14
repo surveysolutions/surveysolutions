@@ -6,7 +6,7 @@ export default function webInterviewRtl() {
         postcssPlugin: 'webinterview-rtl',
         async Once(root, { result }) {
             const file = result.opts.from?.replaceAll('\\', '/')
-            if (!/\/assets\/css\/markup(?:-web-interview)?\.scss$/.test(file ?? '')) return
+            if (!/\/assets\/css\/markup(?:-web-interview|-interview-review)?\.scss$/.test(file ?? '')) return
 
             await postcss([rtlcss({
                 ltrPrefix: ':where(html:not(.web-interview-page[dir="rtl"]))',

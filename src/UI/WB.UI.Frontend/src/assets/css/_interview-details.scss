@@ -6,13 +6,14 @@
         @include gradient-horizontal($gray-super-light, $gray-super-light);
         background-repeat: repeat-y;
         background-size: 12px 100%;
+        background-position: left top;
 
         .question-editor .button-flag {
-            background-position: 0 0;
+            @include sprite-position(0 0);
 
             &:hover,
             &:focus {
-                background-position: -19px 0;
+                @include sprite-position(-19px 0);
             }
         }
     }
@@ -416,23 +417,23 @@
 .readonly {
     input.wb-checkbox {
         &:checked:disabled~label .tick {
-            background-position: -654px 2px;
+            @include sprite-position(-654px 2px);
         }
 
         &:checked:disabled~label:hover .tick,
         &:checked:disabled~label:focus .tick {
-            background-position: -695px 2px;
+            @include sprite-position(-695px 2px);
         }
     }
 
     input.wb-radio {
         &:checked:disabled+label .tick {
-            background-position: -736px 2px;
+            @include sprite-position(-736px 2px);
         }
 
         &:checked:disabled+label:hover .tick,
         &:checked:disabled+label:focus .tick {
-            background-position: -777px 2px;
+            @include sprite-position(-777px 2px);
         }
     }
 }
