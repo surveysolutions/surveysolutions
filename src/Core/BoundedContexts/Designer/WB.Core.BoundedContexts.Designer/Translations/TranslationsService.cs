@@ -23,6 +23,8 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Utils;
+using Regex = System.Text.RegularExpressions.Regex;
+using RegexOptions = System.Text.RegularExpressions.RegexOptions;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
@@ -416,8 +418,31 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             };
         }
 
+        // Bidi embeddings, overrides and isolates (LRE, RLE, PDF, LRO, RLO, LRI, RLI, FSI, PDI)
+        // are stateful invisible characters that are often added when RTL text mixed with Latin is edited or pasted
+        private static readonly Regex BidiEmbeddingControlsRegex =
+            new Regex("[\u202A-\u202E\u2066-\u2069]", RegexOptions.Compiled);
+
+        // Bidi marks (LRM, RLM, ALM) are harmless in text, but break substitutions and html tags when placed inside them
+        private const string BidiMarks = "\u200E\u200F\u061C";
+        private static readonly Regex BidiMarksRegex =
+            new Regex($"[{BidiMarks}]", RegexOptions.Compiled);
+        private static readonly Regex SubstitutionOrHtmlTagRegex =
+            new Regex($@"%[\w{BidiMarks}]+%|<[{BidiMarks}/]*[A-Za-z][^<>]*>", RegexOptions.Compiled);
+
+        private static string? RemoveInvisibleBidiControls(string? value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return value;
+
+            var result = BidiEmbeddingControlsRegex.Replace(value, string.Empty);
+            return SubstitutionOrHtmlTagRegex.Replace(result, m => BidiMarksRegex.Replace(m.Value, string.Empty));
+        }
+
         private string GetCleanedValue(TranslationType translationType, bool isGroup, string? value)
         {
+            value = RemoveInvisibleBidiControls(value);
+
             switch (translationType)
             {
                 case TranslationType.Title:
