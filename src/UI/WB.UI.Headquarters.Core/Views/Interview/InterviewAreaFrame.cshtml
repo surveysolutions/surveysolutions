@@ -6,7 +6,8 @@
     Layout = null;
 }
 <!DOCTYPE html>
-<html>
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name"
+      dir="@(System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -35,7 +36,8 @@
             color: darkorange;
         }
         #messageDiv ul{
-            padding: 0 0 0 6px;
+            padding: 0;
+            padding-inline-start: 6px;
             max-height: 60px;
             overflow: hidden;
             overflow-y: auto;

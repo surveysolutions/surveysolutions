@@ -42,33 +42,36 @@ And then, the main app is compiled. During development, `shared_vendor.dll.js` w
 
 There are 2 webpack configuration files in the `.build` directory, one for `shared_vendor.dll.js` and another for application entries.
 
-# Web interview RTL
+# Headquarters and web interview RTL
 
-Web interview pages, HQ interview review and WebTester use the server-resolved UI culture for their
-HTML `lang` and `dir`. The existing request-localization providers select that
+All HQ layouts (including login, downloads, installation, maintenance and errors),
+web interview pages and WebTester use the server-resolved UI culture for their
+HTML `lang` and `dir`, before scripts and grids initialize. The existing request-localization providers select that
 culture (including the browser's `Accept-Language`, unless a culture query
 parameter or cookie takes precedence). Arabic selects RTL; changing the
 questionnaire translation does not change direction in this first version.
 Designer and questionnaire documents have no RTL setting.
 
 Vite uses `tools/postcss-webinterview-rtl.js` in `WB.UI.Frontend` to generate both
-directions for `markup.scss`, `markup-web-interview.scss` and `markup-interview-review.scss`. RTL rules only apply
-to `html.web-interview-page[dir="rtl"]`; other HQ pages retain LTR. Zero-specificity
-prefixes preserve the existing CSS cascade. Vendor CSS is not transformed:
+directions for `markup.scss`, `markup-specific.scss`, `markup-web-interview.scss`
+and `markup-interview-review.scss`. RTL rules apply to `html[dir="rtl"]`;
+LTR and pages without `dir` retain the original styles. Zero-specificity
+prefixes preserve the existing CSS cascade. Separately loaded vendor CSS is not transformed:
 AG Grid uses its native RTL option, while exceptions and toast adjustments live in
 `_web-interview-rtl.scss`. Use the `sprite-position` Sass mixin for physical
 coordinates within sprite sheets. Other background positions (including roster
 error and warning markers) mirror with their tooltip targets. Saved numeric
 roster answers use `<bdi dir="ltr">` to preserve sign and digit order.
 The date picker retains LTR day order and native arrow-key navigation, with
-localized month/day labels. Numeric inputs, URLs and coordinates also retain LTR.
+localized month/day labels. Numeric inputs, date inputs, URLs and coordinates also retain LTR.
 Scoped Vue styles are not processed by the RTL generator. Completion-page labels,
 error stripes and reconnect-banner spacing use logical CSS properties so they
 follow the page direction without separate RTL overrides.
-HQ review opts into this page scope through `ViewData["WebInterviewPage"]` in its
-Razor view, before the app and roster grids initialize. The shared HQ layout
-leaves other pages unchanged. Review filters, search results and navigation mirror
-with the questionnaire; the audio-audit panel uses logical positioning.
+HQ navigation, filters, tables, export and administration panels mirror along
+with interview review. Inline and scoped styles use logical spacing and alignment.
+Do not mirror pixel coordinates computed from mouse events or map geometry.
+Chart.js legends and tooltips use native RTL; chart axes and geographic data
+retain their original ordering.
 Shared dialogs use logical text alignment so their content and action buttons
 follow the inherited direction even when appended or teleported to `body`.
 
@@ -76,6 +79,8 @@ Run `npm run test:rtl` and `npm run build` from `src/UI/WB.UI.Frontend`.
 Check Arabic and English on desktop and mobile, including start/resume/finish,
 sidebar navigation, all question types, table/matrix rosters, dialogs and dates.
 Also check HQ review filters/search, collapsed sidebars, flags and audio audit.
+For HQ, check login, the workspace/navigation menus, interview/assignment/user tables,
+pagination and sorting, export formats, administrative settings, maps and reports.
 Numeric wire formats, calendar system and questionnaire translations are unchanged.
 
 # Store Modules

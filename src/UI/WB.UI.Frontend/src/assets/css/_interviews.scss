@@ -64,11 +64,11 @@ td.prefield-column{
 .flags .flag{
 	color: $gray_text;
 	&:before{
-        background-position: 1px 0;
+        @include sprite-position(1px 0);
     }
     &:hover, &:focus, &:active{
     	&:before{
-			background-position: -18px 0;
+			@include sprite-position(-18px 0);
 		}
     }
 }
@@ -102,9 +102,9 @@ td.errors{
 	background: transparent url("#{$assetsPath}/img/comments-icon-1x.png") no-repeat;
     @include image-2x("#{$assetsPath}/img/comments-icon-2x.png", 32px, 64px);
     background-size: 32px 64px;
-    background-position: -4px -40px; 
+    @include sprite-position(-4px -40px);
     &.responded{
-    	background-position: -4px -4px; 
+        @include sprite-position(-4px -4px);
     }
 }
 .enumerator{

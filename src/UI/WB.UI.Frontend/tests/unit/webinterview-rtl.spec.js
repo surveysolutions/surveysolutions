@@ -10,8 +10,8 @@ import { renderToString } from 'vue/server-renderer'
 import webInterviewRtl from '../../tools/postcss-webinterview-rtl.js'
 
 const frontend = new URL('../../', import.meta.url)
-const ltr = ':where(html:not(.web-interview-page[dir="rtl"]))'
-const rtl = ':where(html.web-interview-page[dir="rtl"])'
+const ltr = ':where(html:not([dir="rtl"]))'
+const rtl = ':where(html[dir="rtl"])'
 
 async function transform(css, file = 'src/assets/css/markup.scss') {
     return postcss([webInterviewRtl()]).process(css, {
@@ -74,7 +74,7 @@ test('reconnect button uses an automatic margin on the inline start side', async
     assert.deepEqual(declarations(root, selector, 'margin-right'), [])
 })
 
-test('generates scoped RTL and preserves unmarked HQ and LTR rules without adding specificity', async () => {
+test('generates RTL and preserves LTR and pages without direction without adding specificity', async () => {
     const { root } = await transform('.question { margin-left: 12px; padding: 1px 2px 3px 4px; text-align: left }')
     assert.deepEqual(declarations(root, `${ltr} .question`, 'margin-left'), ['12px'])
     assert.deepEqual(declarations(root, `${rtl} .question`, 'margin-right'), ['12px'])
@@ -123,7 +123,7 @@ test('does not process native RTL vendor styles or unrelated entry points', asyn
     const css = '.ag-rtl { left: 20px; direction: rtl }'
     for (const file of [
         'node_modules/ag-grid-community/styles/ag-grid.css',
-        'src/assets/css/markup-specific.scss',
+        'src/assets/css/landing-page.scss',
         'src/shared/components/Bootstrap5Popover.vue',
     ]) {
         assert.equal((await transform(css, file)).css, css)
@@ -133,11 +133,11 @@ test('does not process native RTL vendor styles or unrelated entry points', asyn
 test('explicit RTL exceptions are not mirrored a second time', async () => {
     const { root } = await transform(`
         /* rtl:begin:ignore */
-        html.web-interview-page[dir="rtl"] input { direction: ltr; text-align: right }
+        html[dir="rtl"] input { direction: ltr; text-align: right }
         /* rtl:end:ignore */
     `)
-    assert.deepEqual(declarations(root, 'html.web-interview-page[dir="rtl"] input', 'direction'), ['ltr'])
-    assert.deepEqual(declarations(root, 'html.web-interview-page[dir="rtl"] input', 'text-align'), ['right'])
+    assert.deepEqual(declarations(root, 'html[dir="rtl"] input', 'direction'), ['ltr'])
+    assert.deepEqual(declarations(root, 'html[dir="rtl"] input', 'text-align'), ['right'])
 })
 
 test('actual styles mirror desktop and mobile sidebar positions and retain numeric exceptions', async () => {
@@ -175,12 +175,17 @@ test('actual styles mirror desktop and mobile sidebar positions and retain numer
                     assert.deepEqual(declarations(root, `${rtl} ${selector}`, declaration.prop), [])
                 }
             }
-            assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] input[inputmode=decimal]', 'direction'), ['ltr'])
-            assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .flatpickr-calendar', 'direction'), ['ltr'])
-            assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .btn-back::before', 'transform'), ['scaleX(-1)'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] input[inputmode=decimal]', 'direction'), ['ltr'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] input[type=number]', 'direction'), ['ltr'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] code', 'direction'), ['ltr'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] .flatpickr-input', 'direction'), ['ltr'])
+            assert.ok(declarations(root, `${rtl} .navbar-header`, 'float').includes('right'))
+            assert.ok(declarations(root, `${ltr} .navbar-header`, 'float').includes('left'))
+            assert.deepEqual(declarations(root, 'html[dir=rtl] .flatpickr-calendar', 'direction'), ['ltr'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] .btn-back::before', 'transform'), ['scaleX(-1)'])
             assert.deepEqual(declarations(root, '.modal-dialog', 'text-align'), ['start'])
             assert.deepEqual(declarations(root, '.modal-content .modal-footer', 'text-align'), ['start'])
-            assert.deepEqual(declarations(root, 'html.web-interview-page[dir=rtl] .table-view .ag-theme-customStyles .ag-grid-pinned-right-cells .ag-header-cell', 'border-left'), ['1px solid rgba(0, 0, 0, 0.3)'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] .table-view .ag-theme-customStyles .ag-grid-pinned-right-cells .ag-header-cell', 'border-left'), ['1px solid rgba(0, 0, 0, 0.3)'])
         }
     }
 })
@@ -270,14 +275,70 @@ test('HQ review audio panel uses logical edges and text alignment', async () => 
     assert.deepEqual(declarations(root, '.playlist-item[data-v-rtl-test]', 'text-align'), ['start'])
 })
 
-test('only HQ review opts into culture-based RTL in the shared layout before scripts load', () => {
-    const view = readFileSync(new URL('../WB.UI.Headquarters.Core/Views/Interview/Review.cshtml', frontend), 'utf8')
-    assert.match(view, /ViewData\["WebInterviewPage"\] = true;/)
-    const layout = readFileSync(new URL('../WB.UI.Headquarters.Core/Views/Shared/_Layout.Template.cshtml', frontend), 'utf8')
-    assert.match(layout, /var isWebInterviewPage = ViewData\["WebInterviewPage"\] is true;/)
-    assert.match(layout, /dir="@\(isWebInterviewPage \? \(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft \? "rtl" : "ltr"\) : null\)"/)
-    assert.match(layout, /class="@\(isWebInterviewPage \? "web-interview-page" : null\)"/)
-    assert.ok(layout.indexOf('dir=') < layout.indexOf('<script'))
+test('all HQ layouts select direction from UI culture without requiring a review-page flag', () => {
+    for (const file of [
+        'Shared/_Layout.Template.cshtml',
+        'Shared/_Logon.Template.cshtml',
+        'Shared/_EmptyLayout.Template.cshtml',
+        'Shared/_FinishInstallation.Template.cshtml',
+        'Shared/_WebInterview.Template.cshtml',
+        'UnderConstruction/Index.Template.cshtml',
+        'Error/_LayoutForErrorPage.cshtml',
+        'Maps/MapPreview.cshtml',
+        'Interview/InterviewAreaFrame.cshtml',
+    ]) {
+        const layout = readFileSync(new URL(`../WB.UI.Headquarters.Core/Views/${file}`, frontend), 'utf8')
+        assert.match(layout, /<html lang="@(System\.Globalization\.)?CultureInfo\.CurrentUICulture\.Name"/)
+        assert.match(layout, /dir="@\((System\.Globalization\.)?CultureInfo\.CurrentUICulture\.TextInfo\.IsRightToLeft \? "rtl" : "ltr"\)"/)
+        assert.doesNotMatch(layout, /WebInterviewPage/)
+        if (layout.includes('<script')) assert.ok(layout.indexOf('dir=') < layout.indexOf('<script'))
+    }
+})
+
+test('HQ-specific styles mirror export and action panels without changing sprite pixels', async () => {
+    const file = 'src/assets/css/markup-specific.scss'
+    const compiled = sass.compile(fileURLToPath(new URL(file, frontend)), { logger: sass.Logger.silent })
+    const { root } = await transform(compiled.css, file)
+    assert.deepEqual(declarations(root, `${rtl} .export-types`, 'padding'), ['0 30px 0 0', '0 30px 0 10px'])
+    assert.deepEqual(declarations(root, `${ltr} .export-types`, 'padding'), ['0 0 0 30px', '0 10px 0 30px'])
+    assert.deepEqual(declarations(root, `${rtl} .format-data`, 'padding-right'), ['80px'])
+    assert.ok(declarations(root, `${rtl} .panel-table label .tick`, 'margin-left').includes('20px'))
+    let spriteCount = 0
+    postcss.parse(compiled.css).walkDecls('background-position', declaration => {
+        if (declaration.prev()?.type !== 'comment' || declaration.prev().text !== 'rtl:ignore') return
+        spriteCount++
+        for (const selector of declaration.parent.selectors) {
+            assert.ok(declarations(root, selector, declaration.prop).includes(declaration.value), selector)
+            assert.deepEqual(declarations(root, `${rtl} ${selector}`, declaration.prop), [])
+        }
+    })
+    assert.equal(spriteCount, 26)
+})
+
+test('HQ scoped styles follow direction without mirroring pixel-based popover positioning', async () => {
+    const popover = await componentStyles('Bootstrap5Popover', 'shared/components')
+    assert.deepEqual(declarations(popover, '.bs5-popover[data-v-rtl-test]', 'text-align'), ['start'])
+    assert.deepEqual(declarations(popover, '.bs5-popover[data-v-rtl-test]', 'left'), ['0'])
+    const editor = await componentStyles('MdEditor', 'hqapp/components')
+    const dropdown = '.editor-toolbar .dropdown-menu[data-v-rtl-test]'
+    assert.deepEqual(declarations(editor, dropdown, 'inset-inline-start'), ['0'])
+    assert.deepEqual(declarations(editor, dropdown, 'inset-inline-end'), ['auto'])
+})
+
+test('chart legends and tooltips follow page direction without reversing axes', () => {
+    const filename = fileURLToPath(new URL('src/hqapp/Views/HQ/Reports/CumulativeChart.vue', frontend))
+    const { descriptor } = parse(readFileSync(filename, 'utf8'), { filename })
+    const script = descriptor.script.content
+    const createOptions = new Function('document', script.slice(0, script.indexOf('\nimport ')) + '\nreturn chartOptions')
+    for (const dir of ['ltr', 'rtl']) {
+        const options = createOptions({ documentElement: { dir } })
+        for (const plugin of [options.plugins.legend, options.plugins.tooltip]) {
+            assert.equal(plugin.rtl, dir === 'rtl')
+            assert.equal(plugin.textDirection, dir)
+        }
+        assert.equal(options.scales.x.reverse, undefined)
+        assert.equal(options.scales.y.reverse, undefined)
+    }
 })
 
 test('all interview page templates select direction from UI culture before the app mounts', () => {

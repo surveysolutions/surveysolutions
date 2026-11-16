@@ -184,7 +184,7 @@ export default {
                             : data
 
                         if (row.isLocked) {
-                            tdHtml += `<span class='lock' style="left: auto" title='${self.$t('Users.Locked')}'></span>`
+                            tdHtml += `<span class='lock' style="inset-inline-start: auto" title='${self.$t('Users.Locked')}'></span>`
                         }
                         return tdHtml
                     },

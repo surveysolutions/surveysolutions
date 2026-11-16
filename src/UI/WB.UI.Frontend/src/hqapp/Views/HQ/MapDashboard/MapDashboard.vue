@@ -73,7 +73,7 @@
                 </FilterBlock>
                 <div class="preset-filters-container">
                     <div class="center-block"
-                        style="margin-left: 0">
+                        style="margin-inline-start: 0">
                         <button class="btn btn-default btn-lg"
                             id="reloadMarkersInBounds"
                             v-if="readyToUpdate"
@@ -106,7 +106,7 @@
     content: '...';
     display: inline-block;
     width: 20px;
-    text-align: left;
+    text-align: start;
     animation: dotdotdot 1.5s linear infinite;
 }
 

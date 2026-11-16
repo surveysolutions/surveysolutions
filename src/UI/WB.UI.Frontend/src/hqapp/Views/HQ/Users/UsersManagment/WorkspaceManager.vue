@@ -13,7 +13,7 @@
                 <FilterInput v-model="search"
                     :placeholder="$t('Common.Search')"></FilterInput>
 
-                <div style="padding-top: 20px; padding-left: 12px; height: 380px; overflow: auto">
+                <div style="padding-top: 20px; padding-inline-start: 12px; height: 380px; overflow: auto">
                     <ul class="list-unstyled"
                         data-suso="workspaces-list">
                         <li v-for="workspace in workspacesList"

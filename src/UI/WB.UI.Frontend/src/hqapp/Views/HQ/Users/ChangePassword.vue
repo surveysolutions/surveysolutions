@@ -13,7 +13,7 @@
         <div>
             <div v-if="userInfo.forceChangePassword && userInfo.isOwnProfile"
                 class="alerts form-group"
-                style="margin-left:-10px">
+                style="margin-inline-start:-10px">
                 <div class="alert">
                     {{ $t('FieldsAndValidations.PasswordChangeRequired') }}
                 </div>
@@ -44,7 +44,7 @@
             <div class="block-filter">
                 <input id="ShowPassword"
                     type="checkbox"
-                    style="margin-right:5px"
+                    style="margin-inline-end:5px"
                     onclick="if(window.CONFIG.model.userInfo.isOwnProfile){var oldPass = document.getElementById('OldPassword');oldPass.type = (oldPass.type === 'text' ? 'password' : 'text');} var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');var confirm = document.getElementById('ConfirmPassword');confirm.type = (confirm.type === 'text' ? 'password' : 'text');">
                 <label for="ShowPassword">
                     <span></span>{{ $t('Pages.ShowPassword') }}
@@ -56,7 +56,7 @@
             <div class="block-filter">
                 <button type="submit"
                     class="btn btn-success"
-                    style="margin-right:5px"
+                    style="margin-inline-end:5px"
                     id="btnUpdatePassword"
                     v-bind:disabled="userInfo.isObserving || (userInfo.isRestricted && !userInfo.forceChangePassword)"
                     @click="updatePassword">{{

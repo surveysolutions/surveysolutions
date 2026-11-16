@@ -18,7 +18,7 @@
                     type="hidden"
                     :value="this.$hq.Util.getCsrfCookie()" />
                 <div class="block-filter"
-                    style="padding-left: 30px">
+                    style="padding-inline-start: 30px">
                     <div class="form-group">
                         <label for="companyLogo"
                             style="font-weight: bold">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="block-filter"
-                    style="padding-left: 30px">
+                    style="padding-inline-start: 30px">
                     <button :disabled="files.length == 0"
                         type="submit"
                         class="btn btn-success">
@@ -53,7 +53,7 @@
             </form>
             <div class="col-sm-9">
                 <div class="block-filter"
-                    style="padding-left: 30px">
+                    style="padding-inline-start: 30px">
                     <figure class="logo-wrapper">
                         <figcaption>
                             {{ $t('Settings.CurrentLogo') }}:
@@ -66,7 +66,7 @@
                     </figure>
                 </div>
                 <div class="block-filter action-block"
-                    style="padding-left: 30px">
+                    style="padding-inline-start: 30px">
                     <form :action="$config.model.removeLogoUrl"
                         ref="logoFormRemove"
                         method="post"

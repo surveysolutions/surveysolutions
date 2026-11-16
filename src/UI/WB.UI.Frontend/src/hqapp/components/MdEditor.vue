@@ -267,7 +267,8 @@
     display: none;
     position: absolute;
     top: 100%;
-    left: 0;
+    inset-inline-start: 0;
+    inset-inline-end: auto;
     z-index: 1000;
     min-width: 160px;
     padding: 5px 0;

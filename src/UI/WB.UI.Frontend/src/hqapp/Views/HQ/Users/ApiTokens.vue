@@ -43,7 +43,7 @@
                 <button v-if="!tokenWasIssued"
                     type="submit"
                     class="btn btn-success"
-                    style="margin-right:5px"
+                    style="margin-inline-end:5px"
                     id="btnCreateToken"
                     v-bind:disabled="(userInfo.isObserving || userInfo.isRestricted) && !canGenerate"
                     @click="generateApiKey">{{ $t('Common.Enable') }}</button>

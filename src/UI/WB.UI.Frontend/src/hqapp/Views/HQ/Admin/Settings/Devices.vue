@@ -69,7 +69,7 @@
                 </div>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter" style="padding-inline-start: 30px">
                     <div class="form-group">
                         <input class="checkbox-filter single-checkbox"
                             v-model="allowInterviewerChangeAssignmentStatusModel" @change="updateDeviceSettings"
@@ -86,7 +86,7 @@
                 </div>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter" style="padding-inline-start: 30px">
                     <div class="form-group">
                         <label for="audioRecordingQuality" style="font-weight: bold">
                             <span class="tick"></span>
@@ -104,7 +104,7 @@
                 </div>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter" style="padding-inline-start: 30px">
                     <div class="form-group">
                         <label for="acceptableGpsLocationSource" style="font-weight: bold">
                             <span class="tick"></span>
@@ -123,7 +123,7 @@
             </div>
             <div class="col-sm-9">
                 <Form v-slot="{ meta }" @submit="noAction" :data-vv-scope="'geographyQuestion'">
-                    <div class="block-filter" style="padding-left: 30px">
+                    <div class="block-filter" style="padding-inline-start: 30px">
                         <div class="form-group">
                             <label for="interviewerGeographyQuestionAccuracyInMeters" style="font-weight: bold">
                                 <span class="tick"></span>
@@ -168,7 +168,7 @@
             </div>
             <div class="col-sm-9">
                 <Form v-slot="{ meta }" @submit="noAction">
-                    <div class="block-filter" style="padding-left: 30px">
+                    <div class="block-filter" style="padding-inline-start: 30px">
                         <div class="form-group">
                             <label for="interviewerGeographyQuestionPeriodInSeconds" style="font-weight: bold">
                                 <span class="tick"></span>
@@ -212,7 +212,7 @@
             </div>
 
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter" style="padding-inline-start: 30px">
                     <div class="form-group">
                         <label for="esriApiKey" style="font-weight: bold">
                             <span class="tick"></span>
@@ -237,10 +237,10 @@
                         </button>
                     </div>
                 </div>
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter" style="padding-inline-start: 30px">
                     <input id="ShowKey" type="checkbox"
                         onclick="var pass = document.getElementById('esriApiKey');pass.type = (pass.type === 'text' ? 'password' : 'text');">
-                    <label for="ShowKey" style="padding-left:5px;">
+                    <label for="ShowKey" style="padding-inline-start:5px;">
                         <span></span>{{ $t('Pages.ShowKey') }}
                     </label>
                 </div>
@@ -280,7 +280,7 @@
 }
 
 .form-group .btn-success {
-    margin-left: 20px;
+    margin-inline-start: 20px;
     margin-top: 2px;
 }
 

@@ -10,7 +10,7 @@
             </div>
             <form class="col-sm-9">
                 <div class="block-filter"
-                    style="padding-left: 30px">
+                    style="padding-inline-start: 30px">
                     <div class="form-group">
                         <label for="notificationText"
                             style="font-weight: bold">
@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="block-filter"
-                    style="padding-left: 30px">
+                    style="padding-inline-start: 30px">
                     <button type="button"
                         class="btn btn-success"
                         @click="updateMessage">

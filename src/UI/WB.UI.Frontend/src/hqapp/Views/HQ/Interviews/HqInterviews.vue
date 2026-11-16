@@ -6,7 +6,7 @@
                 <h1>{{ title }}</h1>
                 <a href="../MapDashboard"
                     class="btn"
-                    style="margin-right: 30px; padding: 0">
+                    style="margin-inline-end: 30px; padding: 0">
                     <img style="padding-top: 2px"
                         height="26px;"
                         src="/img/google-maps-markers/map.png"

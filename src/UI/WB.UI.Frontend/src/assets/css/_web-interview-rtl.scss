@@ -1,7 +1,12 @@
 /* rtl:begin:ignore */
-html.web-interview-page[dir="rtl"] {
+html[dir="rtl"] {
+    code,
+    pre,
+    kbd,
     input[type="email"],
     input[type="url"],
+    input[type="number"],
+    .flatpickr-input,
     input[inputmode="numeric"],
     input[inputmode="decimal"],
     .numeric-question input,

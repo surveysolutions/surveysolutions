@@ -2,7 +2,6 @@
 @model WB.Core.SharedKernels.SurveyManagement.Web.Controllers.InterviewReviewModel
 @{
     ViewBag.Title = string.Format(ReviewInterview.PageTitle, Model.Key);
-    ViewData["WebInterviewPage"] = true;
 }
 @section Scripts{
     @Html.RenderHqConfig(Model)

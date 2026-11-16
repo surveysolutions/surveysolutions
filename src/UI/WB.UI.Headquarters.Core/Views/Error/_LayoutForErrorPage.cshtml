@@ -1,7 +1,8 @@
 ﻿@using WB.Core.Infrastructure.Versions
 @inject IProductVersion productVersion
 <!DOCTYPE html>
-<html>
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name"
+      dir="@(System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
 @{
     var isAuthenticated = User.Identity != null && User.Identity.IsAuthenticated;
 }
@@ -26,9 +27,9 @@
         }
 
         .error-content {
-            padding-left: 16px;
+            padding-inline-start: 16px;
             margin-top: 40px;
-            border-left: 13px #F6D6D0 solid;
+            border-inline-start: 13px #F6D6D0 solid;
         }
 
         .description {
@@ -375,7 +376,7 @@
 
     @if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
     {
-        <a href="@returnUrl" style="float: right">@Common.Return</a>
+        <a href="@returnUrl" style="float: inline-end">@Common.Return</a>
     }
 </div>
 <div class="app-version">@productVersion.ToString()</div>

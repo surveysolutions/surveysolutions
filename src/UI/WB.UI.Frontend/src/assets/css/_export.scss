@@ -14,28 +14,28 @@
         position: static;
 
         &:before {
-            background-position: 10px -200px;
+            @include sprite-position(10px -200px);
             left: 20px;
         }
 
         &.separated-data:before {
-            background-position: 10px -120px;
+            @include sprite-position(10px -120px);
         }
 
         &.xlsx:before {
-            background-position: 10px -78px;
+            @include sprite-position(10px -78px);
         }
 
         &.stata:before {
-            background-position: 10px 4px;
+            @include sprite-position(10px 4px);
         }
 
         &.spss:before {
-            background-position: 0px -38px;
+            @include sprite-position(0px -38px);
         }
 
         &.zip:before {
-            background-position: 5px -165px;
+            @include sprite-position(5px -165px);
         }
     }
 
@@ -475,43 +475,43 @@
         background: url("#{$assetsPath}/img/data-image2.png") no-repeat;
         background-size: 63px 314px;
         //@include image-2x("#{$assetsPath}/img/data-image2k.png", 63px, 234px);
-        background-position: 0 -200px;
+        @include sprite-position(0 -200px);
     }
 
     &.Tabular:before {
-        background-position: 0 -120px;
+        @include sprite-position(0 -120px);
     }
 
     &.xlsx:before {
-        background-position: 0 -78px;
+        @include sprite-position(0 -78px);
     }
 
     &.STATA:before {
-        background-position: 0 4px;
+        @include sprite-position(0 4px);
     }
 
     &.SPSS:before {
-        background-position: 0px -38px;
+        @include sprite-position(0px -38px);
     }
 
     &.Binary:before {
-        background-position: 0 -165px;
+        @include sprite-position(0 -165px);
     }
 
     &.DDI:before {
-        background-position: 0 -200px;
+        @include sprite-position(0 -200px);
     }
 
     &.Paradata:before {
-        background-position: 0 -120px;
+        @include sprite-position(0 -120px);
     }
 
     &.ParadataReduced:before {
-        background-position: 0 -271px;
+        @include sprite-position(0 -271px);
     }
 
     &.no-meta:before {
-        background-position: 0 -235px;
+        @include sprite-position(0 -235px);
     }
 }
 
@@ -525,27 +525,27 @@
         background: url("#{$assetsPath}/img/Exprt-icons2.png") no-repeat;
         background-size: 64px 250px;
         //@include image-2x("#{$assetsPath}/img/Exprt-icons2.png", 64px, 250px);
-        background-position: 0px -150px;
+        @include sprite-position(0px -150px);
     }
 
     &.File:before {
-        background-position: 0px -150px;
+        @include sprite-position(0px -150px);
     }
 
     &.OneDrive:before {
-        background-position: 0px 0px;
+        @include sprite-position(0px 0px);
     }
 
     &.Dropbox:before {
-        background-position: 0px -50px;
+        @include sprite-position(0px -50px);
     }
 
     &.ftp-icon:before {
-        background-position: 0px -100px;
+        @include sprite-position(0px -100px);
     }
 
     &.GoogleDrive:before {
-        background-position: 0px -200px;
+        @include sprite-position(0px -200px);
     }
 }
 

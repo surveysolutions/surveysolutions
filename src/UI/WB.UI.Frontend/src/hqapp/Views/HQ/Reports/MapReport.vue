@@ -40,7 +40,7 @@
                 </template>
 
                 <div class="preset-filters-container">
-                    <div class="center-block" style="margin-left: 0">
+                    <div class="center-block" style="margin-inline-start: 0">
                         <button class="btn btn-default btn-lg" id="reloadMarkersInBounds" v-if="readyToUpdate"
                             @click="reloadMarkersInBounds">{{ $t("MapReport.ReloadMarkers") }}</button>
                     </div>
@@ -94,7 +94,7 @@
     content: '...';
     display: inline-block;
     width: 20px;
-    text-align: left;
+    text-align: start;
     animation: dotdotdot 1.5s linear infinite;
 }
 

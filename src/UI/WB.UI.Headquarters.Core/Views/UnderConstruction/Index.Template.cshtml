@@ -4,7 +4,8 @@
     Layout = "";
 }
 <!DOCTYPE html>
-<html>
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.Name"
+      dir="@(System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
 <head class="under-construction-page">
     <title>@Model.Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
