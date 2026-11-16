@@ -55,6 +55,13 @@ export default {
     emits: ['change'],
 
     methods: {
+        initializeField() {
+            if (this.item == null)
+                return
+
+            this.field = find(this.fieldOptions, { id: this.condition.field }) || null
+        },
+
         getTypeaheadValues(options) {
             return options.map(o => {
                 return {
@@ -84,7 +91,23 @@ export default {
     },
 
     watch: {
+        item: {
+            immediate: true,
+            handler() {
+                this.initializeField()
+            },
+        },
+
+        condition: {
+            immediate: true,
+            handler() {
+                this.initializeField()
+            },
+        },
+
         field(to) {
+            if (to == null)
+                return
             this.$emit('change', {
                 variable: this.item.variable,
                 field: to.id,

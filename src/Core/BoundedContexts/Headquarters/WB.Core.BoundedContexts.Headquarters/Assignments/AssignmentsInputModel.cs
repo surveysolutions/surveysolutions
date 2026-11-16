@@ -28,11 +28,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public AssignmentStatus[] Statuses { get; set; }
 
+        /// <summary>
+        /// Per-question filter conditions. Each entry has:
+        /// Variable (question variable name), Field as "field|operator" (e.g. valueLowerCase|startsWith,
+        /// valueLowerCase|eq, answerCode|eq, answerCode|neq, value|eq), and Value as the parsed filter value
+        /// (lowercased string for valueLowerCase operators).
+        /// </summary>
+        public AssignmentFilterCondition[] Conditions { get; set; }
 
         [Flags]
         public enum SearchTypes
         {
-            Id, ResponsibleId, IdentifyingQuestions, QuestionnaireTitle
+            Id = 1, ResponsibleId = 2, IdentifyingQuestions = 4, QuestionnaireTitle = 8
         }
+    }
+
+    public class AssignmentFilterCondition
+    {
+        public string Variable { get; set; }
+        public string Field { get; set; }
+        public string Value { get; set; }
     }
 }
