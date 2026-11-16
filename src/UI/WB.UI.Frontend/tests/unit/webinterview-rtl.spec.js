@@ -182,6 +182,18 @@ test('actual styles mirror desktop and mobile sidebar positions and retain numer
             assert.ok(declarations(root, `${rtl} .navbar-header`, 'float').includes('right'))
             assert.ok(declarations(root, `${ltr} .navbar-header`, 'float').includes('left'))
             assert.deepEqual(declarations(root, 'html[dir=rtl] .flatpickr-calendar', 'direction'), ['ltr'])
+            const cells = ':where(html[dir=rtl]) :where(td, th)'
+            assert.deepEqual(declarations(root, cells, 'unicode-bidi'), ['plaintext'])
+            assert.deepEqual(declarations(root, cells, 'text-align'), ['-webkit-match-parent', 'match-parent'])
+            let textFields = null
+            root.walkRules(rule => {
+                if (rule.selector.startsWith(':where(html[dir=rtl]) :where(input:not([type])')) textFields = rule
+            })
+            assert.ok(textFields, 'free-text fields must resolve direction from content')
+            assert.match(textFields.selector, /input\[type=password\]/)
+            assert.match(textFields.selector, /:not\(\[inputmode=numeric\], \[inputmode=decimal\], \.flatpickr-input, \.numeric-question input, \.time-question input\)/)
+            assert.deepEqual(declarations(root, textFields.selector, 'unicode-bidi'), ['plaintext'])
+            assert.deepEqual(declarations(root, textFields.selector, 'text-align'), ['right'])
             assert.deepEqual(declarations(root, 'html[dir=rtl] .btn-back::before', 'transform'), ['scaleX(-1)'])
             assert.deepEqual(declarations(root, '.modal-dialog', 'text-align'), ['start'])
             assert.deepEqual(declarations(root, '.modal-content .modal-footer', 'text-align'), ['start'])
@@ -351,5 +363,29 @@ test('all interview page templates select direction from UI culture before the a
         assert.match(source, /<html lang="@System\.Globalization\.CultureInfo\.CurrentUICulture\.Name"/)
         assert.match(source, /dir="@\(System\.Globalization\.CultureInfo\.CurrentUICulture\.TextInfo\.IsRightToLeft \? "rtl" : "ltr"\)"/)
         assert.match(source, /class="web-interview-page"/)
+    }
+})
+
+test('interview keys and questionnaire versions are isolated next to translated labels', () => {
+    for (const [file, pattern] of [
+        ['hqapp/Views/HQ/Interview/DetailsInfo.vue', /<bdi dir="ltr">\{\{ \$config\.model\.key \}\}<\/bdi>/],
+        ['hqapp/Views/HQ/Interview/DetailsInfo.vue', /<bdi>\[ver\.\{\{ this\.\$config\.model\.questionnaireVersion \}\}\]<\/bdi>\s*<bdi>\{\{ this\.\$config\.model\.questionnaireTitle \}\}<\/bdi>/],
+        ['hqapp/Views/HQ/Interview/StatusesHistory.vue', /<bdi dir="ltr"\s+v-text="\$config\.model\.key"><\/bdi>/],
+        ['hqapp/components/GoogleMap.vue', /<bdi dir="ltr"\s+v-text="selectedTooltip\.interviewKey"><\/bdi>/],
+        ['hqapp/Views/HQ/Reports/MapReport.vue', /<bdi dir="ltr"\s+v-text="selectedTooltip\.interviewKey"><\/bdi>/],
+    ]) {
+        assert.match(readFileSync(new URL(`src/${file}`, frontend), 'utf8'), pattern, file)
+    }
+})
+
+test('Arabic DataTables strings keep the placeholders DataTables substitutes', () => {
+    const resources = new URL('../WB.UI.Headquarters.Core/Resources/', frontend)
+    const values = file => Object.fromEntries([...readFileSync(new URL(file, resources), 'utf8')
+        .matchAll(/<data name="([^"]+)"[^>]*>\s*<value>([^<]*)<\/value>/g)].map(match => [match[1], match[2]]))
+    const english = values('DataTables.resx')
+    const arabic = values('DataTables.ar.resx')
+    const placeholders = text => (text.match(/_[A-Z]+_/g) ?? []).sort()
+    for (const [name, text] of Object.entries(english)) {
+        if (name in arabic) assert.deepEqual(placeholders(arabic[name]), placeholders(text), name)
     }
 })

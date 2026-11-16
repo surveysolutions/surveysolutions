@@ -13,15 +13,15 @@
                     <ul class="main-info-column list-unstyled">
                         <li id="detailsInfo_interviewKeyListItem">
                             {{ $t('Common.InterviewKey') }}:
-                            {{ $config.model.key }}({{
+                            <bdi dir="ltr">{{ $config.model.key }}</bdi>({{
                                 $t('Common.Assignment')
                             }}
                             <a :href="this.$config.model.assignmentDetailsUrl">#{{ this.$config.model.assignmentId
                                 }}</a>)
                         </li>
                         <li id="detailsInfo_qusetionnaireTitleListItem" class="questionnaire-title">
-                            [ver.{{ this.$config.model.questionnaireVersion }}]
-                            {{ this.$config.model.questionnaireTitle }}
+                            <bdi>[ver.{{ this.$config.model.questionnaireVersion }}]</bdi>
+                            <bdi>{{ this.$config.model.questionnaireTitle }}</bdi>
                         </li>
 
                         <li id="detailsInfo_interviewMode">

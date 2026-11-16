@@ -1,4 +1,18 @@
 /* rtl:begin:ignore */
+// Data cells and free-text fields often hold Latin identifiers, dates or phone numbers.
+// Resolve their direction from content so trailing punctuation and digit groups keep
+// their order, while keeping the column/field alignment of the RTL page.
+:where(html[dir="rtl"]) :where(td, th) {
+    unicode-bidi: plaintext;
+    text-align: -webkit-match-parent;
+    text-align: match-parent;
+}
+
+:where(html[dir="rtl"]) :where(input:not([type]), input[type="text"], input[type="search"], input[type="password"], textarea):where(:not([inputmode="numeric"], [inputmode="decimal"], .flatpickr-input, .numeric-question input, .time-question input)) {
+    unicode-bidi: plaintext;
+    text-align: right;
+}
+
 html[dir="rtl"] {
     code,
     pre,

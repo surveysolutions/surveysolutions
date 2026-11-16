@@ -3,7 +3,8 @@
         id="statusesHistoryModal">
         <template v-slot:title>
             <div>
-                <h3>{{ $t("Pages.HistoryOfStatuses_Interview") }} {{ $config.model.key }}</h3>
+                <h3>{{ $t("Pages.HistoryOfStatuses_Interview") }} <bdi dir="ltr"
+                    v-text="$config.model.key"></bdi></h3>
                 <p>
                     {{ $t('Details.Responsible') }}: <span
                         v-bind:class="[$config.model.responsibleRole.toLowerCase()]">{{

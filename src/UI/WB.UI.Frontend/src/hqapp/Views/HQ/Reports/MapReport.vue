@@ -51,7 +51,8 @@
             <div ref="tooltip">
                 <div class="row-fluid">
                     <strong>{{ $t("Common.InterviewKey") }}:</strong>
-                    &nbsp;{{ selectedTooltip.interviewKey }}
+                    &nbsp;<bdi dir="ltr"
+                        v-text="selectedTooltip.interviewKey"></bdi>
                 </div>
                 <div class="row-fluid">
                     <strong>{{ $t("Common.Responsible") }}:</strong>

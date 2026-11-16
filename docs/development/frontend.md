@@ -74,6 +74,11 @@ Chart.js legends and tooltips use native RTL; chart axes and geographic data
 retain their original ordering.
 Shared dialogs use logical text alignment so their content and action buttons
 follow the inherited direction even when appended or teleported to `body`.
+In RTL, table cells and free-text inputs use `unicode-bidi: plaintext` so dates,
+phone numbers, identifiers and passwords keep their character order; column and
+field alignment is unchanged. Wrap LTR values that follow translated labels inside
+one paragraph (interview keys, versions) in `<bdi>`: after Arabic text, digit groups
+separated by hyphens are otherwise displayed in reverse order.
 
 Run `npm run test:rtl` and `npm run build` from `src/UI/WB.UI.Frontend`.
 Check Arabic and English on desktop and mobile, including start/resume/finish,
