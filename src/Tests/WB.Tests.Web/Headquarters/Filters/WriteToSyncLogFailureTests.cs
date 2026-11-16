@@ -75,14 +75,14 @@ namespace WB.Tests.Web.Headquarters.Filters
         }
 
         [Test]
-        public void should_log_and_rethrow_when_action_delegate_throws()
+        public async Task should_log_and_rethrow_when_action_delegate_throws()
         {
             var executor = new Mock<IInScopeExecutor<IPlainStorageAccessor<SynchronizationLogItem>>>();
             using var services = new ServiceCollection().AddSingleton(executor.Object).BuildServiceProvider();
             var context = Context(services);
             var failure = new InvalidOperationException("Action failed");
 
-            var thrown = Assert.ThrowsAsync<InvalidOperationException>(() =>
+            var thrown = await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 new WriteToSyncLogAttribute(SynchronizationLogType.LinkToDevice)
                     .OnActionExecutionAsync(context, () => throw failure));
 
@@ -123,7 +123,7 @@ namespace WB.Tests.Web.Headquarters.Filters
 
             if (delegateThrows)
             {
-                var thrown = Assert.ThrowsAsync<ApplicationException>(() => filter.OnActionExecutionAsync(context, () => throw failure));
+                var thrown = await Assert.ThrowsAsync<ApplicationException>(() => filter.OnActionExecutionAsync(context, () => throw failure));
                 Assert.That(thrown, Is.SameAs(failure));
             }
             else

@@ -1,3 +1,4 @@
+using System;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments.Validators;
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var validator = Create.Service.WebModeResponsibleAssignmentValidator(userViewFactory);
 
-            TestDelegate act = () =>
+           Action act = () =>
                 validator.Validate(null, Create.Command.CreateAssignment(responsibleId: Id.gA, webMode: true));
 
             Assert.That(act, Throws.Exception.InstanceOf<AssignmentException>().With.Message.EqualTo(CommandValidatorsMessages.WebModeAssignmentShouldBeOnInterviewer)

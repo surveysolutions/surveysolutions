@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             
             // act
-            TestDelegate act = () => questionnaire.AddSharedPerson(responsibleId, email, ShareType.Edit, responsibleId);
+           Action act = () => questionnaire.AddSharedPerson(responsibleId, email, ShareType.Edit, responsibleId);
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.OwnerCannotBeInShareList));
@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // act
             questionnaire.AddSharedPerson(personId, email, ShareType.Edit, responsibleId);
-            TestDelegate act = () => questionnaire.AddSharedPerson(personId, email, ShareType.Edit, responsibleId);
+           Action act = () => questionnaire.AddSharedPerson(personId, email, ShareType.Edit, responsibleId);
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.UserExistInShareList));
@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
             // act
-            TestDelegate act = () => questionnaire.RemoveSharedPerson(personId, responsibleId);
+           Action act = () => questionnaire.RemoveSharedPerson(personId, responsibleId);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -126,7 +126,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: newOwnerId);
 
             // act
-            TestDelegate act = () => questionnaire.TransferOwnership(ownerId, newOwnerId, string.Empty, string.Empty);
+           Action act = () => questionnaire.TransferOwnership(ownerId, newOwnerId, string.Empty, string.Empty);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -144,7 +144,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddSharedPerson(newOwnerId, "some@email", ShareType.Edit, ownerId);
 
             // act
-            TestDelegate act = () => questionnaire.TransferOwnership(newOwnerId, ownerId, string.Empty, string.Empty);
+           Action act = () => questionnaire.TransferOwnership(newOwnerId, ownerId, string.Empty, string.Empty);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -160,7 +160,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: ownerId);
             
             // act
-            TestDelegate act = () => questionnaire.TransferOwnership(ownerId, newOwnerId, string.Empty, string.Empty);
+           Action act = () => questionnaire.TransferOwnership(ownerId, newOwnerId, string.Empty, string.Empty);
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);

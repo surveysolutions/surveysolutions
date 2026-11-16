@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
 
         [TestCase(UserRoles.Supervisor)]
         [TestCase(UserRoles.Interviewer)]
-        public void should_not_allow_removing_user_with_pending_work_from_workspace(UserRoles role)
+        public async Task should_not_allow_removing_user_with_pending_work_from_workspace(UserRoles role)
         {
             var interviewFactory = Mock.Of<IInterviewInformationFactory>(
                 i => i.GetInProgressInterviewsForSupervisor(Id.gA) ==
@@ -63,10 +64,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             // Act
             var hqUser = Create.Entity.HqUser(role: role, userId: Id.gA);
             hqUser.Workspaces.Add(new WorkspacesUsers(enabledWorkspace, hqUser, null));
-            AsyncTestDelegate act = async () => await service.AssignWorkspacesAsync(hqUser, new List<AssignUserWorkspace>());
-
+            
+            Func<Task> act = async () => await service.AssignWorkspacesAsync(hqUser, new List<AssignUserWorkspace>());
+            
             // Assert
-            Assert.ThrowsAsync<WorkspaceRemovalNotAllowedException>(act);
+            await Assert.ThrowsAsync<WorkspaceRemovalNotAllowedException>(act);
         }
     }
 }

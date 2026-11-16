@@ -27,7 +27,6 @@ using Ncqrs.Domain.Storage;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
 using Vite.Extensions.AspNetCore;
-//using VueCliMiddleware;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;

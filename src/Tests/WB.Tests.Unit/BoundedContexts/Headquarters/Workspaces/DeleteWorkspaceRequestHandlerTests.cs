@@ -120,12 +120,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
         }
 
         [Test]
-        public void should_not_remove_workspace_when_map_deletion_fails()
+        public async Task should_not_remove_workspace_when_map_deletion_fails()
         {
             var failure = new InvalidOperationException("Map deletion failed");
             mapStorage.Setup(m => m.DeleteAllMaps()).ThrowsAsync(failure);
 
-            var exception = Assert.ThrowsAsync<InvalidOperationException>(
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(
                 () => Subject.Handle(new DeleteWorkspaceRequest(Workspace.Name)));
 
             Assert.That(exception, Is.SameAs(failure));

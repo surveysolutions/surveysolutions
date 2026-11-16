@@ -318,24 +318,24 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [Test]
-        public void GetHtmlContent_ShouldThrowException_WhenHttpContextIsNull()
+        public async Task GetHtmlContent_ShouldThrowException_WhenHttpContextIsNull()
         {
             // Arrange
             this.mockHttpContextAccessor.Setup(x => x.HttpContext).Returns((HttpContext)null);
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => 
+            await Assert.ThrowsAsync<Exception>(async () =>
                 await this.pdfService.GetHtmlContent(this.questionnaireRevision, this.translationId));
         }
 
         [Test]
-        public void GetHtmlContent_ShouldThrowException_WhenUserIsNull()
+        public async Task GetHtmlContent_ShouldThrowException_WhenUserIsNull()
         {
             // Arrange
             this.mockHttpContext.Setup(x => x.User).Returns((ClaimsPrincipal)null);
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(async () => 
+            await Assert.ThrowsAsync<Exception>(async () =>
                 await this.pdfService.GetHtmlContent(this.questionnaireRevision, this.translationId));
         }
 

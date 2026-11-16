@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using NUnitLite;
 
 namespace WB.Tests.Android.Instrumentation

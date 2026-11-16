@@ -1,7 +1,9 @@
 ﻿using Android.Views;
 using AndroidX.RecyclerView.Widget;
 using Com.Google.Android.Exoplayer2.UI;
+using MvvmCross;
 using MvvmCross.DroidX.RecyclerView;
+using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using WB.UI.Shared.Enumerator.Activities;
 using Object = Java.Lang.Object;
@@ -51,7 +53,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             bool isFocusedChildren = IsThereChildrenWithFocus(holder);
             if (isFocusedChildren) 
             {
-                var topActivity = Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity;
+                var topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
                 topActivity.RemoveFocusFromEditText();
             }
 

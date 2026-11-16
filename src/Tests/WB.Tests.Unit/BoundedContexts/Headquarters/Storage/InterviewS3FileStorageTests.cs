@@ -80,7 +80,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
 
         [Test]
         [Ignore("hangs on CI, needs to be fixed")]
-        public void should_fail_when_objects_are_still_stored_under_prefix_after_all_batches()
+        public async Task should_fail_when_objects_are_still_stored_under_prefix_after_all_batches()
         {
             var interviewId = Guid.NewGuid();
             var prefix = $"images/{interviewId.FormatGuid()}/";
@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
             this.externalFileStorage.Setup(s => s.ListAsync(prefix))
                 .ReturnsAsync(() => new List<FileObject> { new FileObject { Path = prefix + "1.jpg" } });
 
-            Assert.ThrowsAsync<InvalidOperationException>(() =>
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 this.storage.RemoveAllBinaryDataForInterviewsAsync(new List<Guid> { interviewId }));
         }
 

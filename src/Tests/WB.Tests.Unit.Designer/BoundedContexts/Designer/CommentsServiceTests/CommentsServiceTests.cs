@@ -68,12 +68,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CommentsServiceTests
         }
 
         [Test]
-        public void DeleteCommentAsync_when_comment_does_not_exist_then_no_exception_is_thrown()
+        public async Task DeleteCommentAsync_when_comment_does_not_exist_then_no_exception_is_thrown()
         {
             var service = CreateService(out _);
             var questionnaireId = Guid.NewGuid();
 
-            Assert.DoesNotThrowAsync(() => service.DeleteCommentAsync(Guid.NewGuid(), questionnaireId));
+            await Assert.DoesNotThrowAsync(() => service.DeleteCommentAsync(Guid.NewGuid(), questionnaireId));
         }
 
         // ── ResolveCommentAsync ─────────────────────────────────────────────
@@ -92,24 +92,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CommentsServiceTests
         }
 
         [Test]
-        public void ResolveCommentAsync_when_comment_belongs_to_different_questionnaire_then_throws()
+        public async Task ResolveCommentAsync_when_comment_belongs_to_different_questionnaire_then_throws()
         {
             var service = CreateService(out var db);
             var comment = SeedComment(db);
             var otherQuestionnaireId = Guid.NewGuid();
 
-            Assert.ThrowsAsync<InvalidOperationException>(
+            await Assert.ThrowsAsync<InvalidOperationException>(
                 () => service.ResolveCommentAsync(comment.Id, otherQuestionnaireId));
         }
 
         [Test]
-        public void ResolveCommentAsync_when_comment_does_not_exist_then_throws()
+        public async Task ResolveCommentAsync_when_comment_does_not_exist_then_throws()
         {
             var service = CreateService(out _);
 
-            Assert.ThrowsAsync<InvalidOperationException>(
+            await Assert.ThrowsAsync<InvalidOperationException>(
                 () => service.ResolveCommentAsync(Guid.NewGuid(), Guid.NewGuid()));
         }
     }
 }
-

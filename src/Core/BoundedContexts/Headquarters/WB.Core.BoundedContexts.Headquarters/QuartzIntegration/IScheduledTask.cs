@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public interface IScheduledTask<TJob, in TJobData> 
-        where TJob: IJob<TJobData>
+        where TJob: IJobWithData<TJobData>
     {
         Task Schedule(TJobData data);
         Task<bool> IsJobRunning(CancellationToken token = default);

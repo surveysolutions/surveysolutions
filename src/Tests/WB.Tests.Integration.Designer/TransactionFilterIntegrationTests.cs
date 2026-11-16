@@ -34,12 +34,12 @@ namespace WB.Tests.Integration.Designer
     internal class TransactionFilterIntegrationTests : IntegrationTest
     {
         [Test]
-        public void when_write_handler_flushes_changes_then_throws_row_is_rolled_back()
+        public async Task when_write_handler_flushes_changes_then_throws_row_is_rolled_back()
         {
             var dbContext = ServiceLocator.GetInstance<DesignerDbContext>();
             var id = Guid.NewGuid();
 
-            Assert.ThrowsAsync<InvalidOperationException>(() =>
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 RunThroughActionFilter(dbContext, HttpMethods.Post, throwInHandler: true,
                     handlerBody: () => StageAndFlush(dbContext, id)));
 
@@ -47,17 +47,20 @@ namespace WB.Tests.Integration.Designer
         }
 
         [Test]
-        public void when_write_handler_throws_cache_invalidation_runs_after_transaction_disposal()
+        public async Task when_write_handler_throws_cache_invalidation_runs_after_transaction_disposal()
         {
             var dbContext = ServiceLocator.GetInstance<DesignerDbContext>();
             var id = Guid.NewGuid();
             var invalidation = new AssertTransactionSettledInvalidation(dbContext, () => RowExists(dbContext, id));
 
-            Assert.ThrowsAsync<InvalidOperationException>(() =>
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 RunThroughActionFilter(dbContext, HttpMethods.Post, throwInHandler: true,
                     handlerBody: () => StageAndFlush(dbContext, id), invalidation: invalidation));
 
+            Assert.That(exception!.Message, Is.EqualTo("handler failure"));
             Assert.That(invalidation.FlushCalled, Is.True);
+            Assert.That(invalidation.TransactionWasOpen, Is.False);
+            Assert.That(invalidation.RowExistedAtFlush, Is.False);
         }
 
         [Test]
@@ -226,7 +229,7 @@ namespace WB.Tests.Integration.Designer
             await using var externallyOwned = await dbContext.Database.BeginTransactionAsync();
             var handlerRan = false;
 
-            Assert.ThrowsAsync<InvalidOperationException>(() =>
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 RunThroughActionFilter(dbContext, HttpMethods.Post, throwInHandler: false,
                     handlerBody: () => handlerRan = true));
 
@@ -333,14 +336,17 @@ namespace WB.Tests.Integration.Designer
             }
 
             public bool FlushCalled { get; private set; }
+            public bool TransactionWasOpen { get; private set; }
+            public bool RowExistedAtFlush { get; private set; }
 
             public void Enqueue(string cacheKey) { }
 
             public void Flush()
             {
                 FlushCalled = true;
-                Assert.That(this.dbContext.Database.CurrentTransaction, Is.Null);
-                Assert.That(this.rowExists(), Is.False);
+                // The filter swallows cleanup faults, so record state here and assert in the test body.
+                TransactionWasOpen = this.dbContext.Database.CurrentTransaction != null;
+                RowExistedAtFlush = this.rowExists();
             }
         }
 

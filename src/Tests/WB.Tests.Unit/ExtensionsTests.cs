@@ -8,13 +8,6 @@ namespace WB.Tests.Unit
     [TestFixture]
     public class ExtensionsTests
     {
-        [TestCase(47, 0, null, "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0")]
-        [TestCase(42, 0, null, "Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0")]
-        [TestCase(51, 0, 2704, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36")]
-        [TestCase(38, 0, 2220, "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36 OPR/38.0.2220.41")]
-        [TestCase(10, 0, null, "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1")]
-        [TestCase(9, 0, null, "Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0)")]
-        [TestCase(2, 1, null, "Googlebot/2.1 (+http://www.google.com/bot.html)")]
         [TestCase(20, 4, null, "org.worldbank.solutions.interviewer/20.04 (build 27410) (QuestionnaireVersion/29.0.0)")]
         [TestCase(20, 4, 7, "org.worldbank.solutions.interviewer/20.04.7 (build 27417) (QuestionnaireVersion/29.0.0)")]
         [TestCase(20, 4, 7, "org.worldbank.solutions.supervisor/20.04.7 (build 27417) (QuestionnaireVersion/29.0.0)")]
@@ -28,6 +21,18 @@ namespace WB.Tests.Unit
 
             var expected = build.HasValue ? new Version(major, minor, build.Value) : new Version(major, minor);
             Assert.That(version, Is.EqualTo(expected));
+        }
+
+        [TestCase("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0")]
+        [TestCase("org.worldbank.solutions.interviewer/abc (build 1)")]
+        [TestCase("")]
+        public void when_get_user_agent_without_app_version_should_return_null(string userAgent)
+        {
+            IHeaderDictionary headers = new HeaderDictionary();
+            headers.Append("User-Agent", userAgent);
+            var httpRequest = Mock.Of<HttpRequest>(r => r.Headers == headers);
+
+            Assert.That(WB.UI.Headquarters.Code.Extensions.GetProductVersionFromUserAgent(httpRequest, "org.worldbank"), Is.Null);
         }
     }
 }
