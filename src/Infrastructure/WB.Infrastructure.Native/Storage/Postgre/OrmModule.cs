@@ -7,6 +7,7 @@ using NHibernate;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Resources;
@@ -207,7 +208,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.BindToMethod<ISessionFactory>(c => sessionFactory.SessionFactoryBinder(c), 
                 externallyOwned: true);
 
-            registry.BindInPerLifetimeScope<IUnitOfWork, UnitOfWork>();
+            registry.BindInPerLifetimeScope<IUnitOfWork, IUnitOfWorkCompletion, UnitOfWork>();
 
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<,>), typeof(PostgreReadSideStorage<,>));

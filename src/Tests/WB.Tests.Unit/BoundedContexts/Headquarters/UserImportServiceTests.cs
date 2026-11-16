@@ -447,7 +447,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 authorizedUser: Mock.Of<IAuthorizedUser>(u => u.Workspaces == new[] { "space" }));
 
             // Act
-            TestDelegate act = () => service.VerifyAndSaveIfNoErrors(new MemoryStream(Encoding.UTF8.GetBytes(data)), "file.txt", "space").ToList();
+           Action act = () => service.VerifyAndSaveIfNoErrors(new MemoryStream(Encoding.UTF8.GetBytes(data)), "file.txt", "space").ToList();
 
             // Assert
             Assert.DoesNotThrow(act);

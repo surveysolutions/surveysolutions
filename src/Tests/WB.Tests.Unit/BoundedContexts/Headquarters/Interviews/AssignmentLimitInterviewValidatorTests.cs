@@ -37,7 +37,7 @@ public class AssignmentLimitInterviewValidatorTests
 
         var validator = Create.Service.AssignmentLimitInterviewValidator(assignmentService, prototypeService);
 
-        TestDelegate act = () => validator.Validate(null, Create.Command.CreateInterview(userId: Id.gA, assignmentId: 3, interviewMode: InterviewMode.CAWI));
+       Action act = () => validator.Validate(null, Create.Command.CreateInterview(userId: Id.gA, assignmentId: 3, interviewMode: InterviewMode.CAWI));
 
         Assert.That(act, Throws.Exception.InstanceOf<InterviewException>()
             .With.Message.EqualTo(CommandValidatorsMessages.AssignmentLimitReached)
@@ -68,7 +68,7 @@ public class AssignmentLimitInterviewValidatorTests
         statefulInterview.Apply(Create.Event.InterviewCreated(assignmentId: 3));
         statefulInterview.ChangeInterviewMode(Id.g1, DateTimeOffset.Now, InterviewMode.CAWI);
 
-        TestDelegate act = () => validator.Validate(statefulInterview, Create.Command.AnswerTextQuestionCommand(userId: Id.gA, interviewId: Id.g7, answer: "ttt" ));
+       Action act = () => validator.Validate(statefulInterview, Create.Command.AnswerTextQuestionCommand(userId: Id.gA, interviewId: Id.g7, answer: "ttt" ));
 
         Assert.That(act, Throws.Exception.InstanceOf<InterviewException>()
             .With.Message.EqualTo(CommandValidatorsMessages.AssignmentLimitReached)
@@ -147,7 +147,7 @@ public class AssignmentLimitInterviewValidatorTests
             mockAssignmentsService.Object,
             Mock.Of<IAggregateRootPrototypeService>());
 
-        TestDelegate act = () =>
+       Action act = () =>
             validator.Validate(null, Create.Command.CreateInterview(userId: Id.gA, assignmentId: 9, interviewMode: InterviewMode.CAWI));
 
         Assert.That(act, Throws.Exception.InstanceOf<InterviewException>()

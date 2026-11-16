@@ -52,4 +52,5 @@
 
   <data name="Importing" xml:space="preserve"><value>Duke importuar {{percent}}%</value></data>
   <data name="Prepare" xml:space="preserve"><value>Duke marrë të dhënat e pyetësorit</value></data>
+  <data name="CopyWebInterviewSettings" xml:space="preserve"><value>Kopjo cilësimet e Web Interview nga versioni i mëparshëm (përfshirë shabllonet e emailit dhe tekstet e ekranit)</value></data>
 </root>

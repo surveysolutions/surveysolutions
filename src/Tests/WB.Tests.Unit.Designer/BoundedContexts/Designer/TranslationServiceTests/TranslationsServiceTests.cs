@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
 using ClosedXML.Graphics;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -12,7 +11,6 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -562,9 +560,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
             //act
-            TestDelegate act = () => service.Store(questionnaireId, translationId, fileStream);
+            void Act() => service.Store(questionnaireId, translationId, fileStream);
             //assert
-            Assert.That(act, Throws.Nothing);
+            Assert.That(Act, Throws.Nothing);
         }
 
         [Test]
@@ -616,9 +614,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
 
             //act
-            TestDelegate act = () => service.Store(questionnaireId, translationId, fileStream);
+            void Act() => service.Store(questionnaireId, translationId, fileStream);
             //assert
-            Assert.That(act, Throws.Nothing);
+            Assert.That(Act, Throws.Nothing);
         }
         
         [Test]

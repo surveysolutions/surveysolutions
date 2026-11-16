@@ -131,6 +131,21 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <input class="checkbox-filter single-checkbox"
+                                id="ckbCopyWebInterviewSettings"
+                                type="checkbox"
+                                value="True"
+                                name="CopyWebInterviewSettings"
+                                :disabled="!canCopyWebInterviewSettings"
+                                v-model="copyWebInterviewSettings" />
+                            <label for="ckbCopyWebInterviewSettings">
+                                <span class="tick"></span>
+                                {{ $t('QuestionnaireImport.CopyWebInterviewSettings') }}
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -204,6 +219,7 @@ export default {
             errorMessage: null,
             dotsCount: 0,
             criticalityLevel: null,
+            copyWebInterviewSettings: false,
         }
     },
     mounted() {
@@ -227,6 +243,8 @@ export default {
             this.errorMessage = ''
 
             var formData = new FormData(this.$refs.importingForm)
+            formData.set('CopyWebInterviewSettings',
+                this.copyWebInterviewSettings && this.canCopyWebInterviewSettings ? 'True' : 'False')
             var currentStatus = await this.$http.post(window.location, formData)
 
             await this.timeout(1000)
@@ -274,6 +292,9 @@ export default {
         hasQuestionnaireInfo() {
             return this.$config.model.questionnaireInfo != null
         },
+        canCopyWebInterviewSettings() {
+            return this.$config.model.newVersionNumber > 1
+        },
         progressText() {
             var text = ''
             if (this.progressPercent === 0) {
@@ -284,6 +305,12 @@ export default {
             }
             text += '...'.substring(0, this.dotsCount)
             return text
+        },
+    },
+    watch: {
+        canCopyWebInterviewSettings(value) {
+            if (!value)
+                this.copyWebInterviewSettings = false
         },
     },
 }

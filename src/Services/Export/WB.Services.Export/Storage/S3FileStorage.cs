@@ -76,12 +76,12 @@ namespace WB.Services.Export.Storage
 
                 ListObjectsV2Response response = await client.ListObjectsV2Async(listObjects);
 
-                return response.S3Objects.Select(s3 => new FileObject
+                return response.S3Objects?.Select(s3 => new FileObject
                 {
                     Path = s3.Key.Substring(StorageBasePath.Length),
-                    Size = s3.Size,
-                    LastModified = s3.LastModified
-                }).ToList();
+                    Size = s3.Size.GetValueOrDefault(),
+                    LastModified = s3.LastModified.GetValueOrDefault()
+                }).ToList() ?? new List<FileObject>();
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
@@ -189,7 +189,7 @@ namespace WB.Services.Export.Storage
                     {
                         Path = key,
                         Size = response.ContentLength,
-                        LastModified = response.LastModified
+                        LastModified = response.LastModified.GetValueOrDefault()
                     };
                 
                 log.LogWarning($"GetObjectMetadata: metadata request for {key} returned status {response.HttpStatusCode}");

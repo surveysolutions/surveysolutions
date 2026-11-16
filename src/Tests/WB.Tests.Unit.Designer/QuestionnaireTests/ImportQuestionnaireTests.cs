@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
                 Mock<IQuestionnaireDocument> docMock = new Mock<IQuestionnaireDocument>();
                 // act
-                TestDelegate act =
+               Action act =
                     () =>
                     questionnaire.ImportQuestionnaire(Guid.NewGuid(), docMock.Object);
                 // assert
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 document.IsDeleted = true;
 
                 // act
-                TestDelegate act = () => questionnaire.ImportQuestionnaire(Guid.NewGuid(), document);
+               Action act = () => questionnaire.ImportQuestionnaire(Guid.NewGuid(), document);
 
                 // assert
                 Assert.Throws<QuestionnaireException>(act);

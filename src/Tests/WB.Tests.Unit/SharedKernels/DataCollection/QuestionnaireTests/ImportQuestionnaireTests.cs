@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             {
                 questionnaire.ImportFromDesigner(Create.Event.ImportFromDesigner(responsibleId, newState, false, "base64 string of assembly", 1));
 
-                TestDelegate act = () => questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
+               Action act = () => questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 1, responsibleId));
 
                 // assert
                 Assert.Throws<QuestionnaireException>(act);
@@ -83,7 +83,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
 
-                TestDelegate act = () => questionnaire.DisableQuestionnaire(new DisableQuestionnaire(Guid.NewGuid(), 3, responsibleId));
+               Action act = () => questionnaire.DisableQuestionnaire(new DisableQuestionnaire(Guid.NewGuid(), 3, responsibleId));
 
                 // assert
                 Assert.Throws<QuestionnaireException>(act);
@@ -104,7 +104,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             Abc.SetUp.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage);
             using (var eventContext = new EventContext())
             {
-                TestDelegate act =
+               Action act =
                     () =>
                         questionnaire.DisableQuestionnaire(new DisableQuestionnaire(Guid.NewGuid(), 1, responsibleId));
 

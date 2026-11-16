@@ -19,15 +19,18 @@ public static class GeometryEditorExtensions
     private static Task<Geometry> StartImplAsync(GeometryEditor geometryEditor, Action startAction)
     {
         var tcs = new TaskCompletionSource<Geometry>();
+        Geometry lastGeometry = geometryEditor.Geometry;
 
         PropertyChangedEventHandler onPropertyChanged = null;
-        onPropertyChanged = (s, e) =>
+        onPropertyChanged = (_, e) =>
         {
-            if ((e.PropertyName == nameof(GeometryEditor.Geometry) || e.PropertyName == nameof(GeometryEditor.IsStarted)) 
-                && !geometryEditor.IsStarted)
+            if (e.PropertyName == nameof(GeometryEditor.Geometry) && geometryEditor.Geometry != null)
+                lastGeometry = geometryEditor.Geometry;
+
+            if (e.PropertyName == nameof(GeometryEditor.IsStarted) && !geometryEditor.IsStarted)
             {
                 geometryEditor.PropertyChanged -= onPropertyChanged;
-                tcs.TrySetResult(geometryEditor.Geometry);
+                tcs.TrySetResult(geometryEditor.Geometry ?? lastGeometry);
             }
         };
         geometryEditor.PropertyChanged += onPropertyChanged;
@@ -35,9 +38,11 @@ public static class GeometryEditorExtensions
         try
         {
             startAction.Invoke();
+            lastGeometry ??= geometryEditor.Geometry;
         }
         catch (Exception ex)
         {
+            geometryEditor.PropertyChanged -= onPropertyChanged;
             tcs.TrySetException(ex);
         }
         return tcs.Task;

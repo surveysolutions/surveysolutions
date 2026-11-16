@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Abc.Storage;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Domain;
 
 namespace WB.Tests.Abc
 {
@@ -40,6 +41,11 @@ namespace WB.Tests.Abc
             }
 
             public void RunWithLock(string aggregateGuid, Action run)
+            {
+                run();
+            }
+
+            public void RunWithLock(string aggregateGuid, IUnitOfWorkCompletion unitOfWork, Action run)
             {
                 run();
             }

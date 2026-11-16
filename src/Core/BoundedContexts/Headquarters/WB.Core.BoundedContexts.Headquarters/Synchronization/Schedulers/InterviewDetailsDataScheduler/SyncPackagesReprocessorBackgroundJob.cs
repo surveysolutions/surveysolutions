@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -31,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
         }
 
         
-        public Task Execute(IJobExecutionContext context)
+        public ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -40,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                 IReadOnlyCollection<int> packageIds = interviewBrokenPackagesService
                         .GetTopBrokenPackageIdsAllowedToReprocess(syncPackagesProcessorBackgroundJobSetting.SynchronizationBatchCount);
                 
-                if (packageIds == null || !packageIds.Any()) return Task.CompletedTask;
+                if (packageIds == null || !packageIds.Any()) return ValueTask.CompletedTask;
 
                 logger.Info($"Interview reprocess packages job: Received {packageIds.Count} packages for re-procession. Took {stopwatch.Elapsed:g}.");
                 stopwatch.Restart();
@@ -66,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                 logger.Error($"Interview reprocess packages job: FAILED. Reason: {ex.Message} ", ex);
             }
 
-            return Task.CompletedTask; 
+            return ValueTask.CompletedTask;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
@@ -149,6 +150,14 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             if (!aggregate.HasUncommittedChanges())
                 return;
+
+            var unitOfWork = serviceLocator.GetAllInstances<WB.Core.Infrastructure.Domain.IUnitOfWorkCompletion>()
+                ?.LastOrDefault();
+            unitOfWork?.OnCompleted(committed =>
+            {
+                if (!committed)
+                    aggregateRootCache.EvictAggregateRoot(aggregateId);
+            });
 
             var committedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
 

@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         [Test]
         public void should_throw_when_protected_answer_is_removed()
         {
-            TestDelegate act = () => interview.AnswerMultipleOptionsQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, new[] { 3 });
+           Action act = () => interview.AnswerMultipleOptionsQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, new[] { 3 });
 
             Assert.That(act, Throws.Exception.TypeOf<InterviewException>().With.Message.EqualTo("Removing protected answer is not allowed"));
         }
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         [Test]
         public void should_not_allow_removing_protected_answer()
         {
-            TestDelegate act = () => interview.RemoveAnswer(questionId, RosterVector.Empty, userId, DateTime.UtcNow);
+           Action act = () => interview.RemoveAnswer(questionId, RosterVector.Empty, userId, DateTime.UtcNow);
 
             Assert.That(act, Throws.Exception.TypeOf<InterviewException>().With.Message.EqualTo("Removing protected answer is not allowed"));
         }

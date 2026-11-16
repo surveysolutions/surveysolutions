@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
 
         public virtual long Size { get; set; }
         public virtual string FileName { get; set; }
+        public virtual string StorageKey { get; set; }
         public virtual DateTime? ImportDate { get; set; }
         public virtual Guid? UploadedBy { get; set; }
         public virtual double XMaxVal { set; get; }
@@ -35,6 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         {
             Size = source.Size;
             FileName = source.FileName;
+            StorageKey = source.StorageKey;
             ImportDate = source.ImportDate;
             UploadedBy = source.UploadedBy;
             Wkid = source.Wkid;

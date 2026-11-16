@@ -2,8 +2,9 @@
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.QuestionnaireTests
 {
     [TestFixture]
     internal class UpdateGroupTests : QuestionnaireTestsContext
@@ -35,14 +36,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Guid notExistingGroupPublicKey = Guid.NewGuid();
 
             // act
-            TestDelegate act = () =>
-            {
-                questionnaire.UpdateGroup(notExistingGroupPublicKey, responsibleId: responsibleId, title: null, variableName: null, rosterSizeQuestionId: null,
+            void Act() =>
+              questionnaire.UpdateGroup(notExistingGroupPublicKey, responsibleId: responsibleId, title: null, variableName: null, rosterSizeQuestionId: null,
                     description: null, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
-            };
-
+            
             // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(Act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupNotFound));
         }
 
@@ -125,13 +124,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var description = "hardest questionnaire in the world";
 
             // act
-            TestDelegate act =
-                () =>
-                    questionnaire.UpdateGroup(groupPublicKey, responsibleId: Guid.NewGuid(), title: "Title", variableName: null, rosterSizeQuestionId: null,
-                        description: description, condition: null, hideIfDisabled: false, isRoster: false,
-                        rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
+            void Act() =>
+                questionnaire.UpdateGroup(groupPublicKey, responsibleId: Guid.NewGuid(), title: "Title", variableName: null, rosterSizeQuestionId: null,
+                    description: description, condition: null, hideIfDisabled: false, isRoster: false,
+                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, displayMode: RosterDisplayMode.Flat);
             // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(Act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
     }

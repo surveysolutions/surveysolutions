@@ -198,6 +198,11 @@ namespace WB.UI.Headquarters.Controllers
                 var newVersion = this.questionnaireVersionProvider.GetNextVersion(model.Id);
                 this.commandService.Execute(new CloneQuestionnaire(
                     model.Id, model.Version, model.NewTitle, newQuestionnaireVersion:newVersion, userId: this.authorizedUser.Id, comment: model.Comment));
+
+                var sourceIdentity = new QuestionnaireIdentity(model.Id, model.Version);
+                var clonedIdentity = new QuestionnaireIdentity(model.Id, newVersion);
+                var config = this.webInterviewConfigProvider.Get(sourceIdentity);
+                this.webInterviewConfigProvider.Store(clonedIdentity, config.CopyFor(clonedIdentity));
             }
             catch (QuestionnaireException exception)
             {

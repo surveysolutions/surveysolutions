@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.Domain;
 
 namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
@@ -125,9 +127,15 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
-            this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
+            serviceLocator.GetInstance<IInScopeExecutor>().Execute(locator =>
             {
-                serviceLocator.ExecuteInScope<ICommandExecutor>(ce => ce.ExecuteCommand(command, origin, cancellationToken, aggregateId));
+                var execute = () => locator.GetInstance<ICommandExecutor>()
+                    .ExecuteCommand(command, origin, cancellationToken, aggregateId);
+                var unitOfWork = locator.GetAllInstances<IUnitOfWorkCompletion>()?.LastOrDefault();
+                if (unitOfWork == null)
+                    aggregateLock.RunWithLock(aggregateId.FormatGuid(), execute);
+                else
+                    aggregateLock.RunWithLock(aggregateId.FormatGuid(), unitOfWork, execute);
             });
         }
     }

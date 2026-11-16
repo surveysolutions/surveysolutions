@@ -1,8 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.QuestionnaireTests
 {
     [TestFixture]
     internal class UpdateQuestionnaireTests : QuestionnaireTestsContext
@@ -17,10 +18,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
             // act
-            TestDelegate act = () => questionnaire.UpdateQuestionnaire(Create.UpdateQuestionnaire(emptyTitle, false, responsibleId));
+            void Act() => questionnaire.UpdateQuestionnaire(Create.UpdateQuestionnaire(emptyTitle, false, responsibleId));
 
             // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(Act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionnaireTitleRequired));
         }
 
@@ -46,9 +47,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
 
             // act
-            TestDelegate act = () => questionnaire.UpdateQuestionnaire(Create.UpdateQuestionnaire("title", false, responsibleId: Guid.NewGuid()));
+            void Act() => questionnaire.UpdateQuestionnaire(Create.UpdateQuestionnaire("title", false, responsibleId: Guid.NewGuid()));
             // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(Act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
 
@@ -59,10 +60,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
 
             // act
-            TestDelegate act = () => questionnaire.UpdateQuestionnaire(Create.UpdateQuestionnaire("title", false,
+            void Act() => questionnaire.UpdateQuestionnaire(Create.UpdateQuestionnaire("title", false,
                 responsibleId: Guid.NewGuid(), isResponsibleAdmin: true));
             // assert
-            Assert.DoesNotThrow(act);
+            Assert.DoesNotThrow(Act);
         }
     }
 }

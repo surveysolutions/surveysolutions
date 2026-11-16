@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
             // act
-            TestDelegate act = () => questionnaire.Initialize(Guid.NewGuid(), document: null, sharedPersons: null);
+           Action act = () => questionnaire.Initialize(Guid.NewGuid(), document: null, sharedPersons: null);
 
             // assert
             Assert.DoesNotThrow(act);

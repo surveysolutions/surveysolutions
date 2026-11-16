@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Quartz;
-using Quartz.Spi;
+using Quartz.Extensibility;
 using WB.Core.Infrastructure.Domain;
 using WB.Infrastructure.Native.Workspaces;
 
@@ -42,17 +44,24 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         /// <param name="scheduler"></param>
         /// <returns>the newly instantiated Job</returns>
         /// <throws>  SchedulerException if there is a problem instantiating the Job. </throws>
-        public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
+        public ValueTask<JobScope> CreateJob(
+            TriggerFiredBundle bundle,
+            IScheduler scheduler,
+            CancellationToken cancellationToken)
         {
             IJobDetail jobDetail = bundle.JobDetail;
-            Type jobType = jobDetail.JobType;
             try
             {
-                return new AsyncScopedJobDecorator(inScopeExecutor, workspacesCache, logger, jobType);
+                Type jobType = jobDetail.JobType.Type;
+                var job = new AsyncScopedJobDecorator(inScopeExecutor, workspacesCache, logger, jobType);
+                return ValueTask.FromResult(new JobScope(job));
             }
             catch (Exception e)
             {
-                var se = new SchedulerException(string.Format(CultureInfo.InvariantCulture, "Problem instantiating class '{0}'", jobDetail.JobType.FullName), e);
+                var se = new SchedulerException(string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Problem instantiating class '{0}'",
+                    jobDetail.JobType.FullName), e);
                 throw se;
             }
         }
@@ -61,8 +70,9 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         /// Allows the the job factory to destroy/cleanup the job if needed. 
         /// No-op when using SimpleJobFactory.
         /// </summary>
-        public void ReturnJob(IJob job)
+        public ValueTask ReturnJob(JobScope scope, CancellationToken cancellationToken)
         {
+            return ValueTask.CompletedTask;
         }
     }
 }

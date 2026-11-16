@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddOrUpdateCategories(Create.AddOrUpdateCategories(questionnaire.Id, responsibleId, categoriesId));
 
             // act
-            TestDelegate act = () => questionnaire.DeleteCategories(Create.DeleteCategories(questionnaire.Id, Guid.NewGuid(), categoriesId));
+           Action act = () => questionnaire.DeleteCategories(Create.DeleteCategories(questionnaire.Id, Guid.NewGuid(), categoriesId));
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));

@@ -19,7 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             services.AddTransient<IExportSettings, ExportSettings>();
             services.AddTransient<IExportViewFactory, ExportViewFactory>();
             services.AddTransient<IInterviewsToExportViewFactory, InterviewsToExportViewFactory>();
-            services.AddTransient<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
             services.AddTransient<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
         }
     }

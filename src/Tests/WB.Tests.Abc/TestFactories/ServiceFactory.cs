@@ -1277,25 +1277,44 @@ namespace WB.Tests.Abc.TestFactories
             IOptions<FileStorageConfig> fileStorageConfig = null,
             IArchiveUtils archiveUtils = null,
             IPlainStorageAccessor<MapBrowseItem> mapsStorage = null,
+            IPlainStorageAccessor<MapFileDeletionRequest> mapFileDeletionRequests = null,
             IPlainStorageAccessor<UserMap> userMapsStorage = null,
             ISerializer serializer = null,
             IUserRepository userStorage = null,
             IExternalFileStorage externalFileStorage = null,
             IAuthorizedUser authorizedUser = null,
-            IOptions<GeospatialConfig> geospatialConfig = null)
+            IOptions<GeospatialConfig> geospatialConfig = null,
+            IUnitOfWork unitOfWork = null,
+            IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
+            if (unitOfWork == null)
+            {
+                var sqlQuery = new Mock<ISQLQuery>();
+                sqlQuery.Setup(x => x.SetInt32(It.IsAny<string>(), It.IsAny<int>())).Returns(sqlQuery.Object);
+                sqlQuery.Setup(x => x.SetString(It.IsAny<string>(), It.IsAny<string>())).Returns(sqlQuery.Object);
+                sqlQuery.Setup(x => x.ExecuteUpdateAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
+                var session = new Mock<ISession>();
+                session.Setup(x => x.CreateSQLQuery(It.IsAny<string>())).Returns(sqlQuery.Object);
+                var mockedUnitOfWork = new Mock<IUnitOfWork>();
+                mockedUnitOfWork.Setup(x => x.Session).Returns(session.Object);
+                unitOfWork = mockedUnitOfWork.Object;
+            }
+
            return new MapFileStorageService(
              fileSystemAccessor ?? Create.Service.FileSystemIOAccessor(), 
              fileStorageConfig ?? Options.Create(new FileStorageConfig()),
              archiveUtils ?? Create.Service.ArchiveUtils(),
              mapsStorage ?? new TestPlainStorage<MapBrowseItem>(),
+             mapFileDeletionRequests ?? new TestPlainStorage<MapFileDeletionRequest>(),
              userMapsStorage ?? new TestPlainStorage<UserMap>(),
              serializer ?? Create.Service.NewtonJsonSerializer(),
              userStorage ?? Create.Storage.UserRepository(),
              externalFileStorage ?? Mock.Of<IExternalFileStorage>(),
              geospatialConfig ?? Mock.Of<IOptions<GeospatialConfig>>(),
              authorizedUser ?? Mock.Of<IAuthorizedUser>(),
-             Mock.Of<ILogger<MapFileStorageService>>()
+             Mock.Of<ILogger<MapFileStorageService>>(),
+             unitOfWork,
+             workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor()
              ); 
         }
 

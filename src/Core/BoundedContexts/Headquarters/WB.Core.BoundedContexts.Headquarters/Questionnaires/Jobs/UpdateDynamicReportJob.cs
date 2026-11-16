@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs
     [DisallowConcurrentExecution]
     [RetryFailedJob]
     [DisplayName("Update dynamic report job"), Category("Update")]
-    public class UpdateDynamicReportJob : IJob<UpdateDynamicReportRequest>
+    public class UpdateDynamicReportJob : IJobWithData<UpdateDynamicReportRequest>
     {
         private readonly IExposedVariablesService exposedVariablesService;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader;

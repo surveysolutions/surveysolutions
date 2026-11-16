@@ -69,19 +69,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils
         [Test]
         public void AddNullRangeTest()
         {
-            Assert.That((TestDelegate)(() => new ObservableRangeCollection<int>().AddRange(null)), Throws.ArgumentNullException);
+            Assert.That((() => new ObservableRangeCollection<int>().AddRange(null)), Throws.ArgumentNullException);
         }
 
         [Test]
         public void InsertNullRangeTest()
         {
-            Assert.That((TestDelegate)(() => new ObservableRangeCollection<int>().InsertRange(0, null)), Throws.ArgumentNullException);
+            Assert.That((() => new ObservableRangeCollection<int>().InsertRange(0, null)), Throws.ArgumentNullException);
         }
 
         [Test]
         public void RemoveNullRangeTest()
         {
-            Assert.That((TestDelegate)(() => new ObservableRangeCollection<int>().RemoveRange(null)), Throws.ArgumentNullException);
+            Assert.That((() => new ObservableRangeCollection<int>().RemoveRange(null)), Throws.ArgumentNullException);
         }
     }
 }

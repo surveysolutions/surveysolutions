@@ -1,8 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.QuestionnaireTests
 {
     [TestFixture]
     internal class ConstructorTests : QuestionnaireTestsContext
@@ -22,15 +23,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             // arrange
 
             // act
-            TestDelegate act = () =>
+            void Act()
             {
                 Questionnaire questionnaire = Create.Questionnaire();
                 var command = Create.Command.CreateQuestionnaire(Guid.NewGuid(), emptyTitle, null, false);
                 questionnaire.CreateQuestionnaire(command);
-            };
+            }
 
             // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
+            var domainException = Assert.Throws<QuestionnaireException>(Act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionnaireTitleRequired));
         }
 

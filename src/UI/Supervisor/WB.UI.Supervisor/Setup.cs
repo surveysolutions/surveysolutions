@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using Android.Widget;
 using AndroidX.DrawerLayout.Widget;
 using Autofac;
 using Autofac.Features.ResolveAnything;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
-using MvvmCross.Plugin;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Supervisor;
@@ -36,7 +31,6 @@ using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Autofac.MvvmCross;
 using WB.UI.Shared.Enumerator.Services.Logging;
-using WB.UI.Shared.Enumerator.Utils;
 using WB.UI.Supervisor.Activities;
 using WB.UI.Supervisor.Activities.Interview;
 using WB.UI.Supervisor.MvvmBindings;
@@ -105,16 +99,10 @@ namespace WB.UI.Supervisor
         {
             base.InitializeApp(app);
             
-            string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
+            string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key_300);
             if (!string.IsNullOrEmpty(arcgisruntimeKey))
             {
                 ServiceLocator.Current.GetInstance<IMapInteractionService>().SetLicenseKey(arcgisruntimeKey);
-            }
-            
-            string arcgisruntimeApiKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_api_key);
-            if (!string.IsNullOrEmpty(arcgisruntimeApiKey))
-            {
-                ServiceLocator.Current.GetInstance<IMapInteractionService>().SetApiKey(arcgisruntimeApiKey);
             }
 
             var status = new UnderConstructionInfo();

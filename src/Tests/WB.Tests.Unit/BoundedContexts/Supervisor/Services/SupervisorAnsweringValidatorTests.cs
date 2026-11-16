@@ -1,4 +1,5 @@
-﻿using Main.Core.Entities.SubEntities;
+﻿using System;
+using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             var validator = CreateValidator();
 
-            TestDelegate act = () => validator.Validate(interview, Create.Command.AnswerTextQuestionCommand(interview.Id, Id.gA, Id.g1, "answer"));
+           Action act = () => validator.Validate(interview, Create.Command.AnswerTextQuestionCommand(interview.Id, Id.gA, Id.g1, "answer"));
 
             Assert.That(act, Throws.Exception.InstanceOf<AnswerNotAcceptedException>());
         }

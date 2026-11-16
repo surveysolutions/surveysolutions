@@ -103,8 +103,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         protected ILifetimeScope CreateChildContainer(string workspace = null)
         {
             if (lifetimeScope == null) throw new Exception($"Class was not initialized");
-            
-            var scope = lifetimeScope.BeginLifetimeScope(Depth + 1);
+
+            var ambientUnitOfWork = UnitOfWorkAmbientContext.Current;
+            var scope = ambientUnitOfWork == null
+                ? lifetimeScope.BeginLifetimeScope(Depth + 1)
+                : lifetimeScope.BeginLifetimeScope(Depth + 1, builder => builder
+                    .RegisterInstance(ambientUnitOfWork)
+                    .As<IUnitOfWork>()
+                    .As<IUnitOfWorkCompletion>()
+                    .ExternallyOwned());
 
             if (workspace == null)
             {

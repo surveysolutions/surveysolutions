@@ -6,7 +6,7 @@ using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Caching.Memory;
-using Supercluster;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Clustering;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;

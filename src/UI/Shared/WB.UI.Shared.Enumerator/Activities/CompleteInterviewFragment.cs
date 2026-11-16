@@ -25,6 +25,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private TabConfigurationStrategy tabConfigurationStrategy;
         private TabLayoutMediator tabLayoutMediator;
         private int recalculateRequestId;
+        private CompleteInterviewViewModel subscribedViewModel;
         private const int RecalculateRetryDelayMs = 50;
         private const int MaxRecalculateAttempts = 10;
 
@@ -45,6 +46,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             SetupTabsIfNeeded();
             RegisterPageChangeCallback();
+            SubscribeToViewModel();
             viewPager.Post(RecalculateRecyclerViewHeight);
 
             return view;
@@ -62,6 +64,35 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             CleanupViewResources();
             base.OnDestroyView();
+        }
+
+        private void SubscribeToViewModel()
+        {
+            UnsubscribeFromViewModel();
+            subscribedViewModel = ViewModel;
+            if (subscribedViewModel != null)
+                subscribedViewModel.PropertyChanged += OnViewModelPropertyChanged;
+        }
+
+        private void UnsubscribeFromViewModel()
+        {
+            if (subscribedViewModel != null)
+                subscribedViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+            subscribedViewModel = null;
+        }
+
+        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(CompleteInterviewViewModel.IsLoading)) return;
+
+            // tabs are hidden while loading, so their height has to be recalculated once they become visible
+            viewPager?.Post(() =>
+            {
+                if (View == null || IsDetached) return;
+                SetupTabsIfNeeded();
+                UpdateTabIndicator();
+                RecalculateRecyclerViewHeight();
+            });
         }
 
         private void RegisterPageChangeCallback()
@@ -269,10 +300,21 @@ namespace WB.UI.Shared.Enumerator.Activities
                 return computedHeight + recyclerView.PaddingTop + recyclerView.PaddingBottom;
             }
 
-            if (!recyclerView.CanScrollVertically(1) && !recyclerView.CanScrollVertically(-1))
+            if (!recyclerView.CanScrollVertically(1) && !recyclerView.CanScrollVertically(-1)
+                && recyclerView.MeasuredHeight > 0)
                 return recyclerView.MeasuredHeight;
 
-            return 0;
+            // the pager may have been hidden/zero-height on first layout, so the list has no laid out children yet;
+            // measure the content with an unspecified height to get its real size
+            var width = recyclerView.Width > 0 ? recyclerView.Width : recyclerView.MeasuredWidth;
+            if (width <= 0 || recyclerView.GetAdapter()?.ItemCount is not > 0)
+                return 0;
+
+            recyclerView.Measure(
+                View.MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.Exactly),
+                View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
+            var measured = recyclerView.MeasuredHeight;
+            return measured;
         }
 
         private void RecalculateRecyclerViewHeight()
@@ -379,6 +421,8 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void CleanupViewResources()
         {
+            UnsubscribeFromViewModel();
+
             if (viewPager != null)
                 viewPager.Adapter = null;
 

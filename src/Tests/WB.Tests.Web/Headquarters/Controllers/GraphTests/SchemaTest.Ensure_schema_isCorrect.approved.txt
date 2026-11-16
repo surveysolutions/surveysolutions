@@ -247,6 +247,7 @@ type Questionnaire {
   id: ID
   title: String!
   defaultLanguageName: String @cost(weight: "10")
+  defaultTranslationId: UUID @cost(weight: "10")
   translations: [Translation!]! @cost(weight: "10")
 }
 

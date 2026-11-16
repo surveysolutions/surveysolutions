@@ -87,8 +87,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                 cell.Style.NumberFormat.Format = "#,##0";
         }
 
-        //replace with library impl once released
-        //[Obsolete]
         public static XLCellValue FromObject(object obj, IFormatProvider provider = null)
         {
             return obj switch

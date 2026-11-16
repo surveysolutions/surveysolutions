@@ -180,6 +180,7 @@ src/
 - **Only meaningful changes are allowed:** Do not change other lines for formatting or unrelated reasons. Move code only when it provides substantial value.
 - **Follow existing line endings and rely on `.gitattributes`:** Do not rewrite files just to change line endings;
 - **Preserve line ending in files:** keep original line endings in files, if mixed LF is a priority. keep `*.sln` files as CRLF where required.
+- **When creating pull request for an issue, add issue id as suffix in the branch name
 
 ## Copilot Code Review
 
