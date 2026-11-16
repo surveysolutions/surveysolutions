@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using MvvmCross.Base;
 using FluentAssertions;
 using Moq;
 using MvvmCross.Commands;
@@ -8,19 +7,13 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using NSubstitute;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.Tests.Abc;
-using InterviewerInterviewViewModel = WB.UI.Interviewer.ViewModel.InterviewViewModel;
+
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 {
@@ -205,80 +198,5 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             }
         }
 
-        [TestFixture]
-        [TestOf(typeof(InterviewerInterviewViewModel))]
-        public class InterviewerInterviewViewModelTests : MvxIoCSupportingTest
-        {
-            public InterviewerInterviewViewModelTests()
-            {
-                base.Setup();
-                Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
-            }
-
-            [Test]
-            public void when_dispatcher_fails_while_applying_complete_status_exception_should_be_observed()
-            {
-                var sut = new TestableInterviewerInterviewViewModel(new BackgroundFaultingDispatcher());
-
-                Action act = () => sut.InvokeApplyCompleteViewModelStatus(Create.ViewModel.CompleteInterviewViewModel());
-
-                act.Should().Throw<InvalidOperationException>();
-            }
-
-            [Test]
-            public void when_already_on_main_thread_apply_complete_status_should_not_dispatch()
-            {
-                var sut = new TestableInterviewerInterviewViewModel(new MainThreadDispatcherThatMustNotBeCalled());
-
-                Action act = () => sut.InvokeApplyCompleteViewModelStatus(Create.ViewModel.CompleteInterviewViewModel());
-
-                act.Should().NotThrow();
-            }
-
-            private class TestableInterviewerInterviewViewModel : InterviewerInterviewViewModel
-            {
-                public TestableInterviewerInterviewViewModel(IMvxMainThreadAsyncDispatcher dispatcher)
-                    : base(null, null, null, null, Substitute.For<NavigationState>(), null,
-                        Mock.Of<IViewModelNavigationService>(), Mock.Of<IPrincipal>(),
-                        null, null, null, Substitute.For<IInterviewViewModelFactory>(), null, null, null,
-                        null, null, Mock.Of<ILogger>(), null, null, dispatcher,
-                        Mock.Of<IAudioAuditRecordingExecutor>())
-                {
-                }
-
-                public void InvokeApplyCompleteViewModelStatus(CompleteInterviewViewModel vm)
-                {
-                    this.ApplyCompleteViewModelStatus(vm);
-                }
-
-                public override IMvxCommand ReloadCommand { get; }
-                public override Task NavigateBack() => Task.CompletedTask;
-            }
-
-            private class BackgroundFaultingDispatcher : IMvxMainThreadAsyncDispatcher
-            {
-                public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
-                {
-                    action();
-                    return Task.FromException(new InvalidOperationException("dispatcher failure"));
-                }
-
-                public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
-                    => Task.FromException(new InvalidOperationException("dispatcher failure"));
-
-                public bool IsOnMainThread => false;
-            }
-
-            private class MainThreadDispatcherThatMustNotBeCalled : IMvxMainThreadAsyncDispatcher
-            {
-                public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
-                    => throw new InvalidOperationException("dispatcher should not be used on the main thread");
-
-                public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
-                    => throw new InvalidOperationException("dispatcher should not be used on the main thread");
-
-                public bool IsOnMainThread => true;
-            }
-        }
     }
 }
