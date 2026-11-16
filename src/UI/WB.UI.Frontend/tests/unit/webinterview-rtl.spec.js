@@ -182,7 +182,7 @@ test('actual styles mirror desktop and mobile sidebar positions and retain numer
             assert.ok(declarations(root, `${rtl} .navbar-header`, 'float').includes('right'))
             assert.ok(declarations(root, `${ltr} .navbar-header`, 'float').includes('left'))
             assert.deepEqual(declarations(root, 'html[dir=rtl] .flatpickr-calendar', 'direction'), ['ltr'])
-            const cells = ':where(html[dir=rtl]) :where(td, th)'
+            const cells = ':where(html[dir=rtl]) :where(td, th, .btn-input > .dropdown-toggle, .dropdown-menu > li > a)'
             assert.deepEqual(declarations(root, cells, 'unicode-bidi'), ['plaintext'])
             assert.deepEqual(declarations(root, cells, 'text-align'), ['-webkit-match-parent', 'match-parent'])
             let textFields = null

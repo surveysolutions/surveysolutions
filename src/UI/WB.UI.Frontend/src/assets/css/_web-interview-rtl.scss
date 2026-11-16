@@ -1,8 +1,8 @@
 /* rtl:begin:ignore */
-// Data cells and free-text fields often hold Latin identifiers, dates or phone numbers.
+// Data cells, dropdown options and free-text fields often hold Latin identifiers, dates or phone numbers.
 // Resolve their direction from content so trailing punctuation and digit groups keep
 // their order, while keeping the column/field alignment of the RTL page.
-:where(html[dir="rtl"]) :where(td, th) {
+:where(html[dir="rtl"]) :where(td, th, .btn-input > .dropdown-toggle, .dropdown-menu > li > a) {
     unicode-bidi: plaintext;
     text-align: -webkit-match-parent;
     text-align: match-parent;
