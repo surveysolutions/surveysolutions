@@ -1374,6 +1374,9 @@ Por favor, compruebe su conexión de red o póngase en contacto con el soporte d
   <data name="SideBarScenarioName" xml:space="preserve">
     <value>título del escenario</value>
   </data>
+<data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>Grabar nuevo escenario</value>
+  </data>
   <data name="SideBarScenarioTitle" xml:space="preserve">
     <value>Escenarios</value>
   </data>
@@ -1451,6 +1454,9 @@ Por favor, compruebe su conexión de red o póngase en contacto con el soporte d
 </data>
     <data name="CommunicationError" xml:space="preserve">
   <value>Error de red</value>
+</data>
+<data name="PopupBlocked" xml:space="preserve">
+  <value>No se pudo abrir la ventana. Permita las ventanas emergentes en su navegador e inténtelo de nuevo.</value>
 </data>
     <data name="CopyTo" xml:space="preserve">
   <value>Copiar a</value>

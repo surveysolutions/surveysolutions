@@ -340,6 +340,9 @@
   <data name="SideBarScenarioName" xml:space="preserve">
     <value>titre du scénario</value>
   </data>
+<data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>Enregistrer un nouveau scénario</value>
+  </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
     <value>{{count}} Section :</value>
   </data>
@@ -1623,6 +1626,9 @@ Veuillez vérifier votre connexion réseau ou contacter votre support informatiq
   </data>
   <data name="CommunicationError" xml:space="preserve">
     <value>Erreur réseau</value>
+  </data>
+<data name="PopupBlocked" xml:space="preserve">
+    <value>Impossible d’ouvrir la fenêtre. Autorisez les fenêtres contextuelles dans votre navigateur et réessayez.</value>
   </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
     <value>Ajouter de nouvelles catégories</value>
