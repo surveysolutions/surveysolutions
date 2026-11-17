@@ -13,5 +13,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string WebInterviewUrl { get; set; }
         public string ContinueLink { get; set; }
         public bool? AllowTranscriptDownloading { get; set; }
+        public string PdfUrl { get; set; }
     }
 }

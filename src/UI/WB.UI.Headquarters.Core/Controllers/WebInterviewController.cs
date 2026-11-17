@@ -225,7 +225,12 @@ namespace WB.UI.Headquarters.Controllers
             var continueLink = (invitation == null)
                 ? ""
                 : webInterviewLinkProvider.WebInterviewContinueLink(invitation);
-            
+
+            var hasAccess = HttpContext.Session.HasAccessToWebInterviewAfterComplete(interview);
+            var pdfUrl = isGenerateLinkAvailable && hasAccess && config.AllowTranscriptDownloading != false
+                ? Url.Action("Pdf", "InterviewsPublicApi", new { id = interview.Id })
+                : null;
+
             var model = new WebInterviewIndexPageModel
             {
                 Id = interviewId,
@@ -236,6 +241,7 @@ namespace WB.UI.Headquarters.Controllers
                 AllowTranscriptDownloading = config.AllowTranscriptDownloading,
                 WebInterviewUrl = RenderWebInterviewUri(assignmentId, interview.Id),
                 ContinueLink = continueLink,
+                PdfUrl = pdfUrl,
             };
             
             return model;
