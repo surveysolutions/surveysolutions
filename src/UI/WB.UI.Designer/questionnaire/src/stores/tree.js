@@ -144,6 +144,9 @@ export const useTreeStore = defineStore('tree', {
             question.yesNoView = data.yesNoView;
             question.hideIfDisabled = data.hideIfDisabled;
             question.randomizeOrder = data.randomizeOrder;
+            question.randomizeAnswerOptions =
+                (data.type === 'SingleOption' || data.type === 'MultyOption') &&
+                (data.randomizeAnswerOptions || false);
             question.isCritical = data.isCritical;
 
             const varType = this.getUnderlyingQuestionType(question);

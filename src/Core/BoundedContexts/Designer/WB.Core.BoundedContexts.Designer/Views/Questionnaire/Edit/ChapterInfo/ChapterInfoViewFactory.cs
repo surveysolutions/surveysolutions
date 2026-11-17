@@ -193,6 +193,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 HasCondition = !string.IsNullOrWhiteSpace(question.ConditionExpression),
                 HideIfDisabled = question.HideIfDisabled,
                 RandomizeOrder = question.RandomizeOrder,
+                RandomizeAnswerOptions = question.RandomizeAnswerOptions,
                 HasValidation = question.ValidationConditions.Count > 0,
                 Type = question.QuestionType,
                 LinkedToQuestionId = question.LinkedToQuestionId?.FormatGuid(),
