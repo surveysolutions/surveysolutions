@@ -76,7 +76,9 @@ Shared dialogs use logical text alignment so their content and action buttons
 follow the inherited direction even when appended or teleported to `body`.
 In RTL, table cells, dropdown labels/options and free-text inputs use `unicode-bidi: plaintext` so dates,
 phone numbers, identifiers and passwords keep their character order; column and
-field alignment is unchanged. Wrap LTR values that follow translated labels inside
+field alignment is unchanged. Questionnaire titles, options, instructions, section
+names and read-only answers resolve direction the same way, because questionnaire
+text may be in another language than the UI. Wrap LTR values that follow translated labels inside
 one paragraph (interview keys, versions) in `<bdi>`: after Arabic text, digit groups
 separated by hyphens are otherwise displayed in reverse order.
 

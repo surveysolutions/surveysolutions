@@ -194,6 +194,19 @@ test('actual styles mirror desktop and mobile sidebar positions and retain numer
             assert.match(textFields.selector, /:not\(\[inputmode=numeric\], \[inputmode=decimal\], \.flatpickr-input, \.numeric-question input, \.time-question input\)/)
             assert.deepEqual(declarations(root, textFields.selector, 'unicode-bidi'), ['plaintext'])
             assert.deepEqual(declarations(root, textFields.selector, 'text-align'), ['right'])
+            let questionnaireText = null
+            root.walkRules(rule => {
+                if (rule.selector.includes('.question-editor .options-group .field > label')) questionnaireText = rule
+            })
+            assert.ok(questionnaireText, 'questionnaire text must resolve direction from its own content')
+            for (const selector of ['.question-editor h5 > span', '.question-editor .options-group .field > span',
+                '.information-block.instruction > div', '.readonly-answer-group .container-info p > b',
+                '.unit-title h3', '.structured-content .panel-title > a', '.action-container .btn']) {
+                assert.ok(questionnaireText.selector.includes(selector), selector)
+            }
+            assert.ok(questionnaireText.selector.startsWith(':where(html[dir=rtl]) :where('))
+            assert.deepEqual(declarations(root, questionnaireText.selector, 'unicode-bidi'), ['plaintext'])
+            assert.deepEqual(declarations(root, questionnaireText.selector, 'text-align'), ['-webkit-match-parent', 'match-parent'])
             assert.deepEqual(declarations(root, 'html[dir=rtl] .btn-back::before', 'transform'), ['scaleX(-1)'])
             assert.deepEqual(declarations(root, '.modal-dialog', 'text-align'), ['start'])
             assert.deepEqual(declarations(root, '.modal-content .modal-footer', 'text-align'), ['start'])
@@ -370,6 +383,7 @@ test('interview keys and questionnaire versions are isolated next to translated 
     for (const [file, pattern] of [
         ['hqapp/Views/HQ/Interview/DetailsInfo.vue', /<bdi dir="ltr">\{\{ \$config\.model\.key \}\}<\/bdi>/],
         ['hqapp/Views/HQ/Interview/DetailsInfo.vue', /<bdi>\[ver\.\{\{ this\.\$config\.model\.questionnaireVersion \}\}\]<\/bdi>\s*<bdi>\{\{ this\.\$config\.model\.questionnaireTitle \}\}<\/bdi>/],
+        ['hqapp/Views/HQ/Interview/DetailsInfo.vue', /<a dir="ltr"\s+:href="this\.\$config\.model\.assignmentDetailsUrl">#/],
         ['hqapp/Views/HQ/Interview/StatusesHistory.vue', /<bdi dir="ltr"\s+v-text="\$config\.model\.key"><\/bdi>/],
         ['hqapp/components/GoogleMap.vue', /<bdi dir="ltr"\s+v-text="selectedTooltip\.interviewKey"><\/bdi>/],
         ['hqapp/Views/HQ/Reports/MapReport.vue', /<bdi dir="ltr"\s+v-text="selectedTooltip\.interviewKey"><\/bdi>/],

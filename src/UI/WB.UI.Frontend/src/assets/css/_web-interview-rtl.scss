@@ -13,6 +13,22 @@
     text-align: right;
 }
 
+// Questionnaire content is authored in its own language, independently of the UI language.
+:where(html[dir="rtl"]) :where(
+    .question-editor h5 > span,
+    .question-editor .options-group .field > label,
+    .question-editor .options-group .field > span,
+    .information-block.instruction > div,
+    .readonly-answer-group .container-info p > b,
+    .unit-title h3,
+    .structured-content .panel-title > a,
+    .action-container .btn
+) {
+    unicode-bidi: plaintext;
+    text-align: -webkit-match-parent;
+    text-align: match-parent;
+}
+
 html[dir="rtl"] {
     code,
     pre,

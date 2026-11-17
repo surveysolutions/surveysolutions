@@ -16,7 +16,8 @@
                             <bdi dir="ltr">{{ $config.model.key }}</bdi>({{
                                 $t('Common.Assignment')
                             }}
-                            <a :href="this.$config.model.assignmentDetailsUrl">#{{ this.$config.model.assignmentId
+                            <a dir="ltr"
+                                :href="this.$config.model.assignmentDetailsUrl">#{{ this.$config.model.assignmentId
                                 }}</a>)
                         </li>
                         <li id="detailsInfo_qusetionnaireTitleListItem" class="questionnaire-title">
