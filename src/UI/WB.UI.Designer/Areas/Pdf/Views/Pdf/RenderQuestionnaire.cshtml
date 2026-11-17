@@ -352,6 +352,12 @@
                     <div class="variable_name">@(group.VariableName)</div>
                 </div>
 
+                @if (questionnaire.IsOrderRandomized(group))
+                {
+                <div class="common-info">
+                    <div class="instructions"><span>R</span>@PdfStrings.RandomizedOrder</div>
+                </div>
+                }
                 @if (questionnaire.GroupHasEnablementCondition(group))
                 {
                 <div class="common-info">

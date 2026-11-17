@@ -187,6 +187,12 @@
     <data name="QuestionType_Ordered" xml:space="preserve">
         <value>สั่ง</value>
     </data>
+    <data name="QuestionType_RandomizedOptions" xml:space="preserve">
+        <value>ตัวเลือกแบบสุ่ม</value>
+    </data>
+    <data name="RandomizedOrder" xml:space="preserve">
+        <value>ลำดับแบบสุ่ม</value>
+    </data>
     <data name="QuestionType_Picture" xml:space="preserve">
         <value>รูปภาพ</value>
     </data>

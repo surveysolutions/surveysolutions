@@ -303,6 +303,12 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             }
         }
         
+        public static string QuestionType_RandomizedOptions {
+            get {
+                return ResourceManager.GetString("QuestionType_RandomizedOptions", resourceCulture);
+            }
+        }
+        
         public static string QuestionType_Picture {
             get {
                 return ResourceManager.GetString("QuestionType_Picture", resourceCulture);
@@ -324,6 +330,12 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string QuestionType_YesNo {
             get {
                 return ResourceManager.GetString("QuestionType_YesNo", resourceCulture);
+            }
+        }
+        
+        public static string RandomizedOrder {
+            get {
+                return ResourceManager.GetString("RandomizedOrder", resourceCulture);
             }
         }
         

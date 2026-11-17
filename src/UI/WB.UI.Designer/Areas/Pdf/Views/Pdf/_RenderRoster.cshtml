@@ -41,9 +41,15 @@
         </div>
             
         
-        @if (questionnaire.GroupHasEnablementCondition(roster))
+        @if (questionnaire.GroupHasEnablementCondition(roster) || questionnaire.IsOrderRandomized(roster))
         {
             <div class="common-info">
+                @if (questionnaire.IsOrderRandomized(roster))
+                {
+                    <div class="instructions"><span>R</span>@PdfStrings.RandomizedOrder</div>
+                }
+                @if (questionnaire.GroupHasEnablementCondition(roster))
+                {
                 <div class="condition">
                     <span>E</span>@questionnaire.GetExpressionExcerpt(roster.ConditionExpression)
                     @if (questionnaire.ExpressionIsTooLong(roster.ConditionExpression))
@@ -55,6 +61,7 @@
                         </div>
                     }
                 </div>
+                }
             </div>
         }
     </div>

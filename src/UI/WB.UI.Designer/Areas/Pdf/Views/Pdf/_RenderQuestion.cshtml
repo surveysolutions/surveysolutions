@@ -72,6 +72,10 @@
                 </div>
             }
 
+            @if (questionnaire.IsOrderRandomized(question))
+            {
+                <div class="instructions"><span>R</span>@PdfStrings.RandomizedOrder</div>
+            }
             @if (questionnaire.QuestionHasEnablementCondition(question))
             {
                 <div class="condition"><span>E</span>@questionnaire.GetExpressionExcerpt(question.ConditionExpression)

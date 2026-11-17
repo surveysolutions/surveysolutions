@@ -187,6 +187,12 @@
     <data name="QuestionType_Ordered" xml:space="preserve">
         <value>უბრძანა</value>
         </data>
+    <data name="QuestionType_RandomizedOptions" xml:space="preserve">
+        <value>შემთხვევითი ვარიანტები</value>
+    </data>
+    <data name="RandomizedOrder" xml:space="preserve">
+        <value>შემთხვევითი რიგი</value>
+    </data>
     <data name="QuestionType_Picture" xml:space="preserve">
         <value>სურათი</value>
         </data>
