@@ -48,7 +48,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         }
 
         [Test]
-        public void should_export_visible_items_in_display_order_with_consecutive_positions()
+        public void should_export_only_randomized_items_with_positions_starting_from_1_in_every_group()
         {
             var questionnaire = CreateQuestionnaire();
             var interviewId = Id.gF;
@@ -62,22 +62,30 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var rows = result["s__order"];
 
             var itemRows = rows.Where(r => r[2] == SectionId.FormatGuid()).ToList();
-            itemRows.Select(r => r[6]).Should().Equal("1", "2", "3", "4");
             itemRows.Should().OnlyContain(r => r[0] == "11-11-11-11" && r[1] == interviewId.FormatGuid() && r[3] == "");
+            itemRows.Select(r => r[5]).Should().NotContain(Q4.FormatGuid());
 
+            var firstGroup = itemRows.Where(r => r[4] == "1").ToList();
             var expectedOrder = RandomizedItemsOrder
                 .GetChildrenOrder(questionnaire, interviewId.GetRandomDouble(), questionnaire.Find<Group>(SectionId)!, RosterVector.Empty)
                 .Select(x => x.PublicKey)
-                .Where(x => x != Q2)
+                .Where(x => x == Q1 || x == Q3)
                 .Select(x => x.FormatGuid());
-            itemRows.Select(r => r[4]).Should().Equal(expectedOrder);
-            itemRows.Select(r => r[4]).Skip(2).Should().Equal(Q4.FormatGuid(), RosterId.FormatGuid());
-            itemRows.Select(r => r[5]).Should().Equal("Question", "Question", "Question", "Roster");
+            firstGroup.Select(r => r[5]).Should().Equal(expectedOrder);
+            firstGroup.Select(r => r[6]).Should().Equal("Question", "Question");
+            firstGroup.Select(r => r[7]).Should().Equal("1", "2");
+
+            var secondGroup = itemRows.Where(r => r[4] == "2").ToList();
+            secondGroup.Select(r => r[5]).Should().Equal(RosterId.FormatGuid());
+            secondGroup.Select(r => r[6]).Should().Equal("Roster");
+            secondGroup.Select(r => r[7]).Should().Equal("1");
+
+            itemRows.Should().HaveCount(3);
 
             var instanceRows = rows.Where(r => r[2] == RosterId.FormatGuid()).ToList();
-            instanceRows.Select(r => r[5]).Should().OnlyContain(t => t == "RosterInstance");
-            instanceRows.Select(r => r[6]).Should().Equal("1", "2", "3");
-            instanceRows.Select(r => r[3]).Should().BeEquivalentTo("1", "2", "3");
+            instanceRows.Select(r => r[6]).Should().OnlyContain(t => t == "RosterInstance");
+            instanceRows.Select(r => r[4]).Should().OnlyContain(g => g == "1");
+            instanceRows.Select(r => r[7]).Should().Equal("1", "2", "3");
             instanceRows.Select(r => r[3]).Should().Equal(new[] { 1, 2, 3 }
                 .OrderBy(x => RandomizedItemsOrder.GetRosterInstanceSortKey(interviewId.GetRandomDouble(), RosterId, new RosterVector(x)))
                 .Select(x => x.ToString()));
@@ -91,12 +99,12 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var exporter = new InterviewItemsOrderExporter(Mock.Of<ICsvWriter>());
 
             var allInstances = exporter.Export(questionnaire, CreateInterviewEntities(interviewId), interviewId, "key")["s__order"]
-                .Where(r => r[5] == "RosterInstance").Select(r => r[3]).ToList();
+                .Where(r => r[6] == "RosterInstance").Select(r => r[3]).ToList();
 
             var withoutSecond = CreateInterviewEntities(interviewId)
                 .Where(e => !(e.Identity.RosterVector.Length == 1 && e.Identity.RosterVector.Last() == 2)).ToList();
             var remainingInstances = exporter.Export(questionnaire, withoutSecond, interviewId, "key")["s__order"]
-                .Where(r => r[5] == "RosterInstance").Select(r => r[3]).ToList();
+                .Where(r => r[6] == "RosterInstance").Select(r => r[3]).ToList();
 
             remainingInstances.Should().Equal(allInstances.Where(x => x != "2"));
         }
@@ -125,7 +133,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             csvWriter.Verify(x => x.WriteData(System.IO.Path.Combine("base", "s__order.tab"),
                 It.Is<IEnumerable<string[]>>(d => d.Single().SequenceEqual(new[]
-                    { "interview__key", "interview__id", "parent__id", "roster__instance", "item__id", "item__type", "item__order" })),
+                    { "interview__key", "interview__id", "parent__id", "roster__instance", "randomization__group", "item__id", "item__type", "item__order" })),
                 It.IsAny<string>()), Times.Once);
             csvWriter.VerifyNoOtherCalls();
         }
