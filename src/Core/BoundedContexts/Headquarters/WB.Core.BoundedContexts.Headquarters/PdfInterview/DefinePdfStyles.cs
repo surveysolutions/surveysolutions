@@ -8,10 +8,12 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
     {
         public const string DefaultFonts = "Arial, Noto Sans";
 
-        public void Define(Document document)
+        public void Define(Document document, bool isRightToLeft = false)
         {
             var defaultPdf = document.Styles[StyleNames.Normal]!;
             defaultPdf.Font.Name = DefaultFonts;
+            if (isRightToLeft)
+                defaultPdf.ParagraphFormat.Alignment = ParagraphAlignment.Right;
 
             var defaultStyle = document.Styles.AddStyle(PdfStyles.Default, StyleNames.DefaultParagraphFont);
             defaultStyle.Font.Name = DefaultFonts;
@@ -38,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
             var groupHeader = document.Styles.AddStyle(PdfStyles.GroupHeader, PdfStyles.Default);
             groupHeader.Font.Size = Unit.FromPoint(12);
-            groupHeader.ParagraphFormat.LeftIndent = Unit.FromPoint(49);
+            SetStartIndent(groupHeader, Unit.FromPoint(49), isRightToLeft);
             groupHeader.ParagraphFormat.SpaceBefore = Unit.FromPoint(15);
             groupHeader.ParagraphFormat.SpaceAfter = Unit.FromPoint(15);
             
@@ -82,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
             var commentTitle = document.Styles.AddStyle(PdfStyles.CommentTitle, PdfStyles.Default);
             commentTitle.Font.Size = Unit.FromPoint(7);
-            commentTitle.ParagraphFormat.LeftIndent = Unit.FromPoint(20);
+            SetStartIndent(commentTitle, Unit.FromPoint(20), isRightToLeft);
             commentTitle.ParagraphFormat.SpaceBefore = Unit.FromPoint(5);
 
             var commentAuthor = document.Styles.AddStyle(PdfStyles.CommentAuthor, PdfStyles.Default);
@@ -94,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             commentDateTime.Font.Size = Unit.FromPoint(8);
             commentDateTime.Font.Color = PdfColors.Comment;
             commentDateTime.Font.Italic = true;
-            commentDateTime.ParagraphFormat.LeftIndent = Unit.FromPoint(20);
+            SetStartIndent(commentDateTime, Unit.FromPoint(20), isRightToLeft);
 
             var commentMessage = document.Styles.AddStyle(PdfStyles.CommentMessage, PdfStyles.Default);
             commentMessage.Font.Size = Unit.FromPoint(8);
@@ -119,6 +121,14 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             document.Styles.AddStyle(PdfStyles.VariableValue, PdfStyles.QuestionAnswer);
             document.Styles.AddStyle(PdfStyles.IdentifyerVariableNotCalculated, PdfStyles.IdentifyerQuestionNotAnswered);
             document.Styles.AddStyle(PdfStyles.VariableNotCalculated, PdfStyles.QuestionNotAnswered);
+        }
+
+        private static void SetStartIndent(Style style, Unit indent, bool isRightToLeft)
+        {
+            if (isRightToLeft)
+                style.ParagraphFormat.RightIndent = indent;
+            else
+                style.ParagraphFormat.LeftIndent = indent;
         }
     }
 }

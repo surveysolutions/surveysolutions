@@ -90,6 +90,12 @@ For HQ, check login, the workspace/navigation menus, interview/assignment/user t
 pagination and sorting, export formats, administrative settings, maps and reports.
 Numeric wire formats, calendar system and questionnaire translations are unchanged.
 
+The interview transcript PDF (`PdfInterview` in the Headquarters bounded context)
+follows the same UI culture: in RTL it mirrors columns, margins, header, footer and
+the bar code. PDFsharp shapes Arabic and orders each text run as an LTR paragraph,
+so `PdfRtlLayout` reorders directional runs of single-line RTL texts; wrapped
+multi-line RTL text keeps MigraDoc's line order and is not reordered.
+
 # Store Modules
 
 

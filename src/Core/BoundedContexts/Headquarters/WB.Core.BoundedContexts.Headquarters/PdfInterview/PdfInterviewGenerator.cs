@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -81,13 +82,15 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
             var nodes = GetAllInterviewNodes(interview, pdfView).ToList();
             var identifyedEntities = questionnaire.GetPrefilledEntities().Select(id => new Identity(id, RosterVector.Empty)).ToList();
+            // as on web pages, the layout direction follows the UI language of the transcript
+            var isRightToLeft = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
            
             PdfDocument pdfDocument = new PdfDocument();
             Document document = new Document();
-            new DefinePdfStyles().Define(document);
+            new DefinePdfStyles().Define(document, isRightToLeft);
             var firstPageSection = document.AddSection();
             firstPageSection.PageSetup.PageFormat = PageFormat.A4;
-            new InterviewHeaderPdfWriter(nodes, questionnaire, interview, headquartersConfig).Write(firstPageSection);
+            new InterviewHeaderPdfWriter(nodes, questionnaire, interview, headquartersConfig, isRightToLeft).Write(firstPageSection);
             DrawDoubleLines(firstPageSection);
 
             if (identifyedEntities.Count > 0)
@@ -99,17 +102,20 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
             var tableOfContents = WriteTableOfContents(document.LastSection);
             nodes.RemoveAll(node => identifyedEntities.Contains(node) || node.Id == questionnaire.CoverPageSectionId);
-            WriteInterviewData(nodes, questionnaire, interview, document, tableOfContents);
+            WriteInterviewData(nodes, questionnaire, interview, document, tableOfContents, isRightToLeft);
 
-            SetPagesMargins(document);
-            WriteFooterToAllPages(document, questionnaire, interview);
+            SetPagesMargins(document, isRightToLeft);
+            WriteFooterToAllPages(document, questionnaire, interview, isRightToLeft);
+            PdfRtlLayout.UseUprightFontForRightToLeftText(document);
+            if (isRightToLeft)
+                PdfRtlLayout.ApplyVisualOrder(document);
             
             PdfDocumentRenderer renderer = new PdfDocumentRenderer();
             renderer.Document = document;
             renderer.PdfDocument = pdfDocument;
             renderer.RenderDocument();
 
-            RenderBarCode(pdfDocument.Pages[0], interview);
+            RenderBarCode(pdfDocument.Pages[0], interview, isRightToLeft);
 
             var memoryStream = new MemoryStream();
             renderer.PdfDocument.Save(memoryStream);
@@ -197,10 +203,11 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
         }
 
         private void WriteInterviewData(List<Identity> nodes, IQuestionnaire questionnaire, IStatefulInterview interview,
-            Document document, Paragraph tableOfContents)
+            Document document, Paragraph tableOfContents, bool isRightToLeft)
         {
             Table? table = null;
             DateTimeOffset? prevDateTime = null;
+            var (dateColumn, timeColumn, contentColumn) = QuestionsTableColumns(isRightToLeft);
 
             foreach (Identity node in nodes)
             {
@@ -213,21 +220,21 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                         if (question.AnswerTime.HasValue)
                         {
                             if (question.AnswerTime != null && prevDateTime?.Date != question.AnswerTime.Value.Date)
-                                WriteQuestionDate(row[0].AddParagraph(), question);
-                            WriteQuestionTime(row[1].AddParagraph(), question);
+                                WriteQuestionDate(row[dateColumn].AddParagraph(), question);
+                            WriteQuestionTime(row[timeColumn].AddParagraph(), question);
                             prevDateTime = question.AnswerTime;
                         }
 
                         new QuestionPdfWriter(question, interview, questionnaire, imageFileStorage, googleMapsConfig, attachmentContentService)
-                            .Write(row[2].AddParagraph());
+                            .Write(row[contentColumn].AddParagraph());
 
                         if (question.FailedErrors != null && question.FailedErrors.Any())
-                            new ErrorsPdfWriter(question).Write(row[2].AddParagraph());
+                            new ErrorsPdfWriter(question).Write(row[contentColumn].AddParagraph());
                         if (question.FailedWarnings != null && question.FailedWarnings.Any())
-                            new WarningsPdfWriter(question).Write(row[2].AddParagraph());
+                            new WarningsPdfWriter(question).Write(row[contentColumn].AddParagraph());
                         if (question.AnswerComments != null && question.AnswerComments.Any())
-                            new CommentsPdfWriter(question).Write(row[2].AddParagraph());
-                        row[2].AddParagraph();
+                            new CommentsPdfWriter(question).Write(row[contentColumn].AddParagraph());
+                        row[contentColumn].AddParagraph();
                     }
 
                     continue;
@@ -239,12 +246,12 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                         
                     var staticText = interview.GetStaticText(node);
                     new StaticTextPdfWriter(staticText, interview, questionnaire, attachmentContentService)
-                        .Write(row[2].AddParagraph());
+                        .Write(row[contentColumn].AddParagraph());
                     if (staticText.FailedErrors != null && staticText.FailedErrors.Any())
-                        new ErrorsPdfWriter(staticText).Write(row[2].AddParagraph());
+                        new ErrorsPdfWriter(staticText).Write(row[contentColumn].AddParagraph());
                     if (staticText.FailedWarnings != null && staticText.FailedWarnings.Any())
-                        new WarningsPdfWriter(staticText).Write(row[2].AddParagraph());
-                    row[2].AddParagraph();
+                        new WarningsPdfWriter(staticText).Write(row[contentColumn].AddParagraph());
+                    row[contentColumn].AddParagraph();
                     
                     continue;
                 }
@@ -259,13 +266,13 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
                         new SectionPdfWriter(interviewTreeSection)
                             .Write(section.AddParagraph());
-                        table = GenerateQuestionsTable(document.LastSection);
-                        WritePageOfContentRecord(tableOfContents, interviewTreeSection.Title.Text);
+                        table = GenerateQuestionsTable(document.LastSection, isRightToLeft);
+                        WritePageOfContentRecord(tableOfContents, interviewTreeSection.Title.Text, isRightToLeft);
                     }
                     else
                     {
                         new GroupPdfWriter(group).Write(document.LastSection.AddParagraph());
-                        table = GenerateQuestionsTable(document.LastSection);
+                        table = GenerateQuestionsTable(document.LastSection, isRightToLeft);
                     }
 
                     continue;
@@ -275,7 +282,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 {
                     var roster = interview.GetRoster(node);
                     new RosterPdfWriter(roster, questionnaire).Write(document.LastSection.AddParagraph());
-                    table = GenerateQuestionsTable(document.LastSection);
+                    table = GenerateQuestionsTable(document.LastSection, isRightToLeft);
                     continue;
                 }
 
@@ -286,14 +293,14 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             }
         }
 
-        private void SetPagesMargins(Document document)
+        private void SetPagesMargins(Document document, bool isRightToLeft)
         {
             foreach (var section in document.Sections.OfType<Section>())
             {
                 section.PageSetup.PageFormat = PageFormat.A4;
                 
-                section.PageSetup.LeftMargin = Unit.FromPoint(37);
-                section.PageSetup.RightMargin = Unit.FromPoint(33);
+                section.PageSetup.LeftMargin = Unit.FromPoint(isRightToLeft ? EndMargin : StartMargin);
+                section.PageSetup.RightMargin = Unit.FromPoint(isRightToLeft ? StartMargin : EndMargin);
                 section.PageSetup.TopMargin = Unit.FromPoint(31);
                 section.PageSetup.BottomMargin = Unit.FromPoint(37);
                 
@@ -301,7 +308,14 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             }
         }
 
-        private void RenderBarCode(PdfPage page, IStatefulInterview interview)
+        private const double StartMargin = 37;
+        private const double EndMargin = 33;
+        private const double BarCodeWidth = 149;
+
+        internal static double GetBarCodeLeft(double pageWidth, bool isRightToLeft) =>
+            isRightToLeft ? pageWidth - StartMargin - BarCodeWidth : StartMargin;
+
+        private void RenderBarCode(PdfPage page, IStatefulInterview interview, bool isRightToLeft)
         {
             var interviewKey = interview.GetInterviewKey().ToString();
             XGraphics gfx = XGraphics.FromPdfPage(page);
@@ -312,8 +326,8 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             barcode.EndChar = Convert.ToChar("*");
             barcode.Direction = CodeDirection.LeftToRight;
             XFont fontBarcode = new XFont(DefinePdfStyles.DefaultFonts, 14, XFontStyleEx.Regular);
-            var position = new XPoint(Convert.ToDouble(37), Convert.ToDouble(0));
-            XSize size = new XSize(Convert.ToDouble(149), Convert.ToDouble(53));
+            var position = new XPoint(GetBarCodeLeft(page.Width.Point, isRightToLeft), Convert.ToDouble(0));
+            XSize size = new XSize(BarCodeWidth, Convert.ToDouble(53));
             barcode.Size = size;
             gfx.DrawBarCode(barcode, XBrushes.Black, fontBarcode, position);
         }
@@ -330,15 +344,17 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             return tableOfContent;
         }
 
-        private void WriteFooterToAllPages(Document document, IQuestionnaire questionnaire, IStatefulInterview interview)
+        private void WriteFooterToAllPages(Document document, IQuestionnaire questionnaire, IStatefulInterview interview,
+            bool isRightToLeft)
         {
             var interviewKey = interview.GetInterviewKey().ToString();
 
             foreach (var section in document.Sections.OfType<Section>())
-                WriteFooter(section, questionnaire.Title, interviewKey);
+                WriteFooter(section, questionnaire.Title, interviewKey, isRightToLeft);
         }
 
-        internal static void WriteFooter(Section section, string? questionnaireTitle, string interviewKey)
+        internal static void WriteFooter(Section section, string? questionnaireTitle, string interviewKey,
+            bool isRightToLeft = false)
         {
             var pageSetup = section.PageSetup;
             PageSetup.GetPageSize(pageSetup.PageFormat, out var pageWidth, out _);
@@ -355,20 +371,32 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             table.AddColumn(Unit.FromPoint(contentWidth - 2 * FooterSideColumnWidth));
             table.AddColumn(Unit.FromPoint(FooterSideColumnWidth));
             var row = table.AddRow();
+            var startCell = row.Cells[isRightToLeft ? 2 : 0];
+            var endCell = row.Cells[isRightToLeft ? 0 : 2];
 
-            Paragraph pageNumber = row.Cells[0].AddParagraph();
-            pageNumber.Format.Alignment = ParagraphAlignment.Left;
-            pageNumber.AddPageField();
-            pageNumber.AddText(PdfInterviewRes.PageOf);
-            pageNumber.AddNumPagesField();
+            Paragraph pageNumber = startCell.AddParagraph();
+            pageNumber.Format.Alignment = isRightToLeft ? ParagraphAlignment.Right : ParagraphAlignment.Left;
+            // fields are placed from left to right, so "1 of 5" is written in the visual order
+            if (isRightToLeft)
+            {
+                pageNumber.AddNumPagesField();
+                pageNumber.AddText(PdfInterviewRes.PageOf);
+                pageNumber.AddPageField();
+            }
+            else
+            {
+                pageNumber.AddPageField();
+                pageNumber.AddText(PdfInterviewRes.PageOf);
+                pageNumber.AddNumPagesField();
+            }
 
             Paragraph centerFooter = row.Cells[1].AddParagraph();
             centerFooter.Format.Alignment = ParagraphAlignment.Center;
             centerFooter.AddText(ShortenFooterTitle(questionnaireTitle));
 
-            Paragraph rightFooter = row.Cells[2].AddParagraph();
-            rightFooter.Format.Alignment = ParagraphAlignment.Right;
-            rightFooter.AddText(interviewKey);
+            Paragraph interviewKeyFooter = endCell.AddParagraph();
+            interviewKeyFooter.Format.Alignment = isRightToLeft ? ParagraphAlignment.Left : ParagraphAlignment.Right;
+            interviewKeyFooter.AddText(interviewKey);
         }
 
         // footer must fit the bottom margin of the page and not touch the body, titles can be up to 2000 characters long
@@ -387,22 +415,37 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             return title[..length].TrimEnd() + "…";
         }
 
-        private void WritePageOfContentRecord(Paragraph paragraph, string text)
+        private void WritePageOfContentRecord(Paragraph paragraph, string text, bool isRightToLeft)
         {
             var title = text.RemoveHtmlTags();
             Hyperlink hyperlink = paragraph.AddHyperlink(title);
-            hyperlink.AddPageRefField(title);
-            hyperlink.AddTab();
-            hyperlink.AddText(title);
+            if (isRightToLeft)
+            {
+                // mirrored record: fields are placed from left to right, so the page number written last is at the right edge
+                hyperlink.AddText(PdfRtlText.StartsRightToLeft(title) ? PdfRtlText.ToVisualOrder(title) : title);
+                hyperlink.AddText("    ");
+                hyperlink.AddPageRefField(title);
+            }
+            else
+            {
+                hyperlink.AddPageRefField(title);
+                hyperlink.AddTab();
+                hyperlink.AddText(title);
+            }
             paragraph.AddLineBreak();
         }
 
-        private static Table GenerateQuestionsTable(Section section)
+        private static readonly double[] QuestionsTableColumnWidths = { 49, 60, 416 };
+
+        internal static (int Date, int Time, int Content) QuestionsTableColumns(bool isRightToLeft) =>
+            isRightToLeft ? (2, 1, 0) : (0, 1, 2);
+
+        internal static Table GenerateQuestionsTable(Section section, bool isRightToLeft)
         {
             var table = section.AddTable();
-            table.AddColumn(Unit.FromPoint(49));
-            table.AddColumn(Unit.FromPoint(60));
-            table.AddColumn(Unit.FromPoint(416));
+            var widths = isRightToLeft ? QuestionsTableColumnWidths.Reverse() : QuestionsTableColumnWidths;
+            foreach (var width in widths)
+                table.AddColumn(Unit.FromPoint(width));
 
             table.Rows.HeightRule = RowHeightRule.Auto;
             return table;

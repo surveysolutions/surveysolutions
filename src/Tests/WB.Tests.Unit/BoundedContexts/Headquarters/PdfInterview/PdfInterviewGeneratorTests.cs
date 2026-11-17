@@ -1,8 +1,10 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Options;
 using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Fields;
 using MigraDoc.DocumentObjectModel.Tables;
 using Moq;
 using NUnit.Framework;
@@ -157,6 +159,77 @@ public class PdfInterviewGeneratorTests
         Assert.That(GetText(cells[1]), Has.Length.EqualTo(PdfInterviewGenerator.FooterTitleMaxLength));
         Assert.That(GetText(cells[1]), Does.EndWith("…"));
         Assert.That(GetText(cells[2]), Is.EqualTo("00-00-28-95"));
+    }
+
+    [Test]
+    public void when_writing_right_to_left_footer_should_mirror_page_number_and_interview_key()
+    {
+        var section = CreateSection();
+
+        PdfInterviewGenerator.WriteFooter(section, "Household survey", "00-00-28-95", isRightToLeft: true);
+
+        var cells = section.Footers.Primary.Elements.OfType<Table>().Single().Rows[0].Cells;
+        Assert.That(GetParagraph(cells[0]).Format.Alignment, Is.EqualTo(ParagraphAlignment.Left));
+        Assert.That(GetText(cells[0]), Is.EqualTo("00-00-28-95"));
+        Assert.That(GetParagraph(cells[1]).Format.Alignment, Is.EqualTo(ParagraphAlignment.Center));
+
+        var pageNumber = GetParagraph(cells[2]);
+        Assert.That(pageNumber.Format.Alignment, Is.EqualTo(ParagraphAlignment.Right));
+        Assert.That(pageNumber.Elements[0], Is.InstanceOf<NumPagesField>());
+        Assert.That(pageNumber.Elements[2], Is.InstanceOf<PageField>());
+    }
+
+    [Test]
+    public void when_generating_right_to_left_questions_table_should_put_question_column_first()
+    {
+        var section = CreateSection();
+
+        var table = PdfInterviewGenerator.GenerateQuestionsTable(section, isRightToLeft: true);
+        var (date, time, content) = PdfInterviewGenerator.QuestionsTableColumns(isRightToLeft: true);
+
+        Assert.That(Enumerable.Range(0, table.Columns.Count).Select(i => table.Columns[i].Width.Point),
+            Is.EqualTo(new[] { 416.0, 60, 49 }));
+        Assert.That((date, time, content), Is.EqualTo((2, 1, 0)));
+        Assert.That(PdfInterviewGenerator.QuestionsTableColumns(isRightToLeft: false), Is.EqualTo((0, 1, 2)));
+    }
+
+    [Test]
+    public void when_rendering_bar_code_should_mirror_it_in_right_to_left_document()
+    {
+        Assert.That(PdfInterviewGenerator.GetBarCodeLeft(595.276, isRightToLeft: false), Is.EqualTo(37));
+        Assert.That(PdfInterviewGenerator.GetBarCodeLeft(595.276, isRightToLeft: true), Is.EqualTo(595.276 - 37 - 149).Within(0.001));
+    }
+
+    [Test]
+    public void when_generate_interview_pdf_in_right_to_left_language_should_without_exceptions()
+    {
+        var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+            Create.Entity.TextQuestion(questionId: Id.g3, text: "ما اسمك؟"));
+        questionnaireDocument.Title = "مسح الأسرة 2026";
+        var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+        var interview = SetUp.StatefulInterview(questionnaireDocument);
+        interview.Apply(new InterviewKeyAssigned(new InterviewKey(2895), DateTimeOffset.Now));
+        interview.AnswerTextQuestion(Id.gA, Id.g3, RosterVector.Empty, DateTimeOffset.Now, "أحمد");
+
+        var generator = new PdfInterviewGenerator(
+            Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language) == questionnaire),
+            Mock.Of<IStatefulInterviewRepository>(r => r.Get(Id.g1.FormatGuid()) == interview),
+            Mock.Of<IImageFileStorage>(),
+            Mock.Of<IAttachmentContentService>(),
+            Mock.Of<IOptions<GoogleMapsConfig>>(),
+            Mock.Of<IOptions<HeadquartersConfig>>(c => c.Value == new HeadquartersConfig { BaseUrl = "http://localhost" }),
+            Mock.Of<IAuthorizedUser>());
+
+        var uiCulture = CultureInfo.CurrentUICulture;
+        try
+        {
+            CultureInfo.CurrentUICulture = new CultureInfo("ar");
+            Assert.That(generator.Generate(Id.g1, PdfView.Review), Is.Not.Null);
+        }
+        finally
+        {
+            CultureInfo.CurrentUICulture = uiCulture;
+        }
     }
 
     private static Section CreateSection()

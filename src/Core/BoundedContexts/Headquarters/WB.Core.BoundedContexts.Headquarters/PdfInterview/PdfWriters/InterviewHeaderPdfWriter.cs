@@ -22,16 +22,22 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
         private readonly IQuestionnaire questionnaire;
         private readonly IStatefulInterview interview;
         private readonly IOptions<HeadquartersConfig> headquartersConfig;
+        private readonly bool isRightToLeft;
+
+        // logo row spans the page, it is mirrored relatively to the page in right-to-left documents
+        internal const double LogoRowWidth = 568;
 
         public InterviewHeaderPdfWriter(List<Identity> nodes, 
             IQuestionnaire questionnaire, 
             IStatefulInterview interview,
-            IOptions<HeadquartersConfig> headquartersConfig)
+            IOptions<HeadquartersConfig> headquartersConfig,
+            bool isRightToLeft = false)
         {
             this.nodes = nodes;
             this.questionnaire = questionnaire;
             this.interview = interview;
             this.headquartersConfig = headquartersConfig;
+            this.isRightToLeft = isRightToLeft;
         }
 
         public void Write(Section section)
@@ -52,24 +58,29 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
             textFrame.Top = TopPosition.Parse("31pt");
             textFrame.Width = Unit.FromPoint(590);
             textFrame.Height = Unit.FromPoint(40);
+            if (isRightToLeft)
+            {
+                PageSetup.GetPageSize(PageFormat.A4, out var pageWidth, out _);
+                textFrame.Left = Unit.FromPoint(pageWidth.Point - LogoRowWidth);
+            }
 
+            // the first column is the place of the bar code, it is drawn over the rendered page
             var headerTable = textFrame.AddTable();
-            headerTable.AddColumn(Unit.FromPoint(205));
-            headerTable.AddColumn(Unit.FromPoint(22));
-            headerTable.AddColumn(Unit.FromPoint(120));
-            headerTable.AddColumn(Unit.FromPoint(221));
+            var headerColumns = Ordered(new[] { 205.0, 22, 120, 221 });
+            foreach (var width in headerColumns)
+                headerTable.AddColumn(Unit.FromPoint(width));
             var headerRow = headerTable.AddRow();
 
 
             var logoContent = GetEmbeddedResource("pdf_logo.png")!;
             using var logoBuffer = new MemoryStream();
             logoContent.CopyTo(logoBuffer);
-            var image = headerRow[1].AddImage(PdfImageSource.FromBinary(logoBuffer.ToArray()));
+            var image = headerRow[Column(1, 4)].AddImage(PdfImageSource.FromBinary(logoBuffer.ToArray()));
             image.Width = Unit.FromPoint(14);
             image.Height = Unit.FromPoint(35);
             image.LockAspectRatio = true;
 
-            var surveySolutions = headerRow[2].AddParagraph();
+            var surveySolutions = headerRow[Column(2, 4)].AddParagraph();
             surveySolutions.AddFormattedText(PdfInterviewRes.SurveySolutions, isBold: true, size: Unit.FromPoint(10));
             surveySolutions.AddLineBreak();
             surveySolutions.AddFormattedText(PdfInterviewRes.InterviewTranscript, size: Unit.FromPoint(10));
@@ -77,8 +88,8 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 
             if (!string.IsNullOrEmpty(headquartersConfig.Value.BaseUrl))
             {
-                var leftTopText = headerRow[3].AddParagraph();
-                leftTopText.Format.Alignment = ParagraphAlignment.Right;
+                var leftTopText = headerRow[Column(3, 4)].AddParagraph();
+                leftTopText.Format.Alignment = isRightToLeft ? ParagraphAlignment.Left : ParagraphAlignment.Right;
                 leftTopText.Format.Font.Size = Unit.FromPoint(7);
                 leftTopText.AddText(string.Format(PdfInterviewRes.GeneratedBy, headquartersConfig.Value.BaseUrl));
                 leftTopText.AddLineBreak();
@@ -86,12 +97,18 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
             }
 
             Table table = section.AddTable();
-            table.AddColumn(Unit.FromPoint(175)).LeftPadding = Unit.FromPoint(0);
-            table.AddColumn(Unit.FromPoint(175)).LeftPadding = Unit.FromPoint(15);
-            table.AddColumn(Unit.FromPoint(175)).LeftPadding = Unit.FromPoint(15);
+            foreach (var startPadding in Ordered(new[] { 0.0, 15, 15 }))
+            {
+                var column = table.AddColumn(Unit.FromPoint(175));
+                if (isRightToLeft)
+                    column.RightPadding = Unit.FromPoint(startPadding);
+                else
+                    column.LeftPadding = Unit.FromPoint(startPadding);
+            }
 
             table.AddRow().TopPadding = Unit.FromPoint(40);
-            var row = table.AddRow();
+            var tableRow = table.AddRow();
+            var row = new[] { tableRow[Column(0, 3)], tableRow[Column(1, 3)], tableRow[Column(2, 3)] };
 
             row[0].AddParagraphFormattedText(PdfInterviewRes.InterviewKey, PdfStyles.HeaderLineTitle);
 
@@ -155,10 +172,24 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
             interviewStats.AddFormattedText(string.Format(PdfInterviewRes.InterviewStatisticsCommented, commentedCount))
                 .Color = commentedCount > 0 ? new Color(71, 27, 195) : new Color(182, 182, 182);
 
-            row[0].Borders.Right = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1) };
-            row[2].Borders.Left = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1) };
+            var interviewKeyBorder = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1) };
+            var statisticsBorder = new Border() { Style = BorderStyle.Single, Width = Unit.FromPoint(1) };
+            if (isRightToLeft)
+            {
+                row[0].Borders.Left = interviewKeyBorder;
+                row[2].Borders.Right = statisticsBorder;
+            }
+            else
+            {
+                row[0].Borders.Right = interviewKeyBorder;
+                row[2].Borders.Left = statisticsBorder;
+            }
             table.AddRow();
         }
+
+        private int Column(int index, int count) => isRightToLeft ? count - 1 - index : index;
+
+        private IEnumerable<double> Ordered(double[] values) => isRightToLeft ? values.Reverse() : values;
 
         private static Stream? GetEmbeddedResource(string filename)
         {
