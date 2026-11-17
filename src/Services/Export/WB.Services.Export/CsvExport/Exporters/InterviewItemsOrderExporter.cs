@@ -16,6 +16,8 @@ namespace WB.Services.Export.CsvExport.Exporters
     /// Exports actual display order of questionnaire items marked with "Randomize order" for every questionnaire level
     /// (section, sub-section or roster) that contains such items. Only members of randomized groups are exported,
     /// items that are not randomized are skipped. Positions are numbered from 1 within every randomized group.
+    /// Rows are identified with the same key columns as rows of the data file of the corresponding roster level.
+    /// Display order of instances of a randomized roster is exported into the file of that roster.
     /// </summary>
     public class InterviewItemsOrderExporter : IInterviewItemsOrderExporter
     {
@@ -30,16 +32,12 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private readonly ICsvWriter csvWriter;
 
-        public static readonly DoExportFileHeader[] FileColumns =
+        public static readonly DoExportFileHeader[] ItemColumns =
         {
-            CommonHeaderItems.InterviewKey,
-            CommonHeaderItems.InterviewId,
-            new DoExportFileHeader("parent__id", "Id of the parent questionnaire item (section, sub-section or roster)", ExportValueType.String),
-            new DoExportFileHeader("roster__instance", "Roster instance path of the item, roster codes from top to bottom separated with '/'", ExportValueType.String),
-            new DoExportFileHeader("randomization__group", "Number of the randomized group (consecutive items marked with 'Randomize order') within the parent, starting from 1", ExportValueType.NumericInt),
-            new DoExportFileHeader("item__id", "Id of the questionnaire item", ExportValueType.String),
-            new DoExportFileHeader("item__type", "Type of the questionnaire item: Question, StaticText, Section, Roster or RosterInstance", ExportValueType.String),
-            new DoExportFileHeader("item__order", "Displayed position of the item within its randomized group, starting from 1", ExportValueType.NumericInt)
+            new DoExportFileHeader("randomization__group", "Number of the randomized group (consecutive items marked with 'Randomize order') within the parent, starting from 1. Empty for roster instances", ExportValueType.NumericInt),
+            new DoExportFileHeader("variable", "Variable name of the questionnaire item or its id if item has no variable name", ExportValueType.String),
+            new DoExportFileHeader("type", "Type of the questionnaire item: Question, StaticText, Section, Roster or RosterInstance", ExportValueType.String),
+            new DoExportFileHeader("order", "Displayed position of the item within its randomized group or of the roster instance among instances of the roster, starting from 1", ExportValueType.NumericInt)
         };
 
         public InterviewItemsOrderExporter(ICsvWriter csvWriter)
@@ -54,7 +52,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 
             var groups = new IQuestionnaireEntity[] { questionnaire }.TreeToEnumerable(x => x.Children)
                 .OfType<Group>()
-                .Where(group => RandomizedItemsOrder.HasRandomizedChildren(questionnaire, group));
+                .Where(group => RandomizedItemsOrder.HasRandomizedChildren(questionnaire, group) || IsRandomizedRoster(questionnaire, group));
 
             foreach (var group in groups)
             {
@@ -74,13 +72,34 @@ namespace WB.Services.Export.CsvExport.Exporters
             return result;
         }
 
-        public void WriteHeaders(QuestionnaireDocument questionnaire, string basePath, string dataFileExtension)
+        public string[] GetHeader(QuestionnaireExportStructure exportStructure, QuestionnaireDocument questionnaire, Guid groupId)
         {
-            var header = FileColumns.Select(x => x.Title).ToArray();
+            var rosterScope = new ValueVector<Guid>(questionnaire.GetRosterSizeSourcesForEntity(groupId));
 
-            foreach (var fileName in GetFileNames(questionnaire).Values)
+            var header = new List<string> { CommonHeaderItems.InterviewKey.Title };
+
+            if (rosterScope.Length == 0)
             {
-                var filePath = Path.Combine(basePath, $"{fileName}.{dataFileExtension}");
+                header.Add(CommonHeaderItems.InterviewId.Title);
+            }
+            else
+            {
+                header.AddRange(exportStructure.GetAllParentColumnNamesForLevel(rosterScope));
+                header.Add(exportStructure.HeaderToLevelMap.TryGetValue(rosterScope, out var level)
+                    ? level.LevelIdColumnName
+                    : string.Format(ServiceColumns.IdSuffixFormat, $"{ServiceColumns.ParentId}{rosterScope.Length}"));
+            }
+
+            header.AddRange(ItemColumns.Select(x => x.Title));
+            return header.ToArray();
+        }
+
+        public void WriteHeaders(QuestionnaireExportStructure exportStructure, QuestionnaireDocument questionnaire, string basePath, string dataFileExtension)
+        {
+            foreach (var file in GetFileNames(questionnaire))
+            {
+                var filePath = Path.Combine(basePath, $"{file.Value}.{dataFileExtension}");
+                var header = GetHeader(exportStructure, questionnaire, file.Key);
                 this.csvWriter.WriteData(filePath, new[] { header }, ExportFileSettings.DataFileSeparator.ToString());
             }
         }
@@ -105,12 +124,25 @@ namespace WB.Services.Export.CsvExport.Exporters
                 if (parent == null) continue;
 
                 var rows = new List<string[]>();
+                var contexts = state.GetVisibleContexts(parent).ToList();
+                var hasRandomizedChildren = RandomizedItemsOrder.HasRandomizedChildren(questionnaire, parent);
+                var instancePositions = IsRandomizedRoster(questionnaire, parent)
+                    ? GetRosterInstancePositions(seed, parent, contexts)
+                    : null;
 
-                foreach (var parentRosterVector in state.GetVisibleContexts(parent))
+                foreach (var parentRosterVector in contexts)
                 {
+                    if (instancePositions != null && instancePositions.TryGetValue(parentRosterVector, out var instancePosition))
+                    {
+                        rows.Add(CreateRow(interviewKey, formattedInterviewId, parentRosterVector,
+                            null, GetVariable(parent), ItemTypeRosterInstance, instancePosition));
+                    }
+
+                    if (!hasRandomizedChildren)
+                        continue;
+
                     var children = parent.Children.ToArray();
                     var orderedChildren = RandomizedItemsOrder.GetChildrenOrder(questionnaire, seed, parent, parentRosterVector);
-                    var randomizedRosters = new List<Group>();
                     var groupNumber = 0;
                     var position = 0;
 
@@ -132,26 +164,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                         if (itemType == null) continue;
 
                         position++;
-                        rows.Add(CreateRow(interviewKey, formattedInterviewId, parent.PublicKey, parentRosterVector,
-                            groupNumber, child.PublicKey, itemType, position));
-
-                        if (child is Group { IsRoster: true } roster)
-                            randomizedRosters.Add(roster);
-                    }
-
-                    foreach (var roster in randomizedRosters)
-                    {
-                        var instances = state.GetVisibleRosterInstances(roster, parentRosterVector)
-                            .Select(vector => new { vector, key = RandomizedItemsOrder.GetRosterInstanceSortKey(seed, roster.PublicKey, vector) })
-                            .OrderBy(x => x.key)
-                            .ThenBy(x => x.vector.Last())
-                            .ToList();
-
-                        for (int i = 0; i < instances.Count; i++)
-                        {
-                            rows.Add(CreateRow(interviewKey, formattedInterviewId, roster.PublicKey, instances[i].vector,
-                                1, roster.PublicKey, ItemTypeRosterInstance, i + 1));
-                        }
+                        rows.Add(CreateRow(interviewKey, formattedInterviewId, parentRosterVector,
+                            groupNumber, GetVariable(child), itemType, position));
                     }
                 }
 
@@ -161,20 +175,50 @@ namespace WB.Services.Export.CsvExport.Exporters
             return result;
         }
 
-        private static string[] CreateRow(string interviewKey, string interviewId, Guid parentId, RosterVector rosterVector,
-            int groupNumber, Guid itemId, string itemType, int position)
+        private static bool IsRandomizedRoster(QuestionnaireDocument questionnaire, Group group)
+            => group.IsRoster && RandomizedItemsOrder.IsOrderRandomized(questionnaire, group);
+
+        private static Dictionary<RosterVector, int> GetRosterInstancePositions(double seed, Group roster, IEnumerable<RosterVector> instances)
         {
-            return new[]
+            var result = new Dictionary<RosterVector, int>();
+
+            foreach (var siblings in instances.GroupBy(vector => vector.Take(vector.Length - 1)))
             {
-                interviewKey,
-                interviewId,
-                parentId.FormatGuid(),
-                string.Join("/", rosterVector.Coordinates.Select(x => x.ToString(CultureInfo.InvariantCulture))),
-                groupNumber.ToString(CultureInfo.InvariantCulture),
-                itemId.FormatGuid(),
-                itemType,
-                position.ToString(CultureInfo.InvariantCulture)
+                var ordered = siblings
+                    .Select(vector => new { vector, key = RandomizedItemsOrder.GetRosterInstanceSortKey(seed, roster.PublicKey, vector) })
+                    .OrderBy(x => x.key)
+                    .ThenBy(x => x.vector.Last())
+                    .ToList();
+
+                for (int i = 0; i < ordered.Count; i++)
+                    result[ordered[i].vector] = i + 1;
+            }
+
+            return result;
+        }
+
+        private static string GetVariable(IQuestionnaireEntity entity)
+        {
+            var variable = entity switch
+            {
+                Question question => question.VariableName,
+                Group group => group.VariableName,
+                _ => null
             };
+
+            return string.IsNullOrWhiteSpace(variable) ? entity.PublicKey.FormatGuid() : variable;
+        }
+
+        private static string[] CreateRow(string interviewKey, string interviewId, RosterVector rosterVector,
+            int? groupNumber, string variable, string itemType, int position)
+        {
+            var row = new List<string> { interviewKey, interviewId };
+            row.AddRange(rosterVector.Coordinates.Select(x => x.ToString(CultureInfo.InvariantCulture)));
+            row.Add(groupNumber?.ToString(CultureInfo.InvariantCulture) ?? string.Empty);
+            row.Add(variable);
+            row.Add(itemType);
+            row.Add(position.ToString(CultureInfo.InvariantCulture));
+            return row.ToArray();
         }
 
         private class InterviewState

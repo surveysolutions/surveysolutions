@@ -80,7 +80,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-            this.itemsOrderExporter.WriteHeaders(questionnaire, basePath, dataFileExtension);
+            this.itemsOrderExporter.WriteHeaders(questionnaireExportStructure, questionnaire, basePath, dataFileExtension);
             return this.ExportInterviewsAsync(tenant, interviewIdsToExport, basePath, questionnaireExportStructure, questionnaire, progress, cancellationToken, geographyExportFormat);
         }
 
