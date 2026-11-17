@@ -45,6 +45,7 @@ const helpMap = {
     virtualCoverPage: $t('QuestionnaireEditor.HelpVirtualCoverPage'),
     HelpOverlapDetection: $t('QuestionnaireEditor.HelpOverlapDetection'),
     isCritical: $t('QuestionnaireEditor.HelpIsCritical'),
+    randomizeOrder: $t('QuestionnaireEditor.RandomizeOrderTooltip'),
     criticalityConditionExpression: $t('QuestionnaireEditor.HelpCriticalityConditionExpression'),
     criticalityConditionMessage: $t('QuestionnaireEditor.HelpCriticalityConditionMessage'),
     aiDisclaimer: $t('Assistant.Disclaimer'),

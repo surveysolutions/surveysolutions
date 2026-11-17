@@ -162,10 +162,13 @@
             </div>
 
             <div class="form-group" v-if="!currentChapter.isCover">
-                <input id="cb-randomizeOrder" type="checkbox" class="wb-checkbox"
-                    v-model="activeQuestion.randomizeOrder" />
-                <label for="cb-randomizeOrder" :title="$t('QuestionnaireEditor.RandomizeOrderTooltip')"><span></span>{{
-                    $t('QuestionnaireEditor.RandomizeOrder') }}</label>
+                <div class="checkbox-in-column">
+                    <div class="randomize-order-marker"></div>
+                    <input id="cb-randomizeOrder" type="checkbox" class="wb-checkbox"
+                        v-model="activeQuestion.randomizeOrder" />
+                    <label for="cb-randomizeOrder"><span></span>{{ $t('QuestionnaireEditor.RandomizeOrder')
+                    }} <help link="randomizeOrder"></help></label>
+                </div>
             </div>
 
             <div class="form-group">

@@ -145,7 +145,7 @@
     </div>
     <div class="row">
         <div class="col-md-5">
-            <div class="checkbox checkbox-in-column">
+            <div class="checkbox checkbox-in-column no-indent">
                 <input id="cb-is-ordered" type="checkbox" class="wb-checkbox"
                     v-model="activeQuestion.areAnswersOrdered" />
                 <label for="cb-is-ordered"><span></span>{{ $t('QuestionnaireEditor.QuestionOrdered') }}</label>
