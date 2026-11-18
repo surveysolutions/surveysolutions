@@ -178,6 +178,7 @@ test('actual styles mirror desktop and mobile sidebar positions and retain numer
             assert.deepEqual(declarations(root, 'html[dir=rtl] input[inputmode=decimal]', 'direction'), ['ltr'])
             assert.deepEqual(declarations(root, 'html[dir=rtl] input[type=number]', 'direction'), ['ltr'])
             assert.deepEqual(declarations(root, 'html[dir=rtl] code', 'direction'), ['ltr'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] .countDown', 'direction'), ['ltr'])
             assert.deepEqual(declarations(root, 'html[dir=rtl] .flatpickr-input', 'direction'), ['ltr'])
             assert.ok(declarations(root, `${rtl} .navbar-header`, 'float').includes('right'))
             assert.ok(declarations(root, `${ltr} .navbar-header`, 'float').includes('left'))
@@ -201,7 +202,8 @@ test('actual styles mirror desktop and mobile sidebar positions and retain numer
             assert.ok(questionnaireText, 'questionnaire text must resolve direction from its own content')
             for (const selector of ['.question-editor h5 > span', '.question-editor .options-group .field > span',
                 '.information-block.instruction > div', '.readonly-answer-group .container-info p > b',
-                '.unit-title h3', '.structured-content .panel-title > a', '.action-container .btn']) {
+                '.unit-title h3', '.structured-content .panel-title > a', '.action-container .btn',
+                '.overview-item .item-content > h4', '.overview-item .answer']) {
                 assert.ok(questionnaireText.selector.includes(selector), selector)
             }
             assert.ok(questionnaireText.selector.startsWith(':where(html[dir=rtl]) :where('))

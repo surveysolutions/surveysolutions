@@ -22,7 +22,9 @@
     .readonly-answer-group .container-info p > b,
     .unit-title h3,
     .structured-content .panel-title > a,
-    .action-container .btn
+    .action-container .btn,
+    .overview-item .item-content > h4,
+    .overview-item .answer
 ) {
     unicode-bidi: plaintext;
     text-align: -webkit-match-parent;
@@ -42,6 +44,7 @@ html[dir="rtl"] {
     .numeric-question input,
     .time-question input,
     .interview-ID,
+    .countDown,
     .gps-question .block-with-data a,
     .area-question .block-with-data a {
         direction: ltr;
