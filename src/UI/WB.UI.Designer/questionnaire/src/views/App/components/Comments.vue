@@ -9,7 +9,7 @@
                     @click="resolveComment(comment.id)">{{ $t('QuestionnaireEditor.CommentEditorResolve') }}</button>
                 <span class="author technical-value">{{ comment.userEmail }}</span>
                 <span class="date" v-dateTime="comment.date"></span>
-                <p class="comment-text" v-content-direction="comment.comment">{{ comment.comment }}</p>
+                <p class="comment-text"><bdi>{{ comment.comment }}</bdi></p>
             </div>
 
             <div class="row" id="edit-entity-comment-row">

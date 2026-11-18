@@ -71,8 +71,8 @@
             </div>
             <div class="questionnarie-title" style="margin-inline-end: 0!important;">
                 <div class="title">
-                    <div class="questionnarie-title-text" v-content-direction="questionnaire.title">
-                        {{ questionnaire.title }}
+                    <div class="questionnarie-title-text">
+                        <bdi>{{ questionnaire.title }}</bdi>
                     </div>
                     <div class="questionnarie-title-buttons" style="display: inline-block!important;">
                         <span class="text-muted" id="questionnaireStats">
