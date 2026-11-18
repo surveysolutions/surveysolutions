@@ -66,6 +66,7 @@ const contextmenu = app => {
                     }
 
                     menu.style.top = `${mouseY}px`;
+                    // Fixed pointer coordinates are viewport-based and must not be mirrored.
                     menu.style.left = `${mouseX}px`;
 
                     const menuItems =

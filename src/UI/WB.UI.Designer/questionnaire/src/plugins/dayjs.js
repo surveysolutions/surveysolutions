@@ -3,6 +3,7 @@ import utc from 'dayjs/plugin/utc';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import { getUiLocale } from './uiLocale';
 
 dayjs.extend(utc);
 dayjs.extend(duration);
@@ -23,14 +24,6 @@ import 'dayjs/locale/sq';
 import 'dayjs/locale/uk';
 import 'dayjs/locale/zh';
 
-// Prefer the UI language from <html lang> so dayjs stays aligned with the
-// rest of the application, and only fall back to the browser language when
-// no explicit UI language is available.
-const uiLang = document.documentElement.lang
-    || navigator.language
-    || navigator.userLanguage
-    || 'en';
-const userLocale = uiLang.split('-')[0];
-dayjs.locale(userLocale);
+dayjs.locale(getUiLocale());
 
 export default dayjs;

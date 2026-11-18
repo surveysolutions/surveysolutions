@@ -24,7 +24,7 @@
                         <span class="input-group-addon">$</span>
                         <input :id="macro.itemId" :placeholder="$t('QuestionnaireEditor.SideBarMacroName')"
                             maxlength="32" spellcheck="false" v-model="macro.editMacro.name" name="name"
-                            class="form-control" type="text" />
+                            class="form-control technical-value" type="text" />
                     </div>
                     <div class="divider"></div>
                     <div class="macro-editor">
@@ -33,7 +33,8 @@
                     <div v-if="isDescriptionVisible(macro)">
                         <div class="divider"></div>
                         <textarea :placeholder="$t('QuestionnaireEditor.SideBarMacroDescription')" type="text"
-                            v-model="macro.editMacro.description" class="form-control macros-description"
+                            v-model="macro.editMacro.description" v-content-direction="macro.editMacro.description"
+                            class="form-control macros-description"
                             v-autosize></textarea>
                     </div>
                     <div class="actions" v-if="isEditorDirty(macro)">
@@ -42,7 +43,7 @@
                         </button>
                         <button type="button" class="btn lighter-hover" @click="cancel(macro)">{{
                         $t('QuestionnaireEditor.Cancel') }}</button>
-                        <button class="btn btn-default pull-right" v-if="isDescriptionEmpty(macro)" type="button"
+                        <button class="btn btn-default float-end" v-if="isDescriptionEmpty(macro)" type="button"
                             @click="toggleDescription(macro)">
                             {{ isDescriptionVisible(macro) ? $t('QuestionnaireEditor.SideBarMacroHideDescription') :
                         $t('QuestionnaireEditor.SideBarMacroShowDescription') }}

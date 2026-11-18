@@ -24,7 +24,8 @@
         "testDeploy": "powershell New-Item -Path ./bin/WB.UI.Designer/app_offline.htm; rimraf ./bin/WB.UI.Designer; New-Item -Path ./bin/WB.UI.Designer/app_offline.htm -ErrorAction SilentlyIgnore;gulp --production; dotnet publish --self-contained -r win-x64 -o ./bin/WB.UI.Designer -c Release; Remove-Item ./bin/WB.UI.Designer/app_offline.htm",
         "serve": "vite preview",
         "hot": "vite build --mode development --watch --emptyOutDir",
-        "hot2": "vite"
+        "hot2": "vite",
+        "test": "node --test questionnaire/test/*.test.js && node questionnaire/tools/check-logical-css.js"
     },
     "author": "",
     "dependencies": {

@@ -1,9 +1,13 @@
 @using System.Globalization
 @using Microsoft.Extensions.Options
 @inject IOptions<UiConfig> UiConfig
+@{
+    var uiLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var uiDirection = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr";
+}
 
 <!DOCTYPE html>
-<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+<html lang="@uiLanguage" dir="@uiDirection">
 
 <head>
     <title>@this.ViewBag.Title</title>
@@ -36,8 +40,8 @@
 
                 <div class="questionnaire-logo">
                     <a class="logo" href="https://mysurvey.solutions/" target="_blank" rel="noopener">
-                        <img src="~/i/logo.png" alt="Survey Solutions" class="pull-left">
-                        <span class="pull-left">Survey<br>Solutions</span>
+                        <img src="~/i/logo.png" alt="Survey Solutions" class="float-start">
+                        <span class="float-start">Survey<br>Solutions</span>
                     </a>
                     @Html.ActionLink(QuestionnaireController.Designer, "Index", "QuestionnaireList", null, new
                         {
@@ -81,7 +85,7 @@
                             <span class="caret"></span>
                             <span class="sr-only"></span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
+                        <ul class="dropdown-menu dropdown-menu-end">
                             <li>
                                 <a asp-area="Identity" asp-page="/Account/Manage/Index">
                                     @AccountResources.ManageAccount

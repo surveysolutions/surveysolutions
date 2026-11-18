@@ -2,7 +2,7 @@
     <div class="attachments">
         <perfect-scrollbar class="scroller">
             <div class="panel-header clearfix">
-                <div class="title pull-left">
+                <div class="title float-start">
                     <h3>
                         {{ $t('QuestionnaireEditor.SideBarAttachmentsCounter', {
                             count: attachments.length,
@@ -17,7 +17,7 @@
                     </p>
                 </div>
                 <input type="button" :value="$t('QuestionnaireEditor.SideBarAttachmentsUpload')"
-                    @click.stop="openFileDialog()" class="btn btn-default btn-lg pull-left"
+                    @click.stop="openFileDialog()" class="btn btn-default btn-lg float-start"
                     :class="{ 'btn-primary': !isReadOnlyForUser }" v-if="!isReadOnlyForUser" capture />
 
                 <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"

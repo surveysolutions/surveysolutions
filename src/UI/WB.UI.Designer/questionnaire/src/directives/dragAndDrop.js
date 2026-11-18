@@ -29,6 +29,7 @@ const dragAndDrop = app => {
                 offsetX = event.clientX - rect.left;
                 offsetY = event.clientY - rect.top;
                 
+                // Fixed client coordinates are viewport-based and must not be mirrored.
                 // Set positioning: preserve the position by setting left/top to current rect values
                 // Also clear margin to prevent the auto-centering from interfering
                 element.style.left = `${rect.left}px`;

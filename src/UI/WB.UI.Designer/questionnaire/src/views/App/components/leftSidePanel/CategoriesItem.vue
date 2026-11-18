@@ -9,12 +9,13 @@
             <div class="categories-content">
                 <input focus-on-out="focusCategories{{categories.categoriesId}}" required=""
                     :placeholder="$t('QuestionnaireEditor.SideBarCategoriesName')" maxlength="32" spellcheck="false"
-                    v-model="categories.name" name="name" class="form-control table-name" type="text" />
+                    v-model="categories.name" v-content-direction="categories.name" name="name"
+                    class="form-control table-name" type="text" />
                 <div class="drop-box">
                     {{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}
                 </div>
                 <div class="actions" :class="{ 'dirty': isDirty }">
-                    <div v-show="isDirty" class="pull-left">
+                    <div v-show="isDirty" class="float-start">
                         <button type="button" :disabled="isInvalid" class="btn lighter-hover"
                             @click.stop="saveCategories(categories)">
                             {{ $t('QuestionnaireEditor.Save') }}
@@ -22,7 +23,7 @@
                         <button type="button" class="btn lighter-hover" @click.stop="cancel()">{{
                             $t('QuestionnaireEditor.Cancel') }}</button>
                     </div>
-                    <div class="permanent-actions pull-right">
+                    <div class="permanent-actions float-end">
                         <a href="javascript:void(0);" class="btn btn-link" @click="editCategories()">{{
                             $t('QuestionnaireEditor.SideBarEditCategories') }}
                         </a>

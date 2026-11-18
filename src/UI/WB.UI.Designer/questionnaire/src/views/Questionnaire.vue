@@ -10,11 +10,11 @@
             <router-view />
         </section>
         <v-progress-linear :active="progressStore.getIsRunning" indeterminate color="#29d" height="3"
-            style="position:fixed;top:0;left:0;right:0;z-index:9999" />
+            style="position:fixed;top:0;inset-inline:0;z-index:9999" />
     </div>
     <div id="loading-logo" v-if="isActionRunning"></div>
     <confirm-dialog></confirm-dialog>
-    <notifications position="top right">
+    <notifications :position="isRtl ? 'top left' : 'top right'">
         <template #body="props">
             <div class="ui-pnotify ui-pnotify-fade-normal ui-pnotify-mobile-able ui-pnotify-in ui-pnotify-fade-in ui-pnotify-move"
                 aria-live="assertive" aria-role="alertdialog" style="position: inherit;">
@@ -38,7 +38,7 @@
                     </h4>
                     <div class="ui-pnotify-text" role="alert" v-sanitize-html="props.item.text"></div>
                     <div class="ui-pnotify-action-bar"
-                        style="margin-top: 5px; clear: both; text-align: right; display: none;"></div>
+                        style="margin-top: 5px; clear: both; text-align: end; display: none;"></div>
                 </div>
             </div>
         </template>
@@ -77,7 +77,7 @@
     .vue-notification-wrapper {
         overflow: visible;
         padding-top: 36px;
-        padding-right: 36px;
+        padding-inline-end: 36px;
     }
 }
 </style>
@@ -93,6 +93,7 @@ import { useUserStore } from '../stores/user';
 import { useHotkeysStore } from '../stores/hotkeys';
 import { useUnsavedChanges } from '../stores/unsavedChanges';
 import { useKeyShortcut } from '../composables/useKeyShortcut';
+import { getUiDirection } from '../plugins/uiLocale';
 
 import '../../content/external/angular-block-ui.css';
 import '../../content/external/hotkeys.css';
@@ -122,6 +123,7 @@ export default {
         };
     },
     setup() {
+        const isRtl = getUiDirection() === 'rtl';
         const questionnaireStore = useQuestionnaireStore();
         const treeStore = useTreeStore();
         const userStore = useUserStore();
@@ -138,6 +140,7 @@ export default {
         const ctrl_p = useKeyShortcut(e => e.ctrlKey && !e.altKey && !e.shiftKey && e.code === 'KeyP');
 
         return {
+            isRtl,
             questionnaireStore,
             treeStore,
             userStore,

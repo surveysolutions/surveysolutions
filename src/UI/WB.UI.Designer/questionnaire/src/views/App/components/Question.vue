@@ -28,7 +28,7 @@
                     <input type="hidden" v-model="activeQuestion.type" required />
                 </div>
 
-                <div class="form-group input-variable-name col-xs-5 pull-right">
+                <div class="form-group input-variable-name col-xs-5 float-end">
                     <label for="edit-question-variable-name" class="wb-label">{{
                         $t('QuestionnaireEditor.QuestionVariableName') }}
                         <help link="variableName" placement="left" />
@@ -47,7 +47,8 @@
                 <label for="edit-variable-label" class="wb-label">{{ $t('QuestionnaireEditor.QuestionVariableLabel') }}
                     <help link="variableLabel" />
                 </label><br>
-                <input id="edit-variable-label" type="text" v-model="activeQuestion.variableLabel" class="form-control"
+                <input id="edit-variable-label" type="text" v-model="activeQuestion.variableLabel"
+                    v-content-direction="activeQuestion.variableLabel" class="form-control"
                     maxlength="80">
             </div>
 
@@ -162,7 +163,7 @@
             </div>
 
             <div class="form-group">
-                <div class="checkbox-in-column pull-left">
+                <div class="checkbox-in-column float-start">
                     <div class="criticality-group-marker"></div>
                     <input id="cb-is-critical" type="checkbox" class="wb-checkbox"
                         v-model="activeQuestion.isCritical" />
@@ -170,7 +171,7 @@
                     }} <help link="isCritical"></help></label>
 
                 </div>
-                <div class="form-group pull-right" v-if="doesQuestionSupportQuestionScope()">
+                <div class="form-group float-end" v-if="doesQuestionSupportQuestionScope()">
                     <label for="Question-scope">{{ $t('QuestionnaireEditor.QuestionScope') }}&nbsp;</label>
 
                     <div class="btn-group dropup ">
@@ -180,7 +181,7 @@
                             <span class="dropdown-arrow"></span>
                         </button>
 
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-right" role="menu"
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-end" role="menu"
                             aria-labelledby="dropdownMenu1">
                             <li role="presentation" v-for="scope in getQuestionScopes(activeQuestion)">
                                 <a role="menuitem" class="dropdown-item" tabindex="-1"
@@ -194,7 +195,7 @@
             </div>
         </div>
         <div class="form-buttons-holder">
-            <div class="pull-left">
+            <div class="float-start">
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     id="edit-chapter-save-button" class="btn btn-lg " :class="{ 'btn-primary': isDirty }"
                     unsaved-warning-clear @click="saveQuestion()" :disabled="!isDirty || !isValid">{{
@@ -210,7 +211,7 @@
                 <button type="button" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
                     @click="cancel()">{{ $t('QuestionnaireEditor.Cancel') }}</button>
             </div>
-            <div class="pull-right">
+            <div class="float-end">
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     id="add-comment-button" class="btn btn-lg btn-link" @click="toggleComments(activeQuestion)"
                     unsaved-warning-clear>

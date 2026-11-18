@@ -1,6 +1,6 @@
 <template>
     <div class="panels-layout">
-        <div class="questionnaire-tree" :style="{ right: isOpen ? panelWidth + 'px' : '0px' }">
+        <div class="questionnaire-tree" :style="{ '--panel-offset': isOpen ? panelWidth + 'px' : '0px' }">
             <router-view name="tree"></router-view>
             <router-view />
         </div>
@@ -16,6 +16,7 @@ import { ref, onBeforeUnmount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useChatStore } from '../../../stores/chat';
 import ChatPanel from './ChatPanel.vue';
+import { getUiDirection } from '../../../plugins/uiLocale';
 
 export default {
     name: 'Panels',
@@ -31,6 +32,7 @@ export default {
         const isResizing = ref(false);
         const startX = ref(0);
         const startWidth = ref(0);
+        const isRtl = getUiDirection() === 'rtl';
 
         const startResize = (e) => {
             isResizing.value = true;
@@ -43,7 +45,9 @@ export default {
 
         const resize = (e) => {
             if (!isResizing.value) return;
-            const deltaX = startX.value - e.clientX; // Subtract because panel grows from right to left
+            const deltaX = isRtl
+                ? e.clientX - startX.value
+                : startX.value - e.clientX;
             const newWidth = startWidth.value + deltaX;
             // Set min and max width constraints
             panelWidth.value = Math.max(200, Math.min(newWidth, 600));
@@ -84,18 +88,18 @@ export default {
 .questionnaire-tree {
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: var(--panel-offset, 0);
     bottom: 0;
 }
 
 #resizablePanel {
     position: absolute;
     top: 0;
-    right: 0;
+    inset-inline-end: 0;
     bottom: 0;
     background: white;
-    border-left: 1px solid #ddd;
+    border-inline-start: 1px solid #ddd;
     overflow: hidden;
     display: flex;
 }

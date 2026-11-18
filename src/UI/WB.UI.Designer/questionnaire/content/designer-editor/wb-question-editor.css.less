@@ -7,7 +7,7 @@ input#edit-question-title, input#edit-group-title {
 .dropdown-icon {
     display: inline-block;
     position: absolute;
-    left: 0;
+    inset-inline-start: 0;
     vertical-align: middle;
     width: 20px;
     height: 20px;
@@ -40,7 +40,7 @@ input#edit-question-title, input#edit-group-title {
     }
 
     .linked-roster-source {
-        margin-left: 0px;
+        margin-inline-start: 0px;
         font-style: italic;
         font-family: Georgia, serif;
         font-weight: normal;
@@ -73,7 +73,7 @@ input#edit-question-title, input#edit-group-title {
                 .arial-font();
                 font-size: 14px;
                 position: relative;
-                padding-left: 29px;
+                padding-inline-start: 29px;
                 display: block;
                 letter-spacing: normal;
                 font-weight: normal;
@@ -99,7 +99,7 @@ input#edit-question-title, input#edit-group-title {
             margin: auto;
             top: 0;
             bottom: 0;
-            right: 0;
+            inset-inline-end: 0;
             display: table;
             background-color: #fff;
 
@@ -117,7 +117,7 @@ input#edit-question-title, input#edit-group-title {
                 content: '';
                 width: @w;
                 top: 0px;
-                left: -@w;
+                inset-inline-start: -@w;
                 #gradient > .horizontal(rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0));
             }
 
@@ -136,12 +136,12 @@ input#edit-question-title, input#edit-group-title {
         border: none;
 
         li {
-            padding-left: 5px;
-            padding-right: 5px;
+            padding-inline-start: 5px;
+            padding-inline-end: 5px;
 
             span {
-                padding-right: 5px;
-                padding-left: 5px;
+                padding-inline-end: 5px;
+                padding-inline-start: 5px;
             }
         }
 
@@ -151,23 +151,23 @@ input#edit-question-title, input#edit-group-title {
             padding-bottom: 1px;
             color: @questionnarie-question-editor-color;
             position: relative;
-            padding-right: 5px;
-            padding-left: 5px;
-            margin-left: 10px;
+            padding-inline-end: 5px;
+            padding-inline-start: 5px;
+            margin-inline-start: 10px;
 
             &.linked-question-source {
-                margin-left: 0px;
-                padding-right: 5px;
-                padding-left: 20px;
+                margin-inline-start: 0px;
+                padding-inline-end: 5px;
+                padding-inline-start: 20px;
             }
 
             &.linked-roster-source {
-                margin-left: 0px;
+                margin-inline-start: 0px;
                 font-style: italic;
                 font-family: Georgia, serif;
                 font-weight: normal;
-                padding-right: 5px;
-                padding-left: 5px;
+                padding-inline-end: 5px;
+                padding-inline-start: 5px;
                 color: @questionnaire-tree-roster-color;
             }
 
@@ -183,7 +183,7 @@ input#edit-question-title, input#edit-group-title {
                 content: '';
                 width: @w;
                 top: 0;
-                right: 0;
+                inset-inline-end: 0;
                 z-index: 1010;
             }
 
@@ -202,7 +202,7 @@ input#edit-question-title, input#edit-group-title {
                         content: '';
                         width: @w;
                         top: 0px;
-                        left: -@w;
+                        inset-inline-start: -@w;
                         #gradient > .horizontal(rgba(241, 242, 243, 0.0), rgba(241, 242, 243, 1.0));
                     }
                 }
@@ -242,8 +242,8 @@ input#edit-question-title, input#edit-group-title {
             height: 38px;
 
             .column-2, .column-3, .column-35, .column-4 {
-                padding-left: 0;
-                padding-right: 0;
+                padding-inline-start: 0;
+                padding-inline-end: 0;
                 display: table-cell;
                 vertical-align: top;
             }
@@ -298,9 +298,9 @@ input#edit-question-title, input#edit-group-title {
                     height: 34px;
                 }
             }
-            input.border-right {
+            input.border-inline-end {
               border: 2px solid #fff;
-              border-right-color: @panel-light-bg-color;
+              border-inline-end-color: @panel-light-bg-color;
             }
         }
     }
@@ -333,7 +333,7 @@ input#edit-question-title, input#edit-group-title {
     .form-group {
         .checkbox-in-column {
             margin-top: 0px;
-            padding-left: 17px;
+            padding-inline-start: 17px;
         }
     }
 
@@ -357,7 +357,7 @@ input#edit-question-title, input#edit-group-title {
 
     .inline-inputs .form-group .form-control {
         display: inline-block;
-        margin-left: 5px;
+        margin-inline-start: 5px;
     }
 }
 
@@ -385,7 +385,7 @@ input#edit-question-title, input#edit-group-title {
          border-radius: 4px;
          margin-bottom: 4px;
          .delete-validation-condition {
-             float: right;
+             float: inline-end;
          }
          .validation-message{
              margin-top: 18px;
@@ -397,7 +397,7 @@ input#edit-question-title, input#edit-group-title {
         background-color: #ffffff;
         border: 2px solid @input-border-color;
         text-transform: none;
-        text-align: left;
+        text-align: start;
         min-height: 37px;
         //width: 450px;
         > span.dropdown-arrow {
@@ -405,13 +405,13 @@ input#edit-question-title, input#edit-group-title {
             width: 19px;
             height: 12px;
             position: absolute;
-            right: 10px;
+            inset-inline-end: 10px;
         }
 
         > span.edit-roster {
             display: inline-block;
             overflow: hidden;
-            padding-left: 10px;
+            padding-inline-start: 10px;
             width: 100%;
         }
     }
@@ -422,7 +422,7 @@ input#edit-question-title, input#edit-group-title {
     background-color: #ffffff;
     border: 2px solid @input-border-color;
     text-transform: none;
-    text-align: left;
+    text-align: start;
     min-height: 37px;
     width: 220px;
     > span.dropdown-arrow {
@@ -430,7 +430,7 @@ input#edit-question-title, input#edit-group-title {
         width: 19px;
         height: 12px;
         position: absolute;
-        right: 10px;
+        inset-inline-end: 10px;
     }
 }
 

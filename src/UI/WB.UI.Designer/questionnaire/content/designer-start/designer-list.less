@@ -8,6 +8,8 @@
 @header-height: 80px;
 @nav-tab-height: 36px;
 
+@import "../rtl.less";
+
 html,
 body {
     height: 100%;
@@ -26,7 +28,7 @@ body {
         display: inline-block;
         height: 55px;
         width: auto;
-        margin-right: 10px;
+        margin-inline-end: 10px;
     }
 
     a {
@@ -43,14 +45,14 @@ body {
     }
 
     .logo {
-        padding-right: 5px;
-        border-right: 2px solid @designer-list-sidebar-color;
+        padding-inline-end: 5px;
+        border-inline-end: 2px solid @designer-list-sidebar-color;
     }
 
     .navbar-text {
         vertical-align: middle;
-        padding-left: 10px;
-        padding-right: 10px;
+        padding-inline-start: 10px;
+        padding-inline-end: 10px;
         margin: 0;
         float: none;
         font-size: 23px;
@@ -60,8 +62,8 @@ body {
 
 .container-wb-list {
     position: absolute;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     top: 0;
     height: 100%;
     overflow: hidden;
@@ -69,8 +71,8 @@ body {
     .header-wb-list {
         position: absolute;
         top: 0;
-        left: 0;
-        right: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
         height: @header-height;
         z-index: 2;
 
@@ -82,7 +84,7 @@ body {
                 margin: 12px 33px;
                 position: absolute;
                 top: 0;
-                left: 0;
+                inset-inline-start: 0;
             }
 
             .nav-tabs {
@@ -90,13 +92,13 @@ body {
                 display: flex;
                 width: 100%;
                 border: none;
-                border-left: 13px solid @designer-editor-mediumblue-bg-color;
+                border-inline-start: 13px solid @designer-editor-mediumblue-bg-color;
 
                 &>li {
                     margin-top: @header-height - @nav-tab-height;
 
                     &:first-child {
-                        margin-left: 280px;
+                        margin-inline-start: 280px;
                     }
 
                     &>a {
@@ -109,11 +111,11 @@ body {
             }
 
             nav {
-                float: right;
+                float: inline-end;
                 margin: 10px 18px 0 0;
                 position: absolute;
                 top: 0;
-                right: 0;
+                inset-inline-end: 0;
             }
         }
     }
@@ -121,16 +123,16 @@ body {
     section#designer-list {
         position: absolute;
         bottom: 0;
-        left: 0;
-        right: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
         top: @header-height - 1px;
         z-index: 1;
 
         #table-content-holder {
             position: absolute;
             bottom: 0;
-            left: 0;
-            right: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
             top: 45px;
             border-top-width: 0;
             border-top-style: none;
@@ -167,7 +169,7 @@ body {
 
             ul.pager {
                 .trebuchet12b();
-                text-align: left;
+                text-align: start;
                 margin: 0 15px;
 
                 a {
@@ -202,7 +204,7 @@ div#table-message {
     a.cross {
         position: absolute;
         top: 10px;
-        right: 10px;
+        inset-inline-end: 10px;
         background: url("../i/cross.png");
         height: 40px;
         width: 40px;
@@ -278,7 +280,7 @@ div#table-message {
         label {
             display: flex;
             align-items: center;
-            padding-left: 0;
+            padding-inline-start: 0;
         }
 
         input[type="checkbox"] {
@@ -297,7 +299,7 @@ div#table-message {
 table.table-header {
     cursor: default;
     border-top: 1px solid #dddddd;
-    border-left: 13px solid @designer-editor-mediumblue-bg-color;
+    border-inline-start: 13px solid @designer-editor-mediumblue-bg-color;
     border-bottom: 2px solid @designer-list-bottom-border-color;
     margin: 0;
     .trebuchet12b();
@@ -306,7 +308,7 @@ table.table-header {
     tr {
         th {
             padding-top: 5px;
-            padding-right: 21px;
+            padding-inline-end: 21px;
             line-height: 14px;
 
             a {
@@ -322,7 +324,7 @@ table.table-header {
             }
 
             &.ordered {
-                padding-right: 8px;
+                padding-inline-end: 8px;
 
                 a,
                 span.glyphicon {
@@ -343,7 +345,7 @@ table.table-content {
             &.search-value {
                 .robotoL18();
                 color: @table-text-color;
-                border-left: 13px solid @input-border;
+                border-inline-start: 13px solid @input-border;
 
                 a {
                     color: @table-text-color;
@@ -519,11 +521,11 @@ table.table-content {
         td,
         th {
             &:first-child {
-                padding-left: 20px;
+                padding-inline-start: 20px;
             }
 
             &:last-child {
-                padding-right: 20px;
+                padding-inline-end: 20px;
             }
         }
     }
@@ -532,11 +534,11 @@ table.table-content {
 #frmSearch {
     position: relative;
     display: inline-block;
-    margin-left: 30px;
+    margin-inline-start: 30px;
 
     .input-group {
         width: calc(100% - 35px);
-        float: left;
+        float: inline-start;
     }
 
     .btn {
@@ -563,7 +565,7 @@ table.table-content {
 }
 
 #user-table-header #frmSearch {
-    margin-left: 20px;
+    margin-inline-start: 20px;
 }
 
 .nav.nav-tabs>li>a {
@@ -575,11 +577,11 @@ table.table-content {
     padding: 3px 15px 0;
     border-top: 1px solid #ddd;
     margin: 0;
-    border-left: 13px solid @designer-editor-lightblue-bg-color;
+    border-inline-start: 13px solid @designer-editor-lightblue-bg-color;
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     bottom: 0;
     overflow: auto;
 
@@ -666,8 +668,8 @@ table.table-content {
 
             &:nth-child(2),
             &:nth-child(3) {
-                padding-left: 23px;
-                padding-right: 0;
+                padding-inline-start: 23px;
+                padding-inline-end: 0;
             }
         }
     }
@@ -677,8 +679,8 @@ table.table-content {
     width: 300px;
     background: transparent;
     position: relative;
-    float: left;
-    text-align: left;
+    float: inline-start;
+    text-align: start;
     font: 14px/16px Arial, Helvetica, sans-serif;
     border: 1px solid @designer-editor-lightblue-bg-color;
     text-transform: none;
@@ -689,7 +691,7 @@ table.table-content {
     text-overflow: ellipsis;
     white-space: nowrap;
     border-radius: 5px 0 0 5px;
-    padding-right: 30px;
+    padding-inline-end: 30px;
 }
 
 .start-pdf-generation .dropdown .dropdown-toggle:after {
@@ -697,12 +699,12 @@ table.table-content {
     display: block;
     position: absolute;
     top: 15px;
-    right: 10px;
+    inset-inline-end: 10px;
     width: 0;
     height: 0;
     border-top: 12px solid @designer-muted-color;
-    border-right: 7px solid transparent;
-    border-left: 7px solid transparent;
+    border-inline-end: 7px solid transparent;
+    border-inline-start: 7px solid transparent;
     border-bottom: none;
 }
 
@@ -745,10 +747,10 @@ table.table-content {
     background: transparent;
     border: 1px solid @designer-editor-lightblue-bg-color;
     color: @questionnarie-question-editor-color;
-    float: left;
+    float: inline-start;
     border-radius: 0 5px 5px 0;
     position: relative;
-    left: -1px;
+    inset-inline-start: -1px;
 }
 
 .start-pdf-generation .btn-default:hover,
@@ -848,8 +850,8 @@ table.table-content {
     background-color: transparent;
     border-radius: 0;
     margin-bottom: 0;
-    padding-left: 55px;
-    border-left: 13px solid @designer-editor-mediumblue-bg-color;
+    padding-inline-start: 55px;
+    border-inline-start: 13px solid @designer-editor-mediumblue-bg-color;
 }
 
 .public-questionnaires-breadcrumb li {
@@ -877,7 +879,7 @@ table.table-header.page-with-breadcrumbs {
 }
 
 .list-with-icons .search-value a {
-    padding-left: 40px;
+    padding-inline-start: 40px;
     display: inline-block;
 }
 
@@ -886,7 +888,7 @@ table.table-header.page-with-breadcrumbs {
     display: block;
     position: absolute;
     top: 5px;
-    left: 20px;
+    inset-inline-start: 20px;
     width: 30px;
     height: 30px;
 }
@@ -894,7 +896,7 @@ table.table-header.page-with-breadcrumbs {
 .breadcrumb.public-questionnaires-breadcrumb:before {
     content: "";
     background-position: 0 -2px;
-    left: 30px;
+    inset-inline-start: 30px;
 }
 
 .folder-tree .fancytree-checkbox~.fancytree-title {

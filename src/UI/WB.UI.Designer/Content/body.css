@@ -6,7 +6,7 @@ body {
 input[type=text]::-ms-clear { display: none; }
 
 .network-name {
-    float: left;
+    float: inline-start;
     width: 300px;
     height: 80px;
     margin: 0px 0px 23px;
@@ -15,7 +15,7 @@ input[type=text]::-ms-clear { display: none; }
 }
 
 .network-name-container {
-    float: left;
+    float: inline-start;
     width: 160px;
 }
 
@@ -39,7 +39,7 @@ input[type=text]::-ms-clear { display: none; }
 }
 
 .form-horizontal .form-actions {
-    padding-left: 30px;
+    padding-inline-start: 30px;
 }
 
 .icon-chevron-up.icon-white {

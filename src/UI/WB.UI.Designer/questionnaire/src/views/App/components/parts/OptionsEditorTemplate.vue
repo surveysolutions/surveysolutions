@@ -24,16 +24,16 @@
                                 v-model="option.value" v-number="/^([-]?\d*)$/" :name="'option_value_' + index"
                                 :class="{ 'has-error': option.value && !isInteger(option.value) }"
                                 @keypress="onKeyPressIsNumber($event)"
-                                class="form-control question-option-value-editor border-right" />
+                                class="form-control question-option-value-editor border-inline-end technical-value" />
                         </v-form>
                     </div>
                     <div class="column-3">
-                        <input :id="'option-title-' + index" type="text" v-model="option.title"
-                            @keypress="onKeyPressInOptions($event)" class="form-control border-right" />
+                        <input :id="'option-title-' + index" type="text" v-model="option.title" v-content-direction="option.title"
+                            @keypress="onKeyPressInOptions($event)" class="form-control border-inline-end" />
                     </div>
                     <div class="column-35">
-                        <input :id="'option-attachmentName-' + index" type="text" v-model="option.attachmentName"
-                            @keypress="onKeyPressInOptions($event)" class="form-control border-right" />
+                        <input :id="'option-attachmentName-' + index" type="text" v-model="option.attachmentName" dir="ltr"
+                            @keypress="onKeyPressInOptions($event)" class="form-control border-inline-end" />
                     </div>
                     <div class="column-4">
                         <a href="javascript:void(0);" @click="removeOption(index)" class="btn" tabindex="-1"></a>
@@ -50,13 +50,14 @@
                 <button type="button" class="btn btn-link" @click="showAddClassificationModal()">{{
                     $t('QuestionnaireEditor.QuestionAddClassification') }}</button>
 
-                <button type="button" class="btn btn-link pull-right" @click="showOptionsInTextarea()">{{
+                <button type="button" class="btn btn-link float-end" @click="showOptionsInTextarea()">{{
                     $t('QuestionnaireEditor.StringsView') }}</button>
             </p>
         </div>
         <div v-if="!useListAsOptionsEditor">
             <div class="form-group" :class="{ 'has-error': !stringifiedCategoriesValidity.valid }">
                 <textarea name="stringifiedOptions" class="form-control mono"
+                    v-content-direction="activeQuestion.stringifiedCategories"
                     v-bind:value="activeQuestion.stringifiedCategories"
                     v-on:input="updateStringifiedCategoriesValue($event)" match-options-pattern max-options-count
                     v-autosize></textarea>

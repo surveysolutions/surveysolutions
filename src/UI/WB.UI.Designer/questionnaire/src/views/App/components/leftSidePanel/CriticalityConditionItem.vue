@@ -24,6 +24,7 @@
                 {{ $t('QuestionnaireEditor.SideBarCriticalityConditionDescription') }}
             </label>
             <textarea type="text" v-model="criticalityCondition.edit.description"
+                v-content-direction="criticalityCondition.edit.description"
                 class="form-control macros-description" v-autosize aria-label="Description">
                 </textarea>
             <hr style="margin-top:0px; margin-bottom:0px;">
@@ -34,7 +35,7 @@
             </button>
             <button type="button" class="btn lighter-hover" @click="cancel()">{{
                 $t('QuestionnaireEditor.Cancel') }}</button>
-            <button class="btn btn-default pull-right" v-if="isDescriptionEmpty()" type="button"
+            <button class="btn btn-default float-end" v-if="isDescriptionEmpty()" type="button"
                 @click="toggleDescription()">
                 {{ isDescriptionVisible() ? $t('QuestionnaireEditor.SideBarHideDescription') :
                     $t('QuestionnaireEditor.SideBarShowDescription') }}

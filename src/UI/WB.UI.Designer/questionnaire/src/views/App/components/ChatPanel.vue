@@ -7,7 +7,7 @@
             <div class="d-flex align-center">
                 <v-btn icon="mdi-delete-sweep" variant="text" size="medium" class="header-action-btn header-clear"
                     @click="clearHistory" :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory')"
-                    :ripple="false" style="padding-right: 10px;" />
+                    :ripple="false" style="padding-inline-end: 10px;" />
                 <v-btn icon="mdi-close" variant="text" size="medium" class="header-action-btn header-close"
                     @click="close" :ripple="false" :title="$t('QuestionnaireEditor.Close')" />
             </div>
@@ -33,7 +33,8 @@
                         <div class="d-flex align-start">
                             <div class="flex-grow-1">
                                 <div class="message-content">
-                                    <div class="message-body" v-html="formattedContentMap.get(message.id)"></div>
+                                    <div class="message-body" v-content-direction="message.content"
+                                        v-html="formattedContentMap.get(message.id)"></div>
                                     <div class="d-flex align-center justify-space-between">
                                         <div v-if="message.role === 'assistant' && !message.isError && !!message.assistantCallId"
                                             class="d-flex align-center">
@@ -85,7 +86,8 @@
         <!-- Input Area -->
         <v-card-actions class="pa-4">
             <div class="editor pseudo-form-control">
-                <v-textarea ref="messageInput" v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage')" variant="plain"
+                <v-textarea ref="messageInput" v-model="currentMessage" v-content-direction="currentMessage"
+                    :placeholder="$t('Assistant.TypeMessage')" variant="plain"
                     density="comfortable" hide-details @keydown.enter="handleEnter" :disabled="isLoading"
                     class="flex-grow-1" maxlength="2000" rows="3">
                     <template #append>
@@ -645,7 +647,7 @@ export default {
 
 .chat-container :deep(textarea) {
     padding-top: 8px;
-    padding-left: 10px;
+    padding-inline-start: 10px;
     resize: none;
     border: none;
 }
@@ -819,7 +821,7 @@ export default {
 :deep(.chat-copy-btn) {
     position: absolute;
     top: 5px;
-    right: 5px;
+    inset-inline-end: 5px;
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid #d0d7de;
     border-radius: 4px;
@@ -956,7 +958,7 @@ export default {
     font-size: 12px;
     line-height: 1.5;
     color: rgba(var(--v-theme-on-surface), 0.6);
-    text-align: left;
+    text-align: start;
     padding: 12px 16px;
     border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
     border-radius: 6px;

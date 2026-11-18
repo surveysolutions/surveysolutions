@@ -28,7 +28,7 @@
                     name: 'group',
                     params: { entityId: chapterId, chapterId: chapterId }
                 }">
-                    <span v-text="currentChapterData.title"></span>
+                    <span v-text="currentChapterData.title" v-content-direction="currentChapterData.title"></span>
                     <span v-if="currentChapter.isCover && currentChapter.isReadOnly
                     " class="warning-message">
                         {{ $t('QuestionnaireEditor.VirtualCoverPage') }}&nbsp;</span>
@@ -59,7 +59,7 @@
                 <div ui-tree-nodes vmodel="items" class="ui-tree-nodes angular-ui-tree-nodes">
                     <Draggable ref="tree" v-model="filteredTreeData" textKey="title" childrenKey="items"
                         :defaultOpen="true" :maxLevel="10" :indent="30" triggerClass="handler" :keepPlaceholder="true"
-                        :statHandler="treeNodeCreated" @after-drop="treeNodeDropped" :ondragstart="customDragImage">
+                        :statHandler="treeNodeCreated" :rtl="isRtl" @after-drop="treeNodeDropped" :ondragstart="customDragImage">
                         <template #default="{ node, stat }">
                             <component :key="node.itemId" :is="itemTemplate(node.itemType)" :item="node" :stat="stat"
                                 :searchText="search.searchText" :questionnaireId="questionnaireId"
@@ -104,7 +104,7 @@
                             {{ $t('QuestionnaireEditor.SearchForQuestion') }}
                         </button>
 
-                        <input type="button" class="btn lighter-hover pull-right" id="treePaste"
+                        <input type="button" class="btn lighter-hover float-end" id="treePaste"
                             :disabled="!readyToPaste"
                             v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                             :value="$t('QuestionnaireEditor.Paste')" @click="pasteItemInto(currentChapter)" />
@@ -169,6 +169,7 @@ import Help from './Help.vue';
 import { migrateToNewVersion } from '../../../services/questionnaireService'
 import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 import { sanitizeMarkup } from '../../../services/utilityService';
+import { getUiDirection } from '../../../plugins/uiLocale';
 
 export default {
     name: 'Tree',
@@ -218,6 +219,7 @@ export default {
     setup() {
         const treeStore = useTreeStore();
         const searchDialog = ref(null);
+        const isRtl = getUiDirection() === 'rtl';
 
         const ctrl_f = useKeyShortcut(e => e.ctrlKey && !e.altKey && !e.shiftKey && e.code === 'KeyF');
 
@@ -226,6 +228,7 @@ export default {
         return {
             treeStore,
             searchDialog,
+            isRtl,
             ctrl_f,
             ctrl_h,
             canPaste,

@@ -50,11 +50,11 @@
                     </div>
                 </div>
                 <div v-if="isEditMode" class="categories-holder-footer clearfix">
-                    <button v-if="optionsMode" type="button" class="btn btn-link pull-left" @click="addCategory">{{
+                    <button v-if="optionsMode" type="button" class="btn btn-link float-start" @click="addCategory">{{
                         $t('QuestionnaireEditor.QuestionAddOption') }}</button>
-                    <button v-if="optionsMode" type="button" class="btn btn-link pull-right show-strings"
+                    <button v-if="optionsMode" type="button" class="btn btn-link float-end show-strings"
                         @click="showStrings">{{ $t('QuestionnaireEditor.StringsView') }}</button>
-                    <button v-else type="button" class="btn btn-link pull-left" @click="showList">{{
+                    <button v-else type="button" class="btn btn-link float-start" @click="showList">{{
                         $t('QuestionnaireEditor.TableView') }}</button>
                 </div>
             </div>

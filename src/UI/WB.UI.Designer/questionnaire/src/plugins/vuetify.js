@@ -1,6 +1,7 @@
 import { createVuetify } from 'vuetify';
 import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import i18nInstance from './localization';
+import { getUiLocale, isRtlLocale } from './uiLocale';
 
 const myCustomLightTheme = {
     dark: false,
@@ -26,6 +27,10 @@ const vuetify = createVuetify({
         },
     },
     locale: {
+        locale: getUiLocale(),
+        rtl: {
+            [getUiLocale()]: isRtlLocale(getUiLocale()),
+        },
         t: (key, ...params) => i18nInstance.t(key, params),
     },
 });

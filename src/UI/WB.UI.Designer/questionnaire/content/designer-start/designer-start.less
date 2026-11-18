@@ -6,6 +6,8 @@
 
 @viewport-min-height: 801px;
 
+@import "../rtl.less";
+
 html, body {
   height: 100%;
   min-width: 1280px;
@@ -26,14 +28,14 @@ header {
 
   .logo {
     background: url("../i/wb-logo.png") no-repeat;
-    float: left;
+    float: inline-start;
     width: 268px;
     height: 66px;
     margin: 40px 0 0 40px;
   }
 
   nav {
-    float: right;
+    float: inline-end;
     margin: 18px;
   }
 }
@@ -66,7 +68,7 @@ header {
             #notification-message {
               display: table-caption;
               font-style: italic;
-              text-align: left;
+              text-align: start;
             }
 
             .form-row {
@@ -101,7 +103,7 @@ header {
 
             .form-right {
               vertical-align: middle;
-              text-align: left;
+              text-align: start;
               padding: 45px;
 
               .header.alert.alert-success {
@@ -155,8 +157,8 @@ header {
                   letter-spacing: 1px;
 
                   &:nth-child(2), &:nth-child(3) {
-                    padding-left: 23px;
-                    padding-right: 0;
+                    padding-inline-start: 23px;
+                    padding-inline-end: 0;
                   }
                 }
 

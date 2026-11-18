@@ -1,5 +1,7 @@
 <template>
-    <WordHighlighter :query="queryText" :htmlToHighlight="sanitizeText(text)" highlightClass="ui-match" />
+    <span v-content-direction="text">
+        <WordHighlighter :query="queryText" :htmlToHighlight="sanitizeText(text)" highlightClass="ui-match" />
+    </span>
 </template>
 
 <script>

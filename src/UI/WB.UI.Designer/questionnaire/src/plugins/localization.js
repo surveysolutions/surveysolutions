@@ -1,6 +1,6 @@
 import i18next from 'i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 import dayjs from 'dayjs';
+import { getUiLocale } from './uiLocale';
 
 function loadLocaleMessages() {
     const locales = import.meta.glob('../locale/*.json', { eager: true });
@@ -25,12 +25,11 @@ function loadLocaleMessages() {
 
 const messages = loadLocaleMessages();
 
-const userLang = navigator.language || navigator.userLanguage;
-const userLocale = userLang.split('-')[0];
+const userLocale = getUiLocale();
 
-i18next.use(LanguageDetector).init({
+i18next.init({
     debug: false,
-    lng: userLocale || import.meta.env.VUE_APP_I18N_LOCALE || 'en',
+    lng: userLocale,
     fallbackLng: import.meta.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
     /*backend: {
         loadPath: function(languages) {

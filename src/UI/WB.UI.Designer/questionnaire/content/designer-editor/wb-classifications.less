@@ -1,4 +1,4 @@
-﻿@import (reference) "../designer-start/font-styles.less";
+@import (reference) "../designer-start/font-styles.less";
 
 .add-classification-modal .modal-dialog {
     width: 800px;
@@ -8,19 +8,19 @@
     display: inline-block;
     line-height: 18px;
     margin-bottom: -4px;
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 .add-classification-modal {
     .modal-body {
-        padding-left: 20px;
-        padding-right: 0;
+        padding-inline-start: 20px;
+        padding-inline-end: 0;
     }
 
     .header-block {
         border-bottom: 1px solid @neutral-button-bg-color;
         margin-bottom: 15px;
-        margin-right: 20px;
+        margin-inline-end: 20px;
     }
 
     .custom-dropdown {
@@ -28,8 +28,8 @@
             width: 250px;
             background: transparent;
             position: relative;
-            float: left;
-            text-align: left;
+            float: inline-start;
+            text-align: start;
             font: 14px/16px Arial,Helvetica,sans-serif;
             border: 1px solid @designer-editor-lightblue-bg-color;
             text-transform: none;
@@ -40,19 +40,19 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             border-radius: 5px 0 0 5px;
-            padding-right: 30px;
+            padding-inline-end: 30px;
 
             &:after {
                 content: "";
                 display: block;
                 position: absolute;
                 top: 15px;
-                right: 10px;
+                inset-inline-end: 10px;
                 width: 0;
                 height: 0;
                 border-top: 12px solid @designer-muted-color;
-                border-right: 7px solid transparent;
-                border-left: 7px solid transparent;
+                border-inline-end: 7px solid transparent;
+                border-inline-start: 7px solid transparent;
                 border-bottom: none;
             }
         }
@@ -82,7 +82,7 @@
         .form-control {
             font: 14px/16px Arial,Helvetica,sans-serif;
             border: 1px solid @designer-editor-lightblue-bg-color;
-            border-right: none;
+            border-inline-end: none;
             box-shadow: none;
             color: @questionnarie-question-editor-color;
             height: 42px;            
@@ -108,7 +108,7 @@
 
         .search-icon {
             position: absolute;
-            right: 0px;
+            inset-inline-end: 0px;
             top: 0px;
             background-image: url(../i/search-glyph.png);
             width: 42px;
@@ -119,7 +119,7 @@
 
     .input-group-btn-right {
         border: 1px solid @designer-editor-lightblue-bg-color;
-        border-left: none;
+        border-inline-start: none;
         border-radius: 0 5px 5px 0;
     }
 
@@ -134,7 +134,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin-right: 20px;
+        margin-inline-end: 20px;
     }
 
     .tile {
@@ -174,12 +174,12 @@
                 &:hover:before,
                 &:focus:before,
                 &:active:before {
-                    border-left-color: #285f8f;
+                    border-inline-start-color: #285f8f;
                 }
 
                 &:before {
-                    border-left-color: #337ab7;
-                    border-right: none;
+                    border-inline-start-color: #337ab7;
+                    border-inline-end: none;
                     border-top-color: transparent;
                     border-bottom: 5px solid transparent;
                     top: 0;
@@ -196,13 +196,13 @@
             &:before {
                 position: absolute;
                 top: 2px;
-                left: 0;
+                inset-inline-start: 0;
                 display: block;
                 content: "";
                 width: 0;
                 height: 0;
-                border-right: 5px solid transparent;
-                border-left: 5px solid transparent;
+                border-inline-end: 5px solid transparent;
+                border-inline-start: 5px solid transparent;
                 border-top: 5px solid #337ab7;
             }
         }
@@ -211,7 +211,7 @@
             color: #333;
             font-size: 12px;
             line-height: 14px;
-            padding-left: 15px;
+            padding-inline-start: 15px;
 
             & li {
                 display: block;
@@ -232,7 +232,7 @@
                     position: relative;
                     display: inline;
                     z-index: 1;
-                    padding-right: .2rem;
+                    padding-inline-end: .2rem;
                     word-break: break-word;
 
                     & span {
@@ -244,10 +244,10 @@
                     background: #fff;
                     position: absolute;
                     bottom: 0;
-                    right: 0;
-                    padding-left: .2rem;
+                    inset-inline-end: 0;
+                    padding-inline-start: .2rem;
                     z-index: 2;
-                    text-align: right
+                    text-align: end
                 }
             }
         }
@@ -280,7 +280,7 @@
         padding: 6px 0;
         visibility: hidden;
         opacity: 0;
-        float: right;
+        float: inline-end;
         -webkit-transition: all 0.2s linear;
         -moz-transition: all 0.2s linear;
         -ms-transition: all 0.2s linear;
@@ -296,7 +296,7 @@
     width: 40px;
     position: absolute;
     top: 0;
-    right: 0;
+    inset-inline-end: 0;
     margin: 0;
     padding: 0;
 
@@ -314,7 +314,7 @@
             transform: rotate(45deg);
             position: relative;
             top: 1px;
-            left: 8px;
+            inset-inline-start: 8px;
         }
 
         &:after {

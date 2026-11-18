@@ -23,7 +23,7 @@
                     </div>
                 </div>
 
-                <div class="form-group input-variable-name col-xs-5 pull-right">
+                <div class="form-group input-variable-name col-xs-5 float-end">
                     <label for="edit-group-variableName" class="wb-label">{{
                         $t('QuestionnaireEditor.RosterVariableName') }}
                         <help link="variableName" placement="left" />
@@ -176,12 +176,13 @@
                                                 v-number="/^([-]?\d*)$/" v-model.number="title.value"
                                                 :name="'title_value_' + index" @keypress="onKeyPressIsNumber($event)"
                                                 :class="{ 'has-error': !isInteger(title.value) }"
-                                                class="form-control fixed-roster-value-editor border-right">
+                                                class="form-control fixed-roster-value-editor border-inline-end">
                                         </div>
                                         <div class="column-3">
                                             <input :id="'fixed-item-' + index" type="text" v-model="title.title"
+                                                v-content-direction="title.title"
                                                 @keypress="onKeyPressInOptions($event)"
-                                                class="form-control border-right">
+                                                class="form-control border-inline-end">
                                         </div>
                                         <div class="column-4">
                                             <a href="javascript:void(0);" class="btn" tabindex="-1"
@@ -193,7 +194,7 @@
                                     <button class="btn btn-link" type="button"
                                         v-if="activeRoster.fixedRosterTitles.length < fixedRosterLimit"
                                         @click="addFixedTitle()">{{ $t('QuestionnaireEditor.RosterAddItem') }}</button>
-                                    <button class="btn btn-link pull-right" @click="showOptionsInTextarea()">
+                                    <button class="btn btn-link float-end" @click="showOptionsInTextarea()">
                                         {{ $t('QuestionnaireEditor.StringsView') }}
                                     </button>
                                 </p>
@@ -202,6 +203,7 @@
                                 <div class="form-group"
                                     :class="{ 'has-error': !stringifiedRosterTitlesValidity.valid }">
                                     <textarea name="stringifiedRosterTitles" class="form-control mono"
+                                        v-content-direction="activeRoster.stringifiedRosterTitles"
                                         v-bind:value="stringifiedRosterTitles"
                                         v-on:input="updateStringifiedRosterTitlesValue($event)" match-options-pattern
                                         max-options-count v-autosize></textarea>
@@ -277,7 +279,7 @@
                         <span class="dropdown-arrow"></span>
                     </button>
 
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="cb-roster-display-mode">
+                    <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="cb-roster-display-mode">
                         <li role="presentation" v-for="displayMode in activeRoster.displayModes">
                             <a role="menuitem" tabindex="-1" @click="activeRoster.displayMode = displayMode">
                                 {{ $t('QuestionnaireEditor.RosterDisplayMode_' + displayMode) }}
@@ -328,14 +330,14 @@
             </div>
         </div>
         <div class="form-buttons-holder">
-            <div class="pull-left">
+            <div class="float-start">
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="edit-roster-save-button"
                     class="btn btn-lg" :class="{ 'btn-primary': isDirty }" @click="saveRoster()" unsaved-warning-clear
                     :disabled="!isDirty">{{ $t('QuestionnaireEditor.Save') }}</button>
                 <button type="button" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
                     @click="cancel()">{{ $t('QuestionnaireEditor.Cancel') }}</button>
             </div>
-            <div class="pull-right">
+            <div class="float-end">
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="add-comment-button"
                     class="btn btn-lg btn-link" @click="toggleComments(activeQuestion)" unsaved-warning-clear>
                     <span v-if="!isCommentsBlockVisible && commentsCount == 0">{{

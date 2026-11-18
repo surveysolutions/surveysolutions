@@ -5,7 +5,7 @@
                 <div class="form-group" :class="{ 'has-error': errors.title }">
                     <vee-field as="textarea" v-autosize name="title" type="text" rules="required" required
                         v-model="title" class="form-control" v-validate="'required'" :validateOnInput="true"
-                        :placeholder="$t('QuestionnaireEditor.ClassificationGroupTitle')" />
+                        v-content-direction="title" :placeholder="$t('QuestionnaireEditor.ClassificationGroupTitle')" />
                     <span class="help-block" v-show="errors.title">{{ errors.title }}</span>
                 </div>
                 <button type="button" :disabled="!meta.dirty ? 'disabled' : null" @click="save"
@@ -15,7 +15,8 @@
             </vee-form>
         </div>
         <div v-else class="line-wrapper">
-            <a @click="select()">{{ title }} <span class="badge pull-right">{{ group.count }}</span></a>
+            <a @click="select()" v-content-direction="title">{{ title }}
+                <span class="badge float-end">{{ group.count }}</span></a>
         </div>
     </div>
     <Teleport to="body">

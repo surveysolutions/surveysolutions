@@ -30,8 +30,10 @@ import directives from './directives/';
 
 import emitter from './services/emitter';
 import { installServerGuards } from './services/serverGuard';
+import { synchronizeUiDirection } from './plugins/uiLocale';
 
 installServerGuards({ page: true, fetch: true });
+synchronizeUiDirection();
 
 const pinia = createPinia();
 pinia.use(({ store }) => {

@@ -55,7 +55,7 @@
 
     button.date-cross {
         position: absolute;
-        right: 2px;
+        inset-inline-end: 2px;
         display: inline;
         top: 9px;
         width: 17px;
