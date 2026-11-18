@@ -87,20 +87,20 @@
                             var iconCssClass = listViewModel.IsFolder ? "tree-icon folder-closed" : "tree-icon";
 
                             <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
-                                <td class="search-value" dir="auto">
+                                <td class="search-value">
                                     <a href="@Url.Action(openActionName, listViewModel.IsFolder ? "Questionnaire" : "Q", routevalues)" title="@listViewModel.Location">
                                         <span class="@iconCssClass"></span>
-                                        @listViewModel.Title
+                                        <bdi>@listViewModel.Title</bdi>
                                     </a>
                                 </td>
-                                <td class="date" dir="ltr">
-                                    @listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()
+                                <td class="date">
+                                    <bdi>@listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()</bdi>
                                 </td>
-                                <td class="date" dir="ltr">
-                                    @listViewModel.CreationDate.ConvertToLocalAndFormatDate()
+                                <td class="date">
+                                    <bdi>@listViewModel.CreationDate.ConvertToLocalAndFormatDate()</bdi>
                                 </td>
-                                <td class="email" dir="ltr">
-                                    @listViewModel.CreatedBy
+                                <td class="email">
+                                    <bdi>@listViewModel.CreatedBy</bdi>
                                 </td>
                                 <td>
                                     @{

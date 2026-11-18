@@ -15,8 +15,7 @@
             </vee-form>
         </div>
         <div v-else class="line-wrapper">
-            <a @click="select()" v-content-direction="title">{{ title }}
-                <span class="badge float-end">{{ group.count }}</span></a>
+            <a @click="select()"><bdi>{{ title }}</bdi> <span class="badge float-end">{{ group.count }}</span></a>
         </div>
     </div>
     <Teleport to="body">

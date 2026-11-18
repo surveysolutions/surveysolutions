@@ -1,3 +1,11 @@
+/* Monospace UI fonts lack Arabic glyphs; this alias only covers Arabic ranges so Latin text keeps its font. */
+@font-face {
+    font-family: "WB Arabic Fallback";
+    src: local("Segoe UI"), local("Tahoma"), local("Geeza Pro Regular"), local("GeezaPro"),
+        local("Noto Sans Arabic"), local("NotoSansArabic-Regular"), local("Arial Unicode MS"), local("ArialUnicodeMS"), local("Arial");
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
 .border-inline-start-radius(@radius) {
     border-start-start-radius: @radius;
     border-end-start-radius: @radius;
@@ -8,12 +16,25 @@
     border-end-end-radius: @radius;
 }
 
+/* Replacements for Bootstrap 3 pull-left/pull-right, which are also !important. */
 .float-start {
-    float: inline-start;
+    float: inline-start !important;
 }
 
 .float-end {
-    float: inline-end;
+    float: inline-end !important;
+}
+
+/* Bootstrap 3 aligns these with physical left/right; start/end resolve to the same values in LTR. */
+th,
+.dropdown-menu {
+    text-align: start;
+}
+
+@media (min-width: 768px) {
+    .form-horizontal .control-label {
+        text-align: end;
+    }
 }
 
 .dropdown-menu-start {
@@ -24,10 +45,6 @@
 .dropdown-menu-end {
     inset-inline-start: auto;
     inset-inline-end: 0;
-}
-
-.row > [class*="col-"] {
-    float: inline-start;
 }
 
 .border-inline-end {
@@ -93,6 +110,12 @@ pre {
     transform: scaleX(-1);
 }
 
+/* Logins and emails are typed LTR, while the localized placeholder follows the UI direction. */
+.ltr-value:not(:placeholder-shown) {
+    /* direction: fixed */
+    direction: ltr;
+}
+
 /* Horizontal fade overlays are drawn as physical gradients. */
 [dir="rtl"] .qname-block::before {
     transform: scaleX(-1);
@@ -115,29 +138,34 @@ pre {
     text-align: start;
 }
 
-/* Reset the physical Bootstrap 3 offsets before applying their logical equivalents. */
-[dir="rtl"] .col-xs-offset-3 {
-    margin-inline-start: 25%;
-    /* direction: fixed */
-    margin-left: 0;
+/* Mirror the Bootstrap 3 grid, which floats and offsets columns with physical properties. */
+.rtl-grid-columns(@class, @index: 12) when (@index > 0) {
+    [dir="rtl"] .col-@{class}-@{index} {
+        /* direction: fixed */
+        float: right;
+    }
+
+    [dir="rtl"] .col-@{class}-offset-@{index} {
+        /* direction: fixed */
+        margin-left: 0;
+        margin-right: percentage((@index / 12));
+    }
+
+    .rtl-grid-columns(@class, (@index - 1));
 }
 
-[dir="rtl"] .col-sm-offset-2 {
-    margin-inline-start: 16.66666667%;
-    /* direction: fixed */
-    margin-left: 0;
+.rtl-grid-columns(xs);
+
+@media (min-width: 768px) {
+    .rtl-grid-columns(sm);
 }
 
-[dir="rtl"] .col-sm-offset-3 {
-    margin-inline-start: 25%;
-    /* direction: fixed */
-    margin-left: 0;
+@media (min-width: 992px) {
+    .rtl-grid-columns(md);
 }
 
-[dir="rtl"] .col-md-offset-2 {
-    margin-inline-start: 16.66666667%;
-    /* direction: fixed */
-    margin-left: 0;
+@media (min-width: 1200px) {
+    .rtl-grid-columns(lg);
 }
 
 .message-body,
@@ -146,6 +174,3 @@ pre {
 .content-direction-auto {
     unicode-bidi: plaintext;
 }
-    /* direction: fixed */
-    /* direction: fixed */
-    /* direction: fixed */

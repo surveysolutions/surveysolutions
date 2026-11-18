@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="option-cell" :class="{ 'has-error': errors['title' + category.id] }">
                                     <vee-field :name="'title' + category.id" v-on:keyup.enter="moveFocus"
-                                        v-validate="'required'" key="title" type="text" v-model="category.title"
+                                        v-validate="'required'" key="title" type="text" dir="auto" v-model="category.title"
                                         rules="required" class="form-control" :validateOnInput="true"
                                         :placeholder="$t('QuestionnaireEditor.OptionsUploadTitle')" />
                                 </div>
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <div v-else class="form-group" :class="{ 'has-error': errors.stringifiedOptions }">
-                        <vee-field as="textarea" name="stringifiedOptions" v-autosize v-model="stringifiedOptions"
+                        <vee-field as="textarea" name="stringifiedOptions" dir="auto" v-autosize v-model="stringifiedOptions"
                             :rules="validateStringOptions" key="stringifiedOptions" class="form-control js-elasticArea"
                             :validateOnInput="true"
                             :placeholder="$t('QuestionnaireEditor.ClassificationsStringOptionsEditorPlaceholder')" />

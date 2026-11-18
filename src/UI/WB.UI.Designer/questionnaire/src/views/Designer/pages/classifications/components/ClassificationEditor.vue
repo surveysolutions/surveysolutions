@@ -16,8 +16,7 @@
             </vee-form>
         </div>
         <div v-else class="line-wrapper" :class="{ 'private': isPrivate }">
-            <a @click="select()" v-content-direction="title">{{ title }}
-                <span class="badge float-end">{{ classification.count }}</span></a>
+            <a @click="select()"><bdi>{{ title }}</bdi> <span class="badge float-end">{{ classification.count }}</span></a>
         </div>
     </div>
     <Teleport to="body">
