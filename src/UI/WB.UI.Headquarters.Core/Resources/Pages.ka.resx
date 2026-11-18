@@ -312,6 +312,9 @@
   <data name="HistoryOfStatuses_By" xml:space="preserve">
     <value>მიერ</value>
   </data>
+  <data name="HistoryOfStatuses_InterviewResponsible" xml:space="preserve">
+    <value>{{interviewKey}} — {{responsible}}-ის მიერ</value>
+  </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
     <value>კომენტარი</value>
   </data>

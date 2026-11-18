@@ -477,6 +477,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string HistoryOfStatuses_InterviewResponsible {
+            get {
+                return ResourceManager.GetString("HistoryOfStatuses_InterviewResponsible", resourceCulture);
+            }
+        }
+        
         public static string InterviewHistory_Header {
             get {
                 return ResourceManager.GetString("InterviewHistory_Header", resourceCulture);

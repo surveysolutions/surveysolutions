@@ -274,6 +274,9 @@
     <data name="HistoryOfStatuses_By" xml:space="preserve">
         <value>ដោយ</value>
     </data>
+    <data name="HistoryOfStatuses_InterviewResponsible" xml:space="preserve">
+        <value>{{interviewKey}} ដោយ {{responsible}}</value>
+    </data>
     <data name="InterviewHistory_Header" xml:space="preserve">
         <value>ប្រវត្តិបទសម្ភាសន៍</value>
     </data>

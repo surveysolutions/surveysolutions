@@ -333,6 +333,9 @@
   <data name="HistoryOfStatuses_By" xml:space="preserve">
     <value>Por</value>
   </data>
+  <data name="HistoryOfStatuses_InterviewResponsible" xml:space="preserve">
+    <value>{{interviewKey}} por {{responsible}}</value>
+  </data>
   <data name="InterviewHistory_Header" xml:space="preserve">
     <value>Historial de entrevistas</value>
   </data>

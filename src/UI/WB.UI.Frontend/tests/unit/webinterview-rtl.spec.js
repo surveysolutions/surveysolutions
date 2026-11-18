@@ -423,3 +423,19 @@ test('email preview direction follows the first letter of authored text like the
     const settings = readFileSync(new URL('src/hqapp/Views/HQ/WebInterviewSetup/Settings.vue', frontend), 'utf8')
     assert.match(settings, /class="em-table email-example-table"[^>]*:dir="emailDirection\(emailTemplate\)"/s)
 })
+
+test('status history title is a translated phrase with both links as placeholders in every culture', async () => {
+    const { readdirSync } = await import('node:fs')
+    const resources = new URL('../WB.UI.Headquarters.Core/Resources/', frontend)
+    const files = readdirSync(resources).filter(file => /^Pages(\.[a-z]{2})?\.resx$/.test(file))
+    assert.ok(files.length >= 16, files.join())
+    for (const file of files) {
+        const match = readFileSync(new URL(file, resources), 'utf8')
+            .match(/<data name="HistoryOfStatuses_InterviewResponsible"[^>]*>\s*<value>([^<]*)<\/value>/)
+        assert.ok(match, file)
+        assert.deepEqual(match[1].match(/\{\{\w+\}\}/g).sort(), ['{{interviewKey}}', '{{responsible}}'], file)
+    }
+    const view = readFileSync(new URL('src/hqapp/Views/HQ/Interviews/HqInterviews.vue', frontend), 'utf8')
+    assert.doesNotMatch(view, /^\s+by\s*$/m)
+    assert.match(view, /\$t\('Pages\.HistoryOfStatuses_InterviewResponsible'/)
+})
