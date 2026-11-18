@@ -207,6 +207,11 @@
 .slide-leave-to {
     transform: translateX(-500px);
 }
+
+[dir="rtl"] .slide-enter-from,
+[dir="rtl"] .slide-leave-to {
+    transform: translateX(500px);
+}
 </style>
 
 <script>

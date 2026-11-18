@@ -4,6 +4,9 @@ import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '../..');
 const allowedFixedPhysical = '/* direction: fixed */';
 const physicalProperty = /(^\s*|\s)(?:left|right)\s*:|(?:margin|padding)-(?:left|right)\s*:|border-(?:left|right)(?:-[\w-]+)?\s*:|text-align\s*:\s*(?:left|right)\b|float\s*:\s*(?:left|right)\b/;
+// padding/margin shorthands with different left and right values are physical too.
+const asymmetricShorthand = /(?:^|[\s;{"])(?:margin|padding)\s*:\s*([^\s;{}"]+)\s+([^\s;{}"]+)\s+([^\s;{}"]+)\s+([^\s;{}"!]+)/;
+const normalizeLength = value => (/^0(?:px|em|rem|%)?$/.test(value) ? '0' : value);
 const directionalClass = /\b(?:pull-left|pull-right|dropdown-menu-left|dropdown-menu-right)\b/;
 const files = [];
 
@@ -39,6 +42,10 @@ for (const file of files) {
         const isAllowedFixed = lines.slice(Math.max(0, index - 2), index + 1).some(item => item.includes(allowedFixedPhysical));
         if (physicalProperty.test(line) && !isAllowedFixed) {
             violations.push(`${path.relative(root, file)}:${index + 1}: physical CSS property`);
+        }
+        const shorthand = line.match(asymmetricShorthand);
+        if (shorthand && normalizeLength(shorthand[2]) !== normalizeLength(shorthand[4]) && !isAllowedFixed) {
+            violations.push(`${path.relative(root, file)}:${index + 1}: asymmetric padding/margin shorthand`);
         }
     }
 

@@ -64,6 +64,10 @@
         box-shadow: inset -10px 0px 20px -5px rgba(0, 0, 0, 0.2);
     }
 
+    [dir="rtl"] .classifications-wrapper .column {
+        box-shadow: inset 10px 0px 20px -5px rgba(0, 0, 0, 0.2);
+    }
+
         .classifications-wrapper .column h3 {
             color: #7e898f;
             padding-inline-start: 15px;
@@ -80,12 +84,14 @@
 
 .classification-groups {
     background-color: #c9cfd3;
-    padding: 0 0 0 10px;
+    padding-block: 0 0;
+    padding-inline: 10px 0;
 }
 
 .classifications {
     background-color: #e4e7e9;
-    padding: 0 0 0 10px;
+    padding-block: 0 0;
+    padding-inline: 10px 0;
 }
 
 .categories-groups {
@@ -295,6 +301,37 @@
         box-shadow: 7px -8px 0px -3px #f8f9f9;
     }
 
+/* The selected-item tab is drawn with physical box-shadow offsets; mirror them so it joins the next panel in RTL. */
+[dir="rtl"] .classification-groups .active .line-wrapper,
+[dir="rtl"] .classification-groups .active .edit-classification-group-name {
+    box-shadow: -23px 0px 0 0 #e4e7e9;
+}
+
+[dir="rtl"] .classification-list .active .line-wrapper:before,
+[dir="rtl"] .classification-list .active .edit-classification-group-name:before {
+    box-shadow: -8px 7px 0px -3px #e4e7e9;
+}
+
+[dir="rtl"] .classification-list .active .line-wrapper:after,
+[dir="rtl"] .classification-list .active .edit-classification-group-name:after {
+    box-shadow: -7px -8px 0px -3px #e4e7e9;
+}
+
+[dir="rtl"] .classifications .active .line-wrapper,
+[dir="rtl"] .classifications .active .edit-classification-group-name {
+    box-shadow: -23px 0px 0 0 #f8f9f9;
+}
+
+[dir="rtl"] .classifications .active .line-wrapper:before,
+[dir="rtl"] .classifications .active .edit-classification-group-name:before {
+    box-shadow: -8px 7px 0px -3px #f8f9f9;
+}
+
+[dir="rtl"] .classifications .active .line-wrapper:after,
+[dir="rtl"] .classifications .active .edit-classification-group-name:after {
+    box-shadow: -7px -8px 0px -3px #f8f9f9;
+}
+
 .edit-classification-group-name {
     padding: 5px;
     border: 1px solid #fff;
@@ -411,7 +448,8 @@
 }
 
 .categories-holder-body.readonly {
-    padding: 0 25px 0 5px;
+    padding-block: 0 0;
+    padding-inline: 5px 25px;
 }
 
 .categories-groups .readonly .input-group {

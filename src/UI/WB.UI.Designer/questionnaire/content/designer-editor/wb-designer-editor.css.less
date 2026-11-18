@@ -213,7 +213,8 @@
 
         h3 {
             .chapters-title-fontstyle();
-            margin: 18px 24px 20px 18px;
+            margin-block: 18px 20px;
+            margin-inline: 18px 24px;
             color: @designer-panel-grey-color;
             padding-inline-start: 10px;
         }
@@ -461,6 +462,10 @@
                         -moz-box-shadow: -30px 1px 25px 0px @lookup-panel-table-item-bg;
                         box-shadow: -30px 1px 25px 0px @lookup-panel-table-item-bg;
                         bottom: 5px;
+
+                        [dir="rtl"] & {
+                            box-shadow: 30px 1px 25px 0px @lookup-panel-table-item-bg;
+                        }
                         position: absolute;
                         inset-inline-end: 0;
                         padding-inline-start: 5px;
@@ -704,7 +709,8 @@
         height: 100%;
 
         .panel-header {
-            margin: 18px 24px 20px 18px;
+            margin-block: 18px 20px;
+            margin-inline: 18px 24px;
 
             .title {
                 margin-inline-end: 12px;
@@ -1029,7 +1035,8 @@
 
     ul {
         margin: 0;
-        padding: 0 20px 0 10px;
+        padding-block: 0 0;
+        padding-inline: 10px 20px;
         list-style: none;
     }
 
@@ -1104,7 +1111,8 @@
             padding: 0;
 
             li {
-                padding: 0 10px 0 20px;
+                padding-block: 0 0;
+                padding-inline: 20px 10px;
                 border-bottom: 2px solid @designer-editor-lightblue-bg-color;
             }
 
@@ -1363,7 +1371,8 @@
             .chapter-level-buttons {
                 border-top: 2px solid @neutral-button-bg-color;
                 margin-top: 2px;
-                padding: 8px 24px 30px 18px;
+                padding-block: 8px 30px;
+                padding-inline: 18px 24px;
 
                 .btn {
                     margin-bottom: 10px;
@@ -1619,7 +1628,8 @@ li.chapter-panel-item {
                 text-decoration: none;
                 margin: 0;
                 .questionnarie-chapter-list-fontstyle();
-                padding: 14px 23px 16px 0;
+                padding-block: 14px 16px;
+                padding-inline: 0 23px;
                 display: block;
                 min-height: @chapter-item-height;
                 font-weight: bold;
@@ -1755,7 +1765,8 @@ li.chapter-panel-item {
         top: 0;
         inset-inline-end: 40px;
         margin: 0;
-        padding: 0 5px 0 0;
+        padding-block: 0 0;
+        padding-inline: 0 5px;
         z-index: 100;
     }
 
@@ -1847,7 +1858,8 @@ li.chapter-panel-item {
 
         >button {
             @btn-size: 40px;
-            margin: 7px 0 0 3px;
+            margin-block: 7px 0;
+            margin-inline: 3px 0;
             line-height: @h;
             width: @btn-size;
             height: @btn-size;
@@ -2211,7 +2223,8 @@ li.chapter-panel-item {
         inset-inline-start: 50%;
         height: 50px;
         width: 50%;
-        margin: -25px 0 0 -25%;
+        margin-block: -25px 0;
+        margin-inline: -25% 0;
         line-height: 50px;
         background: #fff;
         text-align: center;

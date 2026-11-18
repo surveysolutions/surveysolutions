@@ -112,7 +112,8 @@ body {
 
             nav {
                 float: inline-end;
-                margin: 10px 18px 0 0;
+                margin-block: 10px 0;
+                margin-inline: 0 18px;
                 position: absolute;
                 top: 0;
                 inset-inline-end: 0;
@@ -192,7 +193,8 @@ div#table-message {
 
     p {
         .arial16I();
-        padding: 20px 50px 0 110px;
+        padding-block: 20px 0;
+        padding-inline: 110px 50px;
     }
 
     button {
@@ -285,7 +287,8 @@ div#table-message {
 
         input[type="checkbox"] {
             position: static;
-            margin: 0 6px 0 0;
+            margin-block: 0 0;
+            margin-inline: 0 6px;
         }
     }
 
@@ -767,7 +770,8 @@ table.table-content {
 }
 
 .folder-tree .fancytree-expander {
-    margin: 8px 5px 8px 0;
+    margin-block: 8px 8px;
+    margin-inline: 0 5px;
     color: @designer-muted-color;
 }
 
@@ -904,7 +908,8 @@ table.table-header.page-with-breadcrumbs {
 }
 
 .folder-tree .fancytree-checkbox {
-    margin: 6px 5px 6px 0;
+    margin-block: 6px 6px;
+    margin-inline: 0 5px;
     cursor: pointer;
     width: 24px;
     height: 18px;

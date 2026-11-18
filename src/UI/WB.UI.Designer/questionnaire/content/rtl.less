@@ -26,6 +26,12 @@
 }
 
 /* Bootstrap 3 aligns these with physical left/right; start/end resolve to the same values in LTR. */
+/* Bootstrap 3 resets only padding-left; the UA list indent is logical and would remain on the right in RTL. */
+.list-unstyled,
+.list-inline {
+    padding-inline-start: 0;
+}
+
 th,
 .dropdown-menu {
     text-align: start;
@@ -84,11 +90,6 @@ pre {
     direction: ltr;
     text-align: start;
     unicode-bidi: isolate;
-}
-
-[dir="rtl"] .slide-enter-from,
-[dir="rtl"] .slide-leave-to {
-    transform: translateX(500px);
 }
 
 [dir="rtl"] .foldback-button,

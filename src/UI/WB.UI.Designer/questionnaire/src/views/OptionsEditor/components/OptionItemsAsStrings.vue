@@ -299,7 +299,8 @@ export default {
     min-width: var(--categories-strings-line-numbers-width);
     height: 100%;
     box-sizing: border-box;
-    padding: 0px 8px var(--categories-strings-padding-y) 4px;
+    padding-block: 0px var(--categories-strings-padding-y);
+    padding-inline: 4px 8px;
     background: rgba(0, 0, 0, 0.04);
     border-inline-end: 1px solid rgba(0, 0, 0, 0.12);
     overflow: hidden;
