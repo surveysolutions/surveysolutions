@@ -29,8 +29,8 @@
   <style name="Dashboard_Synchronization_Lock_Text" parent="Dashboard_Synchronization_Statistics_Text">
     <item name="android:layout_width">@dimen/Dashboard_Synchronization_Statistics_Width</item>
     <item name="android:layout_alignParentBottom">true</item>
-    <item name="android:layout_alignParentLeft">true</item>
-    <item name="android:layout_marginRight">@dimen/Dashboard_Synchronization_Lock_marginRight</item>
+    <item name="android:layout_alignParentStart">true</item>
+    <item name="android:layout_marginEnd">@dimen/Dashboard_Synchronization_Lock_marginRight</item>
       
   </style>
 
@@ -38,7 +38,7 @@
     <item name="android:textAllCaps">true</item>
     <item name="android:textColor">@color/dashboard_synchronization_regular_title</item>
     <item name="android:layout_alignParentBottom">true</item>
-    <item name="android:layout_alignParentRight">true</item>
+    <item name="android:layout_alignParentEnd">true</item>
     <item name="android:background">?attr/selectableItemBackground</item>
     <item name="android:padding">@dimen/button_shadow_margin</item>
   </style>
@@ -47,22 +47,22 @@
     <item name="android:textAllCaps">true</item>
     <item name="android:textColor">@color/colorBlueThemePrimary</item>
     <item name="android:layout_alignParentTop">true</item>
-    <item name="android:layout_alignParentLeft">true</item>
+    <item name="android:layout_alignParentStart">true</item>
     <item name="android:background">?attr/selectableItemBackground</item>
     <item name="android:padding">@dimen/button_shadow_margin</item>
   </style>
 
   <style name="Dashboard_Synchronization_Update_Text_Gravity_Right" parent="Dashboard_Synchronization_Update_Text">
-    <item name="android:layout_gravity">right</item>
+    <item name="android:layout_gravity">end</item>
   </style>
 
   <style name="Dashboard_Synchronization_Holder">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">@dimen/Dashboard_Synchronization_Statistics_Height</item>
-    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginStart">@dimen/Dashboard_Layout_marginLeft</item>
     <item name="android:layout_marginTop">@dimen/Dashboard_Layout_marginLeft</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_Layout_marginRight</item>
-    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
+    <item name="android:layout_marginEnd">@dimen/Dashboard_Layout_marginRight</item>
   </style>
 
   <style name="Dashboard_Synchronization_Image">

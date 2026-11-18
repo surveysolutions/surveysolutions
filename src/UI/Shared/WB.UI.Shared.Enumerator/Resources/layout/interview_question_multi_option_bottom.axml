@@ -4,8 +4,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           style="@style/Interview_Question_Instruction_Title"
-          android:layout_marginLeft="@dimen/Interview_Entity_margin_with_border_left"
-          android:layout_marginRight="@dimen/Interview_Entity_margin_with_border_right"
+          android:layout_marginStart="@dimen/Interview_Entity_margin_with_border_left"
+          android:layout_marginEnd="@dimen/Interview_Entity_margin_with_border_right"
           android:layout_marginBottom="@dimen/Interview_Question_Option_vertical_padding"
           local:MvxBind="Hidden Not(MaxAnswersCountMessage); 
                          Text MaxAnswersCountMessage; 

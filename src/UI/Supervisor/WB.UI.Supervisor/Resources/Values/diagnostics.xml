@@ -19,8 +19,8 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:paddingLeft">@dimen/Troubleshooting_double_padding</item>
-    <item name="android:paddingRight">@dimen/Troubleshooting_padding</item>
+    <item name="android:paddingStart">@dimen/Troubleshooting_double_padding</item>
+    <item name="android:paddingEnd">@dimen/Troubleshooting_padding</item>
     <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
   </style>
   <style name="Restore_Button" parent="Login_Button">
@@ -30,8 +30,8 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:paddingLeft">@dimen/Troubleshooting_double_padding</item>
-    <item name="android:paddingRight">@dimen/Troubleshooting_padding</item>
+    <item name="android:paddingStart">@dimen/Troubleshooting_double_padding</item>
+    <item name="android:paddingEnd">@dimen/Troubleshooting_padding</item>
     <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
   </style>
   <style name="Diagnostics_Section_Title">
@@ -72,6 +72,7 @@
     <item name="android:fontFamily">Roboto</item>
     <item name="android:textStyle">bold</item>
     <item name="android:paddingBottom">@dimen/Diagnostics_SubsectionValue_padding</item>
+    <item name="android:textDirection">ltr</item>
   </style>
   <style name="Diagnostic_FormContainer">
     <item name="android:layout_width">wrap_content</item>

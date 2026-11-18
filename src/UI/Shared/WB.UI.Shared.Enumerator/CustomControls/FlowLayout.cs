@@ -51,8 +51,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
-            var sizeWidth = MeasureSpec.GetSize(widthMeasureSpec) - this.PaddingRight - this.PaddingLeft;
-            var sizeHeight = MeasureSpec.GetSize(heightMeasureSpec) - this.PaddingRight - this.PaddingLeft;
+            var sizeWidth = MeasureSpec.GetSize(widthMeasureSpec) - this.PaddingStart - this.PaddingEnd;
+            var sizeHeight = MeasureSpec.GetSize(heightMeasureSpec) - this.PaddingTop - this.PaddingBottom;
 
             var modeWidth = (int)MeasureSpec.GetMode(widthMeasureSpec);
             var modeHeight = (int)MeasureSpec.GetMode(heightMeasureSpec);
@@ -143,12 +143,12 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 int posY;
                 if (this.Orientation == Horizontal)
                 {
-                    posX = this.PaddingLeft + lineLength - childLength;
+                    posX = this.PaddingStart + lineLength - childLength;
                     posY = this.PaddingTop + prevLinePosition;
                 }
                 else
                 {
-                    posX = this.PaddingLeft + prevLinePosition;
+                    posX = this.PaddingStart + prevLinePosition;
                     posY = this.PaddingTop + lineLength - childHeight;
                 }
                 lp.SetPosition(posX, posY);
@@ -212,12 +212,16 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
         {
+            var width = r - l;
             var count = this.ChildCount;
             for (var i = 0; i < count; i++)
             {
                 var child = this.GetChildAt(i);
                 var lp = this.EnsureFlowLayoutLayoutParams(child);
-                child.Layout(lp.X, lp.Y, lp.X + child.MeasuredWidth, lp.Y + child.MeasuredHeight);
+                var x = this.LayoutDirection == Android.Views.LayoutDirection.Rtl
+                    ? width - lp.X - child.MeasuredWidth
+                    : lp.X;
+                child.Layout(x, lp.Y, x + child.MeasuredWidth, lp.Y + child.MeasuredHeight);
             }
         }
 

@@ -15,8 +15,8 @@
         <item name="android:background">@android:color/white</item>
         <item name="android:paddingBottom">@dimen/Interviewer_Selector_Dialog_PaddingBottom</item>
         <item name="android:paddingTop">@dimen/Interviewer_Selector_Dialog_PaddingTop</item>
-        <item name="android:paddingLeft">@dimen/Interviewer_Selector_Dialog_PaddingLeft</item>
-        <item name="android:paddingRight">@dimen/Interviewer_Selector_Dialog_PaddingRight</item>
+        <item name="android:paddingStart">@dimen/Interviewer_Selector_Dialog_PaddingLeft</item>
+        <item name="android:paddingEnd">@dimen/Interviewer_Selector_Dialog_PaddingRight</item>
     </style>
 
     <style name="Interviewer_Selector_Title">
@@ -47,7 +47,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/Interview_Group_button_padding</item>
-        <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_padding_horizontal</item>
+        <item name="android:layout_marginEnd">@dimen/Interview_Question_InputButton_padding_horizontal</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:letterSpacing">0.1</item>
         <item name="android:layout_gravity">center_vertical</item>
@@ -66,14 +66,14 @@
         <item name="android:layout_width">@dimen/Sidebar_image_dimention</item>
         <item name="android:layout_height">@dimen/Sidebar_image_dimention</item>
         <item name="android:layout_alignParentBottom">true</item>
-        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
         <item name="android:layout_alignParentTop">true</item>
         <item name="android:src">@drawable/icon</item>
     </style>
     <style name="Sidebar_Header_Name">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingLeft">@dimen/Sidebar_header_padding</item>
+        <item name="android:paddingStart">@dimen/Sidebar_header_padding</item>
         <item name="android:layout_alignParentTop">true</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -82,12 +82,13 @@
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingLeft">@dimen/Sidebar_header_padding</item>
+        <item name="android:paddingStart">@dimen/Sidebar_header_padding</item>
+        <item name="android:textDirection">ltr</item>
 
     </style>
     <style name="Sidebar_Header_Sync">
         <item name="android:layout_alignParentBottom">true</item>
-        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
         <item name="android:layout_alignParentTop">true</item>
 
         <item name="android:layout_width">@dimen/Sidebar_image_dimention</item>

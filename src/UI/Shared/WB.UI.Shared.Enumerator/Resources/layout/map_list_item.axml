@@ -10,7 +10,7 @@
                   android:layout_height="wrap_content"
                   local:MvxBind="Html MapName;"
                   android:textSize ="@dimen/textsize_18"
-                  android:paddingLeft="14dp"
+                  android:paddingStart="14dp"
                   android:paddingTop="6dp"
                   android:layout_weight="1"/>
         <!--
@@ -18,15 +18,15 @@
                   android:layout_height="wrap_content"
                   local:MvxBind="Text Size;"
                   android:textSize ="@dimen/textsize_14"
-                  android:paddingLeft="14dp"
+                  android:paddingStart="14dp"
                   android:paddingTop="6dp"/>-->
         
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   local:MvxBind="Text CreationDate;"
                   android:textSize ="@dimen/textsize_14"
-                  android:paddingLeft="14dp"
-                  android:paddingRight="14dp"
+                  android:paddingStart="14dp"
+                  android:paddingEnd="14dp"
                   android:paddingTop="6dp"
                   android:textStyle="italic"
                   android:fontFamily="Georgia"/>

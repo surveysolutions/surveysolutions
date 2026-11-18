@@ -3,6 +3,7 @@
           package="org.worldbank.solutions.interviewer" android:versionCode="31025" android:versionName="22.09.1 (build 31025)">
 	<application android:label="Interviewer" 
                  android:icon="@drawable/icon" 
+                 android:supportsRtl="true"
                  android:theme="@android:style/Theme.DeviceDefault.Light" 
                  android:largeHeap="true" 
                  android:allowBackup="false"

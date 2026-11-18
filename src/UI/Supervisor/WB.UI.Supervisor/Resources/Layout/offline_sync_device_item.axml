@@ -18,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="@dimen/Dashboard_Layout_marginLeft"
-            android:paddingRight="@dimen/Dashboard_Layout_marginLeft"
+            android:paddingStart="@dimen/Dashboard_Layout_marginLeft"
+            android:paddingEnd="@dimen/Dashboard_Layout_marginLeft"
             android:paddingTop="@dimen/Dashboard_Layout_marginLeft"
             >
             <ImageView android:layout_width="@dimen/Dashboard_SearchView_DeleteButton_size"

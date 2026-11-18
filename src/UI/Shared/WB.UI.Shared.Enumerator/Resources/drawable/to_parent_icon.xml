@@ -3,7 +3,8 @@
         android:width="@dimen/IconSize"
         android:height="@dimen/IconSize"
         android:viewportWidth="24"
-        android:viewportHeight="24">
+        android:viewportHeight="24"
+        android:autoMirrored="true">
 
     <path
             android:pathData="M0 0h24v24H0z" />

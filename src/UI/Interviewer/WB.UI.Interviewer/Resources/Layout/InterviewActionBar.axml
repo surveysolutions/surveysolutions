@@ -9,8 +9,8 @@
       android:layout_height="fill_parent"
       android:textColor="?android:attr/actionMenuTextColor"
       android:textSize="18sp"
-      android:gravity="center_vertical|left"
-      android:layout_marginLeft="50dp"
+      android:gravity="center_vertical|start"
+      android:layout_marginStart="50dp"
   />
 
 </RelativeLayout>

@@ -8,8 +8,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:backgroundTint">@color/button_save_selector</item>
-        <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
     </style>
 
     <style name="Area_Screen_Button_Bordered" parent="Button_Primary">
@@ -37,23 +37,23 @@
         <item name="iconPadding">0dp</item>
         <item name="iconTint">@drawable/mtrl_btn_text_color_selector</item>
         <item name="rippleColor">?colorOnPrimary</item>
-        <item name="android:layout_marginRight">10dp</item>        
+        <item name="android:layout_marginEnd">10dp</item>        
     </style>
     
     <style name="Area_LocationButton" parent="Widget.AppTheme.Button.IconButton">
-        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_gravity">end</item>
         <item name="android:enabled">false</item>
         <item name="icon">@drawable/my_location</item>
     </style>
 
   <style name="Area_ShowFullMap" parent="Widget.AppTheme.Button.IconButton">
-    <item name="android:layout_gravity">right</item>
+    <item name="android:layout_gravity">end</item>
     <item name="icon">@drawable/show_full_map_icon</item>
     <item name="android:enabled">false</item>
   </style>
 
   <style name="Area_ShowAllItems" parent="Widget.AppTheme.Button.IconButton">
-      <item name="android:layout_gravity">right</item>
+      <item name="android:layout_gravity">end</item>
       <item name="icon">@drawable/show_all_items_icon</item>
       <item name="android:enabled">false</item>
   </style>
@@ -129,14 +129,14 @@
     <style name="Area_ZoomMapInButton">
         <item name="android:layout_width">42dp</item>
         <item name="android:layout_height">42dp</item>
-        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_gravity">end</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:background">@drawable/plus_icon</item>
     </style>
     <style name="Area_ZoomMapOutButton">
         <item name="android:layout_width">42dp</item>
         <item name="android:layout_height">42dp</item>
-        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_gravity">end</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:background">@drawable/minus_icon</item>
     </style>
@@ -144,7 +144,7 @@
     <style name="Area_UpdateMapsButton">
         <item name="android:layout_width">32dp</item>
         <item name="android:layout_height">32dp</item>
-        <item name="android:layout_gravity">left</item>
+        <item name="android:layout_gravity">start</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:background">@drawable/sync_maps</item>
     </style>
@@ -162,7 +162,7 @@
         <item name="android:textColor">@color/text_color_light</item>
         <item name="android:textSize">@dimen/area_editor_text_size_regular</item>
         <item name="android:layout_marginTop">@dimen/area_editor_common_margin_top</item>
-        <item name="android:layout_marginLeft">@dimen/area_editor_common_margin_left</item>
+        <item name="android:layout_marginStart">@dimen/area_editor_common_margin_left</item>
     </style>
     
     <style name="Area_MapListPanel">
@@ -178,8 +178,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/area_editor_text_size_large</item>
-        <item name="android:paddingRight">@dimen/area_editor_padding_regular</item>
-        <item name="android:paddingLeft">@dimen/area_editor_padding_regular</item>
+        <item name="android:paddingEnd">@dimen/area_editor_padding_regular</item>
+        <item name="android:paddingStart">@dimen/area_editor_padding_regular</item>
         <item name="android:paddingBottom">@dimen/area_editor_padding_regular</item>
     </style>
 
@@ -187,8 +187,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/area_editor_text_size_large</item>
-        <item name="android:paddingRight">@dimen/area_editor_padding_regular</item>
-        <item name="android:paddingLeft">@dimen/area_editor_padding_regular</item>
+        <item name="android:paddingEnd">@dimen/area_editor_padding_regular</item>
+        <item name="android:paddingStart">@dimen/area_editor_padding_regular</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
     </style>
@@ -196,7 +196,7 @@
     <style name="Area_Dashboard_Drawer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_gravity">left|start</item>
+        <item name="android:layout_gravity">start</item>
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:background">@color/drawer_panel_color</item>
         <item name="android:orientation">vertical</item>
@@ -205,8 +205,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">22dp</item>
-        <item name="android:paddingRight">32dp</item>
-        <item name="android:paddingLeft">@dimen/area_editor_padding_regular</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="android:paddingStart">@dimen/area_editor_padding_regular</item>
         <item name="android:paddingTop">28dp</item>
         <item name="android:paddingBottom">@dimen/area_editor_padding_regular</item>
     </style>
@@ -214,16 +214,16 @@
     <style name="Area_Dashboard_DrawerCheckBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingRight">@dimen/area_editor_padding_regular</item>
-        <item name="android:paddingLeft">@dimen/area_editor_padding_regular</item>
+        <item name="android:paddingEnd">@dimen/area_editor_padding_regular</item>
+        <item name="android:paddingStart">@dimen/area_editor_padding_regular</item>
         <item name="android:textSize">@dimen/area_editor_text_size_large</item>
     </style>
 
     <style name="Area_Dashboard_Spinner">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingRight">@dimen/area_editor_padding_regular</item>
-        <item name="android:paddingLeft">@dimen/area_editor_padding_regular</item>
+        <item name="android:paddingEnd">@dimen/area_editor_padding_regular</item>
+        <item name="android:paddingStart">@dimen/area_editor_padding_regular</item>
         <item name="android:paddingTop">@dimen/area_editor_padding_regular</item>
         <item name="android:textSize">@dimen/area_editor_text_size_large</item>
     </style>
@@ -231,7 +231,7 @@
     <style name="Area_Dashboard_Text">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingLeft">@dimen/area_editor_padding_regular</item>
+        <item name="android:paddingStart">@dimen/area_editor_padding_regular</item>
         <item name="android:paddingTop">28dp</item>
     </style>
 

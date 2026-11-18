@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
-    android:layout_marginLeft="@dimen/area_editor_common_margin_left"
+    android:layout_marginStart="@dimen/area_editor_common_margin_left"
     android:layout_marginTop="@dimen/area_editor_list_item_margin_top">
   <TextView
       android:layout_width="match_parent"

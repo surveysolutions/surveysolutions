@@ -75,7 +75,7 @@
                     <LinearLayout android:layout_width="wrap_content"
                                   android:layout_height="wrap_content"
                                   android:orientation="horizontal"
-                                  android:gravity="left">
+                                  android:gravity="start">
                         <Button style="@style/Login_Button"
                                 local:MvxBind="Click SignInCommand; Text Localization('LoginText');"/>
                         <Button style="@style/Login_OnlineSingin_Button"

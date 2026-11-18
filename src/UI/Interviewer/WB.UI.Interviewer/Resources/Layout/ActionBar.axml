@@ -13,6 +13,6 @@
         android:id="@+id/greetingsTextView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:gravity="center_vertical|right"
-        android:layout_marginRight="10px" />
+        android:gravity="center_vertical|end"
+        android:layout_marginEnd="10px" />
 </LinearLayout>

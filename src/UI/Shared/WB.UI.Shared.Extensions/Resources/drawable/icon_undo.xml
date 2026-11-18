@@ -3,7 +3,8 @@
         android:width="48dp"
         android:height="48dp"
         android:viewportWidth="48"
-        android:viewportHeight="48">
+        android:viewportHeight="48"
+        android:autoMirrored="true">
 
 <path
         android:strokeColor="?attr/colorControlNormal"

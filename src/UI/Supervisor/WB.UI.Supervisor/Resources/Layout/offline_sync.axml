@@ -16,7 +16,7 @@
             local:layout_scrollFlags="enterAlways|scroll">
 
             <ImageView style="@style/ToolbarIcon"
-                       android:layout_gravity="left"
+                       android:layout_gravity="start"
                        local:MvxBind="Click ExitOfflineSyncCommand"
                        local:srcCompat="@drawable/back_arrow_white"/>
             <TextView

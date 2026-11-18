@@ -30,7 +30,7 @@
         <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible IsStringNotEmpty(FilterText)"
                       style="@style/Interview_Question_Answer_Input_RemoveAnswerWrapper">
             <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                         android:layout_gravity="right" android:duplicateParentState="true"
+                         android:layout_gravity="end" android:duplicateParentState="true"
                          local:MvxBind="HideKeyboardOnClick .;
                                         Click RemoveAnswerCommand; 
                                         Tag Format('ib_RemoveAnswer_{0}', Identity);"

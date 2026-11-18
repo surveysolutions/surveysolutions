@@ -66,7 +66,7 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
             var item = GetItem();
             if (item is IDashboardViewItem dashboardItem)
             {
-                var popup = new PopupMenu(this.DashboardItem.Context, this.MenuHandle, GravityFlags.Left);
+                var popup = new PopupMenu(this.DashboardItem.Context, this.MenuHandle, GravityFlags.Start);
                 var actions = dashboardItem.ContextMenu.Where(a => a.Command.CanExecute());
                 foreach (var action in actions)
                 {

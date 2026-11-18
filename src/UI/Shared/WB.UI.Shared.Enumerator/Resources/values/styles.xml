@@ -24,8 +24,8 @@
   </style>
 
   <style name="PrefilledQuestionsToolbarTitle" parent="ToolbarTitle">
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_marginStart">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginEnd">@dimen/Interview_Entity_margin_right</item>
     <item name="android:singleLine">true</item>
     <item name="android:ellipsize">end</item>
   </style>
@@ -33,8 +33,8 @@
   <style name="InterviewToolbarTitle" parent="ToolbarTitle">
     <item name="android:maxLines">4</item>
     <item name="android:ellipsize">end</item>
-    <item name="android:layout_marginLeft">@dimen/zero</item>
-    <item name="android:layout_marginRight">@dimen/zero</item>
+    <item name="android:layout_marginStart">@dimen/zero</item>
+    <item name="android:layout_marginEnd">@dimen/zero</item>
   </style>
 
   <style name="ToolbarTitle">
@@ -44,18 +44,18 @@
     <item name="android:layout_centerVertical">true</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginLeft">@dimen/Toolbar_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Toolbar_margin_horizontal</item>
+    <item name="android:layout_marginStart">@dimen/Toolbar_margin_horizontal</item>
+    <item name="android:layout_marginEnd">@dimen/Toolbar_margin_horizontal</item>
   </style>
 
     <style name="ToolbarIcon">
         <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
         <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>
-        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_gravity">end</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:scaleType">fitXY</item>
-        <item name="android:layout_marginLeft">@dimen/button_shadow_margin</item>
-        <item name="android:layout_marginRight">@dimen/button_shadow_margin</item>
+        <item name="android:layout_marginStart">@dimen/button_shadow_margin</item>
+        <item name="android:layout_marginEnd">@dimen/button_shadow_margin</item>
     </style>
 
   <style name="Interview_List">
@@ -99,8 +99,8 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:fontFamily">sans-serif-thin</item>
     <item name="android:textSize">@dimen/PrefilledQuestions_QuestionnaireTitle_textsize</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_marginStart">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginEnd">@dimen/Interview_Entity_margin_right</item>
     <item name="android:layout_centerVertical">true</item>
     <item name="android:maxLines">5</item>
     <item name="android:ellipsize">end</item>
@@ -110,15 +110,15 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textAllCaps">true</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_marginStart">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginEnd">@dimen/Interview_Entity_margin_right</item>
     <item name="android:layout_centerVertical">true</item>
   </style>
 
   <style name="Interview_Sidebar">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">match_parent</item>
-    <item name="android:layout_gravity">left|start</item>
+    <item name="android:layout_gravity">start</item>
     <item name="android:fitsSystemWindows">true</item>
     <item name="android:background">#FFFFFFFF</item>
     <item name="android:orientation">vertical</item>
@@ -129,8 +129,8 @@
   </style>
 
   <style name="Interview_Sidebar_Header" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:paddingRight">@dimen/Interview_Sidebar_padding_right</item>
-    <item name="android:paddingLeft">@dimen/Interview_Sidebar_padding_left</item>
+    <item name="android:paddingEnd">@dimen/Interview_Sidebar_padding_right</item>
+    <item name="android:paddingStart">@dimen/Interview_Sidebar_padding_left</item>
     <item name="android:paddingTop">@dimen/Interview_Sidebar_Header_padding_top</item>
     <item name="android:paddingBottom">@dimen/Interview_Sidebar_Header_padding_bottom</item>
   </style>
@@ -151,8 +151,8 @@
       <item name="android:focusable">false</item>
       <item name="android:layout_height">@dimen/LoadingProgressIndicator_height</item>
       <item name="android:layout_width">match_parent</item>
-      <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-      <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+      <item name="android:layout_marginStart">@dimen/Interview_Entity_Element_margin_horizontal</item>
+      <item name="android:layout_marginEnd">@dimen/Interview_Entity_Element_margin_horizontal</item>
       <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_small_vertical</item>
       <item name="android:keepScreenOn">false</item>
       <item name="android:indeterminateDrawable">@drawable/progress_bar_loading_indeterminate</item>
@@ -191,8 +191,8 @@
   </style>
   
   <style name="Interview_Sidebar_Sections_Section_Title">
-    <item name="android:paddingRight">@dimen/Interview_Sidebar_padding_right</item>
-    <item name="android:paddingLeft">@dimen/Interview_Sidebar_row_button_padding_right</item>
+    <item name="android:paddingEnd">@dimen/Interview_Sidebar_padding_right</item>
+    <item name="android:paddingStart">@dimen/Interview_Sidebar_row_button_padding_right</item>
     <item name="android:layout_height">@dimen/Interview_Sidebar_Sections_Item_height</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:gravity">center_vertical</item>
@@ -244,8 +244,8 @@
   </style>
   
   <style name="Interview_Confirmation_Layout" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    <item name="android:layout_marginStart">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    <item name="android:layout_marginEnd">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_TextAnswer_margin_top</item>
     <item name="android:paddingBottom">@dimen/Interview_Question_TextAnswer_margin_top</item>
   </style>
@@ -256,6 +256,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/Interview_Entity_Element_margin_horizontal</item>
         <item name="android:layout_margin">@dimen/Interview_Confirmation_EditText_margin</item>
+        <item name="android:textDirection">ltr</item>
     </style>
 
     <style name="Button_Primary">
