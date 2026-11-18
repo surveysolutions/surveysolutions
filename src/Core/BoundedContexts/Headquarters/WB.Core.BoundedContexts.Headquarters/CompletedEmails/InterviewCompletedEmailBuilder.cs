@@ -158,7 +158,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             Address = senderInfo.Address,
             SurveyName = surveyName,
             SenderName = senderInfo.SenderName,
-            Link = null
+            Link = null,
+            IsRightToLeft = content.IsRightToLeft
         };
     }
 }

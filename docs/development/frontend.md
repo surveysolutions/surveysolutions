@@ -96,6 +96,15 @@ the bar code. PDFsharp shapes Arabic and orders each text run as an LTR paragrap
 so `PdfRtlLayout` reorders directional runs of single-line RTL texts; wrapped
 multi-line RTL text keeps MigraDoc's line order and is not reordered.
 
+Web interview emails (invitations, reminders, rejection and completion emails) get
+their direction from the first letter of the authored template text, with
+`%PLACEHOLDERS%` ignored, so an English questionnaire title does not switch an Arabic
+email to LTR (`EmailTextDirection` on the server, `shared/emailDirection.js` for the
+preview in web interview settings; keep both in sync). HTML emails use `dir` and
+`align` attributes because email clients ignore `dir="auto"` and logical CSS; plain
+text lines get a right-to-left mark. The UI language is not used: emails are sent by
+background jobs. The completion email PDF attachment still uses the server culture.
+
 # Store Modules
 
 

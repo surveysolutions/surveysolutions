@@ -76,7 +76,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 Address = senderInfo.Address,
                 SurveyName = questionnaireTitle,
                 SenderName = senderInfo.SenderName,
-                Link = link
+                Link = link,
+                IsRightToLeft = emailContent.IsRightToLeft
             };
 
             emailParamsStorage.Store(emailParams, emailParamsId);

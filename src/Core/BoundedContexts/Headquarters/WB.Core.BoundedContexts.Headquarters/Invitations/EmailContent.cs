@@ -34,12 +34,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             PasswordDescription = template.PasswordDescription?
                 .Replace(SurveyName, questionnaireTitle)
                 .Replace(QuestionnaireTitle, questionnaireTitle);
+            IsRightToLeft = EmailTextDirection.IsRightToLeft(template);
         }
 
         public string Subject { get; private set; }
         public string MainText { get; private set; }
         public string PasswordDescription { get; }
         public string LinkText { get; }
+        public bool IsRightToLeft { get; }
         
         public List<EmailAttachment> Attachments { get; } = new List<EmailAttachment>();
 

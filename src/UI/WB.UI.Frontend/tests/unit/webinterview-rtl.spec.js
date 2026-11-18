@@ -403,3 +403,23 @@ test('Arabic DataTables strings keep the placeholders DataTables substitutes', (
         if (name in arabic) assert.deepEqual(placeholders(arabic[name]), placeholders(text), name)
     }
 })
+
+test('email preview direction follows the first letter of authored text like the server', async () => {
+    const { emailDirection } = await import('../../src/shared/emailDirection.js')
+    const cases = [
+        [{ subject: 'دعوة للمشاركة', message: 'مرحبا' }, 'rtl'],
+        [{ subject: '%SURVEYNAME%', message: 'مرحبا بكم في %SURVEYNAME%' }, 'rtl'],
+        [{ subject: '2026: دعوة', message: '' }, 'rtl'],
+        [{ subject: 'Invitation', message: 'مرحبا' }, 'ltr'],
+        [{ subject: '', message: '<b>Hello</b> مرحبا' }, 'ltr'],
+        [{ subject: '%QUESTIONNAIRE%', message: '%SURVEYLINK%', linkText: 'ابدأ' }, 'rtl'],
+        [{ subject: '%SURVEYNAME%', message: '%SURVEYLINK%' }, 'ltr'],
+        [{ subject: '٢٠٢٦ Survey' }, 'ltr'],
+        [null, 'ltr'],
+    ]
+    for (const [template, direction] of cases) {
+        assert.equal(emailDirection(template), direction, JSON.stringify(template))
+    }
+    const settings = readFileSync(new URL('src/hqapp/Views/HQ/WebInterviewSetup/Settings.vue', frontend), 'utf8')
+    assert.match(settings, /class="em-table email-example-table"[^>]*:dir="emailDirection\(emailTemplate\)"/s)
+})

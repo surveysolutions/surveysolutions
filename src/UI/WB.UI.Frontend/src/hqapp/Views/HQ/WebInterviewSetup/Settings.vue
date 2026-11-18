@@ -284,6 +284,8 @@
                                             <div class="browser-mockup">
                                                 <div class="email-example">
                                                     <table class="em-table email-example-table" align="center"
+                                                        :dir="emailDirection(emailTemplate)"
+                                                        :style="{ backgroundPosition: emailDirection(emailTemplate) === 'rtl' ? '-15% 45px' : '115% 45px' }"
                                                         border="0" cellspacing="0" cellpadding="0">
                                                         <tr>
                                                             <td
@@ -626,6 +628,7 @@ import { marked } from 'marked'
 import { map, isNil } from 'lodash-es'
 import { Form, Field } from 'vee-validate'
 import emitter from '~/shared/emitter'
+import { emailDirection } from '~/shared/emailDirection'
 
 import Welcome from './Settings/Welcome'
 import Resume from './Settings/Resume'
@@ -952,6 +955,7 @@ export default {
             const form = this.$refs.additionalSettings
             form.resetForm()
         },
+        emailDirection,
         previewHtml(text) {
             var html = marked(this.previewText(text))
             return html
