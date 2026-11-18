@@ -1135,8 +1135,7 @@ export default {
                     selector: 'td>.checkbox-filter',
                     info: false,
                 },
-                dom: 'fritp',
-                sDom: 'rf<"table-with-scroll"t>ip',
+                dom: 'fri<"table-with-scroll"t>p',
                 searchHighlight: true,
             }
 

@@ -492,6 +492,8 @@
 .table-with-scroll {
     overflow-x: auto;
     margin-bottom: 10px;
+    // a scroll container would shrink next to the floated table info instead of moving below it
+    clear: both;
 }
 
 .dataTables_wrapper,

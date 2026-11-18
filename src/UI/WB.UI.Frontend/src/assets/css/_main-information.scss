@@ -106,6 +106,10 @@
 		.panel-table{
 			left:  12px;
 		}
+		// the foldback button of collapsed filters stays at the page edge, keep the title clear of it
+		.page-header{
+			padding-left: 25px;
+		}
 	}
 	.fullscreen-hidden-filters .main-information{
 		display: none;
@@ -123,7 +127,9 @@
 	}
 	.main-information{
 		padding: 10px 5px 0 5px;
-
+		.page-header{
+			padding-left: 30px;
+		}
 	}
 	.main-information #DataTables_Table_0_wrapper #DataTables_Table_0_filter{
 		left: 0;
