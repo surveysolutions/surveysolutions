@@ -3,6 +3,8 @@
         v-if="isVisible"
         :class="questionClass"
         :id="hash">
+        <span class="sr-only"
+            v-if="question.isChangedSinceReject">{{ $t('WebInterviewUI.AnswerChangedSinceLastRejection') }}</span>
         <button class="section-blocker"
             disabled="disabled"
             v-if="isFetchInProgress"></button>
@@ -128,6 +130,7 @@ export default {
                 'mark': this.highlight,
                 'disabled-question': this.disabled,
                 'with-flag': this.hasFlag,
+                'changed-since-reject': this.question.isChangedSinceReject === true,
                 'supervisor-question': this.question.isForSupervisor,
             }, this.questionDivCssClassName]
         },

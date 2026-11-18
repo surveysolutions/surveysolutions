@@ -430,4 +430,7 @@ Merci pour votre coopération!</value>
 
     <value>Lien vers l'exemple de page de destination de l'entretien web</value>
   </data>
+  <data name="Filters_Changed" xml:space="preserve">
+    <value>Modifiées</value>
+  </data>
 </root>

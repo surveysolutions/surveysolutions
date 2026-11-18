@@ -6,6 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     public class InterviewRejectedByHQ : InterviewActiveEvent
     {
         public string Comment { get; private set; }
+        public Guid? PreviousRejectionEventIdentifier { get; set; }
 
         public InterviewRejectedByHQ(Guid userId, string comment, DateTimeOffset originDate)
             : base(userId, originDate)

@@ -384,4 +384,7 @@ Obrigado pela sua cooperação!</value>
   <data name="LinkToWebInterviewExample" xml:space="preserve">
     <value>Link para exemplo de página de destino de entrevista na web</value>
   </data>
+  <data name="Filters_Changed" xml:space="preserve">
+    <value>Alteradas</value>
+  </data>
 </root>

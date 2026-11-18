@@ -24,5 +24,6 @@ namespace WB.UI.Headquarters.API.WebInterview
         ForInterviewer,
         CriticalQuestions,
         CriticalRules,
+        Changed,
     }
 }

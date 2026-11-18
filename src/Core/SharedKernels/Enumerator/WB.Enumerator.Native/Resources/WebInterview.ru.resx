@@ -385,4 +385,7 @@
   <data name="LinkToWebInterviewExample" xml:space="preserve">
     <value>Пример ссылки на веб интервью</value>
   </data>
+  <data name="Filters_Changed" xml:space="preserve">
+    <value>Изменённые</value>
+  </data>
 </root>

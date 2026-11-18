@@ -385,4 +385,7 @@
   <data name="Filters_CriticalRules" xml:space="preserve">
     <value>Критичні правила</value>
   </data>
+  <data name="Filters_Changed" xml:space="preserve">
+    <value>Змінені</value>
+  </data>
 </root>

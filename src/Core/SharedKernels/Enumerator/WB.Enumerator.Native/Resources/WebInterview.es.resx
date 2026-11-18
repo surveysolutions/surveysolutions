@@ -360,4 +360,7 @@
     <data name="LinkToWebInterviewExample" xml:space="preserve">
   <value>Enlace a la página de ejemplo de la entrevista web</value>
 </data>
+    <data name="Filters_Changed" xml:space="preserve">
+  <value>Cambiadas</value>
+</data>
 </root>

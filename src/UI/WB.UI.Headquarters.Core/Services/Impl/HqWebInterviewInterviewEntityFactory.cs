@@ -39,6 +39,8 @@ namespace WB.UI.Headquarters.Services.Impl
                                      callerInterview.Status < InterviewStatus.ApprovedByHeadquarters &&
                                      ((this.authorizedUser.IsSupervisor || this.authorizedUser.IsHeadquarter) && !this.authorizedUser.IsObserving);
             result.AcceptAnswer = result.IsForSupervisor;
+            result.IsChangedSinceReject = question.IsAnswered() &&
+                                          callerInterview.IsQuestionChangedSinceLastRejection(question.Identity);
 
             if (callerInterview.Status < InterviewStatus.ApprovedByHeadquarters
                 && question.AnswerComments.Any(x => !x.Resolved && x.Id.HasValue))

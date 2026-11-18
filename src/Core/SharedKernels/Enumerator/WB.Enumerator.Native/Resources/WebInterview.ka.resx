@@ -114,4 +114,5 @@
   <data name="NoteForSupervisor" xml:space="preserve"><value>კომენტარი</value></data>
   <data name="Complete" xml:space="preserve"><value>დასრულება</value></data>
   <data name="LinkToWebInterviewExample" xml:space="preserve"><value>ვებ გასაუბრების სადესანტო გვერდის ბმულის მაგალითი</value></data>
+  <data name="Filters_Changed" xml:space="preserve"><value>შეცვლილი</value></data>
 </root>

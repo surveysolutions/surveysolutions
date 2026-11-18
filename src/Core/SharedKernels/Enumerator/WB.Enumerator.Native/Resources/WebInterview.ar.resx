@@ -360,4 +360,7 @@
     <data name="LinkToWebInterviewExample" xml:space="preserve">
   <value>رابط إلى مثال صفحة الهبوط للمقابلة الإلكترونية</value>
 </data>
+    <data name="Filters_Changed" xml:space="preserve">
+  <value>تم تغييرها</value>
+</data>
 </root>

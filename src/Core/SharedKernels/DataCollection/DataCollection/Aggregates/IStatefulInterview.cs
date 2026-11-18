@@ -79,6 +79,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         InterviewTreeQuestion GetQuestion(Identity identity);
 
+        bool IsQuestionChangedSinceLastRejection(Identity identity);
+
         InterviewTreeStaticText GetStaticText(Identity identity);
 
         bool HasGroup(Identity group);
