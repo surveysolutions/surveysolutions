@@ -11,7 +11,7 @@ export function isRtlLocale(locale) {
 
 export function getTextDirection(value) {
     const text = String(value ?? '');
-    const firstStrongCharacter = text.match(/[\u0590-\u05ff\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff\p{Script=Latin}]/u)?.[0];
+    const firstStrongCharacter = text.match(/\p{L}/u)?.[0];
 
     return firstStrongCharacter && /[\u0590-\u05ff\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/u.test(firstStrongCharacter)
         ? 'rtl'
