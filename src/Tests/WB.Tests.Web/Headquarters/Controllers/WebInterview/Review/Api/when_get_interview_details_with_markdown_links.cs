@@ -36,6 +36,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         protected override void Because()
         {
             // act
+            this.AnswerTextQuestions(textQuestionIdentity);
             this.MarkQuestionAsInvalid(textQuestionIdentity);
             this.MarkStaticTextAsInvalid(staticTextIdentity);
             this.interviewStaticText = Subject.GetEntityDetails(staticTextIdentity.ToString(), CurrentInterview, questionnaire, true) as InterviewStaticText;
