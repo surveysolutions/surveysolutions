@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System;
 using System.Collections.Generic;
 using System.Net;
 using MigraDoc.DocumentObjectModel;
@@ -33,8 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
         public static void AddWrappedText(this Paragraph paragraph, string text)
         {
             text = WebUtility.HtmlDecode(text);
-            foreach (var str in SplitToWrap(text))
-                paragraph.AddText(str);
+            AddWrappedLines(paragraph, text, chunk => paragraph.AddText(chunk));
         }
 
         public static void AddWrapFormattedText(this Paragraph paragraph, string text, string style, Color? color = null)
@@ -43,28 +43,24 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 return;
             
             text = WebUtility.HtmlDecode(text);
-            foreach (var str in SplitToWrap(text))
+            AddWrappedLines(paragraph, text, chunk =>
             {
-                var formattedText = paragraph.AddFormattedText(str, style);
+                var formattedText = paragraph.AddFormattedText(chunk, style);
                 if (color.HasValue)
                     formattedText.Color = color.Value;
-            }
+            });
         }
 
-        private static IEnumerable<string> SplitToWrap(string text)
+        private static void AddWrappedLines(Paragraph paragraph, string text, Action<string> addChunk)
         {
-            if (PdfRtlText.ContainsRightToLeft(text))
+            var lines = text.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
+            for (var i = 0; i < lines.Length; i++)
             {
-                foreach (var chunk in PdfRtlText.SplitForWrapping(text, 15))
-                    yield return chunk;
-                yield break;
-            }
+                if (i > 0)
+                    paragraph.AddLineBreak();
 
-            for (int i = 0; i < text.Length; i+=15)
-            {
-                yield return i + 15 > text.Length
-                    ? text.Substring(i)
-                    : text.Substring(i, 15);
+                foreach (var chunk in PdfRtlText.SplitForWrapping(lines[i], 15))
+                    addChunk(chunk);
             }
         }
     }

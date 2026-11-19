@@ -56,7 +56,7 @@ public class PdfRtlTextTests
 public class ParagraphExtensionsRtlTests
 {
     [Test]
-    public void when_adding_wrapped_text_should_split_long_runs_in_both_directions()
+    public void when_adding_wrapped_text_should_split_long_runs_in_logical_order()
     {
         var paragraph = new Document().AddSection().AddParagraph();
         var rtlText = string.Concat(Enumerable.Range(0, 30).Select(i => (char)('\u0621' + i)));
@@ -71,12 +71,36 @@ public class ParagraphExtensionsRtlTests
         {
             new string('a', 15),
             new string('a', 15),
-            rtlText.Substring(15),
             rtlText.Substring(0, 15),
-            "عربي ",
-            "abcdefghijklmno",
-            "p",
+            rtlText.Substring(15),
+            "عربي abcdefghij",
+            "klmnop",
         }));
+    }
+
+    [Test]
+    public void when_adding_wrapped_text_should_preserve_explicit_line_breaks()
+    {
+        var paragraph = new Document().AddSection().AddParagraph();
+        paragraph.AddWrappedText("first\n\nthird");
+
+        Assert.That(GetLines(paragraph), Is.EqualTo(new[] { "first", "", "third" }));
+    }
+
+    private static string[] GetLines(Paragraph paragraph)
+    {
+        var lines = new[] { "" }.ToList();
+        foreach (var element in paragraph.Elements)
+        {
+            if (element is Character { SymbolName: SymbolName.LineBreak })
+                lines.Add("");
+            else if (element is Text text)
+                lines[^1] += text.Content;
+            else if (element is FormattedText formattedText)
+                lines[^1] += string.Concat(formattedText.Elements.OfType<Text>().Select(text => text.Content));
+        }
+
+        return lines.ToArray();
     }
 }
 
@@ -87,16 +111,17 @@ public class PdfRtlLayoutTests
     public void SetUpFonts() => RuntimeHelpers.RunClassConstructor(typeof(PdfInterviewGenerator).TypeHandle);
 
     [Test]
-    public void when_applying_visual_order_should_reorder_short_right_to_left_lines_only()
+    public void when_applying_visual_order_should_reorder_short_lines_and_wrap_long_rtl_text()
     {
         var document = CreateDocument(out var section);
         var label = section.AddParagraph();
-        label.AddFormattedText("557 أسئلة غير مجابة", TextFormat.Bold);
+        label.AddWrapFormattedText("557 أسئلة غير مجابة", PdfStyles.QuestionAnswer);
         label.AddLineBreak();
         label.AddText("English line 1");
 
         var longLine = section.AddParagraph();
-        longLine.AddText(string.Join(" ", Enumerable.Repeat("مقابلة", 200)) + " 2026");
+        var longLineText = string.Concat(Enumerable.Repeat("مقابلة", 200));
+        longLine.AddWrapFormattedText(longLineText, PdfStyles.QuestionAnswer);
 
         var withField = section.AddParagraph();
         withField.AddText("صفحة 1 ");
@@ -105,10 +130,23 @@ public class PdfRtlLayoutTests
         PdfRtlLayout.ApplyVisualOrder(document);
 
         Assert.That(GetLines(label), Is.EqualTo(new[] { "أسئلة غير مجابة 557", "English line 1" }));
-        Assert.That(label.Elements.OfType<FormattedText>().All(text => text.Bold), Is.True);
-        Assert.That(GetLines(longLine).Single(), Does.EndWith(" 2026"));
+        Assert.That(label.Elements.OfType<FormattedText>().All(text => text.Style == PdfStyles.QuestionAnswer), Is.True);
+        Assert.That(GetLines(longLine).Length, Is.GreaterThan(1));
+        Assert.That(string.Concat(GetLines(longLine)), Is.EqualTo(longLineText));
         Assert.That(withField.Elements.OfType<PageField>().Count(), Is.EqualTo(1));
         Assert.That(GetLines(withField).Single(), Is.EqualTo("صفحة 1 "));
+    }
+
+    [Test]
+    public void when_applying_visual_order_should_preserve_explicit_multiline_rtl_text()
+    {
+        var document = CreateDocument(out var section);
+        var paragraph = section.AddParagraph();
+        paragraph.AddWrapFormattedText("مرحبا 123\nالعالم 456", PdfStyles.QuestionAnswer);
+
+        PdfRtlLayout.ApplyVisualOrder(document);
+
+        Assert.That(GetLines(paragraph), Is.EqualTo(new[] { "123 مرحبا", "456 العالم" }));
     }
 
     [Test]

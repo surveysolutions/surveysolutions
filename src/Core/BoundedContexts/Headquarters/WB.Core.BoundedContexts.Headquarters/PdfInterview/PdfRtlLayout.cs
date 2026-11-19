@@ -12,9 +12,8 @@ using PdfSharp.Drawing;
 namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 {
     /// <summary>
-    /// Puts directional runs of right-to-left lines into visual order (see <see cref="PdfRtlText"/>).
-    /// MigraDoc wraps lines from left to right, so only lines that surely fit into one rendered line are
-    /// reordered; wrapped lines would get their parts in the wrong vertical order and are left as they are.
+    /// Splits right-to-left text at estimated rendered-line boundaries and puts each line's directional runs
+    /// into visual order (see <see cref="PdfRtlText"/>).
     /// </summary>
     internal class PdfRtlLayout
     {
@@ -187,11 +186,47 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             if (!PdfRtlText.StartsRightToLeft(string.Concat(pieces.Select(piece => piece.Text))))
                 return null;
 
-            var lineWidth = pieces.Sum(piece => measureContext.MeasureString(piece.Text, GetFont(paragraph, piece.Owner)).Width);
-            if (lineWidth > width * FitRatio)
-                return null;
-
             var result = new List<DocumentObject>(leading);
+            var renderedLine = new List<(string Text, FormattedText? Owner)>();
+            var renderedLineWidth = 0d;
+            var maxLineWidth = width * FitRatio;
+            foreach (var piece in pieces)
+            {
+                var chunks = measureContext.MeasureString(piece.Text, GetFont(paragraph, piece.Owner)).Width > maxLineWidth
+                    ? PdfRtlText.SplitForWrapping(piece.Text, 1)
+                    : new[] { piece.Text };
+
+                foreach (var chunk in chunks)
+                {
+                    var chunkWidth = measureContext.MeasureString(chunk, GetFont(paragraph, piece.Owner)).Width;
+                    if (renderedLine.Count > 0 && renderedLineWidth + chunkWidth > maxLineWidth)
+                    {
+                        AddVisualLine(result, renderedLine);
+                        result.Add(CreateLineBreak());
+                        renderedLine.Clear();
+                        renderedLineWidth = 0;
+                    }
+
+                    renderedLine.Add((chunk, piece.Owner));
+                    renderedLineWidth += chunkWidth;
+                }
+            }
+
+            if (renderedLine.Count > 0)
+                AddVisualLine(result, renderedLine);
+
+            return result;
+        }
+
+        private static Character CreateLineBreak()
+        {
+            var paragraph = new Paragraph();
+            paragraph.AddLineBreak();
+            return (Character)paragraph.Elements.OfType<Character>().Single().Clone();
+        }
+
+        private static void AddVisualLine(List<DocumentObject> result, IReadOnlyList<(string Text, FormattedText? Owner)> pieces)
+        {
             foreach (var (text, owner) in PdfRtlText.ToVisualOrder(pieces))
             {
                 if (owner == null)
@@ -205,8 +240,6 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 formattedText.AddText(text);
                 result.Add(formattedText);
             }
-
-            return result;
         }
 
         private static bool HasSameFormat(FormattedText left, FormattedText right) =>
