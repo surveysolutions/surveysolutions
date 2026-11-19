@@ -408,19 +408,39 @@ test('Arabic DataTables strings keep the placeholders DataTables substitutes', (
 
 test('email preview direction follows the first letter of authored text like the server', async () => {
     const { emailDirection } = await import('../../src/shared/emailDirection.js')
+    const originalDocument = globalThis.document
+    globalThis.document = {
+        createElement: () => {
+            let value = ''
+            return {
+                set innerHTML(text) {
+                    value = text.replaceAll('&lt;', '<').replaceAll('&gt;', '>')
+                },
+                get value() {
+                    return value
+                },
+            }
+        },
+    }
     const cases = [
         [{ subject: 'دعوة للمشاركة', message: 'مرحبا' }, 'rtl'],
         [{ subject: '%SURVEYNAME%', message: 'مرحبا بكم في %SURVEYNAME%' }, 'rtl'],
         [{ subject: '2026: دعوة', message: '' }, 'rtl'],
         [{ subject: 'Invitation', message: 'مرحبا' }, 'ltr'],
         [{ subject: '', message: '<b>Hello</b> مرحبا' }, 'ltr'],
+        [{ subject: '', message: '&lt;مرحبا&gt;' }, 'rtl'],
         [{ subject: '%QUESTIONNAIRE%', message: '%SURVEYLINK%', linkText: 'ابدأ' }, 'rtl'],
         [{ subject: '%SURVEYNAME%', message: '%SURVEYLINK%' }, 'ltr'],
         [{ subject: '٢٠٢٦ Survey' }, 'ltr'],
         [null, 'ltr'],
     ]
-    for (const [template, direction] of cases) {
-        assert.equal(emailDirection(template), direction, JSON.stringify(template))
+    try {
+        for (const [template, direction] of cases) {
+            assert.equal(emailDirection(template), direction, JSON.stringify(template))
+        }
+    } finally {
+        if (originalDocument === undefined) delete globalThis.document
+        else globalThis.document = originalDocument
     }
     const settings = readFileSync(new URL('src/hqapp/Views/HQ/WebInterviewSetup/Settings.vue', frontend), 'utf8')
     assert.match(settings, /class="em-table email-example-table"[^>]*:dir="emailDirection\(emailTemplate\)"/s)
