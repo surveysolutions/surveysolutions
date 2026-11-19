@@ -111,6 +111,15 @@ pre {
     transform: scaleX(-1);
 }
 
+/* v-content-direction keeps the content's bidi order, but fields stay aligned with the UI direction. */
+html[dir="rtl"] [data-content-direction][dir="ltr"],
+html[dir="rtl"] [data-content-direction][dir="ltr"] :is(input, textarea),
+html[dir="rtl"] .technical-value,
+html[dir="ltr"] [data-content-direction][dir="rtl"],
+html[dir="ltr"] [data-content-direction][dir="rtl"] :is(input, textarea) {
+    text-align: end;
+}
+
 /* Logins and emails are typed LTR, while the localized placeholder follows the UI direction. */
 .ltr-value:not(:placeholder-shown) {
     /* direction: fixed */
