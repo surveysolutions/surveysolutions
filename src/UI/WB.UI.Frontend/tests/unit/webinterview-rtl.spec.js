@@ -402,19 +402,19 @@ test('Arabic DataTables strings keep the placeholders DataTables substitutes', (
 
 test('email preview direction follows the first letter of authored text like the server', async () => {
     const { emailDirection } = await import('../../src/shared/emailDirection.js')
-    const originalDocument = globalThis.document
-    globalThis.document = {
-        createElement: () => {
-            let value = ''
+    const originalDomParser = globalThis.DOMParser
+    globalThis.DOMParser = class {
+        parseFromString(text) {
             return {
-                set innerHTML(text) {
-                    value = text.replaceAll('&lt;', '<').replaceAll('&gt;', '>')
-                },
-                get value() {
-                    return value
+                body: {
+                    textContent: text.replace(/&(lt|gt|amp);/g, entity => ({
+                        '&lt;': '<',
+                        '&gt;': '>',
+                        '&amp;': '&',
+                    })[entity]),
                 },
             }
-        },
+        }
     }
     const cases = [
         [{ subject: 'دعوة للمشاركة', message: 'مرحبا' }, 'rtl'],
@@ -423,6 +423,7 @@ test('email preview direction follows the first letter of authored text like the
         [{ subject: 'Invitation', message: 'مرحبا' }, 'ltr'],
         [{ subject: '', message: '<b>Hello</b> مرحبا' }, 'ltr'],
         [{ subject: '', message: '&lt;مرحبا&gt;' }, 'rtl'],
+        [{ subject: '', message: '&amp;lt;مرحبا&amp;gt;' }, 'ltr'],
         [{ subject: '%QUESTIONNAIRE%', message: '%SURVEYLINK%', linkText: 'ابدأ' }, 'rtl'],
         [{ subject: '%SURVEYNAME%', message: '%SURVEYLINK%' }, 'ltr'],
         [{ subject: '٢٠٢٦ Survey' }, 'ltr'],
@@ -433,8 +434,8 @@ test('email preview direction follows the first letter of authored text like the
             assert.equal(emailDirection(template), direction, JSON.stringify(template))
         }
     } finally {
-        if (originalDocument === undefined) delete globalThis.document
-        else globalThis.document = originalDocument
+        if (originalDomParser === undefined) delete globalThis.DOMParser
+        else globalThis.DOMParser = originalDomParser
     }
     const settings = readFileSync(new URL('src/hqapp/Views/HQ/WebInterviewSetup/Settings.vue', frontend), 'utf8')
     assert.match(settings, /class="em-table email-example-table"[^>]*:dir="emailDirection\(emailTemplate\)"/s)

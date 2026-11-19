@@ -6,9 +6,7 @@ const rightToLeftChars = /[\u0590-\u065F\u066A-\u06EF\u06FA-\u08FF\uFB1D-\uFDFF\
 const letters = /\p{L}/u
 
 function decodeHtmlEntities(text) {
-    const textarea = document.createElement('textarea')
-    textarea.innerHTML = text
-    return textarea.value
+    return new DOMParser().parseFromString(text, 'text/html').body.textContent || ''
 }
 
 export function startsRightToLeft(text) {
