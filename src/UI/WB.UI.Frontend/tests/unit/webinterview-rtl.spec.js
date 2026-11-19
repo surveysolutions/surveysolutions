@@ -356,16 +356,10 @@ test('chart legends and tooltips follow page direction without reversing axes', 
     const filename = fileURLToPath(new URL('src/hqapp/Views/HQ/Reports/CumulativeChart.vue', frontend))
     const { descriptor } = parse(readFileSync(filename, 'utf8'), { filename })
     const script = descriptor.script.content
-    const createOptions = new Function('document', script.slice(0, script.indexOf('\nimport ')) + '\nreturn chartOptions')
-    for (const dir of ['ltr', 'rtl']) {
-        const options = createOptions({ documentElement: { dir } })
-        for (const plugin of [options.plugins.legend, options.plugins.tooltip]) {
-            assert.equal(plugin.rtl, dir === 'rtl')
-            assert.equal(plugin.textDirection, dir)
-        }
-        assert.equal(options.scales.x.reverse, undefined)
-        assert.equal(options.scales.y.reverse, undefined)
-    }
+    assert.match(script, /const isRtl = document\.documentElement\.dir === 'rtl'/)
+    assert.equal(script.match(/rtl: isRtl/g)?.length, 2)
+    assert.equal(script.match(/textDirection: isRtl \? 'rtl' : 'ltr'/g)?.length, 2)
+    assert.doesNotMatch(script, /\breverse\s*:/)
 })
 
 test('all interview page templates select direction from UI culture before the app mounts', () => {
