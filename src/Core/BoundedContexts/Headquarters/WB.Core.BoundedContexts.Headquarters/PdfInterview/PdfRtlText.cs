@@ -1,6 +1,7 @@
 #nullable enable
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -31,6 +32,57 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             || c is >= '\uFE70' and <= '\uFEFF';
 
         public static bool ContainsRightToLeft(string text) => text.Any(IsRightToLeftChar);
+
+        public static IEnumerable<string> SplitForWrapping(string text, int maxChunkLength)
+        {
+            if (string.IsNullOrEmpty(text))
+                yield break;
+
+            var runs = new List<(bool IsRightToLeft, List<string> TextElements)>();
+            var currentDirection = StartsRightToLeft(text);
+            var textElements = new List<string>();
+            var enumerator = StringInfo.GetTextElementEnumerator(text);
+            while (enumerator.MoveNext())
+            {
+                var element = enumerator.GetTextElement();
+                var isRightToLeft = ContainsRightToLeft(element)
+                    ? true
+                    : element.Any(c => char.IsLetterOrDigit(c) || char.IsSurrogate(c) || IsArabicDigit(c))
+                        ? false
+                        : currentDirection;
+
+                if (isRightToLeft != currentDirection)
+                {
+                    if (textElements.Count > 0)
+                    {
+                        runs.Add((currentDirection, textElements));
+                        textElements = new List<string>();
+                    }
+
+                    currentDirection = isRightToLeft;
+                }
+
+                textElements.Add(element);
+            }
+
+            if (textElements.Count > 0)
+                runs.Add((currentDirection, textElements));
+
+            foreach (var run in runs)
+            {
+                var chunks = run.TextElements
+                    .Select((element, index) => (element, index))
+                    .GroupBy(item => item.index / maxChunkLength)
+                    .Select(group => string.Concat(group.Select(item => item.element)))
+                    .ToList();
+
+                if (run.IsRightToLeft)
+                    chunks.Reverse();
+
+                foreach (var chunk in chunks)
+                    yield return chunk;
+            }
+        }
 
         /// <summary>Direction of a line is the direction of its first letter.</summary>
         public static bool StartsRightToLeft(string text)

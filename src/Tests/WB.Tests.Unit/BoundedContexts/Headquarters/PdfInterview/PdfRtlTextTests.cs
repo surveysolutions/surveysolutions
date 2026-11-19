@@ -56,16 +56,27 @@ public class PdfRtlTextTests
 public class ParagraphExtensionsRtlTests
 {
     [Test]
-    public void when_adding_wrapped_text_should_split_only_left_to_right_text()
+    public void when_adding_wrapped_text_should_split_long_runs_in_both_directions()
     {
         var paragraph = new Document().AddSection().AddParagraph();
+        var rtlText = string.Concat(Enumerable.Range(0, 30).Select(i => (char)('\u0621' + i)));
 
         paragraph.AddWrapFormattedText(new string('a', 30), PdfStyles.Default);
-        paragraph.AddWrapFormattedText("صف ظروف السكن في المنزل بالتفصيل", PdfStyles.Default);
+        paragraph.AddWrapFormattedText(rtlText, PdfStyles.Default);
+        paragraph.AddWrapFormattedText("عربي abcdefghijklmnop", PdfStyles.Default);
 
         var texts = paragraph.Elements.OfType<FormattedText>()
             .Select(text => string.Concat(text.Elements.OfType<Text>().Select(t => t.Content))).ToArray();
-        Assert.That(texts, Is.EqualTo(new[] { new string('a', 15), new string('a', 15), "صف ظروف السكن في المنزل بالتفصيل" }));
+        Assert.That(texts, Is.EqualTo(new[]
+        {
+            new string('a', 15),
+            new string('a', 15),
+            rtlText.Substring(15),
+            rtlText.Substring(0, 15),
+            "عربي ",
+            "abcdefghijklmno",
+            "p",
+        }));
     }
 }
 

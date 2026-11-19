@@ -51,15 +51,12 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             }
         }
 
-        /// <summary>
-        /// Long words without spaces can be wrapped only between chunks. Right-to-left text is not split:
-        /// PDFsharp orders every chunk separately, so words of split right-to-left text get mixed up.
-        /// </summary>
         private static IEnumerable<string> SplitToWrap(string text)
         {
             if (PdfRtlText.ContainsRightToLeft(text))
             {
-                yield return text;
+                foreach (var chunk in PdfRtlText.SplitForWrapping(text, 15))
+                    yield return chunk;
                 yield break;
             }
 
