@@ -46,6 +46,7 @@ const helpMap = {
     HelpOverlapDetection: $t('QuestionnaireEditor.HelpOverlapDetection'),
     isCritical: $t('QuestionnaireEditor.HelpIsCritical'),
     randomizeOrder: $t('QuestionnaireEditor.RandomizeOrderTooltip'),
+    randomizeAnswerOptions: $t('QuestionnaireEditor.RandomizeAnswerOptionsTooltip'),
     criticalityConditionExpression: $t('QuestionnaireEditor.HelpCriticalityConditionExpression'),
     criticalityConditionMessage: $t('QuestionnaireEditor.HelpCriticalityConditionMessage'),
     aiDisclaimer: $t('Assistant.Disclaimer'),

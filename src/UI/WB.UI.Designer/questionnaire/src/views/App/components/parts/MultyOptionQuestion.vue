@@ -136,16 +136,19 @@
     <div class="row" v-if="!activeQuestion.isFilteredCombobox">
         <div class="col-xs-12">
             <div class="form-group">
-                <input id="cb-randomizeAnswerOptions" type="checkbox" class="wb-checkbox"
-                    v-model="activeQuestion.randomizeAnswerOptions" />
-                <label for="cb-randomizeAnswerOptions" :title="$t('QuestionnaireEditor.RandomizeAnswerOptionsTooltip')"><span></span>{{
-                    $t('QuestionnaireEditor.RandomizeAnswerOptions') }}</label>
+                <div class="checkbox-in-column randomize-column">
+                    <div class="randomize-options-marker"></div>
+                    <input id="cb-randomizeAnswerOptions" type="checkbox" class="wb-checkbox"
+                        v-model="activeQuestion.randomizeAnswerOptions" />
+                    <label for="cb-randomizeAnswerOptions"><span></span>{{ $t('QuestionnaireEditor.RandomizeAnswerOptions')
+                    }} <help link="randomizeAnswerOptions"></help></label>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-5">
-            <div class="checkbox checkbox-in-column no-indent">
+            <div class="checkbox checkbox-in-column randomize-column-item">
                 <input id="cb-is-ordered" type="checkbox" class="wb-checkbox"
                     v-model="activeQuestion.areAnswersOrdered" />
                 <label for="cb-is-ordered"><span></span>{{ $t('QuestionnaireEditor.QuestionOrdered') }}</label>
