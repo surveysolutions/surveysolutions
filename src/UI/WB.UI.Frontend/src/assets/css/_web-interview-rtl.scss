@@ -83,6 +83,27 @@ html[dir="rtl"] {
     .flatpickr-calendar {
         // Keep day order consistent with Flatpickr's native arrow-key navigation.
         direction: ltr;
+
+        .flatpickr-current-month {
+            direction: rtl;
+        }
+    }
+
+    .audio-question .modal {
+        .modal-header .close {
+            float: left;
+        }
+
+        .modal-footer {
+            .recordign-time {
+                float: right;
+            }
+
+            button {
+                float: left;
+                margin: 0 0 0 10px;
+            }
+        }
     }
 
     #toast-container > div {

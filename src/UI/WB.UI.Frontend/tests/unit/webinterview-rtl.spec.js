@@ -157,6 +157,7 @@ test('actual styles mirror desktop and mobile sidebar positions and retain numer
                 assert.deepEqual(declarations(root, `${rtl} ${selector}`, 'background-position'), ['100% 0'])
                 assert.deepEqual(declarations(root, `${ltr} ${selector}`, 'background-position'), ['0 0'])
             }
+            assert.deepEqual(declarations(root, `${rtl} .has-instruction`, 'background-position'), ['100% 0'])
             const trigger = '.table-view .ag-theme-customStyles.roster-matrix .ag-cell .tooltip-wrapper'
             assert.deepEqual(declarations(root, `${rtl} ${trigger}`, 'right'), ['0'])
             assert.deepEqual(declarations(root, `${ltr} ${trigger}`, 'left'), ['0'])
@@ -183,6 +184,11 @@ test('actual styles mirror desktop and mobile sidebar positions and retain numer
             assert.ok(declarations(root, `${rtl} .navbar-header`, 'float').includes('right'))
             assert.ok(declarations(root, `${ltr} .navbar-header`, 'float').includes('left'))
             assert.deepEqual(declarations(root, 'html[dir=rtl] .flatpickr-calendar', 'direction'), ['ltr'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] .flatpickr-calendar .flatpickr-current-month', 'direction'), ['rtl'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] .audio-question .modal .modal-header .close', 'float'), ['left'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] .audio-question .modal .modal-footer .recordign-time', 'float'), ['right'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] .audio-question .modal .modal-footer button', 'float'), ['left'])
+            assert.deepEqual(declarations(root, 'html[dir=rtl] .audio-question .modal .modal-footer button', 'margin'), ['0 0 0 10px'])
             const cells = ':where(html[dir=rtl]) :where(td, th, .btn-input > .dropdown-toggle, .dropdown-menu > li > a)'
             assert.deepEqual(declarations(root, cells, 'unicode-bidi'), ['plaintext'])
             assert.deepEqual(declarations(root, cells, 'text-align'), ['-webkit-match-parent', 'match-parent'])
@@ -319,6 +325,19 @@ test('all HQ layouts select direction from UI culture without requiring a review
         assert.match(layout, /dir="@\((System\.Globalization\.)?CultureInfo\.CurrentUICulture\.TextInfo\.IsRightToLeft \? "rtl" : "ltr"\)"/)
         assert.doesNotMatch(layout, /WebInterviewPage/)
         if (layout.includes('<script')) assert.ok(layout.indexOf('dir=') < layout.indexOf('<script'))
+    }
+})
+
+test('roster validation and instruction popovers open below their markers in RTL', () => {
+    for (const file of [
+        'TableRoster.QuestionTitle.vue',
+        'TableRoster.ViewAnswer.vue',
+        'MatrixRoster.CategoricalSingle.vue',
+        'MatrixRoster.CategoricalMulti.vue',
+    ]) {
+        const source = readFileSync(new URL(`src/webinterview/components/questions/${file}`, frontend), 'utf8')
+        assert.match(source, /<popover[\s\S]*?:placement="popoverPlacement"/, file)
+        assert.match(source, /popoverPlacement: typeof document !== 'undefined' && document\.documentElement\.dir === 'rtl' \? 'bottom' : 'top'/, file)
     }
 })
 

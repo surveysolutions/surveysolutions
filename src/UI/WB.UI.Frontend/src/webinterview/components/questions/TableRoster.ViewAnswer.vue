@@ -2,6 +2,7 @@
     <div :class="questionStyle"
         :id="`tr_view_${questionId}`">
         <popover trigger="hover-focus"
+            :placement="popoverPlacement"
             append-to="body"
             :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)"
             v-if="!question.isDisabled">
@@ -49,6 +50,7 @@ export default {
 
     data() {
         return {
+            popoverPlacement: typeof document !== 'undefined' && document.documentElement.dir === 'rtl' ? 'bottom' : 'top',
             questionId: null,
             questionType: null,
             question: null,
