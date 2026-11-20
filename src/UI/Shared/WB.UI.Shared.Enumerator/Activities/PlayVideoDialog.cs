@@ -5,6 +5,7 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
+using Com.Google.Android.Exoplayer2.UI;
 using MvvmCross;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
@@ -29,5 +30,18 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override string? Title => ViewModel?.Title;
         protected override int LayoutFragmentId => Resource.Layout.play_video_dialog;
+
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            var view = base.OnCreateView(inflater, container, savedInstanceState);
+
+            var styledPlayerView = view.FindViewById<StyledPlayerView>(Resource.Id.video_player_view);
+            if (styledPlayerView?.Player != null)
+            {
+                styledPlayerView.Player.PlayWhenReady = true;
+            }
+
+            return view;
+        }
     }
 }

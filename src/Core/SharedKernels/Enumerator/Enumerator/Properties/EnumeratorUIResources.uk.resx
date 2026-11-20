@@ -1035,6 +1035,12 @@
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Закрити</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Закрити</value>
+  </data>
+  <data name="PlayVideo_OpenFullScreen" xml:space="preserve">
+    <value>Відкрити на весь екран</value>
+  </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>Закрити завдання</value>
   </data>

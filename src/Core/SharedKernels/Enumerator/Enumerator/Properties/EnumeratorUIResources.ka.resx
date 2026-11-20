@@ -665,6 +665,12 @@
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>დამტკიცება</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>დახურვა</value>
+  </data>
+  <data name="PlayVideo_OpenFullScreen" xml:space="preserve">
+    <value>გახსნა სრულ ეკრანზე</value>
+  </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>დავალების დახურვა</value>
   </data>
