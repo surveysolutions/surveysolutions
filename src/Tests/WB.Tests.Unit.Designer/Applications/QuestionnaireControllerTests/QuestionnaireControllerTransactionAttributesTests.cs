@@ -11,13 +11,18 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
     internal class QuestionnaireControllerTransactionAttributesTests
     {
         [Test]
-        public void should_mark_update_anonymous_questionnaire_settings_with_no_transaction()
+        public void should_use_transaction_filter_for_anonymous_sharing_actions()
         {
-            typeof(QuestionnaireController)
-                .GetMethod(nameof(QuestionnaireController.UpdateAnonymousQuestionnaireSettings))!
-                .GetCustomAttributes(typeof(NoTransactionAttribute), inherit: true)
-                .OfType<NoTransactionAttribute>()
-                .Should().ContainSingle();
+            new[]
+                {
+                    nameof(QuestionnaireController.UpdateAnonymousQuestionnaireSettings),
+                    nameof(QuestionnaireController.RegenerateAnonymousQuestionnaireLink)
+                }
+                .Select(action => typeof(QuestionnaireController).GetMethod(action)!)
+                .Should()
+                .OnlyContain(action => !action.GetCustomAttributes(typeof(NoTransactionAttribute), inherit: true)
+                    .OfType<NoTransactionAttribute>()
+                    .Any());
         }
     }
 }

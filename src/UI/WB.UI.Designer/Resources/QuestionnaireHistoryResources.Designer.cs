@@ -542,19 +542,37 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("MigratedNewCoverSupport", resourceCulture);
             }
         }
-
+        
+        public static string AnonymousSharingEnabled {
+            get {
+                return ResourceManager.GetString("AnonymousSharingEnabled", resourceCulture);
+            }
+        }
+        
+        public static string AnonymousSharingDisabled {
+            get {
+                return ResourceManager.GetString("AnonymousSharingDisabled", resourceCulture);
+            }
+        }
+        
+        public static string AnonymousSharingLinkRegenerated {
+            get {
+                return ResourceManager.GetString("AnonymousSharingLinkRegenerated", resourceCulture);
+            }
+        }
+        
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
             }
         }
-
+        
         public static string SearchButton {
             get {
                 return ResourceManager.GetString("SearchButton", resourceCulture);
             }
         }
-
+        
         public static string SearchClear {
             get {
                 return ResourceManager.GetString("SearchClear", resourceCulture);

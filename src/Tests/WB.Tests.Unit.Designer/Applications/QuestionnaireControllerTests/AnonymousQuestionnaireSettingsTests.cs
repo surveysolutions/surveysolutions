@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -10,9 +12,14 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.DataAccess;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Controllers;
+using WB.UI.Designer.Filters;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
@@ -59,17 +66,22 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                     .Throws(new InvalidOperationException("Link generation failed"));
 
             var emailSender = new Mock<IEmailSender>();
+            var postCommitActions = CreatePostCommitActions(out var queuedActions);
             var controller = CreateQuestionnaireController(
+                commandService: CreateCommandService(dbContext),
                 dbContext: dbContext,
                 questionnaireViewFactory: questionnaireViewFactory,
                 userManager: userManager,
-                emailSender: emailSender.Object);
+                emailSender: emailSender.Object,
+                postCommitActions: postCommitActions.Object);
             controller.Url = urlHelper;
 
             var result = regenerate
                 ? await controller.RegenerateAnonymousQuestionnaireLink(questionnaireId)
                 : await controller.UpdateAnonymousQuestionnaireSettings(questionnaireId,
                     new QuestionnaireController.UpdateAnonymousQuestionnaireSettingsModel { IsActive = true });
+
+            await RunPostCommitActions(queuedActions);
 
             Assert.That(result, Is.InstanceOf<JsonResult>());
             dbContext.ChangeTracker.Clear();
@@ -98,18 +110,23 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             var user = new DesignerIdentityUser { Email = "test@example.com", UserName = "testuser" };
             var userManager = CreateUserManager(returnUser: user);
+            var postCommitActions = CreatePostCommitActions(out var queuedActions);
 
             var controller = CreateQuestionnaireController(
+                commandService: CreateCommandService(dbContext),
                 dbContext: dbContext,
                 questionnaireViewFactory: CreateQuestionnaireViewFactory(),
                 emailSender: throwingEmailSender.Object,
                 viewRenderService: throwingViewRenderService.Object,
-                userManager: userManager);
+                userManager: userManager,
+                postCommitActions: postCommitActions.Object);
             controller.Url = CreateUrlHelper();
 
             var result = await controller.UpdateAnonymousQuestionnaireSettings(
                 questionnaireId,
                 new QuestionnaireController.UpdateAnonymousQuestionnaireSettingsModel { IsActive = true });
+
+            await RunPostCommitActions(queuedActions);
 
             Assert.That(result, Is.InstanceOf<JsonResult>(), "Should return JsonResult, not an error response");
             var json = result as JsonResult;
@@ -141,6 +158,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             var questionnaireId = Guid.NewGuid();
             var dbContext = Create.InMemoryDbContext();
             var controller = CreateQuestionnaireController(
+                commandService: CreateCommandService(dbContext),
                 dbContext: dbContext,
                 questionnaireViewFactory: CreateQuestionnaireViewFactory());
 
@@ -170,6 +188,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             });
             await dbContext.SaveChangesAsync();
             var controller = CreateQuestionnaireController(
+                commandService: CreateCommandService(dbContext),
                 dbContext: dbContext,
                 questionnaireViewFactory: CreateQuestionnaireViewFactory());
 
@@ -209,16 +228,21 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             var user = new DesignerIdentityUser { Email = "test@example.com", UserName = "testuser" };
             var userManager = CreateUserManager(returnUser: user);
+            var postCommitActions = CreatePostCommitActions(out var queuedActions);
 
             var controller = CreateQuestionnaireController(
+                commandService: CreateCommandService(dbContext),
                 dbContext: dbContext,
                 questionnaireViewFactory: CreateQuestionnaireViewFactory(),
                 emailSender: throwingEmailSender.Object,
                 viewRenderService: viewRenderService.Object,
-                userManager: userManager);
+                userManager: userManager,
+                postCommitActions: postCommitActions.Object);
             controller.Url = CreateUrlHelper();
 
             var result = await controller.RegenerateAnonymousQuestionnaireLink(questionnaireId);
+
+            await RunPostCommitActions(queuedActions);
 
             Assert.That(result, Is.InstanceOf<JsonResult>(), "Should return JsonResult, not an error response");
             throwingEmailSender.Verify(
@@ -247,25 +271,98 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             var emailSender = new Mock<IEmailSender>();
             var user = new DesignerIdentityUser { Email = "test@example.com", UserName = "testuser" };
             var userManager = CreateUserManager(returnUser: user);
+            var postCommitActions = CreatePostCommitActions(out var queuedActions);
 
             var controller = CreateQuestionnaireController(
+                commandService: CreateCommandService(dbContext),
                 dbContext: dbContext,
                 questionnaireViewFactory: CreateQuestionnaireViewFactory(),
                 emailSender: emailSender.Object,
                 viewRenderService: Mock.Of<IViewRenderService>(),
-                userManager: userManager);
+                userManager: userManager,
+                postCommitActions: postCommitActions.Object);
             controller.Url = CreateUrlHelper();
-            controller.ControllerContext.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
+            controller.ControllerContext.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString())
+            }));
 
             var result = await controller.UpdateAnonymousQuestionnaireSettings(
                 questionnaireId,
                 new QuestionnaireController.UpdateAnonymousQuestionnaireSettingsModel { IsActive = true });
+
+            await RunPostCommitActions(queuedActions);
 
             Assert.That(result, Is.InstanceOf<JsonResult>(), "Should return JsonResult, not an error response");
             emailSender.Verify(
                 s => s.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
                 Times.Once,
                 "Email sender should have been called even when the name claim is missing");
+        }
+
+        private static ICommandService CreateCommandService(DesignerDbContext dbContext)
+        {
+            var commandService = new Mock<ICommandService>();
+            commandService.Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Callback<ICommand, string>((command, _) =>
+                {
+                    if (command is not QuestionnaireCommand questionnaireCommand)
+                        return;
+
+                    var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires
+                        .FirstOrDefault(a => a.QuestionnaireId == questionnaireCommand.QuestionnaireId);
+
+                    if (command is EnableAnonymousSharing)
+                    {
+                        if (anonymousQuestionnaire == null)
+                        {
+                            anonymousQuestionnaire = new AnonymousQuestionnaire
+                            {
+                                QuestionnaireId = questionnaireCommand.QuestionnaireId,
+                                AnonymousQuestionnaireId = Guid.NewGuid(),
+                                GeneratedAtUtc = DateTime.UtcNow
+                            };
+                            dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
+                        }
+
+                        anonymousQuestionnaire.IsActive = true;
+                    }
+                    else if (command is DisableAnonymousSharing)
+                    {
+                        if (anonymousQuestionnaire != null)
+                            anonymousQuestionnaire.IsActive = false;
+                    }
+                    else if (command is RegenerateAnonymousSharingLink && anonymousQuestionnaire != null)
+                    {
+                        dbContext.AnonymousQuestionnaires.Remove(anonymousQuestionnaire);
+                        dbContext.SaveChanges();
+                        dbContext.AnonymousQuestionnaires.Add(new AnonymousQuestionnaire
+                        {
+                            QuestionnaireId = questionnaireCommand.QuestionnaireId,
+                            AnonymousQuestionnaireId = Guid.NewGuid(),
+                            IsActive = true,
+                            GeneratedAtUtc = DateTime.UtcNow
+                        });
+                    }
+
+                    dbContext.SaveChanges();
+                });
+            return commandService.Object;
+        }
+
+        private static Mock<IPostCommitActions> CreatePostCommitActions(out List<Func<Task>> queuedActions)
+        {
+            queuedActions = new List<Func<Task>>();
+            var postCommitActions = new Mock<IPostCommitActions>();
+            postCommitActions.Setup(x => x.Enqueue(It.IsAny<Func<Task>>()))
+                .Callback<Func<Task>>(queuedActions.Add);
+            return postCommitActions;
+        }
+
+        private static async Task RunPostCommitActions(List<Func<Task>> queuedActions)
+        {
+            foreach (var action in queuedActions)
+                await action();
         }
     }
 }

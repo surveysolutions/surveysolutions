@@ -3,6 +3,8 @@ using Moq;
 using NUnit.Framework;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions;
@@ -98,6 +100,38 @@ namespace WB.Tests.Unit.Designer.Services
             var revision = await this.metadataUpdater.TrackQuestionnaireImportAsync(this.questionnaire, "", Id.gA);
 
             Assert.That(revision, Is.EqualTo(5));
+        }
+
+        [Test]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void When_snapshot_free_history_exceeds_retention_limit_then_import_revision_remains_reconstructable(int historyLimit)
+        {
+            var historyService = Create.QuestionnireHistoryVersionsService(
+                dbContext: db,
+                questionnaireHistorySettings: Options.Create(
+                    new QuestionnaireHistorySettings { QuestionnaireChangeHistoryLimit = historyLimit }),
+                memoryCache: new MemoryCache(new MemoryCacheOptions()));
+            var questionnaireId = this.questionnaire.PublicKey;
+            var importedDocument = Create.QuestionnaireDocument(questionnaireId, title: "Imported questionnaire");
+            var updatedDocument = Create.QuestionnaireDocument(questionnaireId, title: "Updated questionnaire");
+
+            historyService.AddQuestionnaireChangeItem(questionnaireId, Id.g1, null, QuestionnaireActionType.ImportToHq,
+                QuestionnaireItemType.Questionnaire, questionnaireId, null, null, null, null, importedDocument);
+            historyService.AddQuestionnaireChangeItem(questionnaireId, Id.g1, null, QuestionnaireActionType.Update,
+                QuestionnaireItemType.Questionnaire, questionnaireId, null, null, null, null, updatedDocument);
+            historyService.AddQuestionnaireChangeItem(questionnaireId, Id.g1, null, QuestionnaireActionType.AnonymousSharingEnabled,
+                QuestionnaireItemType.Questionnaire, questionnaireId, null, null, null, null, null);
+            historyService.AddQuestionnaireChangeItem(questionnaireId, Id.g1, null, QuestionnaireActionType.AnonymousSharingDisabled,
+                QuestionnaireItemType.Questionnaire, questionnaireId, null, null, null, null, null);
+
+            var importRevision = db.QuestionnaireChangeRecords
+                .Single(record => record.ActionType == QuestionnaireActionType.ImportToHq);
+
+            var reconstructedDocument = historyService.GetByHistoryVersion(System.Guid.Parse(importRevision.QuestionnaireChangeRecordId));
+
+            Assert.That(reconstructedDocument, Is.Not.Null);
+            Assert.That(reconstructedDocument!.Title, Is.EqualTo(importedDocument.Title));
         }
 
 
