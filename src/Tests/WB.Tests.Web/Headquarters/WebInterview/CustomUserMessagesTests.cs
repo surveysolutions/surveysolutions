@@ -26,5 +26,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             }
            
         }
+
+        [Test]
+        public void should_have_default_for_every_message_and_empty_complete_screen_text()
+        {
+            foreach (WebInterviewUserMessages message in Enum.GetValues(typeof(WebInterviewUserMessages)))
+            {
+                Assert.That(WebInterviewConfig.DefaultMessages.ContainsKey(message), Is.True, $"Default is missing for {message}");
+            }
+
+            Assert.That(WebInterviewConfig.DefaultMessages[WebInterviewUserMessages.CompleteScreenText], Is.Empty);
+        }
     }
 }

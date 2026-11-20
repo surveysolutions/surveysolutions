@@ -326,4 +326,7 @@
   <data name="AddressDescription" xml:space="preserve">
       <value>Këtu do të shfaqet adresa e organizatës suaj siç është specifikuar në llogarinë tuaj në serverin e postimeve masive.</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>Tekst në ekranin e përfundimit (opsionale)</value>
+  </data>
 </root>

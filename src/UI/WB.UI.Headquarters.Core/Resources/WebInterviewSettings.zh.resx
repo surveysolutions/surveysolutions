@@ -247,4 +247,7 @@
     <data name="AddressDescription" xml:space="preserve">
       <value>此处将显示您在群发邮件服务器账户中指定的组织地址。</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>完成页面上的文本（可选）</value>
+  </data>
 </root>

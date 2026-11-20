@@ -267,4 +267,7 @@
   <data name="AllowTranscriptDownloading" xml:space="preserve">
       <value>Дозволити завантаження транскрипту інтерв'ю після подання</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>Текст, що відображається на екрані завершення над списками помилок і запитань без відповідей</value>
+  </data>
 </root>

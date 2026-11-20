@@ -265,6 +265,9 @@
     <value>Complete</value>
     <comment>Complete button title</comment>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>Text on complete screen (optional)</value>
+  </data>
   <data name="NoteToSupervisor" xml:space="preserve">
     <value>Note for supervisor</value>
   </data>

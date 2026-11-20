@@ -87,4 +87,7 @@
     <data name="AddressDescription" xml:space="preserve">
       <value>აქ გამოჩნდება თქვენი ორგანიზაციის მისამართი, როგორც ეს მითითებულია თქვენს ანგარიშში მასობრივი გზავნილების სერვერზე.</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>ტექსტი დასრულების ეკრანზე (არასავალდებულო)</value>
+  </data>
 </root>

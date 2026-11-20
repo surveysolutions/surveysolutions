@@ -235,6 +235,9 @@
   <data name="Invitations_SendAction" xml:space="preserve">
     <value>Send {{count}} invitations</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>Text shown on the complete screen above the lists of errors and unanswered questions</value>
+  </data>
   <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
     <value>Complete</value>
   </data>

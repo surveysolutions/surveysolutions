@@ -309,4 +309,7 @@
   <data name="AddressDescription" xml:space="preserve">
       <value>Здесь будет отображен адрес вашей организации, указанный в вашей учетной записи на сервере массовой рассылки.</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>Текст на экране завершения (необязательно)</value>
+  </data>
 </root>

@@ -87,6 +87,7 @@
             </button>
         </div>
         <textarea ref="textarea"
+            :aria-label="ariaLabel"
             @input="onInput"
             class="markdown-editor"></textarea>
 
@@ -368,6 +369,7 @@ export default {
     props: {
         modelValue: { type: String, required: true },
         supportHtml: { type: Boolean, required: false, default: false },
+        ariaLabel: { type: String, required: false, default: '' },
     },
     data() {
         return {

@@ -208,4 +208,7 @@
     <data name="AllowTranscriptDownloading" xml:space="preserve">
         <value>Izinkan mengunduh transkrip wawancara setelah penyerahan</value>
     </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>Teks yang ditampilkan pada layar selesai di atas daftar kesalahan dan pertanyaan yang belum dijawab</value>
+  </data>
 </root>

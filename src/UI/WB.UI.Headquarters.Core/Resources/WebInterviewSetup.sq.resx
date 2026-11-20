@@ -276,4 +276,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
     <value>Teksti i kreut të mirëseardhjes në faqen hyrëse të lidhjes së intervistës në internet</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>Teksti që shfaqet në ekranin e përfundimit mbi listat e gabimeve dhe pyetjeve pa përgjigje</value>
+  </data>
 </root>

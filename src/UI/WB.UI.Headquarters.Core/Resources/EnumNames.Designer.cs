@@ -232,6 +232,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Complete screen text.
+        /// </summary>
+        public static string WebInterviewUserMessages_CompleteScreenText {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_CompleteScreenText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invitation.
         /// </summary>
         public static string WebInterviewUserMessages_LinkInvitation {

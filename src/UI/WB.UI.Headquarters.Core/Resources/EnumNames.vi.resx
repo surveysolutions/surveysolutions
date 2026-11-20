@@ -32,4 +32,7 @@
   <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve"><value>Tiếp tục</value></data>
   <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve"><value>Lời mời</value></data>
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve"><value>Tiêu đề chào mừng</value></data>
+  <data name="WebInterviewUserMessages_CompleteScreenText" xml:space="preserve">
+    <value>Văn bản màn hình hoàn tất</value>
+  </data>
 </root>

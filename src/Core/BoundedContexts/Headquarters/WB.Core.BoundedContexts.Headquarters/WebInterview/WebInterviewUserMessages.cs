@@ -14,6 +14,7 @@
         StartNewButton = 9,
         ResumeButton = 10,
         LinkWelcome = 11,
-        LinkInvitation = 12
+        LinkInvitation = 12,
+        CompleteScreenText = 13
     }
 }

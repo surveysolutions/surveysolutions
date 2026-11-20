@@ -206,4 +206,7 @@
     <data name="AddressDescription" xml:space="preserve">
       <value>Di sini alamat organisasi Anda akan muncul sebagaimana ditentukan dalam akun Anda di server pengiriman massal.</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>Teks pada layar selesai (opsional)</value>
+  </data>
 </root>

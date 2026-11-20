@@ -267,4 +267,7 @@
   <data name="AllowTranscriptDownloading" xml:space="preserve">
       <value>Autoriser le téléchargement de la transcription de l'entretien après la soumission</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>Texte affiché sur l’écran de fin au-dessus des listes d’erreurs et de questions sans réponse</value>
+  </data>
 </root>

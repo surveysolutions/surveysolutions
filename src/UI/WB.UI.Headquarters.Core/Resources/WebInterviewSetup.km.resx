@@ -208,4 +208,7 @@
     <data name="AllowTranscriptDownloading" xml:space="preserve">
         <value>អនុញ្ញាតឱ្យទាញយកប្រតិចារិកសំភាសន៍បន្ទាប់ពីដាក់ស្នើ</value>
     </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>អត្ថបទដែលបង្ហាញនៅលើអេក្រង់បញ្ចប់ខាងលើបញ្ជីកំហុស និងសំណួរដែលមិនទាន់ឆ្លើយ</value>
+  </data>
 </root>

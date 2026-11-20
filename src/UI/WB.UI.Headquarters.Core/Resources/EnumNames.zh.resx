@@ -208,4 +208,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
     <value>欢迎语标题</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText" xml:space="preserve">
+    <value>完成页面文本</value>
+  </data>
 </root>

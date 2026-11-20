@@ -204,4 +204,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
     <value>Antet de bun venit</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText" xml:space="preserve">
+    <value>Textul ecranului de finalizare</value>
+  </data>
 </root>

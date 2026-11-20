@@ -309,4 +309,7 @@
     <data name="AddressDescription" xml:space="preserve">
       <value>هنا سيظهر عنوان مؤسستك كما هو محدد في حسابك على خادم البريد الجماعي.</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>نص على شاشة الإكمال (اختياري)</value>
+  </data>
 </root>

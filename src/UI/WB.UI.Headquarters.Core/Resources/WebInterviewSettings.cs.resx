@@ -306,4 +306,7 @@
   <data name="AddressDescription" xml:space="preserve">
       <value>Zde se zobrazí adresa vaší organizace, jak je uvedena ve vašem účtu na serveru pro hromadné rozesílání.</value>
   </data>
+  <data name="CompleteScreenText" xml:space="preserve">
+    <value>Text na obrazovce dokončení (volitelné)</value>
+  </data>
 </root>

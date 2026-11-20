@@ -14,6 +14,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     [ResponseCache(NoStore = true)]
     public class WebInterviewSettingsApiController : ControllerBase
     {
+        private const int CompleteScreenTextMaxLength = 2000;
+        private const int CompleteScreenTextMaxStoredLength = CompleteScreenTextMaxLength * 6;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
@@ -44,6 +46,12 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (IsCompleteScreenTextTooLong(updateModel.TitleType, updateModel.TitleText) ||
+                IsCompleteScreenTextTooLong(updateModel.MessageType, updateModel.MessageText) ||
+                (updateModel.ButtonType.HasValue &&
+                 IsCompleteScreenTextTooLong(updateModel.ButtonType.Value, updateModel.ButtonText)))
+                return BadRequest();
 
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
@@ -107,6 +115,9 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            if (IsCompleteScreenTextTooLong(updateModel.Type, updateModel.Message))
+                return BadRequest();
+
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
@@ -120,6 +131,23 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
             return Ok();
         }
+
+        private static bool IsCompleteScreenTextTooLong(WebInterviewUserMessages type, string text) =>
+            type == WebInterviewUserMessages.CompleteScreenText &&
+            (text is { Length: > CompleteScreenTextMaxStoredLength } ||
+             text is not null && DecodeLodashHtmlEntities(text).Length > CompleteScreenTextMaxLength);
+
+        private static string DecodeLodashHtmlEntities(string text) =>
+            System.Text.RegularExpressions.Regex.Replace(text, @"&(?:amp|lt|gt|quot|#39);", match =>
+                match.Value switch
+                {
+                    "&amp;" => "&",
+                    "&lt;" => "<",
+                    "&gt;" => ">",
+                    "&quot;" => "\"",
+                    "&#39;" => "'",
+                    _ => match.Value
+                });
 
         public class UpdateAdditionalSettingsModel
         {

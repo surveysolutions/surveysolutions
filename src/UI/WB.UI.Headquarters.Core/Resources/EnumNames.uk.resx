@@ -201,4 +201,7 @@
   <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
     <value>Привітальний заголовок</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText" xml:space="preserve">
+    <value>Текст екрана завершення</value>
+  </data>
 </root>

@@ -267,4 +267,7 @@
   <data name="AllowTranscriptDownloading" xml:space="preserve">
       <value>Povolit stažení přepisu rozhovoru po odeslání</value>
   </data>
+  <data name="WebInterviewUserMessages_CompleteScreenText_Descr" xml:space="preserve">
+    <value>Text zobrazený na obrazovce dokončení nad seznamy chyb a nezodpovězených otázek</value>
+  </data>
 </root>
