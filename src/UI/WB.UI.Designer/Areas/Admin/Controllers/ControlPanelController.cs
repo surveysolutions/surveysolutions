@@ -14,12 +14,14 @@ using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models.ControlPanel;
+using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Areas.Admin.Controllers
 {
@@ -33,6 +35,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         private readonly IProductVersion productVersion;
         private readonly IProductVersionHistory productVersionHistory;
         private readonly IPlainKeyValueStorage<AssistantSettings> appSettingsStorage;
+        private readonly IGlobalNoticeService globalNoticeService;
         private readonly DesignerDbContext dbContext;
 
         public ControlPanelController(
@@ -42,6 +45,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
             IProductVersion productVersion,
             IProductVersionHistory productVersionHistory,
             IPlainKeyValueStorage<AssistantSettings> appSettingsStorage,
+            IGlobalNoticeService globalNoticeService,
             DesignerDbContext dbContext)
         {
             this.users = users;
@@ -50,6 +54,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
             this.productVersion = productVersion;
             this.productVersionHistory = productVersionHistory;
             this.appSettingsStorage = appSettingsStorage;
+            this.globalNoticeService = globalNoticeService;
             this.dbContext = dbContext;
         }
 
@@ -161,6 +166,25 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
             }
             
             return this.RedirectToAction("AssistantSettings");
+        }
+
+        [AntiForgeryFilter]
+        public ActionResult GlobalNotice()
+            => this.View(new GlobalNoticeModel { Message = this.globalNoticeService.GetMessage() });
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult GlobalNotice(GlobalNoticeModel model)
+        {
+            if (!ModelState.IsValid)
+                return this.View(model);
+
+            this.globalNoticeService.SetMessage(model.Message);
+            this.Success(string.IsNullOrWhiteSpace(model.Message)
+                ? QuestionnaireController.GlobalNoticeRemoved
+                : QuestionnaireController.GlobalNoticeUpdated);
+
+            return this.RedirectToAction("GlobalNotice");
         }
 
         [HttpPost]

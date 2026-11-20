@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
@@ -424,9 +425,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var isCover = this.sourceInterview.Questionnaire.IsCoverPage(sectionId.Id);
 
-            return section.Children
+            return this.OrderForDisplay(sectionId, section.Children
                 .Where(x => isCover || !(x is InterviewTreeVariable))
-                .Select(x => x.Identity);
+                .Select(x => x.Identity));
         }
 
         public IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId)
@@ -621,6 +622,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>();
 
+        public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRostersInDisplayOrder()
+        {
+            IEnumerable<InterviewTreeGroup> GetInDisplayOrder(Identity parentIdentity, IReadOnlyCollection<InterviewTreeGroup> groups)
+            {
+                var groupsByIdentity = groups.ToDictionary(group => group.Identity);
+
+                foreach (var identity in this.OrderForDisplay(parentIdentity, groups.Select(group => group.Identity)))
+                {
+                    var group = groupsByIdentity[identity];
+                    yield return group;
+
+                    foreach (var child in GetInDisplayOrder(group.Identity, group.Children.OfType<InterviewTreeGroup>().ToList()))
+                        yield return child;
+                }
+            }
+
+            return GetInDisplayOrder(null, this.Tree.Sections.Cast<InterviewTreeGroup>().ToList());
+        }
+
         public IEnumerable<IInterviewTreeNode> GetAllInterviewNodes()
         {
             return this.Tree.GetAllNodesInEnumeratorOrder();
@@ -757,20 +777,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.IsLinkedToListQuestion(questionIdentity.Id))
             {
-                return OptionsForLinkedToTextListQuestion(questionIdentity)
+                return this.OrderAnswerOptionsForDisplay(questionnaire, questionIdentity, OptionsForLinkedToTextListQuestion(questionIdentity)
                     .Where(x => filter.IsNullOrEmpty() || x.Title.Contains(filter, StringComparison.CurrentCultureIgnoreCase))
                     .Where(x => excludedOptionIds == null || !excludedOptionIds.Contains(x.Value))
-                    .Take(itemsCount)
-                    .ToList();
+                    .Take(itemsCount));
             }
 
             var options = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter, excludedOptionIds);
 
             if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
-                return options.Take(itemsCount).ToList();
+                return this.OrderAnswerOptionsForDisplay(questionnaire, questionIdentity, options.Take(itemsCount));
 
-            return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options);
+            return this.OrderAnswerOptionsForDisplay(questionnaire, questionIdentity, 
+                this.FilteredCategoricalOptions(questionIdentity, itemsCount, options));
         }
+
+        private List<CategoricalOption> OrderAnswerOptionsForDisplay(IQuestionnaire questionnaire, Identity questionIdentity,
+            IEnumerable<CategoricalOption> options)
+            => RandomizedItemsOrder.OrderAnswerOptionsForDisplay(questionnaire, RandomizedItemsOrder.GetSeed(this.EventSourceId),
+                questionIdentity, options, option => option.Value).ToList();
 
         private IEnumerable<CategoricalOption> OptionsForLinkedToTextListQuestion(Identity questionId)
         {

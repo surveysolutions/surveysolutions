@@ -53,6 +53,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 
         public bool IsFilteredCombobox { get; set; }
 
+        public bool RandomizeAnswerOptions { get; set; }
+
         public Guid? CascadeFromQuestionId { get; set; }
 
         public QuestionScope Scope { get; set; }

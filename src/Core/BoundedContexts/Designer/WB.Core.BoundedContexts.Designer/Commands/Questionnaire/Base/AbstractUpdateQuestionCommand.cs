@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.VariableName = CommandUtils.SanitizeHtml(commonQuestionParameters.VariableName, removeAllTags: true);
             this.EnablementCondition = commonQuestionParameters.EnablementCondition ?? string.Empty;
             this.HideIfDisabled = commonQuestionParameters.HideIfDisabled;
+            this.RandomizeOrder = commonQuestionParameters.RandomizeOrder;
             this.Instructions = CommandUtils.SanitizeHtml(commonQuestionParameters.Instructions);
             this.Properties = new QuestionProperties(commonQuestionParameters.HideInstructions, false)
             {
@@ -32,6 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public string VariableLabel { get; private set; }
         public string EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
+        public bool RandomizeOrder { get; set; }
         public string? Instructions { get; private set; }
         public QuestionProperties Properties { get; set; }
     }

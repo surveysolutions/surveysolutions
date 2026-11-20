@@ -91,7 +91,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     questionsCount : 0,
                     hasCondition : !string.IsNullOrWhiteSpace(chapter.ConditionExpression),
                     hideIfDisabled : chapter.HideIfDisabled
-                ));
+                )
+                {
+                    RandomizeOrder = chapter.RandomizeOrder
+                });
             }
 
             int questionsCount = 0, groupsCount = 0, rostersCount = 0;

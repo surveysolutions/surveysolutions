@@ -13,9 +13,15 @@
         <div class="generated_by">
             <div class="variable_name">@(group.VariableName)</div>
         </div>
-        @if (questionnaire.GroupHasEnablementCondition(group))
+        @if (questionnaire.GroupHasEnablementCondition(group) || questionnaire.IsOrderRandomized(group))
         {
             <div class="common-info">
+                @if (questionnaire.IsOrderRandomized(group))
+                {
+                    <div class="instructions"><span>R</span>@PdfStrings.RandomizedOrder</div>
+                }
+                @if (questionnaire.GroupHasEnablementCondition(group))
+                {
                 <div class="condition">
                     <span>E</span>@questionnaire.GetExpressionExcerpt(group.ConditionExpression)
                     @if (questionnaire.ExpressionIsTooLong(group.ConditionExpression))
@@ -27,6 +33,7 @@
                         </div>
                     }
                 </div>
+                }
             </div>
         }
     </div>

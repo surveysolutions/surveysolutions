@@ -44,6 +44,8 @@ namespace WB.Services.Export.Questionnaire
 
         public Guid? RosterTitleQuestionId { get; set;  }
 
+        public bool RandomizeOrder { get; set; }
+
         public Guid PublicKey { get; set;  }
 
         public IEnumerable<IQuestionnaireEntity> Children { get; set; } 

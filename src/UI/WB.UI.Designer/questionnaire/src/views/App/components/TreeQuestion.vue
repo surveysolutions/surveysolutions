@@ -15,6 +15,10 @@
                 <span>&nbsp;</span>
                 <div class="conditions-block">
                     <div class="criticality-group-marker" v-if="item.isCritical"></div>
+                    <div class="randomize-order-marker" v-if="item.randomizeOrder"
+                        :title="$t('QuestionnaireEditor.RandomizeOrderTooltip')"></div>
+                    <div class="randomize-options-marker" v-if="item.randomizeAnswerOptions"
+                        :title="$t('QuestionnaireEditor.RandomizeAnswerOptionsTooltip')"></div>
                     <div class="enabling-group-marker" :class="{ 'hide-if-disabled': item.hideIfDisabled }"
                         v-if="item.hasCondition"></div>
                     <div class="validation-group-marker" v-if="item.hasValidation"></div>

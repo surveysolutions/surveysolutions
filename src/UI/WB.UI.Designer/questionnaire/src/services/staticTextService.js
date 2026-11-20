@@ -34,6 +34,7 @@ export function updateStaticText(questionnaireId, staticText) {
         attachmentName: staticText.attachmentName,
         enablementCondition: staticText.enablementCondition,
         hideIfDisabled: staticText.hideIfDisabled,
+        randomizeOrder: staticText.randomizeOrder,
         validationConditions: staticText.validationConditions
     };
 

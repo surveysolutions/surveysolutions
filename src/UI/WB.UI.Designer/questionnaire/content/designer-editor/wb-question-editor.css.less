@@ -328,6 +328,14 @@ input#edit-question-title, input#edit-group-title {
             color: @designer-secondary-text-color;
             font-size: 14px;
         }
+
+        &.checkbox.randomize-column-item {
+            padding-left: 28px;
+
+            input.wb-checkbox + label {
+                padding-left: 0;
+            }
+        }
     }
 
     .form-group {
@@ -335,6 +343,10 @@ input#edit-question-title, input#edit-group-title {
             margin-top: 0px;
             padding-left: 17px;
         }
+    }
+
+    .question-type-specific-block .form-group .checkbox-in-column.randomize-column {
+        padding-left: 9px;
     }
 
     .small-numeric-input {

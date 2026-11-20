@@ -40,5 +40,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 
         public string Condition { get; private set; }
         public bool HideIfDisabled { get; private set; }
+        public bool RandomizeOrder { get; set; }
     }
 }

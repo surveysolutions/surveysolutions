@@ -187,6 +187,12 @@
     <data name="QuestionType_Ordered" xml:space="preserve">
         <value>ra lệnh</value>
         </data>
+    <data name="QuestionType_RandomizedOptions" xml:space="preserve">
+        <value>tùy chọn ngẫu nhiên</value>
+    </data>
+    <data name="RandomizedOrder" xml:space="preserve">
+        <value>Thứ tự ngẫu nhiên</value>
+    </data>
     <data name="QuestionType_Picture" xml:space="preserve">
         <value>hình ảnh</value>
         </data>

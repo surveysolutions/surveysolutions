@@ -2355,8 +2355,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 || (!includeVariables && questionnaire.IsVariable(x.Identity.Id))
             );
 
-            return result.Select(x => x.Identity);
+            var identities = result.Select(x => x.Identity);
+
+            return sectionId != null
+                ? this.OrderForDisplay(sectionId, identities)
+                : identities;
         }
+
+        public IEnumerable<Identity> OrderForDisplay(Identity parentIdentity, IEnumerable<Identity> children)
+            => RandomizedItemsOrder.OrderForDisplay(this.GetQuestionnaireOrThrow(),
+                new InterviewProperties(this.EventSourceId).IRnd(), parentIdentity, children);
 
         protected bool HasInvalidAnswers()
             => this.Tree.FindQuestions().Any(question => !question.IsValid && !question.IsDisabled());

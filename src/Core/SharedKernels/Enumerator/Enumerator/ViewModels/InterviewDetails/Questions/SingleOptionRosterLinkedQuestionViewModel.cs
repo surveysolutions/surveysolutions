@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -167,8 +168,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var interview = this.interviewRepository.GetOrThrow(interviewId);
             var linkedQuestion = interview.GetLinkedSingleOptionQuestion(this.Identity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var options = RandomizedItemsOrder.OrderLinkedAnswerOptionsForDisplay(questionnaire,
+                RandomizedItemsOrder.GetSeed(interview.Id), this.Identity, linkedQuestion.Options, x => x);
 
-            foreach (var linkedOption in linkedQuestion.Options)
+            foreach (var linkedOption in options)
                 yield return this.CreateOptionViewModel(linkedOption, linkedQuestion.GetAnswer()?.SelectedValue,
                     interview);
         }

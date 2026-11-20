@@ -374,10 +374,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 return button;
             }
 
-            var sections = callerQuestionnaire.GetAllSections()
-                .Where(sec => 
-                    statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)) 
-                    && !callerQuestionnaire.IsCoverPage(sec))
+            var sections = statefulInterview.OrderForDisplay(null, callerQuestionnaire.GetAllSections()
+                    .Where(sec => 
+                        statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)) 
+                        && !callerQuestionnaire.IsCoverPage(sec))
+                    .Select(sec => Identity.Create(sec, RosterVector.Empty)))
+                .Select(sec => sec.Id)
                 .ToArray();
 
             if (sectionId == null)

@@ -324,6 +324,12 @@
   <data name="QuestionType_Ordered" xml:space="preserve">
     <value>впорядкований</value>
   </data>
+  <data name="QuestionType_RandomizedOptions" xml:space="preserve">
+    <value>випадковий порядок варіантів</value>
+  </data>
+  <data name="RandomizedOrder" xml:space="preserve">
+    <value>Випадковий порядок</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>зображення</value>
   </data>

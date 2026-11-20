@@ -17,6 +17,10 @@ namespace WB.Services.Export.Questionnaire
 
         public bool Featured { get; set;  }
 
+        public QuestionScope QuestionScope { get; set; }
+
+        public bool RandomizeOrder { get; set; }
+
         public string VariableName { get; set;  } = String.Empty;
 
         public string VariableLabel { get; set;  } = String.Empty; 

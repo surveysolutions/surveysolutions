@@ -94,5 +94,6 @@ namespace Main.Core.Entities.SubEntities
         public IList<ValidationCondition> ValidationConditions { get; set; }
         public string ConditionExpression { get; set; }
         public bool HideIfDisabled { get; set; }
+        public bool RandomizeOrder { get; set; }
     }
 }

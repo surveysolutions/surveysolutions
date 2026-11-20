@@ -468,6 +468,60 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Global notice.
+        /// </summary>
+        public static string GlobalNotice {
+            get {
+                return ResourceManager.GetString("GlobalNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The message is displayed at the top of the pages for all Designer users. Save an empty message to remove it..
+        /// </summary>
+        public static string GlobalNoticeDescription {
+            get {
+                return ResourceManager.GetString("GlobalNoticeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message.
+        /// </summary>
+        public static string GlobalNoticeMessage {
+            get {
+                return ResourceManager.GetString("GlobalNoticeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message must not exceed {1} characters..
+        /// </summary>
+        public static string GlobalNoticeMessageTooLong {
+            get {
+                return ResourceManager.GetString("GlobalNoticeMessageTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global notice successfully removed.
+        /// </summary>
+        public static string GlobalNoticeRemoved {
+            get {
+                return ResourceManager.GetString("GlobalNoticeRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global notice successfully updated.
+        /// </summary>
+        public static string GlobalNoticeUpdated {
+            get {
+                return ResourceManager.GetString("GlobalNoticeUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Html.
         /// </summary>
         public static string GetHtml {

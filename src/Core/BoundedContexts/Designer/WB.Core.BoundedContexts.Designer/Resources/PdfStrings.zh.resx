@@ -219,6 +219,12 @@
   <data name="QuestionType_Ordered" xml:space="preserve">
     <value>顺序型</value>
   </data>
+  <data name="QuestionType_RandomizedOptions" xml:space="preserve">
+    <value>随机选项</value>
+  </data>
+  <data name="RandomizedOrder" xml:space="preserve">
+    <value>随机顺序</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>图片型</value>
   </data>

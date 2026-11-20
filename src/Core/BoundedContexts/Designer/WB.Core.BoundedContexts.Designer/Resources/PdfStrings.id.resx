@@ -187,6 +187,12 @@
     <data name="QuestionType_Ordered" xml:space="preserve">
         <value>dipesan</value>
     </data>
+    <data name="QuestionType_RandomizedOptions" xml:space="preserve">
+        <value>opsi acak</value>
+    </data>
+    <data name="RandomizedOrder" xml:space="preserve">
+        <value>Urutan acak</value>
+    </data>
     <data name="QuestionType_Picture" xml:space="preserve">
         <value>gambar</value>
     </data>

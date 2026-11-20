@@ -333,4 +333,22 @@
   <data name="IncludeScenarios" xml:space="preserve">
       <value>Zahrnout scénáře</value>
   </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>Globální oznámení</value>
+  </data>
+  <data name="GlobalNoticeDescription" xml:space="preserve">
+    <value>Zpráva se zobrazuje v horní části stránek všem uživatelům Designeru. Pro odstranění uložte prázdnou zprávu.</value>
+  </data>
+  <data name="GlobalNoticeMessage" xml:space="preserve">
+    <value>Zpráva</value>
+  </data>
+  <data name="GlobalNoticeMessageTooLong" xml:space="preserve">
+    <value>Zpráva nesmí být delší než {1} znaků.</value>
+  </data>
+  <data name="GlobalNoticeUpdated" xml:space="preserve">
+    <value>Globální oznámení bylo úspěšně aktualizováno</value>
+  </data>
+  <data name="GlobalNoticeRemoved" xml:space="preserve">
+    <value>Globální oznámení bylo úspěšně odstraněno</value>
+  </data>
 </root>

@@ -655,7 +655,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             RosterSizeSourceType rosterSizeSource, 
             FixedRosterTitleItem[]? rosterFixedTitles, 
             Guid? rosterTitleQuestionId,
-            RosterDisplayMode displayMode)
+            RosterDisplayMode displayMode,
+            bool randomizeOrder = false)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -675,6 +676,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 condition,
                 hideIfDisabled,
                 displayMode);
+
+            var canBeRandomized = this.CanBeRandomized(groupId);
+            this.innerDocument.UpdateGroup(groupId, groupToUpdate => groupToUpdate.RandomizeOrder = canBeRandomized && randomizeOrder);
 
             if (isRoster)
             {
@@ -906,6 +910,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null);
 
+            newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
@@ -943,6 +948,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null);
 
+            newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
@@ -980,6 +986,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 null);
 
+            newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
@@ -1038,6 +1045,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 categoriesId: command.CategoriesId);
 
+            newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
+            newQuestion.RandomizeAnswerOptions = command.RandomizeAnswerOptions && !command.IsFilteredCombobox;
             this.innerDocument.ReplaceEntity(question, newQuestion);
             
         }
@@ -1113,6 +1122,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 showAsListThreshold: command.ShowAsListThreshold,
                 categoriesId: command.CategoriesId);
 
+            newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
+            newQuestion.RandomizeAnswerOptions = command.RandomizeAnswerOptions 
+                                                 && !command.IsFilteredCombobox 
+                                                 && !command.CascadeFromQuestionId.HasValue;
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
@@ -1164,6 +1177,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 categoricalQuestion.CategoriesId);
 
+            newQuestion.RandomizeOrder = categoricalQuestion.RandomizeOrder;
             this.innerDocument.ReplaceEntity(categoricalQuestion, newQuestion);
         }
 
@@ -1201,6 +1215,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 categoricalOneAnswerQuestion.CategoriesId);
 
+            newQuestion.RandomizeOrder = categoricalOneAnswerQuestion.RandomizeOrder;
             this.innerDocument.ReplaceEntity(categoricalOneAnswerQuestion, newQuestion);
         }
 
@@ -1239,6 +1254,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 categoricalOneAnswerQuestion.ShowAsListThreshold,
                 categoricalOneAnswerQuestion.CategoriesId);
 
+            newQuestion.RandomizeOrder = categoricalOneAnswerQuestion.RandomizeOrder;
             this.innerDocument.ReplaceEntity(categoricalOneAnswerQuestion, newQuestion);
         }
         #endregion
@@ -1287,6 +1303,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 command.IsNonNegative);
 
+            newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
@@ -1336,6 +1353,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (question != null)
             {
+                newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
                 this.innerDocument.ReplaceEntity(question, newQuestion);
             }
         }
@@ -1388,6 +1406,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (question != null)
             {
+                newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
                 this.innerDocument.ReplaceEntity(question, newQuestion);
             }
         }
@@ -1440,6 +1459,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (question != null)
             {
+                newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
                 this.innerDocument.ReplaceEntity(question, newQuestion);
             }
         }
@@ -1492,6 +1512,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             newQuestion.IsSignature = command.IsSignature;
             if (question != null)
             {
+                newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
                 this.innerDocument.ReplaceEntity(question, newQuestion);
             }
         }
@@ -1532,6 +1553,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (question != null)
             {
+                newQuestion.RandomizeOrder = this.CanBeRandomized(command.QuestionId) && command.RandomizeOrder;
                 this.innerDocument.ReplaceEntity(question, newQuestion);
             }
         }
@@ -1574,7 +1596,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 conditionExpression: command.EnablementCondition,
                 hideIfDisabled: command.HideIfDisabled,
                 validationConditions: command.ValidationConditions,
-                attachmentName: command.AttachmentName);
+                attachmentName: command.AttachmentName)
+            {
+                RandomizeOrder = this.CanBeRandomized(command.EntityId) && command.RandomizeOrder
+            };
 
             this.innerDocument.ReplaceEntity(oldStaticText, newStaticText);
         }
@@ -1859,6 +1884,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         q.LinkedToRosterId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToRosterId);
                         q.Featured = QuestionnaireDocument.IsCoverPageSupported ? targetIsCoverPage : q.Featured;
                         q.ConditionExpression = targetIsCoverPage ? string.Empty : q.ConditionExpression; 
+                        q.RandomizeOrder = !targetIsCoverPage && q.RandomizeOrder;
                         this.CopyCategories(q, sourceQuestionnaire);
                         break;
                     case Variable v:
@@ -1866,6 +1892,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         break;
                     case StaticText st:
                         st.PublicKey = replacementIdDictionary[st.PublicKey];
+                        st.RandomizeOrder = !targetIsCoverPage && st.RandomizeOrder;
                         break;
                 }
             });
@@ -1895,6 +1922,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (IsCoverPage(targetToPasteIn.PublicKey))
             {
                 staticText.ConditionExpression = String.Empty;
+                staticText.RandomizeOrder = false;
             }
             
             this.innerDocument.Insert(targetIndex, staticText, targetToPasteIn.PublicKey);
@@ -1917,6 +1945,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (targetIsCoverPage)
                 {
                     question.ConditionExpression = string.Empty;
+                    question.RandomizeOrder = false;
                 }
             }
 
@@ -2577,6 +2606,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private bool IsCoverPage(Guid publicKey) => publicKey == QuestionnaireDocument.CoverPageSectionId;
+
+        private bool CanBeRandomized(Guid entityId)
+        {
+            var entity = this.innerDocument.Find<IComposite>(entityId);
+            while (entity != null)
+            {
+                if (IsCoverPage(entity.PublicKey))
+                    return false;
+                entity = entity.GetParent();
+            }
+
+            return true;
+        }
 
         public void MigrateToNewVersion(MigrateToNewVersion command)
         {

@@ -40,6 +40,8 @@
                 </router-link>
                 <div class="qname-block chapter-condition-block">
                     <div class="conditions-block">
+                        <div class="randomize-order-marker" v-if="currentChapterData.randomizeOrder"
+                            :title="$t('QuestionnaireEditor.RandomizeOrderTooltip')"></div>
                         <div class="enabling-group-marker"
                             :class="{ 'hide-if-disabled': currentChapterData.hideIfDisabled }"
                             v-if="currentChapterData.hasCondition">
