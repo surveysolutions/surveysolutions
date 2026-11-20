@@ -4,6 +4,7 @@ using FluentAssertions;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
@@ -51,6 +52,30 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.Services
 
             snapshot.Select(e => e.EventSequence).Should().Equal(1);
             store.Read(interviewId, 0).Select(e => e.EventSequence).Should().Equal(1, 2);
+        }
+
+        [Test]
+        public void when_retiring_an_interview_should_keep_questionnaire_revision_until_its_last_history_is_retired()
+        {
+            var store = new TesterEventStore();
+            var questionnaireId = Guid.NewGuid();
+            var firstInterviewId = Guid.NewGuid();
+            var secondInterviewId = Guid.NewGuid();
+            var firstStream = new UncommittedEventStream(Guid.NewGuid(), null);
+            firstStream.Append(new UncommittedEvent(Guid.NewGuid(), firstInterviewId, 1, 0, DateTime.UtcNow,
+                Create.Event.InterviewCreated(questionnaireId, 1)));
+            var secondStream = new UncommittedEventStream(Guid.NewGuid(), null);
+            secondStream.Append(new UncommittedEvent(Guid.NewGuid(), secondInterviewId, 1, 0, DateTime.UtcNow,
+                Create.Event.InterviewCreated(questionnaireId, 1)));
+            store.Store(firstStream);
+            store.Store(secondStream);
+
+            store.RetireInterview(firstInterviewId).Should().BeNull();
+            store.Read(firstInterviewId, 0).Should().BeEmpty();
+
+            store.RetireInterview(secondInterviewId)
+                .Should().Be(new QuestionnaireIdentity(questionnaireId, 1));
+            store.Read(secondInterviewId, 0).Should().BeEmpty();
         }
     }
 }

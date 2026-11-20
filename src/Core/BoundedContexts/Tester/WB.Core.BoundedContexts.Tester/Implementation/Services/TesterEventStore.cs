@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
-    public class TesterEventStore : IEventStore
+    public class TesterEventStore : ITesterEventStore
     {
         private readonly Dictionary<Guid, List<CommittedEvent>> events = new Dictionary<Guid, List<CommittedEvent>>();
         private readonly object sync = new object();
@@ -36,6 +39,35 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         public bool IsDirty(Guid eventSourceId, long lastKnownEventSequence)
             => GetLastEventSequence(eventSourceId) != lastKnownEventSequence;
+
+        public QuestionnaireIdentity RetireInterview(Guid interviewId)
+        {
+            lock (sync)
+            {
+                if (!events.TryGetValue(interviewId, out var interviewEvents))
+                    return null;
+
+                events.Remove(interviewId);
+
+                var interviewCreated = interviewEvents
+                    .Select(e => e.Payload)
+                    .OfType<InterviewCreated>()
+                    .FirstOrDefault();
+                if (interviewCreated == null)
+                    return null;
+
+                var questionnaireIsStillUsed = events.Values
+                    .SelectMany(stream => stream)
+                    .Select(e => e.Payload)
+                    .OfType<InterviewCreated>()
+                    .Any(e => e.QuestionnaireId == interviewCreated.QuestionnaireId
+                              && e.QuestionnaireVersion == interviewCreated.QuestionnaireVersion);
+
+                return questionnaireIsStillUsed
+                    ? null
+                    : new QuestionnaireIdentity(interviewCreated.QuestionnaireId, interviewCreated.QuestionnaireVersion);
+            }
+        }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {

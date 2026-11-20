@@ -192,5 +192,23 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             // assert
             Assert.That(isExists, Is.False);
         }
+
+        [Test]
+        public async Task when_removing_a_pdf_attachment_should_delete_its_cached_file()
+        {
+            var contentId = Id.g10.FormatGuid();
+            var metadata = Create.Storage.SqliteInmemoryStorage(
+                Create.Entity.AttachmentContentMetadata("application/pdf", contentId));
+            var fileSystem = new Mock<IFileSystemAccessor>();
+            fileSystem.Setup(x => x.IsFileExists(It.IsAny<string>())).Returns(true);
+            var storage = Create.Service.AttachmentContentStorage(
+                attachmentContentMetadataRepository: metadata,
+                files: fileSystem.Object);
+            var cachedFile = await storage.GetFileCacheLocationAsync(contentId);
+
+            await storage.RemoveAsync(contentId);
+
+            fileSystem.Verify(x => x.DeleteFile(cachedFile), Times.Once);
+        }
     }
 }

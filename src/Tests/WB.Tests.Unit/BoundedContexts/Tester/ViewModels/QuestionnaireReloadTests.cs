@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Main.Core.Documents;
 using Moq;
 using MvvmCross.Tests;
 using NUnit.Framework;
@@ -13,6 +14,7 @@ using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -63,13 +65,18 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels
                 .ReturnsAsync(true);
             var attachments = new Mock<IAttachmentContentStorage>();
             var storage = new ExecutedCommandsStorage();
+            var testerEventStore = new Mock<ITesterEventStore>();
+            var questionnaireDocumentStorage = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var downloader = new QuestionnaireDownloadViewModel(Mock.Of<ITesterPrincipal>(), designer.Object,
                 commands.Object, Mock.Of<IQuestionnaireImportService>(), navigation.Object,
                 Mock.Of<IFriendlyErrorMessageService>(), Mock.Of<IUserInteractionService>(), Mock.Of<ILogger>(),
-                storage, attachments.Object, Mock.Of<IQuestionnaireStorage>());
+                storage, testerEventStore.Object, questionnaireDocumentStorage.Object,
+                attachments.Object, questionnaireStorage.Object);
             var progress = new Progress<string>();
             var oldIdentity = await downloader.DownloadQuestionnaireWithAllDependenciesAsync(
                 questionnaireId.ToString(), "test", progress, CancellationToken.None);
+            testerEventStore.Setup(x => x.RetireInterview(interviewId)).Returns(oldIdentity);
             var create = Create.Command.CreateInterview(interviewId: interviewId, questionnaireIdentity: oldIdentity);
             storage.Add(interviewId, create);
 
@@ -90,7 +97,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels
             create.InterviewId.Should().Be(interviewId);
             create.QuestionnaireId.Should().Be(oldIdentity);
             answer.InterviewId.Should().Be(interviewId);
-            storage.Get(interviewId).Should().Equal(create, answer);
+            storage.Get(interviewId).Should().BeEmpty();
+            testerEventStore.Verify(x => x.RetireInterview(interviewId), Times.Once);
+            questionnaireStorage.Verify(
+                x => x.DeleteQuestionnaireDocument(oldIdentity.QuestionnaireId, oldIdentity.Version), Times.Once);
+            questionnaireDocumentStorage.Verify(x => x.Remove(oldIdentity.ToString()), Times.Once);
             attachments.Verify(x => x.RemoveAsync(It.IsAny<string>()), Times.Never);
         }
     }
