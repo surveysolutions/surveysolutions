@@ -92,13 +92,13 @@ namespace WB.UI.Headquarters.SupportTool
 
                     if (role == UserRoles.Interviewer && supervisorUser == null)
                     {
-                        logger.LogError("Supervisor name is required for interviewer creation");
+                        logger.LogError("Supervisor name is required for Interviewer creation");
                         return;
                     }
 
                     if (supervisorUser != null && supervisorUser.Workspaces.All(w => w.Workspace.Name != workspaceName))
                     {
-                        logger.LogError("Supervisor must exists in workspace of interviewer");
+                        logger.LogError("Supervisor must exists in workspace of Interviewer");
                         return;
                     }
                     

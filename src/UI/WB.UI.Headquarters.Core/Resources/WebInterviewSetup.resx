@@ -124,7 +124,7 @@
     <value>Done</value>
   </data>
   <data name="SelectInterviwer" xml:space="preserve">
-    <value>Select interviewer</value>
+    <value>Select Interviewer</value>
   </data>
   <data name="Start" xml:space="preserve">
     <value>Start</value>
@@ -152,7 +152,7 @@
     <comment>{0} - count of interviews in file</comment>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>You can download list of created assignments that are assigned to interviewer in order to deliver web links to respondents</value>
+    <value>You can download list of created assignments that are assigned to Interviewer in order to deliver web links to respondents</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>Stop Web Interview</value>

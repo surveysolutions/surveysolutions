@@ -136,7 +136,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             //assert
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message,
-                Is.EqualTo($"Can't modify Interview {interviewId} on server, because it received by interviewer."));
+                Is.EqualTo($"Can't modify Interview {interviewId} on server, because it received by Interviewer."));
         }
 
         [Test]
@@ -162,7 +162,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             //assert
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message,
-                Is.EqualTo($"Can't modify Interview {interviewId} on server, because it received by interviewer."));
+                Is.EqualTo($"Can't modify Interview {interviewId} on server, because it received by Interviewer."));
         }
     }
 }

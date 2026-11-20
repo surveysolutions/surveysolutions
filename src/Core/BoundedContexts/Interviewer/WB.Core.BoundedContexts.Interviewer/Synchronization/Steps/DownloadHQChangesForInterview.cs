@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
                     var name = principal.CurrentUserIdentity.Name;
                     this.logger.Error(
-                        $"Failed to partial download hq changes for interview {interview.InterviewId}, interviewer {name}",
+                        $"Failed to partial download hq changes for interview {interview.InterviewId}, Interviewer {name}",
                         exception);
                 }
             }

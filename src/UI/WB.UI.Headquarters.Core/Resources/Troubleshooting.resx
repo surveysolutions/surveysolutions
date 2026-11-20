@@ -124,10 +124,10 @@
     <value>Specify an interview key or interview id to search.</value>
   </data>
   <data name="InterviewDataIsMissingTitle" xml:space="preserve">
-    <value>An interviewer claims an interview was completed and synchronized, but I see no data for that interview on the server</value>
+    <value>An Interviewer claims an interview was completed and synchronized, but I see no data for that interview on the server</value>
   </data>
   <data name="MissingCensusInterviewsDescription" xml:space="preserve">
-    <value>Provide an interviewer login name, name of a questionnaire and a date range</value>
+    <value>Provide an Interviewer login name, name of a questionnaire and a date range</value>
   </data>
   <data name="MissingCensusInterviewsTitle" xml:space="preserve">
     <value>I need to locate an interview</value>
@@ -148,7 +148,7 @@
     <value>Interviewer</value>
   </data>
   <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
-    <value>Select interviewer</value>
+    <value>Select Interviewer</value>
   </data>
   <data name="MissingCensusInterviews_Filters_Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
@@ -161,7 +161,7 @@
   </data>
   <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
     <value>To locate an interview, please provide name of the questionnaire.&lt;br/&gt;
-Select an interviewer and timeframe to narrow down your search result</value>
+Select an Interviewer and timeframe to narrow down your search result</value>
   </data>
   <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
     <value>{0} interviews satisfy filter conditions</value>

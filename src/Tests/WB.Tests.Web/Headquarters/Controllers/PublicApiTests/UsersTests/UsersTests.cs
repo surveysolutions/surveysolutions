@@ -21,7 +21,7 @@ internal class UsersTests : ApiTestContext
 {
     [Test]
     [TestCase("super1", "Supervisor was not found")]
-    [TestCase(null, "Supervisor name is required for interviewer creation")]
+    [TestCase(null, "Supervisor name is required for Interviewer creation")]
     public async Task when_creating_interviewer_without_valid_supervisor(string supervisor, string message)
     {
         var workspaceContextAccessor = new Mock<IWorkspaceContextAccessor>();

@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Models
         [Required]
         public string Password { get; set; }
 
-        [Description("Login of supervisor for registered interviewer")]
+        [Description("Login of supervisor for registered Interviewer")]
         public string Supervisor { get; set; }
 
         public Main.Core.Entities.SubEntities.UserRoles GetDomainRole()

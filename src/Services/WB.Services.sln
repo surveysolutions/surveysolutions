@@ -111,4 +111,8 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4540629E-1903-4312-A956-8E62E0A49DCA}
 	EndGlobalSection
+	GlobalSection(RiderSharedRunConfigurations) = postSolution
+		File = ..\.run\HQ_Designer.run.xml
+		File = ..\.run\Headquarters.run.xml
+	EndGlobalSection
 EndGlobal

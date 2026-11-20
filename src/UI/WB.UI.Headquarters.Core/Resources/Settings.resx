@@ -270,7 +270,7 @@ Possible reasons:
     <value>Enable partial synchronization</value>
   </data>
   <data name="PartialSynchronizationDescription" xml:space="preserve">
-    <value>When enabled, interviewer tablets will send answers in noncompleted interviews to Headquarters</value>
+    <value>When enabled, Interviewers tablets will send answers in noncompleted interviews to Headquarters</value>
   </data>
   <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
       <value>Location accuracy limit</value>
@@ -519,16 +519,16 @@ Possible reasons:
     <value>When enabled, supervisors can close and reopen assignments</value>
   </data>
   <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
-    <value>Allow interviewers to change assignment statuses</value>
+    <value>Allow Interviewers to change assignment statuses</value>
   </data>
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
-    <value>When enabled, interviewers can complete and reopen assignments (requires supervisor setting to be enabled)</value>
+    <value>When enabled, Interviewers can complete and reopen assignments (requires Supervisor setting to be enabled)</value>
   </data>
   <data name="AudioRecordingQuality" xml:space="preserve">
     <value>Audio recording quality</value>
   </data>
   <data name="AudioRecordingQualityDescription" xml:space="preserve">
-    <value>Audio quality used by the interviewer application when recording audio (audio audit and audio questions)</value>
+    <value>Audio quality used by the Interviewer application when recording audio (audio audit and audio questions)</value>
   </data>
   <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
     <value>64 kbps, Mono, 44.1 kHz</value>

@@ -226,7 +226,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             {
                 await this.nearbyConnection.StartAdvertisingAsync(serviceName, this.Principal.CurrentUserIdentity.Name,
                     cancellationTokenSource.Token);
-                SetStatus(ConnectionStatus.Advertising, "Waiting for interviewers connections");
+                SetStatus(ConnectionStatus.Advertising, "Waiting for Interviewers connections");
             }
             catch (NearbyConnectionException nce)
             {

@@ -129,7 +129,7 @@
     <value>Download list of census questionnaires: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
   </data>
     <data name="GetInterviewer" xml:space="preserve">
-    <value>Download interviewer information. &lt;br/&gt;Supervisor: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Download Interviewer information. &lt;br/&gt;Supervisor: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
     <data name="GetInterviewPackage" xml:space="preserve">
     <value>Download interview package: &lt;b&gt;{0}&lt;/b&gt;</value>
@@ -144,13 +144,13 @@
     <value>Download questionnaire assembly: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
     <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
-    <value>Device can be assigned to interviewer</value>
+    <value>Device can be assigned to Interviewer</value>
   </data>
     <data name="InterviewPackageProcessed" xml:space="preserve">
     <value>&lt;font color="green"&gt;Interview package &lt;b&gt;{0}&lt;/b&gt; successfully processed&lt;/font&gt;</value>
   </data>
     <data name="LinkToDevice" xml:space="preserve">
-    <value>Link interviewer to device</value>
+    <value>Link Interviewer to device</value>
   </data>
     <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
     <value>&lt;font color="green"&gt;Questionnaire assembly &lt;b&gt;{0}&lt;/b&gt; [{1}] successfully processed&lt;/font&gt;</value>

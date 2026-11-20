@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var user = await userRepository.FindByIdAsync(authorizedUserId);
             if (!user.IsInRole(UserRoles.Interviewer) && !user.IsInRole(UserRoles.Supervisor))
             {
-                throw new InvalidOperationException("Only interviewer or supervisor can be linked to device");
+                throw new InvalidOperationException("Only Interviewer or Supervisor can be linked to device");
             }
 
             if (user.Profile != null

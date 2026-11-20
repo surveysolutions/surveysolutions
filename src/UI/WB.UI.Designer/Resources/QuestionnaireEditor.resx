@@ -308,7 +308,7 @@
     <value>Each critical rule consists of a condition and a message. Critical conditions may refer to any questions or variables and must be satisfied (evaluate to true). Treatment of interviews with unsatisfied critical conditions is determined during import of the questionnaire to the data server.</value>
   </data>
   <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
-    <value>Include a message for the interviewer (respondent) to explain what needs to be changed in the interview (the message is displayed when the critical condition is not satisfied). Including hyperlinks to questions in the message is useful for navigation.</value>
+    <value>Include a message for the Interviewer (respondent) to explain what needs to be changed in the interview (the message is displayed when the critical condition is not satisfied). Including hyperlinks to questions in the message is useful for navigation.</value>
   </data>
   <data name="SideBarHideDescription" xml:space="preserve">
     <value>hide description</value>
@@ -1084,7 +1084,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>The name of attachment file that will be displayed.</value>
   </data>
   <data name="HelpCoverPage" xml:space="preserve">
-    <value>The first section of every questionnaire contains identifying questions that are also displayed at the interviewers' and supervisors' dashboards.</value>
+    <value>The first section of every questionnaire contains identifying questions that are also displayed at the Interviewers' and supervisors' dashboards.</value>
   </data>
   <data name="HelpVirtualCoverPage" xml:space="preserve">
     <value>Cover is virtual section that shows all identifying questions.
@@ -1585,10 +1585,10 @@ Please check your network connection or contact your IT support.</value>
     <value>Custom title</value>
   </data>
   <data name="HelpOptionValue" xml:space="preserve">
-    <value>Numeric integer code of the category (not visible to the interviewer)</value>
+    <value>Numeric integer code of the category (not visible to the Interviewer)</value>
   </data>
   <data name="HelpOptionTitle" xml:space="preserve">
-    <value>Text label for the category (visible to the interviewer)</value>
+    <value>Text label for the category (visible to the Interviewer)</value>
   </data>
   <data name="HelpOverlapDetection" xml:space="preserve">
     <value>Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances</value>

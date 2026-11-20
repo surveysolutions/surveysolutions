@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         {
             var user = userViewFactory.FindById(this.authorizedUser.Id);
             return user.WorkspaceProfile.SupervisorId 
-                   ?? throw new ArgumentException("SupervisorId must be set for interviewer");
+                   ?? throw new ArgumentException("SupervisorId must be set for Interviewer");
         }
 
         [HttpGet]

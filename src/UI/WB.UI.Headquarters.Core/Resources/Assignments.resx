@@ -172,13 +172,13 @@
     <value>Responsible is required</value>
   </data>
   <data name="WebModeNonInterviewer" xml:space="preserve">
-    <value>All assignments for web interviews must be made to an interviewer</value>
+    <value>All assignments for web interviews must be made to an Interviewer</value>
   </data>
   <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
-    <value>You are reassigning web assignment to a user who is not an INTERVIEWER. If you've already sent out the link for this assignment, the respondents will not be able to respond to your survey until the assignment is returned to a user in the role INTERVIEWER.</value>
+    <value>You are reassigning web assignment to a user who is not an Interviewer. If you've already sent out the link for this assignment, the respondents will not be able to respond to your survey until the assignment is returned to a user in the role Interviewer.</value>
   </data>
   <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
-    <value>You are reassigning web assignments to a user who is not an INTERVIEWER. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignments are returned to a user in the role INTERVIEWER.</value>
+    <value>You are reassigning web assignments to a user who is not an Interviewer. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignments are returned to a user in the role Interviewer.</value>
   </data>
   <data name="ShowArchived" xml:space="preserve">
     <value>Archived status</value>
@@ -599,7 +599,7 @@
       <value>Reopen assignment</value>
   </data>
   <data name="ReopenAssignmentMessage" xml:space="preserve">
-      <value>The assignment will be set back to Open status and interviewers will be able to create new interviews.</value>
+      <value>The assignment will be set back to Open status and Interviewers will be able to create new interviews.</value>
   </data>
   <data name="Complete" xml:space="preserve">
       <value>Complete</value>

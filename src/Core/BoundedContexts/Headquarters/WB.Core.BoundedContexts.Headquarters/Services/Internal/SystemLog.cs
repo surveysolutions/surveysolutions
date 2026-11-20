@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         public void UsersImported(int importedSupervisors, int importedInterviewers, string responsibleName)
             => this.Append(LogEntryType.UsersImported, "Users", "Import",
                 $"User {responsibleName} created {importedSupervisors + importedInterviewers} users in batch mode, " +
-                $"of which {importedInterviewers} are interviewers and {importedSupervisors} supervisors",
+                $"of which {importedInterviewers} are Interviewers and {importedSupervisors} Supervisors",
                 responsibleName: responsibleName);
 
         public void AssignmentsImported(long assignmentsCount, string questionnaireTitle, long questionnaireVersion,
@@ -77,19 +77,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void InterviewerArchived(string interviewerName)
             => this.Append(LogEntryType.InterviewerArchived, "Interviewer", "Archive",
-                $"User {this.authorizedUser.UserName} has archived interviewer account {interviewerName}");
+                $"User {this.authorizedUser.UserName} has archived Interviewer account {interviewerName}");
 
         public void InterviewerUnArchived(string interviewerName)
             => this.Append(LogEntryType.InterviewerUnArchived, "Interviewer", "Unarchive",
-                $"User {this.authorizedUser.UserName} has unarchived interviewer account {interviewerName}");
+                $"User {this.authorizedUser.UserName} has unarchived Interviewer account {interviewerName}");
 
         public void SupervisorArchived(string supervisorName)
             => this.Append(LogEntryType.SupervisorArchived, "Supervisor", "Archive",
-                $"User {this.authorizedUser.UserName} has archived interviewer account {supervisorName}");
+                $"User {this.authorizedUser.UserName} has archived Interviewer account {supervisorName}");
 
         public void SupervisorUnArchived(string supervisorName)
             => this.Append(LogEntryType.SupervisorUnarchived, "Supervisor", "Unarchive",
-                $"User {this.authorizedUser.UserName} has unarchived interviewer account {supervisorName}");
+                $"User {this.authorizedUser.UserName} has unarchived Interviewer account {supervisorName}");
 
         public void UserCreated(UserRoles role, string userName)
         {

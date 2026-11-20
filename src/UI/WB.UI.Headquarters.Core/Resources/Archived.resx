@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ActiveInterviewers" xml:space="preserve">
-    <value>Active interviewers</value>
+    <value>Active Interviewers</value>
   </data>
   <data name="ActiveSupervisors" xml:space="preserve">
-    <value>Active supervisors</value>
+    <value>Active Supervisors</value>
   </data>
   <data name="ArchivedInterviewers" xml:space="preserve">
-    <value>archived interviewers</value>
+    <value>archived Interviewers</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Archived supervisors</value>
+    <value>Archived Supervisors</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Creation date</value>

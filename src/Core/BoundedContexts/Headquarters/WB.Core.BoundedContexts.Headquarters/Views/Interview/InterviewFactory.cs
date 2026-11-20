@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (interview == null)
                 throw new InterviewException($"Interview {interviewId} not found.");
             if (interview.ReceivedByInterviewer)
-                throw new InterviewException($"Can't modify Interview {interviewId} on server, because it received by interviewer.");
+                throw new InterviewException($"Can't modify Interview {interviewId} on server, because it received by Interviewer.");
             if (interview.Status == InterviewStatus.ApprovedByHeadquarters)
                 throw new InterviewException($"Interview was approved by Headquarters and cannot be edited. InterviewId: {interviewId}");
 

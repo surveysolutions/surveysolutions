@@ -362,7 +362,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return StatusCode(StatusCodes.Status406NotAcceptable, "User was not found.");
 
             if(!userInfo.Roles.Contains(UserRoles.Interviewer))
-                return StatusCode(StatusCodes.Status406NotAcceptable, "User is not an interviewer.");
+                return StatusCode(StatusCodes.Status406NotAcceptable, "User is not an Interviewer.");
             
             return this.TryExecuteCommand(new AssignResponsibleCommand(id, this.authorizedUser.Id, userInfo.PublicKey, userInfo.Supervisor.Id));
         }
@@ -437,7 +437,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return StatusCode(StatusCodes.Status406NotAcceptable, "Responsible was not found.");
 
             if(!(userInfo.Roles.Contains(UserRoles.Interviewer) || userInfo.Roles.Contains(UserRoles.Supervisor)))
-                return StatusCode(StatusCodes.Status406NotAcceptable, "Responsible is not an interviewer or supervisor.");
+                return StatusCode(StatusCodes.Status406NotAcceptable, "Responsible is not an Interviewer or Supervisor.");
 
             var resultToInter = this.TryExecuteCommand(new RejectInterviewToInterviewerCommand(this.authorizedUser.Id, 
                 id, userInfo.PublicKey, comment));
@@ -502,7 +502,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if(userInfo.Roles.Contains(UserRoles.Supervisor))
                 return this.TryExecuteCommand(new HqRejectInterviewToSupervisorCommand(id, this.authorizedUser.Id, userInfo.PublicKey, comment));
             
-            return StatusCode(StatusCodes.Status406NotAcceptable, "Responsible is not an interviewer or supervisor.");
+            return StatusCode(StatusCodes.Status406NotAcceptable, "Responsible is not an Interviewer or Supervisor.");
         }
 
         /// <summary>

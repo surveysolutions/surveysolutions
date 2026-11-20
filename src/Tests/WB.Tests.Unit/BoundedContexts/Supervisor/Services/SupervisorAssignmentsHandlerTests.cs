@@ -272,8 +272,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             // Assert: only Open assignment is sent to interviewer; Completed and Closed stay on supervisor
             response.Assignments.Should().HaveCount(1);
             response.Assignments.Should().Contain(a => a.Status == AssignmentStatus.Open && a.Id == 1);
-            response.Assignments.Should().NotContain(a => a.Id == 2, "Completed assignments are not forwarded to interviewers");
-            response.Assignments.Should().NotContain(a => a.Id == 3, "Closed assignments are not forwarded to interviewers");
+            response.Assignments.Should().NotContain(a => a.Id == 2, "Completed assignments are not forwarded to Interviewers");
+            response.Assignments.Should().NotContain(a => a.Id == 3, "Closed assignments are not forwarded to Interviewers");
         }
     }
 }

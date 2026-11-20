@@ -121,10 +121,10 @@
     <value>Supervisor</value>
   </data>
   <data name="AssignedToDescription" xml:space="preserve">
-    <value>required for interviewers, contains user name of supervisor to whom this person wil be assigned</value>
+    <value>required for Interviewers, contains user name of supervisor to whom this person wil be assigned</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Create set of users by uploading file with all necessary information. Set can contain both supervisors and interviewers, alternatively, you can create</value>
+    <value>Create set of users by uploading file with all necessary information. Set can contain both Supervisors and Interviewers, alternatively, you can create</value>
   </data>
   <data name="Profile" xml:space="preserve">
     <value>profile manually</value>
@@ -160,7 +160,7 @@
     <value>Phone number</value>
   </data>
   <data name="RequiredData" xml:space="preserve">
-    <value>Data required for creating interviewers and supervisors</value>
+    <value>Data required for creating Interviewers and Supervisors</value>
   </data>
   <data name="Role" xml:space="preserve">
     <value>Role</value>
@@ -208,7 +208,7 @@
     <value>All {{total}} accounts were successfully created:</value>
   </data>
   <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
-    <value>{{supervisorsCount}} supervisors and {{interviewersCount}} interviewers</value>
+    <value>{{supervisorsCount}} Supervisors and {{interviewersCount}} Interviewers</value>
   </data>
   <data name="CompleteDescription" xml:space="preserve">
     <value>You can make an assignments for these teams from 'questionnaires' section, assignments can also be created in batch mode</value>

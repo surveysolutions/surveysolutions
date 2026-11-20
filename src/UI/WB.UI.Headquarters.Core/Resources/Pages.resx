@@ -412,7 +412,7 @@
     <value>Interviewer: {0}</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{{interviewer}} (supervisor: {{supervisor}})</value>
+    <value>{{interviewer}} (Supervisor: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
     <value>E-mail: {{email}}</value>
@@ -611,7 +611,7 @@
     <value>Interviewers</value>
   </data>
   <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
-    <value>You are moving an interviewer who was having assignments for web interviews to another team. These assignments will be assigned to the original supervisor. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignment is reassigned to a user in the role INTERVIEWER.</value>
+    <value>You are moving an Interviewer who was having assignments for web interviews to another team. These assignments will be assigned to the original supervisor. If you've already sent out the links for these assignments, the respondents will not be able to respond to your survey until the assignment is reassigned to a user in the role INTERVIEWER.</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
@@ -671,7 +671,7 @@
     <value>Interviewer(s) will be archived.</value>
   </data>
   <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
-    <value>If the interviewer has completed interviews on his tablet then the data will be lost.</value>
+    <value>If the Interviewer has completed interviews on his tablet then the data will be lost.</value>
   </data>
   <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
     <value>Do you want to continue?</value>
@@ -879,7 +879,7 @@
     <value>This action will create individual user,</value>
   </data>
   <data name="User_CreateText2" xml:space="preserve">
-    <value>to create several interviewers and supervisors you can use {{link}}</value>
+    <value>to create several Interviewers and Supervisors you can use {{link}}</value>
   </data>
   <data name="User_CreateText_UserBatchUploadLinkText" xml:space="preserve">
     <value>user batch creation</value>
@@ -891,13 +891,13 @@
     <value>(optional, will be visible only to authenticated users).</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
-    <value>Date when the interviewer account was created</value>
+    <value>Date when the Interviewer account was created</value>
   </data>
   <data name="Interviewers_LastLoginDateTooltip" xml:space="preserve">
-    <value>Date when the interviewer logged in to website last time</value>
+    <value>Date when the Interviewer logged in to website last time</value>
   </data>
   <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
-    <value>Login name of the interviewer’s supervisor</value>
+    <value>Login name of the Interviewer’s Supervisor</value>
   </data>
   <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
     <value>Interviewer App version reported during last synchronization of his/her tablet to the server</value>
@@ -931,10 +931,10 @@
     <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
-    <value>Download latest interviewer app</value>
+    <value>Download latest Interviewer app</value>
   </data>
   <data name="GetInterviewerApp" xml:space="preserve">
-    <value>Download interviewer app</value>
+    <value>Download Interviewer app</value>
   </data>
   <data name="GetLatestSupervisorApp" xml:space="preserve">
     <value>Download latest Supervisor app</value>
@@ -949,7 +949,7 @@
     <value>Filters</value>
   </data>
   <data name="Interviewers_Selected" xml:space="preserve">
-    <value>interviewer(s) selected</value>
+    <value>Interviewer(s) selected</value>
   </data>
   <data name="OperationFailedDescription" xml:space="preserve">
     <value>Error occurred please try again later.</value>
@@ -973,10 +973,10 @@
     <value>User(s) will be unarchived.</value>
   </data>
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
-    <value>If the interviewer has completed interviews on his tablet then the data will be lost.</value>
+    <value>If the Interviewer has completed interviews on his tablet then the data will be lost.</value>
   </data>
   <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
-    <value>You will archive supervisors and interviewers within their teams. Interviewers assigned to archived supervisors will be archived in ALL workspaces. Any remaining non synchronized data at the devices of archived users (interviewers or supervisors) will not be transmitted to the server.</value>
+    <value>You will archive supervisors and Interviewers within their teams. Interviewers assigned to archived supervisors will be archived in ALL workspaces. Any remaining non synchronized data at the devices of archived users (Interviewers or Supervisors) will not be transmitted to the server.</value>
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
     <value>supervisor(s) selected</value>
@@ -988,10 +988,10 @@
     <value>Unarchive</value>
   </data>
   <data name="Profile_InterviewerEditFormat" xml:space="preserve">
-    <value>Edit interviewer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    <value>Edit Interviewer profile: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="Profile_InterviewerCreate" xml:space="preserve">
-    <value>Create interviewer profile</value>
+    <value>Create Interviewer profile</value>
   </data>
   <data name="Profile_InterviewersList" xml:space="preserve">
     <value>Interviewers</value>
@@ -1127,7 +1127,7 @@
     <value>Locked headquarters (box checked) cannot login and perform any actions on the server.</value>
   </data>
   <data name="Interviewer_LockWarning" xml:space="preserve">
-    <value>Locked interviewers cannot connect their tablets with the server and send interviews.</value>
+    <value>Locked Interviewers cannot connect their tablets with the server and send interviews.</value>
   </data>
   <data name="Tablet_RelinkMessage" xml:space="preserve">
     <value>A single device is linked to this account.</value>
@@ -1151,7 +1151,7 @@
     <value>Press Add Interviewer button to create a new Interviewer.</value>
   </data>
   <data name="Users_Interviewers_Instruction2" xml:space="preserve">
-    <value>Click on a Login Name to see information on an interviewer and to modify an Interviewer profile.</value>
+    <value>Click on a Login Name to see information on an Interviewer and to modify an Interviewer profile.</value>
   </data>
   <data name="Users_Observers_Instruction1" xml:space="preserve">
     <value>Press Add Observer button to create a new Observer.</value>
@@ -1172,7 +1172,7 @@
     <value>Download and install this version of the Interviewer app for surveys that use no ESRI GIS functionality. This apk does not include an ESRI SDK and thus is much smaller in size and faster to download compared to the version with SDK.</value>
   </data>
   <data name="GetLatestAppExtendedDescription" xml:space="preserve">
-    <value>Download and install this version of the interviewer app only if you use advanced ESRI GIS functionality. This apk contains large ESRI SDK, is large in size and might take long time to download.</value>
+    <value>Download and install this version of the Interviewer app only if you use advanced ESRI GIS functionality. This apk contains large ESRI SDK, is large in size and might take long time to download.</value>
   </data>
   <data name="DownloadPage_Instructions" xml:space="preserve">
     <value>Installation instructions</value>
@@ -1259,7 +1259,7 @@
     <value>Include mapping functionality</value>
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-      <value>Mapping functionality will significantly increase application size and download time. Follow the instruction of your supervisor as to which version of the Interviewer application (with or without maps) is needed for your task.</value>
+      <value>Mapping functionality will significantly increase application size and download time. Follow the instruction of your Supervisor as to which version of the Interviewer application (with or without maps) is needed for your task.</value>
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Assignment</value>
@@ -1274,7 +1274,7 @@
     <value>Devices/Interviewers</value>
   </data>
   <data name="InterviewersAndDevicesSubtitle" xml:space="preserve">
-    <value>Issues for each interviewer</value>
+    <value>Issues for each Interviewer</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Status Duration</value>
@@ -1439,13 +1439,13 @@
     <value>Move to another team</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-    <value>Interviewer(s) {{interviewers}} will be moved to a team of supervisor {{supervisor}}.</value>
+    <value>Interviewer(s) {{interviewers}} will be moved to a team of Supervisor {{supervisor}}.</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
-    <value>Interviewer(s) {{interviewers}} are in the team of supervisor {{supervisor}} and no actions will be performed.</value>
+    <value>Interviewer(s) {{interviewers}} are in the team of Supervisor {{supervisor}} and no actions will be performed.</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-    <value>Move interviewer(s) with their assignments and interviews to the team of supervisor {{supervisor}}.</value>
+    <value>Move interviewer(s) with their assignments and interviews to the team of Supervisor {{supervisor}}.</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
     <value>Select a team where to move {{names}}</value>
@@ -1457,7 +1457,7 @@
     <value>{{names}} and {{more}} more</value>
   </data>
   <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
-    <value>Make original supervisor responsible for the existing assignments and interviews of the moved interviewer(s).</value>
+    <value>Make original supervisor responsible for the existing assignments and interviews of the moved Interviewer(s).</value>
   </data>
   <data name="Interviewers_MovingCompleted" xml:space="preserve">
     <value>Moving users completed</value>
@@ -1506,7 +1506,7 @@
     <value>Email Providers</value>
   </data>
   <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
-    <value>Qr code that simplifies interviewer application setup</value>
+    <value>Qr code that simplifies Interviewer application setup</value>
   </data>
   <data name="InterviewerProfile_NoMarkers" xml:space="preserve">
     <value>Interviewer location was never recorded in any of the interviews that he/she has submitted</value>
@@ -1587,7 +1587,7 @@
     <value>Size</value>
   </data>
   <data name="Admin_InterviewPackages_SelectInterviewer" xml:space="preserve">
-    <value>Select interviewer</value>
+    <value>Select Interviewer</value>
   </data>
   <data name="Admin_InterviewPackages_Interviewer" xml:space="preserve">
     <value>Interviewer</value>
@@ -1705,7 +1705,7 @@
     <value>Select workspaces that need to be added to selected users</value>
   </data>
   <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
-    <value>Select workspace and supervisor that need to create interviewer</value>
+    <value>Select workspace and Iupervisor that need to create Interviewer</value>
   </data>
   <data name="UserManagement_SubtitleRemove" xml:space="preserve">
     <value>Select workspaces that need to be removed from selected users</value>
@@ -1723,7 +1723,7 @@
     <value>User(s) selected</value>
   </data>
   <data name="Interviewer_CreateText" xml:space="preserve">
-    <value>This action will create individual user with interviewer rights,&lt;br&gt; to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
+    <value>This action will create individual user with Interviewer rights,&lt;br&gt; to create several users you can use &lt;a href="{{link}}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
   </data>
   <data name="UsersManage_TeamFilterPlaceHolder" xml:space="preserve">
     <value>Team</value>

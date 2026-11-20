@@ -963,12 +963,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string MissingPermissions_Microphone_Interview {
-            get {
-                return ResourceManager.GetString("MissingPermissions_Microphone_Interview", resourceCulture);
-            }
-        }
-        
         public static string MissingPermissions_Storage_Global {
             get {
                 return ResourceManager.GetString("MissingPermissions_Storage_Global", resourceCulture);
@@ -1260,30 +1254,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MapDashboard_FiltersTitle {
             get {
                 return ResourceManager.GetString("MapDashboard_FiltersTitle", resourceCulture);
-            }
-        }
-        
-        public static string MapDashboard_AssignmentStatusTitle {
-            get {
-                return ResourceManager.GetString("MapDashboard_AssignmentStatusTitle", resourceCulture);
-            }
-        }
-        
-        public static string Assignment_Status_Open {
-            get {
-                return ResourceManager.GetString("Assignment_Status_Open", resourceCulture);
-            }
-        }
-        
-        public static string Assignment_Status_Completed {
-            get {
-                return ResourceManager.GetString("Assignment_Status_Completed", resourceCulture);
-            }
-        }
-        
-        public static string Assignment_Status_Closed {
-            get {
-                return ResourceManager.GetString("Assignment_Status_Closed", resourceCulture);
             }
         }
         
@@ -1830,6 +1800,36 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Complete_Tab_Title_Unanswered {
             get {
                 return ResourceManager.GetString("Interview_Complete_Tab_Title_Unanswered", resourceCulture);
+            }
+        }
+        
+        public static string MapDashboard_AssignmentStatusTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_AssignmentStatusTitle", resourceCulture);
+            }
+        }
+        
+        public static string Assignment_Status_Open {
+            get {
+                return ResourceManager.GetString("Assignment_Status_Open", resourceCulture);
+            }
+        }
+        
+        public static string Assignment_Status_Completed {
+            get {
+                return ResourceManager.GetString("Assignment_Status_Completed", resourceCulture);
+            }
+        }
+        
+        public static string Assignment_Status_Closed {
+            get {
+                return ResourceManager.GetString("Assignment_Status_Closed", resourceCulture);
+            }
+        }
+        
+        public static string MissingPermissions_Microphone_Interview {
+            get {
+                return ResourceManager.GetString("MissingPermissions_Microphone_Interview", resourceCulture);
             }
         }
     }

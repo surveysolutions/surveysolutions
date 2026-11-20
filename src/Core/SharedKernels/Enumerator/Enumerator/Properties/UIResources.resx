@@ -549,7 +549,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Load map to show location for GPS questions</value>
   </data>
   <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
-    <value>If interviewers don't have an access to the internet, this functionality should be enabled, because it makes it possible to update their applications during offline synchronization with the Supervisor application</value>
+    <value>If Interviewers don't have an access to the internet, this functionality should be enabled, because it makes it possible to update their applications during offline synchronization with the Supervisor application</value>
   </data>
   <data name="VariableEmptyValue" xml:space="preserve">
     <value>&lt;empty&gt;</value>
@@ -876,7 +876,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>This device is not supported.</value>
   </data>
   <data name="Synchronization_FoundDevice" xml:space="preserve">
-    <value>Found interviewer device ({0})</value>
+    <value>Found Interviewer device ({0})</value>
     <comment>{0} - interviewer login</comment>
   </data>
   <data name="OfflineSync_Supervisor_Title" xml:space="preserve">

@@ -83,7 +83,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     && !user.IsInRole(UserRoles.Observer))
                 {
                     ModelState.AddModelError(nameof(model.UserIds),
-                        "Only headquarter, supervisor, interviewer, observer or api user workspaces can be edited");
+                        "Only Headquarter, Supervisor, Interviewer, observer or api user workspaces can be edited");
                 }
 
                 if (user.IsInRole(UserRoles.Interviewer)
@@ -91,7 +91,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
                     && dbWorkspaces.Any(w => !w.SupervisorId.HasValue))
                 {
                     ModelState.AddModelError(nameof(model.Workspaces),
-                        "SupervisorId is required for each workspace when assigning to an interviewer");
+                        "SupervisorId is required for each workspace when assigning to an Interviewer");
                 }
 
                 if (ModelState.IsValid)

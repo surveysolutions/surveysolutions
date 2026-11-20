@@ -52,7 +52,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Supervisor login who is responsible for interview");
             
             descriptor.Field(x => x.WasCompleted)
-                .Description("Indicates if interview was ever completed by interviewer")
+                .Description("Indicates if interview was ever completed by Interviewer")
                 .Type<NonNullType<BooleanType>>();
             
             descriptor.Field(x => x.CreatedDate)
@@ -63,7 +63,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Description("Short case identifier that appears throughout the system - in Headquarters, Supervisor, and Interviewer");
 
             descriptor.Field(x => x.ClientKey).Type<NonNullType<StringType>>()  
-                .Description("Key that was generated on interviewer tablet when interview was created for the first time");
+                .Description("Key that was generated on Interviewer tablet when interview was created for the first time");
 
             descriptor.Field(x => x.UpdateDate)
                 .Name("updateDateUtc")
@@ -77,7 +77,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 
             descriptor.Field(x => x.ReceivedByInterviewerAtUtc)
                 .Type<DateTimeType>()
-                .Description("Represents date (UTC) when the interview was received by the interviewer’s tablet");
+                .Description("Represents date (UTC) when the interview was received by the Interviewer’s tablet");
             
             descriptor.Field(x => x.ErrorsCount)
                 .Description("Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1")
@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             
             descriptor.Field(x => x.NotAnsweredCount)
                 .Description(
-                    "Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release");
+                    "Number of questions without answer. Includes supervisor, identifying and Interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release");
             
             descriptor.Field("calendarEvent")
                 .Description("Active Calendar Event associated with interview")

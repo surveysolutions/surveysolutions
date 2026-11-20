@@ -255,7 +255,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                                 EventsThatChangeAnswersStateProvider.GetTypeNames()))
                     {
                         throw new InterviewException(
-                            "Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet",
+                            "Provided interview package is outdated. New answers were given to the interview while Interviewer had interview on a tablet",
                             InterviewDomainExceptionType.PackageIsOudated);
                     }
 

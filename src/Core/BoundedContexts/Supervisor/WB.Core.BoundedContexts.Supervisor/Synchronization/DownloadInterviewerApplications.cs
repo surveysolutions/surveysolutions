@@ -137,7 +137,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             }
             catch (Exception exc)
             {
-                this.logger.Error("Error on downloading interviewer apks", exc);
+                this.logger.Error("Error on downloading Interviewer apks", exc);
             }
         }
 

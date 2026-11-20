@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
                         interview.InterviewId, EventsThatChangeAnswersStateProvider.GetTypeNames()))
                 {
-                    throw new InterviewException("Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet", 
+                    throw new InterviewException("Provided interview package is outdated. New answers were given to the interview while Interviewer had interview on a tablet", 
                         InterviewDomainExceptionType.PackageIsOudated);
                 }
 

@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
 
                     if(moveResult.Errors.Count > 0)
                     {
-                        throw new Exception("Failed to reassign interviewer tasks to other responsible");
+                        throw new Exception("Failed to reassign Interviewer tasks to other responsible");
                     }
 
                 }, userWorkspace.Workspace.Name);
@@ -159,7 +159,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Workspaces.Impl
 
             workspacesStorage.Delete(workspace.Name);
 
-            logger.LogWarning("Deleting interviewers and supervisors in workspace {name}", workspace.Name);
+            logger.LogWarning("Deleting Interviewers and Supervisors in workspace {name}", workspace.Name);
         }
 
         public void AddUserToWorkspace(HqUser user, string workspace, Guid? supervisorId)

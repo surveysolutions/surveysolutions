@@ -253,7 +253,7 @@
     <value>Number of interviewers who have not successfully synchronized their tablets to the server yet</value>
   </data>
   <data name="NumberOfInterviewersInTeam" xml:space="preserve">
-    <value>Number of interviewers in the team</value>
+    <value>Number of Interviewers in the team</value>
   </data>
   <data name="AccountCreationDateTooltip" xml:space="preserve">
     <value>Date when the account was created</value>
@@ -268,7 +268,7 @@
     <value>Headquarters email</value>
   </data>
   <data name="AddInterviewer" xml:space="preserve">
-    <value>Add interviewer</value>
+    <value>Add Interviewer</value>
   </data>
   <data name="ArchivingStatusTitle" xml:space="preserve">
     <value>Archiving Status</value>

@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (Exception e)
             {
-                logger.Error("Error write to interviewer audit log", e);
+                logger.Error("Error write to Interviewer audit log", e);
             }
         }
 

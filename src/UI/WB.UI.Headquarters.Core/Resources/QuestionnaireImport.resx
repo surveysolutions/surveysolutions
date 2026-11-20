@@ -172,7 +172,7 @@
     <value>Import</value>
   </data>
   <data name="RegularImportSubTitle" xml:space="preserve">
-    <value>This will allow you to create individual assignments that may contain identifying data. Only those assignments will appear on interviewer devices.</value>
+    <value>This will allow you to create individual assignments that may contain identifying data. Only those assignments will appear on Interviewer devices.</value>
   </data>
   <data name="MyQuestionnairesTitle" xml:space="preserve">
     <value>Designer: My Questionnaires</value>

@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (this.InterviewProperties.WasCompleted)
                 throw new InterviewException(
-                    $"Interview was completed by interviewer and cannot be deleted")
+                    $"Interview was completed by Interviewer and cannot be deleted")
                 {
                     Data =
                     {
@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (this.InterviewProperties.Status == InterviewStatus.InterviewerAssigned && this.InterviewProperties.InterviewerId == interviewerIdToAssign)
                 throw new InterviewException(
-                    $"Interview has assigned on this interviewer already")
+                    $"Interview has assigned on this Interviewer already")
                 {
                     Data =
                     {

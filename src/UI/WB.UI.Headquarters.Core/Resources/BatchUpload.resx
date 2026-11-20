@@ -370,7 +370,7 @@ All data files must contain variable interview__id with a unique string or numer
     <value>Optionally can specify the following columns:</value>
   </data>
   <data name="ColumnsDescription" xml:space="preserve">
-    <value>&lt;b&gt;_responsible&lt;/b&gt; - username of a headquarters, supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - username of a Headquarters, Supervisor or an Interviewer who will be responsible for the assignment;&lt;br/&gt;
 &lt;b&gt;_quantity&lt;/b&gt; - capacity of the assignment;&lt;br/&gt;
 &lt;b&gt;_email&lt;/b&gt; - email of the respondent (for web-interviews only);&lt;br/&gt;
 &lt;b&gt;_password&lt;/b&gt; - password to start an interview (for web-interviews only);&lt;br/&gt;
@@ -383,7 +383,7 @@ All data files must contain variable interview__id with a unique string or numer
   </data>
   <data name="UploadDescription" xml:space="preserve">
     <value>Upload a file with identifying data to create new assignments.
-Specify usernames for headquarters, supervisors or interviewers to make batch assignments.</value>
+Specify usernames for Headquarters, Supervisors or Interviewers to make batch assignments.</value>
   </data>
   <data name="FileTypeDescription" xml:space="preserve">
     <value>Save file in UTF8 encoding for support language specific texts.</value>
@@ -447,7 +447,7 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <value>Back to import</value>
   </data>
   <data name="AssignedToMultipleEnumerators" xml:space="preserve">
-    <value>Assigned to {0} interviewers</value>
+    <value>Assigned to {0} Interviewers</value>
     <comment>{0} - count of enumerators (always &gt; 1)</comment>
   </data>
   <data name="AssignedToMultipleSupervisors" xml:space="preserve">
@@ -455,7 +455,7 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <comment>{0} - count of supervisors (always &gt; 1)</comment>
   </data>
   <data name="AssignedToSingleEnumerator" xml:space="preserve">
-    <value>Assigned to 1 interviewer</value>
+    <value>Assigned to 1 Interviewer</value>
   </data>
   <data name="AssignedToSingleSupervisor" xml:space="preserve">
     <value>Assigned to 1 supervisor</value>
@@ -535,7 +535,7 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <value>Verification complete</value>
   </data>
   <data name="SupervisorMustBeSelected" xml:space="preserve">
-    <value>Supervisor or interviewer must be selected</value>
+    <value>Supervisor or Interviewer must be selected</value>
   </data>
   <data name="Cell" xml:space="preserve">
     <value>Cell</value>
@@ -601,7 +601,7 @@ Specify usernames for headquarters, supervisors or interviewers to make batch as
     <value>Select default responsible (required)</value>
   </data>
   <data name="Select_Responsible_Description" xml:space="preserve">
-    <value>If no responsible assigned in batch file use this headquarters/supervisor/interviewer account:</value>
+    <value>If no responsible assigned in batch file use this Headquarters/Supervisor/Interviewer account:</value>
   </data>
   <data name="RequiredField" xml:space="preserve">
     <value>This field is mandatory</value>

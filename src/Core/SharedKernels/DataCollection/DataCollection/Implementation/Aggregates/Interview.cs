@@ -1533,7 +1533,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 // direct assign to the interviewer?
                 throw new InterviewException(
-                    $"Specify supervisor's id for interviewer {interviewerId} to make direct assignment on interviewer for interview {this.properties.Id}.",
+                    $"Specify Supervisor's id for Interviewer {interviewerId} to make direct assignment on Interviewer for interview {this.properties.Id}.",
                     InterviewDomainExceptionType.OtherUserIsResponsible);
             }
             propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId);

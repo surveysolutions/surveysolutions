@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Controllers
                 throw new InvalidOperationException($"User was not found");
             
             if (!interviewer.IsInterviewer())
-                throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
+                throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an Interviewer. Interview cannot be created");
 
             if (assignment.Status != AssignmentStatus.Open)
                 throw new InvalidOperationException($"Assignment {assignment.Id} has status {assignment.Status}. Interview cannot be created for assignment that is not open");

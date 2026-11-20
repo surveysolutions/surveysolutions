@@ -51,6 +51,36 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string GeographyExportFormat_Title {
+            get {
+                return ResourceManager.GetString("GeographyExportFormat_Title", resourceCulture);
+            }
+        }
+        
+        public static string GeographyExportFormat_Description {
+            get {
+                return ResourceManager.GetString("GeographyExportFormat_Description", resourceCulture);
+            }
+        }
+        
+        public static string GeographyExportFormat_Wkt {
+            get {
+                return ResourceManager.GetString("GeographyExportFormat_Wkt", resourceCulture);
+            }
+        }
+        
+        public static string GeographyExportFormat_GeoJson {
+            get {
+                return ResourceManager.GetString("GeographyExportFormat_GeoJson", resourceCulture);
+            }
+        }
+        
+        public static string GeographyExportFormat_ArrayOfCoordinates {
+            get {
+                return ResourceManager.GetString("GeographyExportFormat_ArrayOfCoordinates", resourceCulture);
+            }
+        }
+        
         public static string ClearExportCache_Title {
             get {
                 return ResourceManager.GetString("ClearExportCache_Title", resourceCulture);
@@ -792,6 +822,120 @@ namespace WB.UI.Headquarters.Resources {
         public static string LogoRemoveError {
             get {
                 return ResourceManager.GetString("LogoRemoveError", resourceCulture);
+            }
+        }
+        
+        public static string AllowSupervisorChangeAssignmentStatus {
+            get {
+                return ResourceManager.GetString("AllowSupervisorChangeAssignmentStatus", resourceCulture);
+            }
+        }
+        
+        public static string AllowSupervisorChangeAssignmentStatusDescription {
+            get {
+                return ResourceManager.GetString("AllowSupervisorChangeAssignmentStatusDescription", resourceCulture);
+            }
+        }
+        
+        public static string AllowInterviewerChangeAssignmentStatus {
+            get {
+                return ResourceManager.GetString("AllowInterviewerChangeAssignmentStatus", resourceCulture);
+            }
+        }
+        
+        public static string AllowInterviewerChangeAssignmentStatusDescription {
+            get {
+                return ResourceManager.GetString("AllowInterviewerChangeAssignmentStatusDescription", resourceCulture);
+            }
+        }
+        
+        public static string AudioRecordingQuality {
+            get {
+                return ResourceManager.GetString("AudioRecordingQuality", resourceCulture);
+            }
+        }
+        
+        public static string AudioRecordingQualityDescription {
+            get {
+                return ResourceManager.GetString("AudioRecordingQualityDescription", resourceCulture);
+            }
+        }
+        
+        public static string AudioRecordingQuality_Mono44kHz {
+            get {
+                return ResourceManager.GetString("AudioRecordingQuality_Mono44kHz", resourceCulture);
+            }
+        }
+        
+        public static string AudioRecordingQuality_Mono22kHz {
+            get {
+                return ResourceManager.GetString("AudioRecordingQuality_Mono22kHz", resourceCulture);
+            }
+        }
+        
+        public static string AudioRecordingQuality_Mono16kHz {
+            get {
+                return ResourceManager.GetString("AudioRecordingQuality_Mono16kHz", resourceCulture);
+            }
+        }
+        
+        public static string AudioRecordingQuality_Stereo44kHz {
+            get {
+                return ResourceManager.GetString("AudioRecordingQuality_Stereo44kHz", resourceCulture);
+            }
+        }
+        
+        public static string AudioRecordingQuality_Stereo48kHz {
+            get {
+                return ResourceManager.GetString("AudioRecordingQuality_Stereo48kHz", resourceCulture);
+            }
+        }
+        
+        public static string AcceptableGpsLocationSource {
+            get {
+                return ResourceManager.GetString("AcceptableGpsLocationSource", resourceCulture);
+            }
+        }
+        
+        public static string AcceptableGpsLocationSourceDescription {
+            get {
+                return ResourceManager.GetString("AcceptableGpsLocationSourceDescription", resourceCulture);
+            }
+        }
+        
+        public static string AcceptableGpsLocationSource_Any {
+            get {
+                return ResourceManager.GetString("AcceptableGpsLocationSource_Any", resourceCulture);
+            }
+        }
+        
+        public static string AcceptableGpsLocationSource_AnyNonMock {
+            get {
+                return ResourceManager.GetString("AcceptableGpsLocationSource_AnyNonMock", resourceCulture);
+            }
+        }
+        
+        public static string AcceptableGpsLocationSource_BuiltInOrExternalGps {
+            get {
+                return ResourceManager.GetString("AcceptableGpsLocationSource_BuiltInOrExternalGps", resourceCulture);
+            }
+        }
+        
+        public static string AcceptableGpsLocationSource_BuiltInGpsOnly {
+            get {
+                return ResourceManager.GetString("AcceptableGpsLocationSource_BuiltInGpsOnly", resourceCulture);
+            }
+        }
+        
+        public static string AllowSupervisorAudioAuditPlayback {
+            get {
+                return ResourceManager.GetString("AllowSupervisorAudioAuditPlayback", resourceCulture);
+            }
+        }
+        
+        public static string AllowSupervisorAudioAuditPlaybackDescription {
+            get {
+                return ResourceManager.GetString("AllowSupervisorAudioAuditPlaybackDescription", resourceCulture);
             }
         }
     }

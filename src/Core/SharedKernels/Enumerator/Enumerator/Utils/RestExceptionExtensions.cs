@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                                 exceptionMessage = EnumeratorUIResources.AccountIsNotApprovedOnServer;
                                 exceptionType = SynchronizationExceptionType.UserNotApproved;
                             }
-                            else if (restException.Message.Contains("not have an interviewer role"))
+                            else if (restException.Message.Contains("not have an Interviewer role"))
                             {
                                 exceptionMessage = EnumeratorUIResources.AccountIsNotAnInterviewer;
                                 exceptionType = SynchronizationExceptionType.UserIsNotInterviewer;

@@ -766,7 +766,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (user == null)
             {
-                throw new UserNotFoundException("Map can be assigned only to existing non archived interviewer or supervisor.");
+                throw new UserNotFoundException("Map can be assigned only to existing non archived Interviewer or Supervisor.");
             }
 
             var userMap = this.userMapsStorage

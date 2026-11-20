@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AssignmentDashboardI
         public void reopen_assignment_dialog_message_should_not_be_empty()
         {
             Assert.That(EnumeratorUIResources.Dashboard_ReopenAssignment_Message,
-                Is.EqualTo("The assignment will be set back to Open status and interviewers will be able to create new interviews."));
+                Is.EqualTo("The assignment will be set back to Open status and Interviewers will be able to create new interviews."));
         }
 
         AssignmentDashboardItemViewModel CreateViewModel()

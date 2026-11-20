@@ -221,7 +221,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                ModelState.AddModelError("user", "Only interviewers and supervisors can be archived.");
+                ModelState.AddModelError("user", "Only Interviewers and Supervisors can be archived.");
                 return ValidationProblem();
             }
 
@@ -266,7 +266,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                ModelState.AddModelError("user", "Only interviewers and supervisors can be unarchived.");
+                ModelState.AddModelError("user", "Only Interviewers and Supervisors can be unarchived.");
                 return ValidationProblem();
             }
 
@@ -351,7 +351,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 if (createdUserRole == UserRoles.Interviewer && string.IsNullOrWhiteSpace(model.Supervisor))
                 {
-                    ModelState.AddModelError(nameof(model.Supervisor), "Supervisor name is required for interviewer creation");
+                    ModelState.AddModelError(nameof(model.Supervisor), "Supervisor name is required for Interviewer creation");
                     return ValidationProblem();
                 }
 

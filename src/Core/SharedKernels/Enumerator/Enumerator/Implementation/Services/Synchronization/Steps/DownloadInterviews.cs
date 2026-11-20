@@ -153,7 +153,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                     await this.TrySendUnexpectedExceptionToServerAsync(exception);
                     this.logger.Error(
-                        "Failed to create interview, interviewer",
+                        "Failed to create interview, Interviewer",
                         exception);
                 }
         }

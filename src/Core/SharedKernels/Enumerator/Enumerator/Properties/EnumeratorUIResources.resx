@@ -121,7 +121,7 @@
     <value>Your user account is locked. Please contact your supervisor.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
-    <value>Your account does not have an interviewer role</value>
+    <value>Your account does not have an Interviewer role</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Your account is not approved. Please contact your supervisor.</value>
@@ -818,7 +818,7 @@ your next synchronization</value>
   <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
     <value>To collect: {0} interview(s)</value>
     <comment>{0} - number of interviews created
-    {1} - number of interviewer to be created by assignment</comment>
+    {1} - number of interviews to be created by assignment</comment>
   </data>
   <data name="FailedToCreateInterview" xml:space="preserve">
     <value>Failed to create interview. Reason: {0}</value>
@@ -923,13 +923,13 @@ Downloaded {3}%</value>
     <value>Assign</value>
   </data>
   <data name="Synchronization_Of_Interviewers" xml:space="preserve">
-    <value>Synchronization of interviewers</value>
+    <value>Synchronization of Interviewers</value>
   </data>
   <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
     <value>Synchronization of Supervisor details</value>
   </data>
   <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
-    <value>Synchronizing {0} of {1} interviewer(s)</value>
+    <value>Synchronizing {0} of {1} Interviewer(s)</value>
   </data>
   <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
     <value>Allow synchronization with Headquarters</value>
@@ -957,7 +957,7 @@ Downloaded {3}%</value>
   </data>
   <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
     <value>Select new responsible for interview.
-It will appear on interviewer device after next synchronization</value>
+It will appear on Interviewer's device after next synchronization</value>
   </data>
   <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
     <value>Reassign</value>
@@ -1062,7 +1062,7 @@ It will appear on interviewer device after next synchronization</value>
     <value>Reopen assignment</value>
   </data>
   <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
-    <value>The assignment will be set back to Open status and interviewers will be able to create new interviews.</value>
+    <value>The assignment will be set back to Open status and Interviewers will be able to create new interviews.</value>
   </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Close</value>

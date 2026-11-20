@@ -921,6 +921,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string TargetAreaNameTooLong {
+            get {
+                return ResourceManager.GetString("TargetAreaNameTooLong", resourceCulture);
+            }
+        }
+        
         public static string EnterTargetArea {
             get {
                 return ResourceManager.GetString("EnterTargetArea", resourceCulture);

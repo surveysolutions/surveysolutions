@@ -293,7 +293,7 @@
     <value>For supervisor</value>
   </data>
   <data name="Filters_ForInterviewer" xml:space="preserve">
-    <value>For interviewer</value>
+    <value>For Interviewer</value>
   </data>
   <data name="Filters_NotFlagged" xml:space="preserve">
     <value>No flag</value>
