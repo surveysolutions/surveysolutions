@@ -115,9 +115,37 @@ pre {
 html[dir="rtl"] [data-content-direction][dir="ltr"],
 html[dir="rtl"] [data-content-direction][dir="ltr"] :is(input, textarea),
 html[dir="rtl"] .technical-value,
+html[dir="rtl"] .input-variable-name input,
 html[dir="ltr"] [data-content-direction][dir="rtl"],
 html[dir="ltr"] [data-content-direction][dir="rtl"] :is(input, textarea) {
     text-align: end;
+}
+
+/* Tree rows: in RTL the variable-name block sits beside the title instead of over it, so LTR titles
+   keep their beginning visible and are ellipsized at their own end. */
+html[dir="rtl"] .item .item-body {
+    display: flex;
+}
+
+html[dir="rtl"] .item .item-body > .item-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
+}
+
+html[dir="rtl"] .item .item-body > .qname-block {
+    position: relative;
+    flex: 0 0 auto;
+    inset: auto;
+}
+
+html[dir="rtl"] .item .item-text > [data-content-direction] {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: top;
 }
 
 /* Logins and emails are typed LTR, while the localized placeholder follows the UI direction. */
