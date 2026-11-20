@@ -12,6 +12,7 @@
 import * as bootstrap from 'bootstrap';
 
 import { i18n } from '../../../plugins/localization';
+import { mirrorPlacement } from '../../../plugins/uiLocale';
 const $t = i18n.t
 
 const helpMap = {
@@ -65,7 +66,7 @@ export default {
         this.tooltip = new bootstrap.Tooltip(this.$refs.tooltipBoundary, {
             title: this.tooltipMessage,
             container: 'body',
-            placement: this.placement,
+            placement: mirrorPlacement(this.placement),
             customClass: 'in',
             trigger: 'hover'
         })

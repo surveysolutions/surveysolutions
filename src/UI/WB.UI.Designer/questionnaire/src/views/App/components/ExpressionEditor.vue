@@ -1,5 +1,6 @@
 <template>
-    <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder" aceEditor>
+    <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder" aceEditor
+        :dir="editorDirection">
         <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github"
             :lang="mode !== 'substitutions' ? 'csharp' : 'text'" :options="{
         minLines: 1,
@@ -31,6 +32,7 @@ ace.config.setModuleUrl('ace/ext/language_tools', tools);
 import { setCompleters } from 'ace-builds/src-noconflict/ext-language_tools';
 import _ from 'lodash'
 import { useTreeStore } from '../../../stores/tree';
+import { getTextDirection } from '../../../plugins/uiLocale';
 
 export default {
     name: 'ExpressionEditor',
@@ -54,6 +56,9 @@ export default {
         };
     },
     computed: {
+        editorDirection() {
+            return this.mode === 'expression' ? 'ltr' : getTextDirection(this.modelValue);
+        },
         editorValue: {
             get() {
                 return this.modelValue;

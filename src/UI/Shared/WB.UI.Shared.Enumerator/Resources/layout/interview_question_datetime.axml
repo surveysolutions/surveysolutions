@@ -8,6 +8,7 @@
                 local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
 
       <EditText
+        android:textDirection="ltr"
         android:editable="false"
         android:focusable="false"
         style="@style/Interview_Question_Answer_Text_Editor"

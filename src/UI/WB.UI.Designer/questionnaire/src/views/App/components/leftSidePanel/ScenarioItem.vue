@@ -4,7 +4,8 @@
             tabindex="-1"></a>
         <div class="input-group macroses-name">
             <input focus-on-out="focusScenario{{scenario.id}}" :placeholder='$t("QuestionnaireEditor.SideBarScenarioName")'
-                maxlength="32" spellcheck="false" v-model="scenario.title" name="name" class="form-control" type="text" />
+                maxlength="32" spellcheck="false" v-model="scenario.title" v-content-direction="scenario.title"
+                name="name" class="form-control" type="text" />
         </div>
         <div class="divider"></div>
         <button type="button" class="btn lighter-hover" @click="runScenario()">{{

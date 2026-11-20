@@ -53,6 +53,7 @@ export function blockUIForever() {
     const overlay = document.createElement('div');
     overlay.id = OVERLAY_ID;
     overlay.style.cssText =
+        // The blocking overlay deliberately uses fixed viewport coordinates.
         'position:fixed;top:0;left:0;width:100%;height:100%;' +
         'background:rgba(0,0,0,0.75);z-index:99999;display:flex;' +
         'align-items:center;justify-content:center;';

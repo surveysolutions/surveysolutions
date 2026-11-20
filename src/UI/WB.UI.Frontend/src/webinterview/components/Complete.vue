@@ -205,7 +205,7 @@
     font-weight: Medium;
     font-size: 14px;
     opacity: 1;
-    text-align: left;
+    text-align: start;
 }
 
 .tab-item .tab-count {
@@ -213,7 +213,7 @@
     font-weight: Black;
     font-size: 18px;
     opacity: 1;
-    text-align: left;
+    text-align: start;
 }
 
 .tab-content {
@@ -245,7 +245,7 @@
     font-weight: Bold;
     font-size: 14px;
     opacity: 1;
-    text-align: left;
+    text-align: start;
 }
 
 .tab-content-item .item-error {
@@ -253,7 +253,7 @@
     font-family: RobotoRegular;
     font-size: 14px;
     opacity: 1;
-    text-align: left;
+    text-align: start;
 }
 
 .tab-content-item .item-comment {
@@ -261,14 +261,13 @@
     font-family: RobotoRegular;
     font-size: 14px;
     opacity: 1;
-    text-align: left;
+    text-align: start;
     font-style: italic;
 }
 
-/* Left colored stripe based on active group type */
 .tab-content-item {
     position: relative;
-    padding-left: 20px;
+    padding-inline-start: 20px;
     max-width: 540px;
 }
 
@@ -285,10 +284,12 @@
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     width: 5px;
     height: 100%;
-    border-radius: 4px 0 0 4px;
+    border-radius: 0;
+    border-start-start-radius: 4px;
+    border-end-start-radius: 4px;
 }
 
 .note-supervisor {
@@ -345,7 +346,7 @@
     font-size: 14px;
     opacity: 0.5;
     padding-top: 17px;
-    padding-left: 19px;
+    padding-inline-start: 19px;
 }
 </style>
 

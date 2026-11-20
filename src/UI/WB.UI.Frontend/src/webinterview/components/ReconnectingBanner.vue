@@ -75,7 +75,7 @@ export default {
 }
 
 .reconnecting-banner__reload {
-    margin-left: auto;
+    margin-inline-start: auto;
     background: rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(0, 0, 0, 0.35);
     color: #1a1a1a;

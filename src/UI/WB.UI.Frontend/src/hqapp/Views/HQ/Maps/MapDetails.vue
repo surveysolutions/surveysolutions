@@ -60,7 +60,7 @@
 
                             <DataTables ref="table" :tableOptions="tableOptions"
                                 :addParamsToRequest="addParamsToRequest" :contextMenuItems="contextMenuItems"
-                                :supportContextMenu="!config.isObserving" style="margin-left: 0px;">
+                                :supportContextMenu="!config.isObserving" style="margin-inline-start: 0px;">
                             </DataTables>
                         </div>
                     </div>

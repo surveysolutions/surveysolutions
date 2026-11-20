@@ -1,5 +1,11 @@
 @use "sass:color";
 
+// Sprite coordinates address image pixels and must not be mirrored in RTL.
+@mixin sprite-position($position) {
+    /* rtl:ignore */
+    background-position: $position;
+}
+
 @mixin fontface($family) {
     @font-face {
         font-family: '#{$family}';
@@ -476,7 +482,7 @@ filter: alpha(opacity=$opacity-ie);
         background: transparent url("#{$assetsPath}/img/questionnaire-sprite.png") no-repeat;
         vertical-align: middle;
         background-size: 793px 18px;
-        background-position: 4px 2px;
+        @include sprite-position(4px 2px);
         margin-right: 12px;
         @include image-2x("#{$assetsPath}/img/questionnaire-sprite2k.png", 793px, 18px);
     }

@@ -167,6 +167,7 @@
     "FindReplaceInAllFound": "in {{count}} found entity?",
     "FindReplaceInAllFound_other": "in {{count}} found entities?",
     "FindReplaceMatchingLines": "Matching lines: {{count}}",
+    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceNext": "Next",
     "FindReplacePrevious": "Previous",
     "FindReplaceReplaceAll": "Replace all ({{count}})",
@@ -254,6 +255,7 @@
     "GeometryOverlapDetection": "Overlap detection",
     "QuestionDecimalPlaces": "Number of decimal places",
     "QuestionInteger": "Integer",
+    "QuestionNonNegative": "Non-negative",
     "QuestionIsLinked": "Is linked",
     "QuestionMaxListCount": "Maximum number of list elements",
     "QuestionMaxNumberOfAnswers": "Max number of answers",
@@ -516,7 +518,9 @@
     "HelpCriticalityConditionMessage": "This message is shown when the critical condition evaluates to \"False\" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.",
     "SwitchTo": "Switch To",
     "SwitchToTranslationConfirm": "Switch To will change the display language of the questionnaire. The translation must include text for all elements.",
-    "AIAssistant": "AI"
+    "AIAssistant": "AI",
+    "Edit": "Edit",
+    "Stick": "Stick"
   },
   "AccountResources": {
     "AllRights": "All Rights Reserved.",
@@ -580,7 +584,7 @@
     "PasswordEmailSent": "Please check your email to reset your password.",
     "EmailChangeShouldBeConfirmed": "Please follow instructions sent to provided email ({0}) to confirm email change.",
     "PendingEmailUpdate": "Pending update to {0}",
-    "LastLoginDate": "Last login date"
+    "LastLoginDate": "Last login"
   },
   "QuestionnaireController": {
     "Action": "Action",
@@ -652,7 +656,8 @@
     "NotSupportedBrowserUsedDescr": "You are using Internet Explorer browser that is not supported. Some features might not work properly.",
     "Classifications": "Classifications",
     "SaveAs": "Save as",
-    "CloneDeletedWarning": "You are creating a copy of deleted questionnaire. Some parts might be lost."
+    "CloneDeletedWarning": "You are creating a copy of deleted questionnaire. Some parts might be lost.",
+    "IncludeScenarios": "Include scenarios"
   },
   "Assistant": {
     "ClearHistory": "Clear history",

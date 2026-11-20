@@ -4,15 +4,16 @@
             tabindex="-1"></a>
         <input focus-on-out="focusLookupTable{{table.itemId}}" required=""
             :placeholder="$t('QuestionnaireEditor.SideBarLookupTableName')" maxlength="32" spellcheck="false"
-            autocomplete="off" v-model="table.name" name="name" class="form-control table-name" type="text" />
+            autocomplete="off" v-model="table.name" v-content-direction="table.name" name="name"
+            class="form-control table-name" type="text" />
         <div class="divider"></div>
         <input :placeholder="$t('QuestionnaireEditor.SideBarLookupTableFileName')" required="" spellcheck="false"
-            v-model="table.fileName" name="fileName" class="form-control" disabled="" type="text" />
+            v-model="table.fileName" name="fileName" class="form-control technical-value" disabled="" type="text" />
 
         <div class="drop-box">{{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}</div>
 
         <div class="actions clearfix" :class="{ 'dirty': isDirty }">
-            <div v-show="isDirty" class="pull-left">
+            <div v-show="isDirty" class="float-start">
                 <button type="button" v-if="!isReadOnlyForUser" :disabled="isInvalid ? 'disabled' : null"
                     class="btn lighter-hover" @click.self="saveLookupTable()">{{
         $t('QuestionnaireEditor.Save') }}</button>
@@ -22,10 +23,10 @@
             </div>
             <div class="permanent-actions clearfix">
                 <a :href="sanitizeUrl(downloadLookupFileBaseUrl + questionnaireId + '?lookupTableId=' + table.itemId)"
-                    v-if="hasUploadedFile" class="btn btn-default pull-right" target="_blank"
+                    v-if="hasUploadedFile" class="btn btn-default float-end" target="_blank"
                     rel="noopener noreferrer">{{
         $t('QuestionnaireEditor.Download') }}</a>
-                <button class="btn btn-default pull-right" type="button" @click.stop="openFileDialog()"
+                <button class="btn btn-default float-end" type="button" @click.stop="openFileDialog()"
                     :disabled="isReadOnlyForUser">
                     <span v-show="!hasUploadedFile">{{
         $t('QuestionnaireEditor.SideBarLookupTableSelectFile') }}</span>

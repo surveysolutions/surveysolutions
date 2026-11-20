@@ -26,8 +26,8 @@
             android:id="@+id/area_warning"
             android:layout_alignParentTop="true"
             android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
-            android:layout_marginLeft="@dimen/area_editor_warning_margin"
-            android:layout_marginRight="@dimen/area_editor_warning_margin"
+            android:layout_marginStart="@dimen/area_editor_warning_margin"
+            android:layout_marginEnd="@dimen/area_editor_warning_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.75"
-                android:gravity="center_vertical|left"
+                android:gravity="center_vertical|start"
                 android:orientation="vertical"
                 android:layout_marginBottom="1dp"
                 android:background="@drawable/warning"
@@ -44,11 +44,11 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
-                    android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
+                    android:layout_marginStart="@dimen/area_editor_buttons_margin_space"
+                    android:layout_marginEnd="@dimen/area_editor_buttons_margin_space"
                     android:textSize="@dimen/area_editor_warning_text"
                     android:textColor="@color/map_warning_text_color"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:duplicateParentState="true"
                     android:singleLine="false"
                     android:maxLines="2"
@@ -62,9 +62,9 @@
             style="@style/Area_BackButton"
             local:MvxBind="Click CancelCommand;"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
-            android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
+            android:layout_marginStart="@dimen/area_editor_buttons_margin_space"
     />
 
 
@@ -72,9 +72,9 @@
             android:id="@+id/butMenu"
             style="@style/Area_MenuButton"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
-            android:layout_marginRight="@dimen/area_editor_buttons_margin_space" />
+            android:layout_marginEnd="@dimen/area_editor_buttons_margin_space" />
     <ImageButton
             android:id="@+id/butLocation"
             style="@style/Area_LocButton"
@@ -110,63 +110,63 @@
         android:orientation="vertical"
         android:background="@drawable/area_editor_control_panel"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
-        android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
+        android:layout_marginStart="@dimen/area_editor_buttons_margin_space"
+        android:layout_marginEnd="@dimen/area_editor_buttons_margin_space"
         android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom">
         
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:weightSum="1.0"
-                android:gravity="center_vertical|right"
+                android:gravity="center_vertical|end"
                 android:clickable="true"
                 android:orientation="horizontal"
-                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
                 android:paddingTop="5dp"
-                android:paddingRight="10dp"
+                android:paddingEnd="10dp"
                 android:paddingBottom="5dp"
         >
             <LinearLayout
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_weight="0.4"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:duplicateParentState="true"
-                    android:gravity="center_vertical|left">
+                    android:gravity="center_vertical|start">
                 <ImageButton
                         style="@style/Area_UndoButton"
                         android:id="@+id/areaEditor_Undo"
                         local:MvxBind="Click UndoCommand; Text Localization('AreaMap_Undo'); Enabled CanUndo;"
-                        android:layout_marginRight="@dimen/area_editor_cancel_space"
+                        android:layout_marginEnd="@dimen/area_editor_cancel_space"
                 />
                 
                 <Button
                         style="@style/Area_Screen_Button_Bordered"
                         android:id="@+id/areaEditor_StartMeasurement"
                         local:MvxBind="Click StartStopCollectingCommand; Text StartButtonText; Enabled CanStartStopCollecting; Visible StartButtonVisible;"
-                        android:layout_marginRight="@dimen/area_editor_cancel_space"  />
+                        android:layout_marginEnd="@dimen/area_editor_cancel_space"  />
                 <Button
                         style="@style/Area_Screen_Button_Bordered"
                         android:id="@+id/areaEditor_AddPoint"
                         local:MvxBind="Click AddPointCommand; Text 'Add point'; Enabled CanAddPoint; Visible AddPointVisible;"
-                        android:layout_marginRight="@dimen/area_editor_cancel_space" />
+                        android:layout_marginEnd="@dimen/area_editor_cancel_space" />
             </LinearLayout>
             <LinearLayout
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:layout_weight="0.6"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:duplicateParentState="true"
-                android:gravity="center_vertical|right">
+                android:gravity="center_vertical|end">
                 <Button
                     style="@style/Interview_Button_Link"
                     android:id="@+id/areaEditor_Cancel"
-                    android:layout_marginLeft="@dimen/area_editor_cancel_space"
+                    android:layout_marginStart="@dimen/area_editor_cancel_space"
                     local:MvxBind="Click CancelCommand;Text Localization('AreaMap_Cancel');" />
                 <Button
                     style="@style/Area_Screen_Button"
                     android:id="@+id/areaEditor_Save"
-                    android:layout_marginLeft="@dimen/area_editor_cancel_space"
+                    android:layout_marginStart="@dimen/area_editor_cancel_space"
                     local:MvxBind="Click SaveAreaCommand;Text Localization('AreaMap_Save'); Enabled CanSave; ButtonHasWarningOrSuccess HasWarning;" />
             </LinearLayout>
         </LinearLayout>

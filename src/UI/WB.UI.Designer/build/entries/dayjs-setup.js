@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import { getUiLocale } from '../../questionnaire/src/plugins/uiLocale';
 import 'dayjs/locale/ar';
 import 'dayjs/locale/cs';
 import 'dayjs/locale/es';
@@ -15,10 +16,6 @@ import 'dayjs/locale/zh';
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
-// Use the culture set by the server on the <html lang="..."> attribute, falling back to
-// the browser's preferred language and then to English.
-const serverLocale = document.documentElement.lang;
-const userLocale = (serverLocale || navigator.language || navigator.userLanguage || 'en').split('-')[0];
-dayjs.locale(userLocale);
+dayjs.locale(getUiLocale());
 
 export default dayjs;

@@ -264,7 +264,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<ViewGroup>("StatusBarColorByInterviewStatus", view => new ViewGroupStatusBarColorByInterviewStatusBinding(view));
             registry.RegisterCustomBindingFactory<ViewGroup>("StatusBarColorByDashboardGroupType", view => new DashboardStatusBarColorByDashboardGroupTypeBinding(view));
             registry.RegisterCustomBindingFactory<View>("Transparent", view => new ViewTransparentBinding(view));
-            registry.RegisterCustomBindingFactory<View>("PaddingLeft", view => new ViewPaddingLeftBinding(view));
+            registry.RegisterCustomBindingFactory<View>("PaddingStart", view => new ViewPaddingStartBinding(view));
             registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextColor", (view) => new TextViewTextColorBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("UnderlinePressed", (view) => new TextViewUnderlinePressedBinding(view));

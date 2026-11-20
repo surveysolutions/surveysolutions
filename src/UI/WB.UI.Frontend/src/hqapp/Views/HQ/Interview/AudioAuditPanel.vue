@@ -856,13 +856,13 @@ export default {
 .audio-audit-panel {
     position: fixed;
     top: 70px;
-    right: 0;
+    inset-inline-end: 0;
     bottom: 0;
     z-index: 1020;
     width: 340px;
     box-sizing: border-box;
     padding: 15px;
-    border-left: 1px solid #d9d9d9;
+    border-inline-start: 1px solid #d9d9d9;
     background: #fff;
     display: flex;
     flex-direction: column;
@@ -956,7 +956,7 @@ export default {
     margin-top: 15px;
     min-height: 0;
     overflow-y: auto;
-    padding-right: 2px;
+    padding-inline-end: 2px;
 }
 
 .audio-audit-playlist h5 {
@@ -970,7 +970,7 @@ export default {
     padding: 7px 10px;
     border: 1px solid #ededed;
     background: #fff;
-    text-align: left;
+    text-align: start;
     cursor: pointer;
 }
 
@@ -982,6 +982,10 @@ export default {
 
 .playlist-item.active .segment-label {
     font-weight: bold;
+}
+
+.playlist-item.active:dir(rtl) {
+    box-shadow: inset -4px 0 0 #337ab7;
 }
 
 .playlist-item.unavailable {
@@ -1027,9 +1031,9 @@ export default {
 @media (max-width: 767px) {
     .audio-audit-panel {
         top: 0;
-        left: 0;
+        inset-inline-start: 0;
         width: 100%;
-        border-left: 0;
+        border-inline-start: 0;
     }
 
     .player-status {

@@ -266,13 +266,13 @@ a.disabled {
     @include image-2x("#{$assetsPath}/img/flags2k.png", 75px, 22px);
     background: transparent url("#{$assetsPath}/img/flags.png") no-repeat;
     background-size: 75px 22px;
-    background-position: -38px 0;
+    @include sprite-position(-38px 0);
     border: none;
     outline: none;
 
     &:hover,
     &:focus {
-        background-position: -57px 0;
+        @include sprite-position(-57px 0);
     }
 }
 

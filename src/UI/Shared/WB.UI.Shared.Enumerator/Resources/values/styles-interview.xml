@@ -4,8 +4,8 @@
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_marginStart">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginEnd">@dimen/Interview_Entity_margin_right</item>
     <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_vertical</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_vertical</item>
   </style>
@@ -13,6 +13,8 @@
   <style name="Interview_Entity_BasicFont">
     <item name="android:fontFamily">Arial</item>
     <item name="android:textSize">@dimen/textsize_18</item>
+    <item name="android:textDirection">firstStrong</item>
+    <item name="android:gravity">start</item>
   </style>
 
   <style name="Interview_Entity_Title" parent="Interview_Entity_BasicFont">
@@ -34,8 +36,8 @@
   <style name="Interview_BreadCrumbsContainer" parent="VerticalFullWidthWrappingLayout">
     <item name="android:background">@color/btn_default</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:paddingLeft">@dimen/Interview_Entity_margin_left</item>
-    <item name="android:paddingRight">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:paddingStart">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:paddingEnd">@dimen/Interview_Entity_margin_left</item>
     <item name="android:paddingTop">@dimen/Interview_BreadCrumbs_padding_top</item>
 
   </style>
@@ -45,6 +47,7 @@
     <item name="android:textAllCaps">true</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:textDirection">firstStrong</item>
   </style>
 
   <style name ="Interview_Cover_Screen_Header" parent="FullWidthWrappingLayout">
@@ -53,11 +56,12 @@
     <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
     <item name="android:textSize">@dimen/textsize_24</item>
     <item name="android:fontFamily">@string/font_fontFamily_medium</item>
+    <item name="android:textDirection">firstStrong</item>
   </style>
   
   <style name ="Interview_Cover_Prefilled_Answers_Block" parent="FullWidthWrappingLayout">
     <item name="android:background">@color/colorBlueThemePrimary</item>
-   <item name="android:paddingLeft">@dimen/Interview_Cover_Marker_Line_width</item>
+   <item name="android:paddingStart">@dimen/Interview_Cover_Marker_Line_width</item>
   </style>
   
   <style name ="Interview_Cover_Prefilled_Answers" parent="FullWidthWrappingLayout">
@@ -91,6 +95,7 @@
   <style name ="Interview_Cover_GpsQuestion_Answer" parent="Interview_Cover_Question_Answer">
     <item name="android:textColor">@color/btn_default</item>
     <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textDirection">ltr</item>
   </style>
 
   <style name ="Interview_Cover_Supervisor_Note" parent="Interview_Entity">
@@ -104,11 +109,12 @@
   </style>
 
   <style name="Interview_Cover_Header_Line"  parent="VerticalFullWidthWrappingLayout">
-    <item name="android:paddingLeft">@dimen/Interview_Entity_margin_with_border_left</item>
-    <item name="android:paddingRight">@dimen/Interview_Entity_margin_with_border_right</item>
+    <item name="android:paddingStart">@dimen/Interview_Entity_margin_with_border_left</item>
+    <item name="android:paddingEnd">@dimen/Interview_Entity_margin_with_border_right</item>
     <item name="android:textColor">@color/cover_header_text</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:textDirection">ltr</item>
   </style>
   
   <style name="Interview_Cover_Main_Header"  parent="Interview_Cover_Header_Line">

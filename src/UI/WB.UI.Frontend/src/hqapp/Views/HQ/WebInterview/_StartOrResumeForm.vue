@@ -49,7 +49,7 @@
                     type="checkbox"
                     onclick="var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');">
                 <label for="ShowPassword"
-                    style="padding-left:5px; margin-top: 10px; font-size: 13px; font-weight: normal;">
+                    style="padding-inline-start:5px; margin-top: 10px; font-size: 13px; font-weight: normal;">
                     <span></span>{{ $t('Pages.ShowPassword') }}
                 </label>
 

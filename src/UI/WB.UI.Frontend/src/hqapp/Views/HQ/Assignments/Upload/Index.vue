@@ -99,7 +99,7 @@
                         <p> {{ $t('BatchUpload.SimpleDescription') }}</p>
                         <h5>{{ $t('BatchUpload.SimpleColumnsTitle') }}</h5>
                         <p v-dompurify-html="$t('BatchUpload.ColumnsDescription')"
-                            style="margin-left:30px;"></p>
+                            style="margin-inline-start:30px;"></p>
                     </div>
                     <div>
                         <a v-bind:href="api.simpleTemplateDownloadUrl">
@@ -149,7 +149,7 @@
                         <p v-dompurify-html="$t('BatchUpload.BatchDescription')"></p>
                         <h5>{{ $t('BatchUpload.BatchColumnsTitle') }}</h5>
                         <p v-dompurify-html="$t('BatchUpload.ColumnsDescription')"
-                            style="margin-left:30px;"></p>
+                            style="margin-inline-start:30px;"></p>
                     </div>
                     <div>
                         <a v-bind:href="api.templateDownloadUrl">

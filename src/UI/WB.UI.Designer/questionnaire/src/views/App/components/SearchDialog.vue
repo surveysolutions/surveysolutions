@@ -16,7 +16,8 @@
                                 </label>
                                 <div class="col-sm-9">
                                     <input type="text" maxlength="500" class="form-control" id="searchFor"
-                                        v-model="searchForm.searchFor" on-enter="findAll()" autocomplete="off">
+                                        v-model="searchForm.searchFor" v-content-direction="searchForm.searchFor"
+                                        on-enter="findAll()" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -25,7 +26,8 @@
                                 </label>
                                 <div class="col-sm-9">
                                     <input type="text" maxlength="500" class="form-control" id="relaceWith"
-                                        v-model="searchForm.replaceWith" autocomplete="off">
+                                        v-model="searchForm.replaceWith" v-content-direction="searchForm.replaceWith"
+                                        autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -95,7 +97,7 @@
                                 {{ $t('QuestionnaireEditor.FindReplaceReplaceAll', { count: foundReferences.length }) }}
                             </button>
 
-                            <div class="pull-right" v-if="foundReferences.length">
+                            <div class="float-end" v-if="foundReferences.length">
                                 <button type="button" class="btn btn-lg btn-link" @click="navigatePrev()"> {{
         $t('QuestionnaireEditor.FindReplacePrevious') }}
                                 </button>
@@ -125,6 +127,7 @@
 <script>
 import { replaceAll, findAll } from '../../../services/searchService'
 import { setFocusIn } from '../../../services/utilityService'
+import { getUiDirection } from '../../../plugins/uiLocale'
 
 export default {
     name: 'SearchDialog',
@@ -246,8 +249,15 @@ export default {
             const modal = this.$refs.searchModal;
             if (modal) {
                 const rect = modal.getBoundingClientRect();
-                if (rect.left < 700)
-                    modal.style.left = '700px'
+                if (getUiDirection() === 'rtl') {
+                    if (rect.right > window.innerWidth - 700) {
+                        modal.style.setProperty('inset-inline-end', 'auto');
+                        modal.style.setProperty('inset-inline-start', '700px');
+                    }
+                } else if (rect.left < 700) {
+                    modal.style.setProperty('inset-inline-end', 'auto');
+                    modal.style.setProperty('inset-inline-start', '700px');
+                }
             }
         }
     }

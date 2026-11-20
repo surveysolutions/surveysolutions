@@ -1,3 +1,4 @@
+@using System.Globalization
 @using Microsoft.Extensions.Options
 @using WB.Core.Infrastructure.Versions
 @using WB.UI.Designer.Extensions
@@ -6,11 +7,15 @@
 
 @inject IOptions<UiConfig> uiConfig
 @inject IProductVersion ProductVersion
+@{
+    var uiLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var uiDirection = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr";
+}
 
 <!DOCTYPE html>
-<html>
+<html lang="@uiLanguage" dir="@uiDirection">
 
-<head lang="en">
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,14 +32,15 @@
         }
     </script>
     @RenderSection("Scripts", required: false)
-  <script type="module" crossorigin src="/js/modulepreload-polyfill-B5Qt9EMX.js"></script>
-  <script type="module" crossorigin src="/js/mande-BCagLYbb.js"></script>
-  <script type="module" crossorigin src="/js/jquery.min-BdwSxSBs.js"></script>
-  <script type="module" crossorigin src="/js/jquery.validate-B4oxVRdg.js"></script>
-  <script type="module" crossorigin src="/js/jquery.validate.unobtrusive-BfjL9qAb.js"></script>
-  <script type="module" crossorigin src="/js/logon-Cx6N7Gk5.js"></script>
-  <link rel="stylesheet" crossorigin href="/css/jquery.validate-CudfdLEa.css">
-  <link rel="stylesheet" crossorigin href="/css/logon-CIl1nzAs.css">
+  <script type="module" crossorigin src="/js/logon.js"></script>
+  <link rel="modulepreload" crossorigin href="/js/modulepreload-polyfill.js">
+  <link rel="modulepreload" crossorigin href="/js/jquery.min.js">
+  <link rel="modulepreload" crossorigin href="/js/rejectionMessage.js">
+  <link rel="modulepreload" crossorigin href="/js/jquery.validate.js">
+  <link rel="modulepreload" crossorigin href="/js/validation.js">
+  <link rel="modulepreload" crossorigin href="/js/logon2.js">
+  <link rel="stylesheet" crossorigin href="/css/validation.css">
+  <link rel="stylesheet" crossorigin href="/css/logon.css">
 </head>
 
 <body onload="FrameCheck();">

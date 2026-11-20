@@ -2,6 +2,7 @@
     <div :class="questionStyle"
         :id='`mr_view_${questionId}`'>
         <popover class="tooltip-wrapper"
+            :placement="popoverPlacement"
             trigger="hover-focus"
             append-to="body"
             :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)">
@@ -69,6 +70,7 @@ export default {
     props: ['isDisabled'],
     data() {
         return {
+            popoverPlacement: typeof document !== 'undefined' && document.documentElement.dir === 'rtl' ? 'bottom' : 'top',
             showAllOptions: false,
             answer: null,
             question: null,

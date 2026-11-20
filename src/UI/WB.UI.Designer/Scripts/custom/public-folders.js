@@ -26,6 +26,7 @@
 
     element.fancytree({
         extensions: ['contextMenu', 'edit', 'glyph'],
+        rtl: document.documentElement.dir === 'rtl',
         checkbox: supportRadioButton ? 'radio' : false,
         glyph: glyph_opts,
         selectMode: 1,

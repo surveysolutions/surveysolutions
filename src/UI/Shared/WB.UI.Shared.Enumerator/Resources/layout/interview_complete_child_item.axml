@@ -22,8 +22,8 @@
             android:orientation="vertical"
             android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
             android:layout_marginBottom="@dimen/Interview_Entity_Title_margin_vertical"
-            android:layout_marginLeft="@dimen/Interview_Entity_Title_margin_vertical"
-            android:layout_marginRight="@dimen/Interview_Entity_Title_margin_vertical"
+            android:layout_marginStart="@dimen/Interview_Entity_Title_margin_vertical"
+            android:layout_marginEnd="@dimen/Interview_Entity_Title_margin_vertical"
     >
 
         <TextView

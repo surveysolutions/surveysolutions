@@ -2,8 +2,8 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:local="http://schemas.android.com/apk/res-auto"
-  android:paddingRight="@dimen/Interview_Entity_margin_right"
-  android:paddingLeft="@dimen/Interview_Entity_margin_left"
+  android:paddingEnd="@dimen/Interview_Entity_margin_right"
+  android:paddingStart="@dimen/Interview_Entity_margin_left"
   style="@style/FullWidthWrappingLayout">
 <LinearLayout style="@style/Audio_Dialog_Holder">
   <TableLayout
@@ -64,14 +64,14 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             style="@style/Widget.App.NegativeButton"
             android:id="@+id/btn_AudioDialog_Cancel"
             local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             style="@style/Widget.App.Button"
             android:id="@+id/btn_AudioDialog_Done"
             local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />

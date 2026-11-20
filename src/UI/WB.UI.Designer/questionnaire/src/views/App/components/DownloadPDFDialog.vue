@@ -45,7 +45,7 @@
                             v-if="canRetryGenerate">
                             {{ $t('QuestionnaireEditor.RetryExportPDF') }}
                         </button>
-                        <button type="button" class="btn btn-lg pull-right" @click="cancel()">
+                        <button type="button" class="btn btn-lg float-end" @click="cancel()">
                             {{ $t('QuestionnaireEditor.Cancel') }}
                         </button>
                     </div>

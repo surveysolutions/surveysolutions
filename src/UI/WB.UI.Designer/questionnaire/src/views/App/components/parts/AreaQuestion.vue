@@ -14,7 +14,7 @@
                         <span class="dropdown-arrow"></span>
                     </button>
 
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="geometry-type">
+                    <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="geometry-type">
                         <li role="presentation" v-for="qtype in activeQuestion.geometryTypeOptions">
                             <a role="menuitem" tabindex="-1" @click="changeGeometryType(qtype.value)">
                                 {{ qtype.text }}
@@ -42,7 +42,7 @@
                         <span class="dropdown-arrow"></span>
                     </button>
 
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="geometry-input-mode">
+                    <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="geometry-input-mode">
                         <li role="presentation" v-for="mode in getGeometryInputModeOptions">
                             <a role="menuitem" tabindex="-1" @click="changeGeometryInputMode(mode.value)">
                                 {{ mode.text }}

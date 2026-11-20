@@ -10,7 +10,7 @@ Description:
 /* -- Notice */
 .ui-pnotify {
 top: 45px;
-right: 25px;
+inset-inline-end: 25px;
 position: absolute;
 height: auto;
 /* Ensures notices are above everything */
@@ -37,8 +37,8 @@ margin: 0;
 border-radius: 0;
 }
 .ui-pnotify-closer, .ui-pnotify-sticker {
-float: right;
-margin-left: .2em;
+float: inline-end;
+margin-inline-start: .2em;
 }
 .ui-pnotify-title {
 display: block;
@@ -49,14 +49,14 @@ display: block;
 }
 .ui-pnotify-icon, .ui-pnotify-icon span {
 display: block;
-float: left;
-margin-right: .2em;
+float: inline-start;
+margin-inline-end: .2em;
 }
 /* -- History Pulldown */
 .ui-pnotify-history-container {
 position: absolute;
 top: 0;
-right: 18px;
+inset-inline-end: 18px;
 width: 70px;
 border-top: none;
 padding: 0;
@@ -84,8 +84,8 @@ width: 100%;
 }
 /* Alternate stack initial positioning. */
 .ui-pnotify.stack-topleft, .ui-pnotify.stack-bottomleft {
-left: 25px;
-right: auto;
+inset-inline-start: 25px;
+inset-inline-end: auto;
 }
 .ui-pnotify.stack-bottomright, .ui-pnotify.stack-bottomleft {
 bottom: 25px;

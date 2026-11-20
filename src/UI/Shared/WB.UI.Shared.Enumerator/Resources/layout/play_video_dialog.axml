@@ -4,8 +4,8 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:paddingRight="@dimen/calendar_event_dialog_padding"
-              android:paddingLeft="@dimen/calendar_event_dialog_padding"
+              android:paddingEnd="@dimen/calendar_event_dialog_padding"
+              android:paddingStart="@dimen/calendar_event_dialog_padding"
               android:paddingTop="@dimen/calendar_event_dialog_padding"
               android:paddingBottom="@dimen/calendar_event_dialog_padding"
               android:minWidth="400dp"
@@ -31,7 +31,7 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 style="@style/Widget.App.NegativeButton"
                 local:MvxBind="Text Localization('Cancel'); HideKeyboardOnClick .; Click CloseCommand;" />
     </LinearLayout>

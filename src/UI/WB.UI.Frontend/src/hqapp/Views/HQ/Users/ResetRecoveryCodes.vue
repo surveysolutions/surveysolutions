@@ -18,7 +18,7 @@
                 role="alert">
                 <p>
                     <span class="glyphicon glyphicon-warning-sign"
-                        style="margin-right: 5px;"></span>
+                        style="margin-inline-end: 5px;"></span>
                     <strong>{{ $t('Pages.RecoveryCodesInfo') }}</strong>
                 </p>
                 <p>

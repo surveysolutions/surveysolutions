@@ -6,7 +6,7 @@
             <div class="attachment">
                 <div class="attachment-preview">
                     <div class="attachment-preview-cover clearfix">
-                        <img class="pull-right" @click="previewAttachment(attachment)" style="{width: 156, height: 140}"
+                        <img class="float-end" @click="previewAttachment(attachment)" style="{width: 156, height: 140}"
                             v-if="!attachment.file"
                             :src='downloadBaseUrl + "/" + questionnaireId + "/thumbnail/" + attachment.attachmentId'>
                     </div>
@@ -47,16 +47,16 @@
                         </p>
                     </div>
                     <div class="actions clearfix" :class="{ 'dirty': isDirty }">
-                        <div v-if="isDirty" class="pull-left">
+                        <div v-if="isDirty" class="float-start">
                             <button type="button" v-if="!isReadOnlyForUser" :disabled="isInvalid ? 'disabled' : null"
                                 class="btn lighter-hover" @click="saveAttachment(attachment)">{{
                                     $t('QuestionnaireEditor.Save') }}</button>
                             <button type="button" class="btn lighter-hover" @click="cancel(attachment)">{{
                                 $t('QuestionnaireEditor.Cancel') }}</button>
                         </div>
-                        <div class="permanent-actions pull-right clearfix">
+                        <div class="permanent-actions float-end clearfix">
                             <button type="button" :value="$t('QuestionnaireEditor.SideBarAttachmentsUpload')"
-                                @click.stop="openFileDialog()" class="btn btn-default pull-right"
+                                @click.stop="openFileDialog()" class="btn btn-default float-end"
                                 v-if="!isReadOnlyForUser" capture>
                                 <span>{{ $t('QuestionnaireEditor.Update') }}</span>
                             </button>
@@ -66,7 +66,7 @@
                                 accept=".pdf,image/*,video/*,audio/*">
                             </file-upload>
 
-                            <a :href="getDownloadUrl()" class="btn btn-default pull-right" target="_blank"
+                            <a :href="getDownloadUrl()" class="btn btn-default float-end" target="_blank"
                                 rel="noopener noreferrer">{{
                                     $t('QuestionnaireEditor.Download') }}</a>
                         </div>

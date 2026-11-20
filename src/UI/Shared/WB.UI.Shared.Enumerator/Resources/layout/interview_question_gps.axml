@@ -33,6 +33,7 @@
             <TableRow
                 local:MvxBind="Visible QuestionState.IsAnswered">
                 <TextView
+                    android:textDirection="ltr"
                     style="@style/Interview_Question_RecordedAnswer_Link"
                     local:MvxBind="Text Format('{0}, {1}', Answer.Latitude, Answer.Longitude); 
                          Click NavigateToMapsCommand;

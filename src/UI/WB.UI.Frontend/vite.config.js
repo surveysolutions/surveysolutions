@@ -6,6 +6,8 @@ import fs from 'fs'
 import fg from 'fast-glob'
 import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.js'
 import { normalizePath } from 'vite'
+import autoprefixer from 'autoprefixer'
+import webInterviewRtl from './tools/postcss-webinterview-rtl.js'
 
 
 const baseDir = path.relative(import.meta.dirname, './')
@@ -216,6 +218,9 @@ export default defineConfig(({ mode, command }) => {
         base,
         css: {
             devSourcemap: isDevMode,
+            postcss: {
+                plugins: [webInterviewRtl(), autoprefixer()],
+            },
             preprocessorOptions: {
                 scss: {
                     //...silenceSomeSassDeprecationWarnings,

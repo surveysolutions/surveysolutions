@@ -1,0 +1,120 @@
+/* rtl:begin:ignore */
+// Data cells, dropdown options and free-text fields often hold Latin identifiers, dates or phone numbers.
+// Resolve their direction from content so trailing punctuation and digit groups keep
+// their order, while keeping the column/field alignment of the RTL page.
+:where(html[dir="rtl"]) :where(td, th, .btn-input > .dropdown-toggle, .dropdown-menu > li > a) {
+    unicode-bidi: plaintext;
+    text-align: -webkit-match-parent;
+    text-align: match-parent;
+}
+
+:where(html[dir="rtl"]) :where(input:not([type]), input[type="text"], input[type="search"], input[type="password"], textarea):where(:not([inputmode="numeric"], [inputmode="decimal"], .flatpickr-input, .numeric-question input, .time-question input)) {
+    unicode-bidi: plaintext;
+    text-align: right;
+}
+
+// Questionnaire content is authored in its own language, independently of the UI language.
+:where(html[dir="rtl"]) :where(
+    .question-editor h5 > span,
+    .question-editor .options-group .field > label,
+    .question-editor .options-group .field > span,
+    .information-block.instruction > div,
+    .readonly-answer-group .container-info p > b,
+    .unit-title h3,
+    .structured-content .panel-title > a,
+    .action-container .btn,
+    .overview-item .item-content > h4,
+    .overview-item .answer
+) {
+    unicode-bidi: plaintext;
+    text-align: -webkit-match-parent;
+    text-align: match-parent;
+}
+
+html[dir="rtl"] {
+    code,
+    pre,
+    kbd,
+    input[type="email"],
+    input[type="url"],
+    input[type="number"],
+    .flatpickr-input,
+    input[inputmode="numeric"],
+    input[inputmode="decimal"],
+    .numeric-question input,
+    .time-question input,
+    .interview-ID,
+    .countDown,
+    .gps-question .block-with-data a,
+    .area-question .block-with-data a {
+        direction: ltr;
+        unicode-bidi: isolate;
+    }
+
+    input::placeholder {
+        direction: rtl;
+        text-align: right;
+    }
+
+    .btn-back::before {
+        transform: scaleX(-1);
+    }
+
+    .table-view .ag-theme-customStyles {
+        .ag-horizontal-right-spacer {
+            height: 0;
+        }
+
+        .ag-grid-pinned-right-cells .ag-header-cell {
+            border-right: 1px solid #E5E5E5;
+            border-left: 1px solid rgba(0, 0, 0, 0.3);
+        }
+
+        .ag-grid-pinned-right-cells {
+            border-left: 1px solid rgba(0, 0, 0, 0.3);
+            border-right: 1px solid #E5E5E5;
+
+            .ag-cell {
+                background-color: transparent;
+            }
+        }
+    }
+
+    .flatpickr-calendar {
+        // Keep day order consistent with Flatpickr's native arrow-key navigation.
+        direction: ltr;
+
+        .flatpickr-current-month {
+            direction: rtl;
+        }
+    }
+
+    .audio-question .modal {
+        .modal-header .close {
+            float: left;
+        }
+
+        .modal-footer {
+            .recordign-time {
+                float: right;
+            }
+
+            button {
+                float: left;
+                margin: 0 0 0 10px;
+            }
+        }
+    }
+
+    #toast-container > div {
+        padding: 15px 50px 15px 15px;
+        background-position: right 15px center;
+    }
+
+    .toast-close-button {
+        float: left;
+        right: auto;
+        left: -.3em;
+    }
+}
+/* rtl:end:ignore */

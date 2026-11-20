@@ -6,6 +6,7 @@
                 local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, SpecialValues.IsSpecialValue), true);">
 
     <NumericEditText style="@style/Interview_Question_Answer_Text_Editor"
+                     android:textDirection="ltr"
                      local:MvxBind="UseGroupSeparator UseFormatting;
                                     MaxDigitsAfterDecimal CountOfDecimalPlaces; 
                                     IsNonNegative IsNonNegative;

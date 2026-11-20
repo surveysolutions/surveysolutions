@@ -1,6 +1,11 @@
+@using System.Globalization
+@{
+    var uiLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var uiDirection = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr";
+}
 <!DOCTYPE html>
-<html>
-<head lang="en">
+<html lang="@uiLanguage" dir="@uiDirection">
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,16 +26,17 @@
 
 
 /**/</script>
-  <script type="module" crossorigin src="/js/modulepreload-polyfill-B5Qt9EMX.js"></script>
-  <script type="module" crossorigin src="/js/mande-BCagLYbb.js"></script>
-  <script type="module" crossorigin src="/js/jquery.min-BdwSxSBs.js"></script>
-  <script type="module" crossorigin src="/js/jquery.validate-B4oxVRdg.js"></script>
-  <script type="module" crossorigin src="/js/jquery.validate.unobtrusive-BfjL9qAb.js"></script>
-  <script type="module" crossorigin src="/js/logon-Cx6N7Gk5.js"></script>
-  <script type="module" crossorigin src="/js/bootstrap.esm-DEBReTKS.js"></script>
-  <script type="module" crossorigin src="/js/simplepage-JsXihgeF.js"></script>
-  <link rel="stylesheet" crossorigin href="/css/jquery.validate-CudfdLEa.css">
-  <link rel="stylesheet" crossorigin href="/css/logon-CIl1nzAs.css">
+  <script type="module" crossorigin src="/js/errorLayout.js"></script>
+  <link rel="modulepreload" crossorigin href="/js/modulepreload-polyfill.js">
+  <link rel="modulepreload" crossorigin href="/js/jquery.min.js">
+  <link rel="modulepreload" crossorigin href="/js/rejectionMessage.js">
+  <link rel="modulepreload" crossorigin href="/js/jquery.validate.js">
+  <link rel="modulepreload" crossorigin href="/js/validation.js">
+  <link rel="modulepreload" crossorigin href="/js/logon2.js">
+  <link rel="modulepreload" crossorigin href="/js/bootstrap.esm.js">
+  <link rel="modulepreload" crossorigin href="/js/simplepage.js">
+  <link rel="stylesheet" crossorigin href="/css/validation.css">
+  <link rel="stylesheet" crossorigin href="/css/logon.css">
 </head>
 <body onload="FrameCheck();">
     <header>

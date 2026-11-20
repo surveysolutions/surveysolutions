@@ -127,7 +127,7 @@
     <value>معلومات غير متوفرة في الجدول</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>اظهار _ٍStart _الى_END_محموع_ادخالات</value>
+    <value>إظهار _START_ إلى _END_ من أصل _TOTAL_ مُدخل</value>
   </data>
   <data name="InfoEmpty" xml:space="preserve">
     <value>عرص 0 الى 0 من 0 ادخالات</value>
@@ -139,7 +139,7 @@
     <value>,</value>
   </data>
   <data name="LengthMenu" xml:space="preserve">
-    <value>اظهر_قائمة_مدخلات</value>
+    <value>إظهار _MENU_ مُدخلات</value>
   </data>
   <data name="LoadingRecords" xml:space="preserve">
     <value>جار التحميل...</value>

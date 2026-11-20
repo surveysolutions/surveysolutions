@@ -6,7 +6,7 @@
                 <a class="btn btn-success" v-if="model.canAddUsers" :href="$config.model.createUrl">
                     {{ $t('Users.AddUser') }}
                 </a>
-                <a class="btn btn-success" style="margin-left:10px" v-if="model.canAddUsers"
+                <a class="btn btn-success" style="margin-inline-start:10px" v-if="model.canAddUsers"
                     :href="$hq.basePath + 'Upload'">
                     {{ $t('Users.UploadUsers') }}
                 </a>
@@ -261,7 +261,7 @@ export default {
                                 : data
 
                             if (row.isLocked) {
-                                tdHtml += `<span class='lock' style="left: auto" title='${self.$t('Users.Locked')}'></span>`
+                                tdHtml += `<span class='lock' style="inset-inline-start: auto" title='${self.$t('Users.Locked')}'></span>`
                             }
                             return tdHtml
                         },

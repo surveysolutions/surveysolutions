@@ -41,7 +41,8 @@
                                             <input id="questionnaireTitle" type="text"
                                                 class="form-control questionaire-title"
                                                 :disabled="questionnaire.isReadOnlyForUser"
-                                                v-model="questionnaireEdit.title" maxlength="2000" />
+                                                v-model="questionnaireEdit.title" v-content-direction="questionnaireEdit.title"
+                                                maxlength="2000" />
                                         </div>
 
                                         <div class="form-group input-variable-name">
@@ -49,7 +50,7 @@
                                                 {{ $t('QuestionnaireEditor.SettingsQuestionnaireVariable') }}
                                             </label>&nbsp;
                                             <help link="questionnaireVariableName" />
-                                            <input id="questionnaireVariable"
+                                            <input id="questionnaireVariable" dir="ltr"
                                                 :disabled="questionnaire.isReadOnlyForUser" type="text"
                                                 class="form-control questionaire-title"
                                                 v-model="questionnaireEdit.variable" maxlength="32"
@@ -57,7 +58,7 @@
                                         </div>
 
                                         <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
-                                        <div class="form-group" style="margin-left: -8px;">
+                                        <div class="form-group" style="margin-inline-start: -8px;">
                                             <input id="questionnaireHideIdDisabled" type="checkbox" class="wb-checkbox"
                                                 :disabled="questionnaire.isReadOnlyForUser"
                                                 v-model="questionnaireEdit.hideIfDisabled" />
@@ -97,10 +98,10 @@
                                     <br />
                                     <ul class="accounts">
                                         <li v-for="s in questionnaire.sharedPersons">
-                                            <a :href="'mailto:' + s.email">
+                                            <a :href="'mailto:' + s.email" dir="ltr">
                                                 {{ s.email }}
                                             </a>
-                                            ({{ s.login }}) -
+                                            <span dir="ltr">({{ s.login }})</span> -
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-link dropdown-toggle"
                                                     data-bs-toggle="dropdown" v-if="!s.isOwner">
@@ -154,7 +155,7 @@
                                                     {{ $t('QuestionnaireEditor.SettingsInviteCollaborators') }}
                                                 </label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" name="shareWithInput"
+                                                    <input type="text" class="form-control" name="shareWithInput" dir="ltr"
                                                         v-model="viewModelData.shareWith" />
                                                     <div class="input-group-btn dropup share-type">
                                                         <button type="button" class="btn btn-default dropdown-toggle"
@@ -182,7 +183,7 @@
                                             </div>
                                         </div>
                                         <div class="col-xs-5">
-                                            <div class="form-group pull-right">
+                                            <div class="form-group float-end">
                                                 <button class="btn btn-primary btn-lg invite-button" @click="invite()"
                                                     :disabled="!viewModelData.shareWith || questionnaire.isReadOnlyForUser">
                                                     {{ $t('QuestionnaireEditor.SettingsInvite') }}
@@ -231,7 +232,7 @@
                                                     })
                                                     }}
                                                 </div>
-                                                <button class="btn btn-link answer" style="padding-left: 0px;"
+                                                <button class="btn btn-link answer" style="padding-inline-start: 0px;"
                                                     @click="copyAnonymousQuestionnaireLink()">
                                                     {{ $t('QuestionnaireEditor.CopyLink') }}
                                                 </button>

@@ -35,8 +35,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-        <item name="android:paddingRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+        <item name="android:paddingStart">@dimen/Interview_Entity_Element_margin_horizontal</item>
+        <item name="android:paddingEnd">@dimen/Interview_Entity_Element_margin_horizontal</item>
     </style>
 
     <style name="Interview_Complete_Screen_Statistics_Column_With_Right_Border" parent="Interview_Complete_Screen_Statistics_Column">
@@ -87,6 +87,8 @@
     <style name="Interview_Complete_ListItem">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:textDirection">firstStrong</item>
+        <item name="android:gravity">start</item>
 
         <item name="android:clipChildren">false</item>
         <item name="android:clipToPadding">false</item>
@@ -105,8 +107,8 @@
     </style>
 
     <style name="Interview_Complete_Page_Item" parent="Interview_Complete_Base">
-        <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
-        <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_left</item>
+        <item name="android:layout_marginStart">@dimen/Interview_Entity_margin_with_border_left</item>
+        <item name="android:layout_marginEnd">@dimen/Interview_Entity_margin_with_border_left</item>
         <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_top</item>
     </style>
 
@@ -180,8 +182,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/Interview_Entity_Divider_height</item>
         <item name="android:background">#dadada</item>
-        <item name="android:layout_marginLeft">5dp</item>
-        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
     </style>
 
     <style name="Interview_Complete_Tab_Container" parent="Interview_Complete_Base">
@@ -211,8 +213,8 @@
     <style name="Interview_Complete_Tab_Content_More_label" parent="Interview_Complete_Base">
         <item name="android:textSize">@dimen/textsize_14</item>
         <item name="android:layout_marginTop">17dp</item>
-        <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
-        <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_left</item>
+        <item name="android:layout_marginStart">@dimen/Interview_Entity_margin_with_border_left</item>
+        <item name="android:layout_marginEnd">@dimen/Interview_Entity_margin_with_border_left</item>
     </style>
 
 </resources>

@@ -324,6 +324,9 @@
   <data name="HistoryOfStatuses_By" xml:space="preserve">
     <value>De către</value>
   </data>
+  <data name="HistoryOfStatuses_InterviewResponsible" xml:space="preserve">
+    <value>{{interviewKey}} de către {{responsible}}</value>
+  </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
     <value>Comentariu</value>
   </data>

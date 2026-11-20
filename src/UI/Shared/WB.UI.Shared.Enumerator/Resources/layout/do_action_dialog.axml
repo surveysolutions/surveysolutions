@@ -8,8 +8,8 @@
     android:orientation="vertical"
     android:paddingBottom="10dp"
     android:paddingTop="20dp"
-    android:paddingLeft="25dp"
-    android:paddingRight="25dp"
+    android:paddingStart="25dp"
+    android:paddingEnd="25dp"
     android:minWidth="400dp"
     local:MvxBind="HideKeyboardOnClick .">
 
@@ -23,7 +23,7 @@
         <ImageButton
                 style="@style/Interview_Question_RemoveAnswer"
                 android:duplicateParentState="true"
-                android:layout_gravity="top|right"
+                android:layout_gravity="top|end"
                 local:MvxBind="HideKeyboardOnClick .;Click CancelCommand;"
                 local:srcCompat="@drawable/delete_button"/>
     </FrameLayout>
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:lines="3"
-                android:gravity="top|left"
+                android:gravity="top|start"
                 android:maxLength="500"
                 android:scrollHorizontally="false"
                 android:scrollbars="vertical"
@@ -79,7 +79,7 @@
                 local:MvxBind="HideKeyboardOnClick .;Click ApplyCommand; Enabled CanApply; Text ApplyTitle;" />
         <Button
                 style="@style/Button_Link"
-                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
                 local:MvxBind="HideKeyboardOnClick .;Click CancelCommand; Text CancelTitle;" />
     </LinearLayout>
 </LinearLayout>

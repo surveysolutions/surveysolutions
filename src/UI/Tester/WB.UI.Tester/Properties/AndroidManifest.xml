@@ -6,6 +6,7 @@
           android:versionName="1.0.1114">
 	<application android:label="Tester" 
                  android:icon="@drawable/icon" 
+                 android:supportsRtl="true"
                  android:largeHeap="true" 
                  android:theme="@style/AppTheme" 
                  android:allowBackup="false" 

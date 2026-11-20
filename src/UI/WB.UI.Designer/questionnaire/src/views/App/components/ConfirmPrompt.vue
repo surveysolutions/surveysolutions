@@ -19,7 +19,8 @@
 
                         <div class="form-group" style="margin-top: 10px;">
                             <label v-if="inputLabel" class="control-label">{{ inputLabel }}</label>
-                            <textarea class="form-control" v-model="inputValue" :placeholder="inputPlaceholder"
+                            <textarea class="form-control" v-model="inputValue" v-content-direction="inputValue"
+                                :placeholder="inputPlaceholder"
                                 :rows="inputRows" :maxlength="inputMaxLength || undefined"
                                 style="resize: none;"></textarea>
                             <div v-if="inputHint" class="help-block">{{ inputHint }}</div>
@@ -119,6 +120,7 @@ const confirmPromptDialog = {
 
                     this.dialogStyle = {
                         position: 'fixed',
+                        // Dialog drag coordinates stay in the viewport's fixed axis.
                         left: `${left}px`,
                         top: `${top}px`,
                         margin: '0'
@@ -163,6 +165,7 @@ const confirmPromptDialog = {
             // Ensure the dialog is positioned so dragging updates are effective.
             this.dialogStyle = {
                 position: 'fixed',
+                // Preserve the pointer position in the viewport's fixed axis.
                 left: `${Math.round(rect.left)}px`,
                 top: `${Math.round(rect.top)}px`,
                 margin: '0'
@@ -197,6 +200,7 @@ const confirmPromptDialog = {
 
             this.dialogStyle = {
                 position: 'fixed',
+                // Clamp dragging in the viewport's fixed axis.
                 left: `${Math.round(left)}px`,
                 top: `${Math.round(top)}px`,
                 margin: '0'

@@ -3,11 +3,15 @@
 @inject IWebInterviewLinkProvider webInterviewLinkProvider
 @{
     Uri webRoot = new Uri((string) ViewData["webRoot"]);
+    // email clients ignore dir="auto" and logical css, so direction and alignment are set by attributes
+    var dir = Model.IsRightToLeft ? "rtl" : "ltr";
+    var start = Model.IsRightToLeft ? "right" : "left";
+    var logoPosition = Model.IsRightToLeft ? "-15% 45px" : "115% 45px";
 }
 @{ Layout = null; }
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="@dir">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>@Model.Subject</title>
@@ -56,37 +60,37 @@
         }
     </style>
 </head>
-<body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; box-sizing: border-box;">
-    <table class="em-table" align="center" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-image: url('@("~/img/logo.svg".Replace("~", ViewData["webAppRoot"]?.ToString()))'); background-repeat: no-repeat;  background-size: 270px auto;  background-position: 115% 45px;">
+<body dir="@dir" style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; box-sizing: border-box;">
+    <table class="em-table" dir="@dir" align="center" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-image: url('@("~/img/logo.svg".Replace("~", ViewData["webAppRoot"]?.ToString()))'); background-repeat: no-repeat;  background-size: 270px auto;  background-position: @logoPosition;">
         <tr>
             <td style="border: 6px solid #E5E5E5;  padding: 50px 55px 115px; box-sizing: border-box;">
-                <table border="0" width="100%" cellpadding="0" cellspacing="0">
+                <table dir="@dir" border="0" width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td style="padding-bottom: 80px;">
+                        <td align="@start" style="padding-bottom: 80px;">
                             <img src="@(webRoot + "/api/CompanyLogo/ThumbnailOrDefault")" alt="logo" style="display: block; max-height: 170px; width: auto" class="em-img" />
                         </td>
                     </tr>
                     <tr>
-                        <td style="font-size: 24px; line-height: 30px; color: #727272; font-weight: bold; white-space: pre-wrap;">@Model.Subject</td>
+                        <td align="@start" style="font-size: 24px; line-height: 30px; color: #727272; font-weight: bold; white-space: pre-wrap; text-align: @start;">@Model.Subject</td>
                     </tr>
                     <tr>
-                        <td style="padding: 40px 0; font-size: 16px; line-height: 20px; white-space: pre-wrap;">@Html.Raw(Model.MainText)</td>
+                        <td align="@start" style="padding: 40px 0; font-size: 16px; line-height: 20px; white-space: pre-wrap; text-align: @start;">@Html.Raw(Model.MainText)</td>
                     </tr>
                     @if (!string.IsNullOrWhiteSpace(Model.Password))
                     {
                         <tr>
-                            <td style="padding: 0px 0 5px; font-size: 16px; line-height: 20px; white-space: pre-wrap;">@Model.PasswordDescription</td>
+                            <td align="@start" style="padding: 0px 0 5px; font-size: 16px; line-height: 20px; white-space: pre-wrap; text-align: @start;">@Model.PasswordDescription</td>
                         </tr>
                         <tr>
-                            <td style="padding: 0px 0 50px; font-size: 24px; line-height: 30px; color: #727272; font-weight: bold;">
-                                @Model.Password
+                            <td align="@start" style="padding: 0px 0 50px; font-size: 24px; line-height: 30px; color: #727272; font-weight: bold; text-align: @start;">
+                                <span dir="ltr">@Model.Password</span>
                             </td>
                         </tr>
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Link))
                     {
                         <tr>
-                            <td>
+                            <td align="@start" style="text-align: @start;">
                                 <a href="@Model.Link" class="btn-success"
                                    style="text-decoration: none; background: #368E19; padding: 10px 12px; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px; border: 2px solid #368E19; color: #fff; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 14px; box-shadow: none;">@Model.LinkText</a>
                             </td>
@@ -97,7 +101,7 @@
         </tr>
         <tr>
             <td width="100%" align="center">
-                <table align="center" width="80%" cellpadding="0" cellspacing="0" border="0" style="color: #808080;">
+                <table dir="@dir" align="center" width="80%" cellpadding="0" cellspacing="0" border="0" style="color: #808080;">
                     <tr>
                         <td align="center" style="padding: 15px 0;">
                             <ul>

@@ -591,6 +591,9 @@
   <data name="HistoryOfStatuses_By" xml:space="preserve">
       <value>Ким</value>
   </data>
+  <data name="HistoryOfStatuses_InterviewResponsible" xml:space="preserve">
+      <value>{{interviewKey}}, відповідальний: {{responsible}}</value>
+  </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
     <value>Коментар</value>
   </data>

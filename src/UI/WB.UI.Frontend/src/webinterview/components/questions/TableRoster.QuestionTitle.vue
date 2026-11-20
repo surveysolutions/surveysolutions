@@ -1,5 +1,6 @@
 <template>
     <popover class="w-100 d-block"
+        :placement="popoverPlacement"
         :enable="hasInstructions"
         trigger="hover-focus"
         append-to="body">
@@ -36,6 +37,7 @@ export default {
 
     data() {
         return {
+            popoverPlacement: typeof document !== 'undefined' && document.documentElement.dir === 'rtl' ? 'bottom' : 'top',
             title: null,
             instruction: null,
             hasInstructions: false,

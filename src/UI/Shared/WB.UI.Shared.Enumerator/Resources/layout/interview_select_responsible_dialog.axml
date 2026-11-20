@@ -23,7 +23,7 @@
             </LinearLayout>
             <ImageButton
                 style="@style/Interview_Question_RemoveAnswer"
-                android:layout_marginRight="@dimen/Interview_Audio_Dialog_Remove_Button_Margin_Left"
+                android:layout_marginEnd="@dimen/Interview_Audio_Dialog_Remove_Button_Margin_Left"
                 android:duplicateParentState="true"
                 local:MvxBind="HideKeyboardOnClick .;Click CancelCommand;"
                 local:srcCompat="@drawable/delete_button"/>
@@ -39,7 +39,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:lines="6"
-                        android:gravity="top|left"
+                        android:gravity="top|start"
                         android:maxLength="500"
                         android:scrollHorizontally="false"
                         android:inputType="textMultiLine"
@@ -51,8 +51,8 @@
         style="@style/FullWidthWrappingLayout"
         android:gravity ="fill|clip_vertical"
         android:layout_weight="3"
-        android:paddingLeft="30dp"
-        android:paddingRight="50dp">
+        android:paddingStart="30dp"
+        android:paddingEnd="50dp">
 
         <MvxRecyclerView
                 android:layout_column="0"
@@ -70,8 +70,8 @@
             android:gravity ="bottom"
             android:layout_weight="1"
             android:paddingBottom="10dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="10dp">
+            android:paddingStart="30dp"
+            android:paddingEnd="10dp">
         <Button
                 style="@style/Done_Button"
                 local:MvxBind="HideKeyboardOnClick .;Click ReassignCommand; Enabled CanReassign; Text Localization('SelectResponsible_ReassignButtonText');" />

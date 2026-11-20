@@ -1,4 +1,4 @@
-﻿.metadata-panel .metadata {
+.metadata-panel .metadata {
     height: 100%;
 }
 
@@ -8,19 +8,20 @@
 }
 
 .left-side-panel.metadata .left-side-panel-content h3 {
-    margin-left: 20px;
+    margin-inline-start: 20px;
 }
 
 .metadata-panel .metadata {
-    padding-left: 30px;
+    padding-inline-start: 30px;
 }
 
 .metadata-panel .attachments .panel-header {
-    margin: 18px 24px 20px 18px;
+    margin-block: 18px 20px;
+    margin-inline: 18px 24px;
 }
 
 .left-side-panel.metadata .foldback-region {
-    left: 85%;
+    inset-inline-start: 85%;
     background: url(../i/left-panel-shadow-small.png) repeat-y;
 }
 
@@ -29,7 +30,7 @@
 }
 
 .metadata-blocks > li {
-    margin-right: 35px;
+    margin-inline-end: 35px;
     background: #fff;
     margin-bottom: 7px;
     padding: 30px;
@@ -77,7 +78,7 @@
     width: 34px;
     position: absolute;
     top: 0;
-    right: 0;
+    inset-inline-end: 0;
     margin: 0;
     padding: 0;
     display: block;
@@ -96,7 +97,7 @@
     transform: rotate(45deg);
     position: relative;
     top: 1px;
-    left: 5px;
+    inset-inline-start: 5px;
     -webkit-transition: background-color 0.2s linear;
     -moz-transition: background-color 0.2s linear;
     -ms-transition: background-color 0.2s linear;
@@ -153,7 +154,8 @@
     width: 100%;
     border: none;
     border-radius: 5px;
-    padding: 8px 34px 8px 12px;
+    padding-block: 8px 8px;
+    padding-inline: 12px 34px;
     text-overflow: ellipsis;
     display: block;
 }
@@ -175,12 +177,12 @@
 input.checkbox-filter {
     display: block;
     position: absolute;
-    left: -999999px;
+    inset-inline-start: -999999px;
 }
 
 input.checkbox-filter ~ label {
     position: relative;
-    padding-left: 30px;
+    padding-inline-start: 30px;
     cursor: pointer;
 }
 
@@ -191,11 +193,11 @@ input.checkbox-filter ~ label .tick {
     vertical-align: middle;
     position: absolute;
     top: 0;
-    left: -5px;
+    inset-inline-start: -5px;
     background: transparent url("../i/chekboxes.png") no-repeat;
     background-size: 68px 350px;
     background-position: 0 0;
-    margin-right: 10px;
+    margin-inline-end: 10px;
 }
 
 input.checkbox-filter:focus ~ label .tick,
@@ -227,7 +229,7 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
 }
 
 .metadata .form-buttons-holder {
-    margin-left: 30px - 17px;// (margin - button padding)
+    margin-inline-start: 30px - 17px;// (margin - button padding)
     margin-bottom: 30px;
 }
 
@@ -273,8 +275,8 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
 
 .metadata-panel .dropdown .btn-clear {
     height: 37px;
-    left: auto;
-    right: -40px;
+    inset-inline-start: auto;
+    inset-inline-end: -40px;
 }
 
 .metadata-panel .dropdown.has-value .btn-clear {
@@ -288,6 +290,6 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
     }
 
     .metadata-panel .dropdown .btn-clear {
-        right: -32px;
+        inset-inline-end: -32px;
     }
 }

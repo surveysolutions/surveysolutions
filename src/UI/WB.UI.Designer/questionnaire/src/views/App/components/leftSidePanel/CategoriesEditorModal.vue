@@ -451,7 +451,7 @@ export default {
     content: '';
     position: absolute;
     top: 14px;
-    left: 7px;
+    inset-inline-start: 7px;
     width: 16px;
     height: 2px;
     background: currentColor;

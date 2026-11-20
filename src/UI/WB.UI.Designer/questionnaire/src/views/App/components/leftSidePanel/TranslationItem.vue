@@ -9,12 +9,13 @@
             <div class="translation-content">
                 <input focus-on-out="focusTranslation{{translation.translationId}}" required=""
                     :placeholder="$t('QuestionnaireEditor.SideBarTranslationName')" maxlength="32" spellcheck="false"
-                    v-model="translation.name" name="name" class="form-control table-name" type="text" />
+                    v-model="translation.name" v-content-direction="translation.name" name="name"
+                    class="form-control table-name" type="text" />
                 <div class="drop-box">
                     {{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}
                 </div>
                 <div class="actions" :class="{ 'dirty': isDirty }">
-                    <div v-show="isDirty" class="pull-left">
+                    <div v-show="isDirty" class="float-start">
                         <button type="button" v-if="!isReadOnlyForUser" :disabled="isInvalid" class="btn lighter-hover"
                             @click.self="saveTranslation()">
                             {{ $t('QuestionnaireEditor.Save') }}
@@ -34,7 +35,7 @@
                         {{ $t('QuestionnaireEditor.Reset') }}
                     </button>
 
-                    <div class="permanent-actions pull-right">
+                    <div class="permanent-actions float-end">
                         <button type="button" class="btn lighter-hover"
                             v-if="!isReadOnlyForUser && translation.translationId" @click.self="switchToTranslation();">
                             {{ $t('QuestionnaireEditor.SwitchTo') }}

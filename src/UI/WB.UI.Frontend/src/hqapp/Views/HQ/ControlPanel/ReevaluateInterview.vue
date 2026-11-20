@@ -25,7 +25,7 @@
                     <div class="block-filter">
                         <button type="submit"
                             class="btn btn-success"
-                            style="margin-right:5px"
+                            style="margin-inline-end:5px"
                             id="btnReevaluate"
                             @click="reevaluateInterview"
                             :disabled="interviewId == null || errorByInterviewId != undefined">{{

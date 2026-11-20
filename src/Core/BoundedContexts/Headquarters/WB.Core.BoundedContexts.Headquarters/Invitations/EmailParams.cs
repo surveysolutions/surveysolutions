@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public string SenderName{ get; set; }
         public int AssignmentId { get; set; }
         public int InvitationId { get; set; }
+        public bool IsRightToLeft { get; set; }
     }
 
     public class EmailParameters : EmailParams

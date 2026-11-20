@@ -34,7 +34,8 @@ namespace WB.UI.Headquarters.Services.Impl
                 Address = address,
                 SurveyName = surveyName,
                 SenderName = senderName,
-                Link = link
+                Link = link,
+                IsRightToLeft = emailContent.IsRightToLeft
             };
 
             return RenderEmailWithControllerContext(model);
@@ -50,15 +51,16 @@ namespace WB.UI.Headquarters.Services.Impl
             return this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailHtml.cshtml", emailParams, options.Value.BaseUrl, options.Value.BaseAppUrl);
         }
 
-        public Task<string> RenderTextEmail(EmailParams emailParams)
+        public async Task<string> RenderTextEmail(EmailParams emailParams)
         {
-            return this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailText.cshtml", emailParams, options.Value.BaseUrl, options.Value.BaseAppUrl);
+            var text = await this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailText.cshtml", emailParams, options.Value.BaseUrl, options.Value.BaseAppUrl);
+            return emailParams.IsRightToLeft ? EmailTextDirection.MarkRightToLeftLines(text) : text;
         }
 
         private async Task<PersonalizedWebInterviewEmail> RenderEmailWithControllerContext(EmailParams emailParams)
         {
             string html = await this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailHtml.cshtml", emailParams, options.Value.BaseUrl, options.Value.BaseAppUrl);
-            string text = await this.viewRenderService.RenderToStringAsync("/Views/WebEmails/EmailText.cshtml", emailParams, options.Value.BaseUrl, options.Value.BaseAppUrl);
+            string text = await this.RenderTextEmail(emailParams);
             return new PersonalizedWebInterviewEmail(emailParams.Subject, html, text);
         }
     }

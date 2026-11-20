@@ -83,7 +83,7 @@
             <div class="block-filter">
                 <button type="submit"
                     class="btn btn-success"
-                    style="margin-right:5px"
+                    style="margin-inline-end:5px"
                     id="btnUpdateUser"
                     v-bind:disabled="userInfo.isObserving || userInfo.isRestricted || !userInfo.canChangeContactInfo"
                     @click="updateAccount">{{
@@ -100,7 +100,7 @@
             <p>{{ $t('Pages.AutolockDescription') }}</p>
             <button type="submit"
                 class="btn btn-success"
-                style="margin-right:5px"
+                style="margin-inline-end:5px"
                 id="btnUpdateUser"
                 v-if='lockedOutCanBeReleased'
                 v-bind:disabled="userInfo.isObserving || userInfo.isRestricted"

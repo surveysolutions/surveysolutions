@@ -30,7 +30,7 @@
                                             v-for="(reference, index) in referencesWithErrors.references"
                                             @click="navigateTo(reference)" :key="index">
                                             <a class="verification-item" href="javascript:void(0);"
-                                                data-bs-placement="right" data-bs-html="true"
+                                                :data-bs-placement="isRtl ? 'left' : 'right'" data-bs-html="true"
                                                 data-bs-custom-class="error-tooltip in" data-bs-container='body'
                                                 :title="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">
                                                 <span v-if="reference.type == 'Question'" class="icon"
@@ -78,6 +78,7 @@
 <script>
 import { useVerificationStore } from '../../../stores/verification';
 import * as bootstrap from 'bootstrap';
+import { getUiDirection } from '../../../plugins/uiLocale';
 
 export default {
     name: 'VerificationDialog',
@@ -94,9 +95,11 @@ export default {
     },
     setup(props) {
         const verificationStore = useVerificationStore();
+        const isRtl = getUiDirection() === 'rtl';
 
         return {
-            verificationStore
+            verificationStore,
+            isRtl
         };
     },
     expose: ['openErrors', 'openWarnings', 'close'],

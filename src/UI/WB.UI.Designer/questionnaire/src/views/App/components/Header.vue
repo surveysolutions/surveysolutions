@@ -33,7 +33,7 @@
                     </button>
 
                     <div class="btn-group" v-if="currentUser.isAuthenticated">
-                        <a class="btn btn-default" style="margin-right: 0px;">{{
+                        <a class="btn btn-default" style="margin-inline-end: 0px;">{{
                             $t('QuestionnaireEditor.HellowMessageBtn', {
                                 currentUserName: currentUser.userName
                             })
@@ -44,7 +44,7 @@
                                 $t('QuestionnaireEditor.ToggleDropdown')
                                 }}</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
+                        <ul class="dropdown-menu dropdown-menu-end">
                             <li>
                                 <a href="/identity/account/manage">{{
                                     $t('QuestionnaireEditor.ManageAccount')
@@ -69,10 +69,10 @@
                             $t('QuestionnaireEditor.Register') }}</a>
                 </div>
             </div>
-            <div class="questionnarie-title" style="margin-right: 0!important;">
+            <div class="questionnarie-title" style="margin-inline-end: 0!important;">
                 <div class="title">
                     <div class="questionnarie-title-text">
-                        {{ questionnaire.title }}
+                        <bdi>{{ questionnaire.title }}</bdi>
                     </div>
                     <div class="questionnarie-title-buttons" style="display: inline-block!important;">
                         <span class="text-muted" id="questionnaireStats">

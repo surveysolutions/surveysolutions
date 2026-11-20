@@ -108,7 +108,7 @@
             </div>
         </div>
         <div class="form-buttons-holder">
-            <div class="pull-left">
+            <div class="float-start">
                 <button type="button" id="edit-static-text-save-button" v-if="!questionnaire.isReadOnlyForUser"
                     :class="{ 'btn-primary': isDirty }" :disabled="!isDirty" class="btn btn-lg" unsaved-warning-clear
                     @click="saveStaticText()">
@@ -119,7 +119,7 @@
                     {{ $t('QuestionnaireEditor.Cancel') }}
                 </button>
             </div>
-            <div class="pull-right">
+            <div class="float-end">
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="add-comment-button"
                     class="btn btn-lg btn-link" @click="toggleComments(activeStaticText)" unsaved-warning-clear>
                     <span v-if="!isCommentsBlockVisible && commentsCount == 0">{{

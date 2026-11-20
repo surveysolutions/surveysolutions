@@ -1,6 +1,11 @@
+@using System.Globalization
+@{
+    var uiLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var uiDirection = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr";
+}
 <!DOCTYPE html>
-<html>
-<head lang="en">
+<html lang="@uiLanguage" dir="@uiDirection">
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

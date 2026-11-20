@@ -16,7 +16,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter" style="padding-inline-start: 30px">
                     <label for="exportPassword" style="font-weight: bold">
                         <span class="tick"></span>
                         {{ $t('Settings.Password') }}
@@ -54,7 +54,7 @@
                 </div>
 
                 <Form v-slot="{ meta }" @submit="noAction" ref="retentionForm">
-                    <div class="block-filter" style="padding-left: 30px">
+                    <div class="block-filter" style="padding-inline-start: 30px">
                         <div class="form-group">
                             <label for="Days" style="font-weight: bold">
                                 <span class="tick"></span>
@@ -96,7 +96,7 @@
             </div>
             <div class="col-sm-9">
                 <Form v-slot="{ meta }" @submit="noAction" :disabled="!isRetentionEnabledModel">
-                    <div class="block-filter" style="padding-left: 30px">
+                    <div class="block-filter" style="padding-inline-start: 30px">
                         <div class="form-group">
                             <label for="Files" style="font-weight: bold">
                                 <span class="tick"></span>
@@ -137,9 +137,9 @@
                 </Form>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter" style="padding-inline-start: 30px">
                     <button type="button" class="btn btn-danger" @click="forceRunRetentionPolicy"
-                        :disabled="!isRetentionEnabledModel" style="margin-right: 15px">
+                        :disabled="!isRetentionEnabledModel" style="margin-inline-end: 15px">
                         {{ $t('Settings.ForceRunRetentionPolicy') }}
                     </button>
                 </div>
@@ -151,7 +151,7 @@
                 <p>{{ $t('Settings.GeographyExportFormat_Description') }}</p>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter" style="padding-inline-start: 30px">
                     <div class="form-group">
                         <Typeahead control-id="geographyExportFormat" noSearch noClear :values="geographyFormatOptions"
                             :value="geographyFormatValue" @selected="onGeographyFormatSelected" />
@@ -165,9 +165,9 @@
                 <p>{{ $t('Settings.ClearExportCache_Description') }}</p>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter" style="padding-inline-start: 30px">
                     <button type="button" class="btn btn-danger" @click="removeExportCache"
-                        :disabled="!allowToRemoveExportCache" style="margin-right: 15px">
+                        :disabled="!allowToRemoveExportCache" style="margin-inline-end: 15px">
                         {{ $t('Settings.RemoveExportCache') }}
                     </button>
                     <span v-if="!allowToRemoveExportCache && statusDropExportCache == 'Removing'" style="color:blue">
@@ -203,7 +203,7 @@
 }
 
 .form-group .btn-success {
-    margin-left: 20px;
+    margin-inline-start: 20px;
     margin-top: 2px;
 }
 

@@ -3,13 +3,13 @@
         <div class="form-holder">
             <div v-for="comment in comments" :key="comment.id" class="comment"
                 :class="{ isResolved: comment.resolveDate != null }">
-                <button type="button" class="btn btn-sm btn-link pull-right" @click="deleteComment(comment.id)">{{
+                <button type="button" class="btn btn-sm btn-link float-end" @click="deleteComment(comment.id)">{{
                     $t('QuestionnaireEditor.Delete') }}</button>
-                <button v-show="comment.resolveDate == null" type="button" class="btn btn-sm btn-link pull-right"
+                <button v-show="comment.resolveDate == null" type="button" class="btn btn-sm btn-link float-end"
                     @click="resolveComment(comment.id)">{{ $t('QuestionnaireEditor.CommentEditorResolve') }}</button>
-                <span class="author">{{ comment.userEmail }}</span>
+                <span class="author technical-value">{{ comment.userEmail }}</span>
                 <span class="date" v-dateTime="comment.date"></span>
-                <p class="comment-text">{{ comment.comment }}</p>
+                <p class="comment-text"><bdi>{{ comment.comment }}</bdi></p>
             </div>
 
             <div class="row" id="edit-entity-comment-row">
@@ -18,7 +18,7 @@
                         <help link="newComment" />
                     </label>
                     <textarea name="comment" id="edit-entity-comment" v-model="activeComment.comment" class="form-control"
-                        required v-autosize></textarea>
+                        v-content-direction="activeComment.comment" required v-autosize></textarea>
                     <div>
                         <span>{{ activeComment.comment.length }} / {{ maxCommentLength }}</span>
                     </div>

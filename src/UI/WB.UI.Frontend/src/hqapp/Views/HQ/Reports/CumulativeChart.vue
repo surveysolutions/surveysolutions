@@ -5,6 +5,7 @@
 </template>
 
 <script>
+const isRtl = document.documentElement.dir === 'rtl'
 const chartOptions = {
     elements: {
         point: { radius: 0 },
@@ -22,6 +23,8 @@ const chartOptions = {
     plugins: {
         legend: {
             display: true,
+            rtl: isRtl,
+            textDirection: isRtl ? 'rtl' : 'ltr',
             position: 'top',
             labels: {
                 generateLabels(chart) {
@@ -39,6 +42,8 @@ const chartOptions = {
             },
         },
         tooltip: {
+            rtl: isRtl,
+            textDirection: isRtl ? 'rtl' : 'ltr',
             mode: 'x',
             intersect: false,
             position: 'average',

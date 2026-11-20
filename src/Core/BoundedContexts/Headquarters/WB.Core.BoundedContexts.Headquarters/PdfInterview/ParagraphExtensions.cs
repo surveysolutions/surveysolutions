@@ -1,5 +1,7 @@
 ﻿#nullable enable
 
+using System;
+using System.Collections.Generic;
 using System.Net;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
@@ -32,13 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
         public static void AddWrappedText(this Paragraph paragraph, string text)
         {
             text = WebUtility.HtmlDecode(text);
-            for (int i = 0; i < text.Length; i+=15)
-            {
-                var str = i + 15 > text.Length
-                    ? text.Substring(i)
-                    : text.Substring(i, 15);
-                paragraph.AddText(str);
-            }
+            AddWrappedLines(paragraph, text, chunk => paragraph.AddText(chunk));
         }
 
         public static void AddWrapFormattedText(this Paragraph paragraph, string text, string style, Color? color = null)
@@ -47,14 +43,24 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 return;
             
             text = WebUtility.HtmlDecode(text);
-            for (int i = 0; i < text.Length; i+=15)
+            AddWrappedLines(paragraph, text, chunk =>
             {
-                var str = i + 15 > text.Length
-                    ? text.Substring(i)
-                    : text.Substring(i, 15);
-                var formattedText = paragraph.AddFormattedText(str, style);
+                var formattedText = paragraph.AddFormattedText(chunk, style);
                 if (color.HasValue)
                     formattedText.Color = color.Value;
+            });
+        }
+
+        private static void AddWrappedLines(Paragraph paragraph, string text, Action<string> addChunk)
+        {
+            var lines = text.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
+            for (var i = 0; i < lines.Length; i++)
+            {
+                if (i > 0)
+                    paragraph.AddLineBreak();
+
+                foreach (var chunk in PdfRtlText.SplitForWrapping(lines[i], 15))
+                    addChunk(chunk);
             }
         }
     }

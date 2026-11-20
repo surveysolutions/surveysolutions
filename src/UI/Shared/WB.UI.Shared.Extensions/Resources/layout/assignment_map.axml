@@ -25,8 +25,8 @@
             android:id="@+id/area_warning"
             android:layout_alignParentTop="true"
             android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
-            android:layout_marginLeft="@dimen/area_editor_warning_margin"
-            android:layout_marginRight="@dimen/area_editor_warning_margin"
+            android:layout_marginStart="@dimen/area_editor_warning_margin"
+            android:layout_marginEnd="@dimen/area_editor_warning_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.75"
-                android:gravity="center_vertical|left"
+                android:gravity="center_vertical|start"
                 android:orientation="vertical"
                 android:layout_marginBottom="1dp"
                 android:background="@drawable/warning"
@@ -43,11 +43,11 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
-                    android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
+                    android:layout_marginStart="@dimen/area_editor_buttons_margin_space"
+                    android:layout_marginEnd="@dimen/area_editor_buttons_margin_space"
                     android:textSize="@dimen/area_editor_warning_text"
                     android:textColor="@color/map_warning_text_color"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:duplicateParentState="true"
                     android:singleLine="false"
                     android:maxLines="2"
@@ -61,18 +61,18 @@
             android:id="@+id/butBack"
             style="@style/Area_BackButton"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             local:MvxBind="Click NavigateToDashboardCommand;"
             android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
-            android:layout_marginLeft="@dimen/area_editor_buttons_margin_space" />
+            android:layout_marginStart="@dimen/area_editor_buttons_margin_space" />
 
     <ImageButton
             android:id="@+id/butMenu"
             style="@style/Area_MenuButton"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
-            android:layout_marginRight="@dimen/area_editor_buttons_margin_space" />
+            android:layout_marginEnd="@dimen/area_editor_buttons_margin_space" />
     <ImageButton
             android:id="@+id/butGeoTracking"
             style="@style/Area_GeoTrackingButton"
@@ -124,7 +124,7 @@
             android:id="@+id/butZoomMenu"
             style="@style/Area_ZoomMenuButton"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
+            android:layout_marginStart="@dimen/area_editor_buttons_margin_space"
             android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
              />
 
@@ -132,9 +132,9 @@
             android:id="@+id/butCreateInterview"
             style="@style/AssigmentMap_CreateInterview"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             local:MvxBind="Click CreateInterviewCommand; Visible AllowCreateInterview;"
-            android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
+            android:layout_marginEnd="@dimen/area_editor_buttons_margin_space"
             android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
     />
     

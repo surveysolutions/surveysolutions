@@ -51,7 +51,7 @@
                                     </div>
                                 </div><!-- /input-group -->
                             </form>
-                            <span class="group-summary pull-right">{{ totalResults }} {{
+                            <span class="group-summary float-end">{{ totalResults }} {{
                 $t('QuestionnaireEditor.ClassificationsSearchEntities') }}</span>
                         </div>
                         <perfect-scrollbar class="scroller">

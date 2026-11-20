@@ -218,7 +218,8 @@ export default {
                 pagingType: this.pagingType,
                 lengthChange: false, // do not show page size selector
                 pageLength: this.pageLength, // page size
-                dom: 'frtp',
+                // wide tables scroll inside the wrapper instead of the whole page
+                dom: 'fr<"table-with-scroll"t>p',
                 conditionalPaging: true,
                 searchHighlight: true,
                 paging: !this.noPaging,

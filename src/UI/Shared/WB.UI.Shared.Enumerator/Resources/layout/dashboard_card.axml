@@ -22,7 +22,7 @@
       android:background="@drawable/dashboard_interview_status_new"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintLeft_toLeftOf="parent" />
+      app:layout_constraintStart_toStartOf="parent" />
     
     <androidx.constraintlayout.widget.Guideline
       android:id="@+id/left_guideline"
@@ -50,7 +50,7 @@
       android:id="@+id/menu" app:MvxBind="Visible HasContextMenu"
       app:srcCompat="@drawable/ic_action_more_vert"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/top_guideline"
       app:layout_constraintVertical_bias="0"
       android:background="?attr/selectableItemBackgroundBorderless"
@@ -60,8 +60,8 @@
         android:id="@+id/id"
         app:MvxBind="Text IdLabel;"
         app:layout_constraintHorizontal_weight="34"
-        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-        app:layout_constraintRight_toLeftOf="@+id/title"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline"
+        app:layout_constraintEnd_toStartOf="@+id/title"
         app:layout_constraintTop_toTopOf="@+id/top_guideline"
         style="@style/Dashboard_InterviewItem_Id" />
 
@@ -69,8 +69,8 @@
         android:id="@+id/title"
         app:MvxBind="Text Title;"
         app:layout_constraintHorizontal_weight="55"
-        app:layout_constraintLeft_toRightOf="@+id/id"
-        app:layout_constraintRight_toRightOf="@id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/id"
+        app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintTop_toTopOf="@+id/top_guideline"
         style="@style/Dashboard_InterviewItem_Title" />
 
@@ -81,8 +81,8 @@
 	        Text SubTitle; 
 	        TextColor InterviewStatusToColor(Status);"      
         style="@style/Dashboard_InterviewItem_SubTitle"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
       <TextView
@@ -91,8 +91,8 @@
             Text SubTitle; 
             TextColor InterviewStatusToColor(Status);"
         style="@style/Dashboard_InterviewItem_SubTitle"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/subtitle" />
 
     <TextView
@@ -101,8 +101,8 @@
           Text Responsible; 
           TextColor InterviewStatusToColor(Status);"
         style="@style/Dashboard_InterviewItem_SubTitle"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/subtitleFull" />
       
     <TextView
@@ -112,8 +112,8 @@
           Text CalendarEvent; 
           TextColor CalendarEventToColor(CalendarEventStart);"      
         style="@style/Dashboard_InterviewItem_SubTitle"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/responsible" />
     <TextView
           android:id="@+id/calendareventFull"
@@ -121,8 +121,8 @@
                 Text CalendarEvent; 
                 TextColor CalendarEventToColor(CalendarEventStart);"
               style="@style/Dashboard_InterviewItem_SubTitle"
-          app:layout_constraintLeft_toLeftOf="@+id/title"
-          app:layout_constraintRight_toRightOf="@+id/right_guideline"
+          app:layout_constraintStart_toStartOf="@+id/title"
+          app:layout_constraintEnd_toEndOf="@+id/right_guideline"
           app:layout_constraintTop_toBottomOf="@+id/calendarevent" />
 
     <TextView
@@ -132,8 +132,8 @@
                      TextColor InterviewStatusToColor(Status);"
         style="@style/Dashboard_InterviewItem_SubTitle"
         android:maxLines="1"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/calendareventFull" />
 
     <TextView
@@ -142,8 +142,8 @@
                            Text Comments;
                            TextColor InterviewStatusToColor(Status);"
               style="@style/Dashboard_InterviewItem_SubTitle"
-              app:layout_constraintLeft_toLeftOf="@+id/title"
-              app:layout_constraintRight_toRightOf="@+id/right_guideline"
+              app:layout_constraintStart_toStartOf="@+id/title"
+              app:layout_constraintEnd_toEndOf="@+id/right_guideline"
               app:layout_constraintTop_toBottomOf="@+id/comments" />
 
     <TextView
@@ -153,8 +153,8 @@
                      TextColor InterviewStatusToColor(Status);"
         style="@style/Dashboard_InterviewItem_SubTitle"
         android:maxLines="1"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/commentsFull" />
 
     <TextView
@@ -163,8 +163,8 @@
                      Text AssignmentStatusLabel;
                      TextColor InterviewStatusToColor(Status);"
         style="@style/Dashboard_InterviewItem_SubTitle"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/commentsFull" />
 
     <TextView
@@ -174,8 +174,8 @@
                      TextColor InterviewStatusToColor(Status);"
         style="@style/Dashboard_InterviewItem_SubTitle"
         android:maxLines="2"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/assignment_status_label" />
 
     <TextView
@@ -184,8 +184,8 @@
                      Text AssignmentStatusComment;
                      TextColor InterviewStatusToColor(Status);"
         style="@style/Dashboard_InterviewItem_SubTitle"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/assignment_status_label_full" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -198,7 +198,7 @@
     <TextView android:id="@+id/assignmentId"
         app:MvxBind="Text AssignmentIdLabel"
               
-        app:layout_constraintLeft_toLeftOf="@+id/id"
+        app:layout_constraintStart_toStartOf="@+id/id"
         app:layout_constraintTop_toBottomOf="@+id/id"
         style="@style/Dashboard_InterviewItem_SubId" />
 
@@ -207,15 +207,15 @@
         app:MvxBind="ItemsSource PrefilledQuestions;"
         app:MvxItemTemplate="@layout/dashboard_item_prefilled_question"
         
-        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline"
+        app:layout_constraintEnd_toEndOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/status_comment_barrier"
         style="@style/dashboard_prefilledQuestion_container"/>
 
     <ImageView app:MvxBind="Visible And(HasExpandedView, Not(IsExpanded));"
                android:id="@+id/ExpandHandle"
-               app:layout_constraintLeft_toLeftOf="parent"
-               app:layout_constraintRight_toRightOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
                app:layout_constraintTop_toBottomOf="@+id/prefilledQuestions"
                android:background="?attr/selectableItemBackgroundBorderless"
                app:srcCompat="@drawable/dashboard_expand_handle"
@@ -227,7 +227,7 @@
           BackgroundColor InterviewStatusToButton(Status);"            
           style="@style/Dashboard_InterviewItem_MainActionButton"
             
-          app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+          app:layout_constraintStart_toStartOf="@+id/left_guideline"
           app:layout_constraintTop_toBottomOf="@+id/ExpandHandle" />
     <TextView
         android:id="@+id/show_qr_code"
@@ -236,7 +236,7 @@
                 Text ExtraAction.Label;                               
                 Click ExtraAction.Command;"
         
-        app:layout_constraintLeft_toRightOf="@+id/main_action"
+        app:layout_constraintStart_toEndOf="@+id/main_action"
         app:layout_constraintTop_toBottomOf="@+id/ExpandHandle"/>      
     <TextView 
           android:id="@+id/show_location"
@@ -255,7 +255,7 @@
                 Hint InterviewStatusToButton(Status);"
           
           app:layout_constraintTop_toBottomOf="@+id/ExpandHandle"
-          app:layout_constraintRight_toRightOf="parent"/>
+          app:layout_constraintEnd_toEndOf="parent"/>
       <View
           android:id="@+id/footer"
           android:layout_width="wrap_content"

@@ -1,6 +1,7 @@
 <template>
     <v-container fluid class="categories-strings pa-4">
-        <v-textarea ref="strings" v-model="categoriesAsText" rows="15" variant="outlined" spellcheck="false" wrap="off"
+        <v-textarea ref="strings" v-model="categoriesAsText" v-content-direction="categoriesAsText"
+            rows="15" variant="outlined" spellcheck="false" wrap="off"
             autocorrect="off" :hide-details="!validationMessage" :error="!validity" :disabled="loading || convert"
             :loading="loading || convert" :readonly="readonly" class="categories-strings__textarea" @change="change"
             @focus="onFocus" @blur="onBlur">
@@ -278,7 +279,7 @@ export default {
 
 .categories-strings__textarea :deep(.v-field__input) {
     padding: 0;
-    padding-left: 8px;
+    padding-inline-start: 8px;
     mask-image: none !important;
     -webkit-mask-image: none !important;
 }
@@ -298,15 +299,16 @@ export default {
     min-width: var(--categories-strings-line-numbers-width);
     height: 100%;
     box-sizing: border-box;
-    padding: 0px 8px var(--categories-strings-padding-y) 4px;
+    padding-block: 0px var(--categories-strings-padding-y);
+    padding-inline: 4px 8px;
     background: rgba(0, 0, 0, 0.04);
-    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    border-inline-end: 1px solid rgba(0, 0, 0, 0.12);
     overflow: hidden;
     color: rgba(0, 0, 0, 0.6);
     font-family: var(--categories-strings-font-family);
     font-size: var(--categories-strings-font-size);
     line-height: var(--categories-strings-line-height);
-    text-align: right;
+    text-align: end;
     white-space: pre;
     user-select: none;
 }
@@ -324,7 +326,7 @@ export default {
 
 .categories-strings__validation-list {
     margin: 8px 0 0;
-    padding-left: 20px;
+    padding-inline-start: 20px;
 }
 
 .categories-strings__validation-link {
@@ -332,7 +334,7 @@ export default {
     padding: 0;
     background: transparent;
     color: inherit;
-    text-align: left;
+    text-align: start;
     white-space: pre-wrap;
     text-decoration: underline;
 }

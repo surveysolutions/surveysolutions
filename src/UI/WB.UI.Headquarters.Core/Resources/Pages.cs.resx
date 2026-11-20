@@ -672,6 +672,9 @@
   <data name="HistoryOfStatuses_By" xml:space="preserve">
     <value>Zadáno</value>
   </data>
+  <data name="HistoryOfStatuses_InterviewResponsible" xml:space="preserve">
+    <value>{{interviewKey}}, zodpovědný uživatel: {{responsible}}</value>
+  </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
     <value>Poznámka</value>
   </data>

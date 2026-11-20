@@ -17,7 +17,7 @@
         > .arrow {
             position: absolute;
             top: -20px;
-            left: 100px;
+            inset-inline-start: 100px;
             width: 42px;
             height: 21px;
             background: url(../../i/popover-arrow.png) center no-repeat;
@@ -67,7 +67,7 @@
         @s: 40px;
         position: absolute;
         z-index: 100;
-        right: 4px;
+        inset-inline-end: 4px;
         width: @s;
         height: @s;
         background: url(../../i/cross.png) 0 0 no-repeat;
@@ -89,7 +89,7 @@
 }
 
 .modal-footer {
-    text-align: left; // right align buttons
+    text-align: start; // right align buttons
     border-top: none;
 }
 

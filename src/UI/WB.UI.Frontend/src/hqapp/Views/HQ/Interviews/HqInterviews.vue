@@ -6,7 +6,7 @@
                 <h1>{{ title }}</h1>
                 <a href="../MapDashboard"
                     class="btn"
-                    style="margin-right: 30px; padding: 0">
+                    style="margin-inline-end: 30px; padding: 0">
                     <img style="padding-top: 2px"
                         height="26px;"
                         src="/img/google-maps-markers/map.png"
@@ -451,14 +451,20 @@
             :title="$t('Pages.HistoryOfStatuses_Title')">
             <div class="action-container">
                 <p>
-                    <a class="interview-id title-row"
-                        @click="viewInterview"
-                        href="javascript:void(0)">
-                        {{ interviewKey }}
-                    </a>
-                    by
-                    <span :class="responsibleClass"
-                        v-dompurify-html="responsibleLink"></span>
+                    <template v-for="(part, index) in historyTitleParts"
+                        :key="index">
+                        <a v-if="part.type === 'interviewKey'"
+                            class="interview-id title-row"
+                            dir="ltr"
+                            @click="viewInterview"
+                            href="javascript:void(0)">
+                            {{ interviewKey }}
+                        </a>
+                        <span v-else-if="part.type === 'responsible'"
+                            :class="responsibleClass"
+                            v-dompurify-html="responsibleLink"></span>
+                        <template v-else>{{ part.text }}</template>
+                    </template>
                 </p>
             </div>
             <div class="table-with-scroll">
@@ -757,6 +763,17 @@ export default {
             return this.selectedRowWithMenu != undefined
                 ? this.selectedRowWithMenu.key
                 : ''
+        },
+        historyTitleParts() {
+            // translations define the word order, links are placed instead of the placeholders
+            const marker = '\u0001'
+            return this.$t('Pages.HistoryOfStatuses_InterviewResponsible', {
+                interviewKey: marker + 'interviewKey' + marker,
+                responsible: marker + 'responsible' + marker,
+            })
+                .split(marker)
+                .map((text, index) => (index % 2 === 1 ? { type: text } : { type: 'text', text }))
+                .filter((part) => part.type !== 'text' || part.text !== '')
         },
         responsibleLink() {
             if (this.selectedRowWithMenu == undefined) return ''
@@ -1118,8 +1135,7 @@ export default {
                     selector: 'td>.checkbox-filter',
                     info: false,
                 },
-                dom: 'fritp',
-                sDom: 'rf<"table-with-scroll"t>ip',
+                dom: 'fri<"table-with-scroll"t>p',
                 searchHighlight: true,
             }
 

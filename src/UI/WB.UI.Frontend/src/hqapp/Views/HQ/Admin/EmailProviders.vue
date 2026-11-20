@@ -319,7 +319,7 @@
                                             <Field v-slot="{ field }" name="smtpTlsEncryption"
                                                 :value="smtpTlsEncryption">
 
-                                                <input v-bind="field" type="checkbox" style="margin-right: 5px"
+                                                <input v-bind="field" type="checkbox" style="margin-inline-end: 5px"
                                                     class="form-control checkbox-filter single-checkbox"
                                                     :label="$t('Settings.EmailProvider_SmtpTlsEncryption')"
                                                     name="smtpTlsEncryption" id="smtpTlsEncryption"
@@ -348,7 +348,7 @@
                                             <Field v-slot="{ field }" name="smtpAuthentication"
                                                 :value="smtpAuthentication">
 
-                                                <input v-bind="field" type="checkbox" style="margin-right: 5px"
+                                                <input v-bind="field" type="checkbox" style="margin-inline-end: 5px"
                                                     class="form-control checkbox-filter single-checkbox"
                                                     :label="$t('Settings.EmailProvider_SmtpAuthentication')"
                                                     name="smtpAuthentication" id="smtpAuthentication"

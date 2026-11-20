@@ -342,6 +342,9 @@
   <data name="HistoryOfStatuses_By" xml:space="preserve">
     <value>Nga</value>
   </data>
+  <data name="HistoryOfStatuses_InterviewResponsible" xml:space="preserve">
+    <value>{{interviewKey}} nga {{responsible}}</value>
+  </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
     <value>Komento</value>
   </data>

@@ -5,8 +5,8 @@
 
                 <div class="questionnaire-logo">
                     <a class="logo" href="https://mysurvey.solutions/" target="_blank" rel="noopener">
-                        <img src="../../../content/i/logo.png" alt="Survey Solutions" class="pull-left">
-                        <span class="pull-left">Survey<br>Solutions</span>
+                        <img src="../../../content/i/logo.png" alt="Survey Solutions" class="float-start">
+                        <span class="float-start">Survey<br>Solutions</span>
                     </a>
 
                     <a class="navbar-text" href="/">{{ $t('QuestionnaireController.Designer') }}</a>
@@ -50,7 +50,7 @@
                             <span class="caret"></span>
                             <span class="sr-only"></span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
+                        <ul class="dropdown-menu dropdown-menu-end">
                             <li>
                                 <a href="/identity/account/manage">{{
                         $t('AccountResources.ManageAccount')

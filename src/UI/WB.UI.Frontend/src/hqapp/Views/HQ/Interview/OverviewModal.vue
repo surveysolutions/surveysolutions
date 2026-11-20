@@ -23,7 +23,7 @@
                 </button>
                 <button type="button"
                     class="btn btn-link"
-                    style="float:right"
+                    style="float:inline-end"
                     @click="print">
                     {{ $t("Pages.Print") }}
                 </button>
@@ -47,7 +47,7 @@
     }
 
     .overviewOpenned .overviewModal {
-        padding-left: 0px !important;
+        padding-inline-start: 0px !important;
         position: unset;
     }
 

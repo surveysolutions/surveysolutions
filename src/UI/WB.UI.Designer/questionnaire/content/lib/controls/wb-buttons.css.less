@@ -32,10 +32,10 @@
 
 .vapp{
   .btn{
-    margin-right: 5px;
+    margin-inline-end: 5px;
   }
   #verification-button {
-    margin-left: 5px;
+    margin-inline-start: 5px;
   }
 }
 
@@ -94,7 +94,7 @@
 
     .arrow {
       position: absolute;
-      right: 0;
+      inset-inline-end: 0;
       top: 0;
       height: 100%;
       width: 40px;
@@ -105,7 +105,7 @@
   > .wb-dropdown-button {
     background-color: #fff;
     width: 100%;
-    text-align: left;
+    text-align: start;
     .wb-input-text-fontstyle();
 
   }
@@ -113,7 +113,8 @@
 }
 button#questionSelectBtn {padding: 10px 0 10px 0px;width: 100%;}
 button#questionTypeBtn {
-    padding: 10px 40px 10px 50px;
+    padding-block: 10px 10px;
+    padding-inline: 50px 40px;
     width: 380px;
     overflow: hidden;
 }
@@ -122,20 +123,20 @@ button#questionTypeBtn, button#questionSelectBtn {
   background-color: #ffffff;
   border: 2px solid #cccccc;
   text-transform: none;
-  text-align: left;
+  text-align: start;
 
   >i {
-    left: 10px;
+    inset-inline-start: 10px;
     top: 7px;
     position: absolute;
   }
 
   >span.vertical-line {
-    border-left: 2px solid #cccccc;
+    border-inline-start: 2px solid #cccccc;
     height: 93%;
     position: absolute;
     top: 1px;
-    left: 40px;
+    inset-inline-start: 40px;
   }
 
   >span.dropdown-arrow {
@@ -143,7 +144,7 @@ button#questionTypeBtn, button#questionSelectBtn {
     width: 40px;
     height: 12px;
     position: absolute;
-    right: 0;
+    inset-inline-end: 0;
   }
 }
 ul.dropdown-menu {
@@ -163,32 +164,32 @@ ul.dropdown-menu {
 ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a {
   width: 100%;
   position: relative;
-  padding-left: 40px;
+  padding-inline-start: 40px;
 
   .inline-button-fontstyle();
   line-height: 20px;
   text-transform: none;
 
   >i {
-    left: 10px;
+    inset-inline-start: 10px;
     position: absolute;
   }
 }
 
 .instructions-cross {
   margin-top: 38px;
-  margin-left: -30px;
+  margin-inline-start: -30px;
 }
 
 .filter-cross {
   margin-top: 28px;
-  margin-left: -32px;
+  margin-inline-start: -32px;
 }
 
 .add-filter-label {
-  margin-left: 6px;
+  margin-inline-start: 6px;
 }
 
 .upload-categories-button {
-  margin-left: 16px;
+  margin-inline-start: 16px;
 }

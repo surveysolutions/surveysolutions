@@ -1,9 +1,13 @@
 @using System.Globalization
 @using Microsoft.Extensions.Options
 @inject IOptions<UiConfig> UiConfig
+@{
+    var uiLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var uiDirection = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr";
+}
 
 <!DOCTYPE html>
-<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+<html lang="@uiLanguage" dir="@uiDirection">
 
 <head>
     <title>@this.ViewBag.Title</title>
@@ -25,18 +29,18 @@
         }
     </script>
 
-  <script type="module" crossorigin src="/js/sharedLayout-Dk2oBs8J.js"></script>
-  <link rel="modulepreload" crossorigin href="/js/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="modulepreload" crossorigin href="/js/jquery.min-BdwSxSBs.js">
-  <link rel="modulepreload" crossorigin href="/js/serverGuard-BBIIdcxq.js">
-  <link rel="modulepreload" crossorigin href="/js/bootstrap.esm-DEBReTKS.js">
-  <link rel="modulepreload" crossorigin href="/js/mande-BCagLYbb.js">
-  <link rel="modulepreload" crossorigin href="/js/jquery.validate-B4oxVRdg.js">
-  <link rel="modulepreload" crossorigin href="/js/jquery.validate.unobtrusive-BfjL9qAb.js">
-  <link rel="modulepreload" crossorigin href="/js/simplepage-JsXihgeF.js">
-  <link rel="stylesheet" crossorigin href="/css/jquery.validate-CudfdLEa.css">
-  <link rel="stylesheet" crossorigin href="/css/sharedLayout-CQwwu-JK.css">
-  <link rel="stylesheet" crossorigin href="/css/designer-list-D82bTui6.css">
+  <script type="module" crossorigin src="/js/sharedLayout.js"></script>
+  <link rel="modulepreload" crossorigin href="/js/jquery.min.js">
+  <link rel="modulepreload" crossorigin href="/js/modulepreload-polyfill.js">
+  <link rel="modulepreload" crossorigin href="/js/serverGuard.js">
+  <link rel="modulepreload" crossorigin href="/js/bootstrap.esm.js">
+  <link rel="modulepreload" crossorigin href="/js/rejectionMessage.js">
+  <link rel="modulepreload" crossorigin href="/js/jquery.validate.js">
+  <link rel="modulepreload" crossorigin href="/js/validation.js">
+  <link rel="modulepreload" crossorigin href="/js/simplepage.js">
+  <link rel="stylesheet" crossorigin href="/css/validation.css">
+  <link rel="stylesheet" crossorigin href="/css/sharedLayout.css">
+  <link rel="stylesheet" crossorigin href="/css/designer-list.css">
 </head>
 
 <body onload="FrameCheck();">
@@ -46,8 +50,8 @@
 
                 <div class="questionnaire-logo">
                     <a class="logo" href="https://mysurvey.solutions/" target="_blank" rel="noopener">
-                        <img src="~/i/logo.png" alt="Survey Solutions" class="pull-left">
-                        <span class="pull-left">Survey<br>Solutions</span>
+                        <img src="~/i/logo.png" alt="Survey Solutions" class="float-start">
+                        <span class="float-start">Survey<br>Solutions</span>
                     </a>
                     @Html.ActionLink(QuestionnaireController.Designer, "Index", "QuestionnaireList", null, new
                         {
@@ -91,7 +95,7 @@
                             <span class="caret"></span>
                             <span class="sr-only"></span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
+                        <ul class="dropdown-menu dropdown-menu-end">
                             <li>
                                 <a asp-area="Identity" asp-page="/Account/Manage/Index">
                                     @AccountResources.ManageAccount

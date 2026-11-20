@@ -1,0 +1,213 @@
+/* Monospace UI fonts lack Arabic glyphs; this alias only covers Arabic ranges so Latin text keeps its font. */
+@font-face {
+    font-family: "WB Arabic Fallback";
+    src: local("Segoe UI"), local("Tahoma"), local("Geeza Pro Regular"), local("GeezaPro"),
+        local("Noto Sans Arabic"), local("NotoSansArabic-Regular"), local("Arial Unicode MS"), local("ArialUnicodeMS"), local("Arial");
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+.border-inline-start-radius(@radius) {
+    border-start-start-radius: @radius;
+    border-end-start-radius: @radius;
+}
+
+.border-inline-end-radius(@radius) {
+    border-start-end-radius: @radius;
+    border-end-end-radius: @radius;
+}
+
+/* Replacements for Bootstrap 3 pull-left/pull-right, which are also !important. */
+.float-start {
+    float: inline-start !important;
+}
+
+.float-end {
+    float: inline-end !important;
+}
+
+/* Bootstrap 3 aligns these with physical left/right; start/end resolve to the same values in LTR. */
+/* Bootstrap 3 resets only padding-left; the UA list indent is logical and would remain on the right in RTL. */
+.list-unstyled,
+.list-inline {
+    padding-inline-start: 0;
+}
+
+th,
+.dropdown-menu {
+    text-align: start;
+}
+
+@media (min-width: 768px) {
+    .form-horizontal .control-label {
+        text-align: end;
+    }
+}
+
+.dropdown-menu-start {
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+}
+
+.dropdown-menu-end {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+}
+
+.border-inline-end {
+    border-inline-end: 1px solid #ddd;
+}
+
+.content-direction-auto {
+    direction: ltr;
+    text-align: start;
+    unicode-bidi: plaintext;
+}
+
+.content-direction-auto[dir="rtl"] {
+    direction: rtl;
+}
+
+.technical-value,
+.technical-value input,
+.technical-value textarea,
+.input-variable-name input,
+input[type="email"],
+input[type="password"],
+input[type="url"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[inputmode="numeric"],
+.mono,
+.var-name,
+.error-code,
+code,
+pre {
+    /* Code, identifiers, URLs, and IDs deliberately use a fixed LTR coordinate system. */
+    /* direction: fixed */
+    direction: ltr;
+    text-align: start;
+    unicode-bidi: isolate;
+}
+
+[dir="rtl"] .foldback-button,
+[dir="rtl"] .ui-icon-carat-1-w,
+[dir="rtl"] .ui-icon-carat-1-e,
+[dir="rtl"] .he-tree__open-icon,
+[dir="rtl"] .glyphicon-chevron-left,
+[dir="rtl"] .glyphicon-chevron-right,
+[dir="rtl"] .glyphicon-arrow-left,
+[dir="rtl"] .glyphicon-arrow-right,
+[dir="rtl"] .glyphicon-menu-left,
+[dir="rtl"] .glyphicon-menu-right,
+[dir="rtl"] .btn-expand,
+[dir="rtl"] .mdi-chevron-left::before,
+[dir="rtl"] .mdi-chevron-right::before,
+[dir="rtl"] .mdi-arrow-left::before,
+[dir="rtl"] .mdi-arrow-right::before,
+[dir="rtl"] .mdi-send::before {
+    transform: scaleX(-1);
+}
+
+/* v-content-direction keeps the content's bidi order, but fields stay aligned with the UI direction. */
+html[dir="rtl"] [data-content-direction][dir="ltr"],
+html[dir="rtl"] [data-content-direction][dir="ltr"] :is(input, textarea),
+html[dir="rtl"] .technical-value,
+html[dir="rtl"] .input-variable-name input,
+html[dir="ltr"] [data-content-direction][dir="rtl"],
+html[dir="ltr"] [data-content-direction][dir="rtl"] :is(input, textarea) {
+    text-align: end;
+}
+
+/* Tree rows: in RTL the variable-name block sits beside the title instead of over it, so LTR titles
+   keep their beginning visible and are ellipsized at their own end. */
+html[dir="rtl"] .item .item-body {
+    display: flex;
+}
+
+html[dir="rtl"] .item .item-body > .item-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
+}
+
+html[dir="rtl"] .item .item-body > .qname-block {
+    position: relative;
+    flex: 0 0 auto;
+    inset: auto;
+}
+
+html[dir="rtl"] .item .item-text > [data-content-direction] {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: top;
+}
+
+/* Logins and emails are typed LTR, while the localized placeholder follows the UI direction. */
+.ltr-value:not(:placeholder-shown) {
+    /* direction: fixed */
+    direction: ltr;
+}
+
+/* Horizontal fade overlays are drawn as physical gradients. */
+[dir="rtl"] .qname-block::before {
+    transform: scaleX(-1);
+}
+
+[dir="rtl"] .ps__rail-y {
+    inset-inline-start: 0;
+    inset-inline-end: auto !important;
+}
+
+.ace_editor {
+    /* Ace keeps code columns and cursor coordinates in a fixed LTR coordinate system. */
+    /* direction: fixed */
+    direction: ltr;
+    text-align: start;
+}
+
+[dir="rtl"] > .ace_editor {
+    direction: rtl;
+    text-align: start;
+}
+
+/* Mirror the Bootstrap 3 grid, which floats and offsets columns with physical properties. */
+.rtl-grid-columns(@class, @index: 12) when (@index > 0) {
+    [dir="rtl"] .col-@{class}-@{index} {
+        /* direction: fixed */
+        float: right;
+    }
+
+    [dir="rtl"] .col-@{class}-offset-@{index} {
+        /* direction: fixed */
+        margin-left: 0;
+        margin-right: percentage((@index / 12));
+    }
+
+    .rtl-grid-columns(@class, (@index - 1));
+}
+
+.rtl-grid-columns(xs);
+
+@media (min-width: 768px) {
+    .rtl-grid-columns(sm);
+}
+
+@media (min-width: 992px) {
+    .rtl-grid-columns(md);
+}
+
+@media (min-width: 1200px) {
+    .rtl-grid-columns(lg);
+}
+
+.message-body,
+.questionnaire-content,
+.content-direction-auto {
+    unicode-bidi: plaintext;
+}

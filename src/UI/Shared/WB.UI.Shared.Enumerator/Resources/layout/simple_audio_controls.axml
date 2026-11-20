@@ -11,7 +11,7 @@
       android:layout_height="@dimen/exo_player_button_size"
       android:layout_gravity="center"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent">
     <ImageButton
             android:id="@id/exo_play_pause"
@@ -23,6 +23,7 @@
   </FrameLayout>
 
   <TextView android:id="@id/exo_position"
+      android:textDirection="ltr"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -30,7 +31,7 @@
       android:textSize="@dimen/exo_player_text_size"
       android:textStyle="bold"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintLeft_toRightOf="@id/control_buttons"
+      app:layout_constraintStart_toEndOf="@id/control_buttons"
       app:layout_constraintTop_toTopOf="parent"
       android:includeFontPadding="false" />
 
@@ -45,12 +46,13 @@
         app:unplayed_color="@color/exo_player_seek_unplayed"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/exo_position"
+        app:layout_constraintStart_toEndOf="@id/exo_position"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/exo_duration" />
+        app:layout_constraintEnd_toStartOf="@id/exo_duration" />
 
   <TextView
       android:id="@id/exo_duration"
+      android:textDirection="ltr"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -58,8 +60,8 @@
       android:textColor="@color/exo_player_text"
       android:textStyle="bold"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintLeft_toRightOf="@id/exo_progress"
+      app:layout_constraintStart_toEndOf="@id/exo_progress"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintRight_toRightOf="parent"  />
+      app:layout_constraintEnd_toEndOf="parent"  />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

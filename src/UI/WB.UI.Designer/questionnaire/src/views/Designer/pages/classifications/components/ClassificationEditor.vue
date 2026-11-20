@@ -4,7 +4,7 @@
             <vee-form ref="form" v-slot="{ errors, meta }">
                 <div class="form-group" :class="{ 'has-error': errors.title }">
                     <vee-field as="textarea" v-autosize name="title" type="text" required v-model="title"
-                        rules="required" class="form-control" :validateOnInput="true"
+                        v-content-direction="title" rules="required" class="form-control" :validateOnInput="true"
                         :placeholder="$t('QuestionnaireEditor.ClassificationTitle')" />
                     <span class="help-block" v-show="errors.title">{{ errors.title }}</span>
                 </div>
@@ -16,7 +16,7 @@
             </vee-form>
         </div>
         <div v-else class="line-wrapper" :class="{ 'private': isPrivate }">
-            <a @click="select()">{{ title }} <span class="badge pull-right">{{ classification.count }}</span></a>
+            <a @click="select()"><bdi>{{ title }}</bdi> <span class="badge float-end">{{ classification.count }}</span></a>
         </div>
     </div>
     <Teleport to="body">

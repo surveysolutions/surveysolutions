@@ -38,7 +38,7 @@
                                         </div>
                                     </div><!-- /btn-group -->
                                     <div class="search">
-                                        <input type="text" v-model="searchText" v-focus
+                                        <input type="text" v-model="searchText" v-content-direction="searchText" v-focus
                                             :placeholder="$t('QuestionnaireEditor.SearchQuestionPlaceholder')"
                                             class="form-control" id="searchFor" aria-label="classification-search">
                                     </div>
@@ -50,7 +50,7 @@
                                     </div>
                                 </div><!-- /input-group -->
                             </form>
-                            <span class="group-summary pull-right">{{ totalResults }} {{
+                            <span class="group-summary float-end">{{ totalResults }} {{
                 $t('QuestionnaireEditor.QuestionsSearchEntities')
             }}</span>
                         </div>

@@ -14,7 +14,7 @@
             </div>
 
             <div class="row">
-                <div class="form-group input-variable-name col-xs-12 pull-right">
+                <div class="form-group input-variable-name col-xs-12 float-end">
                     <label for="edit-group-variableName" class="wb-label">
                         {{ $t('QuestionnaireEditor.SectionVariableName') }}
                         <help link="variableName" placement="left" />
@@ -63,7 +63,7 @@
             </div>
         </div>
         <div class="form-buttons-holder">
-            <div class="pull-left">
+            <div class="float-start">
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     id="edit-chapter-save-button" class="btn btn-lg" :class="{ 'btn-primary': isDirty }"
                     @click="saveGroup()" unsaved-warning-clear :disabled="!isDirty">
@@ -74,7 +74,7 @@
                     {{ $t('QuestionnaireEditor.Cancel') }}
                 </button>
             </div>
-            <div class="pull-right">
+            <div class="float-end">
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     id="add-comment-button" class="btn btn-lg btn-link" @click="toggleComments(activeQuestion)"
                     unsaved-warning-clear>

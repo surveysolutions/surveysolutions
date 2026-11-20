@@ -42,6 +42,69 @@ And then, the main app is compiled. During development, `shared_vendor.dll.js` w
 
 There are 2 webpack configuration files in the `.build` directory, one for `shared_vendor.dll.js` and another for application entries.
 
+# Headquarters and web interview RTL
+
+All HQ layouts (including login, downloads, installation, maintenance and errors),
+web interview pages and WebTester use the server-resolved UI culture for their
+HTML `lang` and `dir`, before scripts and grids initialize. The existing request-localization providers select that
+culture (including the browser's `Accept-Language`, unless a culture query
+parameter or cookie takes precedence). Arabic selects RTL; changing the
+questionnaire translation does not change direction in this first version.
+Designer and questionnaire documents have no RTL setting.
+
+Vite uses `tools/postcss-webinterview-rtl.js` in `WB.UI.Frontend` to generate both
+directions for `markup.scss`, `markup-specific.scss`, `markup-web-interview.scss`
+and `markup-interview-review.scss`. RTL rules apply to `html[dir="rtl"]`;
+LTR and pages without `dir` retain the original styles. Zero-specificity
+prefixes preserve the existing CSS cascade. Separately loaded vendor CSS is not transformed:
+AG Grid uses its native RTL option, while exceptions and toast adjustments live in
+`_web-interview-rtl.scss`. Use the `sprite-position` Sass mixin for physical
+coordinates within sprite sheets. Other background positions (including roster
+error and warning markers) mirror with their tooltip targets. Saved numeric
+roster answers use `<bdi dir="ltr">` to preserve sign and digit order.
+The date picker retains LTR day order and native arrow-key navigation, with
+localized month/day labels. Numeric inputs, date inputs, URLs and coordinates also retain LTR.
+Scoped Vue styles are not processed by the RTL generator. Completion-page labels,
+error stripes and reconnect-banner spacing use logical CSS properties so they
+follow the page direction without separate RTL overrides.
+HQ navigation, filters, tables, export and administration panels mirror along
+with interview review. Inline and scoped styles use logical spacing and alignment.
+Do not mirror pixel coordinates computed from mouse events or map geometry.
+Chart.js legends and tooltips use native RTL; chart axes and geographic data
+retain their original ordering.
+Shared dialogs use logical text alignment so their content and action buttons
+follow the inherited direction even when appended or teleported to `body`.
+In RTL, table cells, dropdown labels/options and free-text inputs use `unicode-bidi: plaintext` so dates,
+phone numbers, identifiers and passwords keep their character order; column and
+field alignment is unchanged. Questionnaire titles, options, instructions, section
+names and read-only answers resolve direction the same way, because questionnaire
+text may be in another language than the UI. Wrap LTR values that follow translated labels inside
+one paragraph (interview keys, versions) in `<bdi>`: after Arabic text, digit groups
+separated by hyphens are otherwise displayed in reverse order.
+
+Run `npm run test:rtl` and `npm run build` from `src/UI/WB.UI.Frontend`.
+Check Arabic and English on desktop and mobile, including start/resume/finish,
+sidebar navigation, all question types, table/matrix rosters, dialogs and dates.
+Also check HQ review filters/search, collapsed sidebars, flags and audio audit.
+For HQ, check login, the workspace/navigation menus, interview/assignment/user tables,
+pagination and sorting, export formats, administrative settings, maps and reports.
+Numeric wire formats, calendar system and questionnaire translations are unchanged.
+
+The interview transcript PDF (`PdfInterview` in the Headquarters bounded context)
+follows the same UI culture: in RTL it mirrors columns, margins, header, footer and
+the bar code. PDFsharp shapes Arabic and orders each text run as an LTR paragraph,
+so `PdfRtlLayout` reorders directional runs of single-line RTL texts; wrapped
+multi-line RTL text keeps MigraDoc's line order and is not reordered.
+
+Web interview emails (invitations, reminders, rejection and completion emails) get
+their direction from the first letter of the authored template text, with
+`%PLACEHOLDERS%` ignored, so an English questionnaire title does not switch an Arabic
+email to LTR (`EmailTextDirection` on the server, `shared/emailDirection.js` for the
+preview in web interview settings; keep both in sync). HTML emails use `dir` and
+`align` attributes because email clients ignore `dir="auto"` and logical CSS; plain
+text lines get a right-to-left mark. The UI language is not used: emails are sent by
+background jobs. The completion email PDF attachment still uses the server culture.
+
 # Store Modules
 
 
@@ -84,5 +147,3 @@ All view components are processed and merged with `ComponentsProvider` class - i
 Each view component can optionally provide array of `route`s to register, method `initialize` for one time initialization and `modules` hash object to register them in RootStore
 
 Each view component initialized only once on first navigation.
-
-

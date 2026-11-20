@@ -90,17 +90,17 @@
                                 <td class="search-value">
                                     <a href="@Url.Action(openActionName, listViewModel.IsFolder ? "Questionnaire" : "Q", routevalues)" title="@listViewModel.Location">
                                         <span class="@iconCssClass"></span>
-                                        @listViewModel.Title
+                                        <bdi>@listViewModel.Title</bdi>
                                     </a>
                                 </td>
                                 <td class="date">
-                                    @listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()
+                                    <bdi>@listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()</bdi>
                                 </td>
                                 <td class="date">
-                                    @listViewModel.CreationDate.ConvertToLocalAndFormatDate()
+                                    <bdi>@listViewModel.CreationDate.ConvertToLocalAndFormatDate()</bdi>
                                 </td>
                                 <td class="email">
-                                    @listViewModel.CreatedBy
+                                    <bdi>@listViewModel.CreatedBy</bdi>
                                 </td>
                                 <td>
                                     @{
@@ -109,7 +109,7 @@
                                         {
                                             if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanExport || actionModel.CanSynchronize || actionModel.CanOpen)
                                             {
-                                                <div class="btn-group pull-right">
+                                                <div class="btn-group float-end">
                                                     <a class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" data-bs-boundary="viewport" href="#">
                                                         @QuestionnaireController.Action
                                                         <span class="caret"></span>

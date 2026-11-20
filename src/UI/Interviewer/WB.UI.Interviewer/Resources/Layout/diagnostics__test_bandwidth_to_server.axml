@@ -19,6 +19,7 @@
       <TextView
         style="@style/Diagnostics_Section_Description"
         android:textAllCaps="false"
+        android:textDirection="ltr"
         android:textColor="@color/btn_default"
         android:clickable="true"
         android:layout_width="wrap_content"
