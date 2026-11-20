@@ -15,6 +15,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
@@ -72,7 +73,9 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                     logger: logger ?? Mock.Of<ILogger>(),
                     attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
                     questionnaireRepository: questionnaireRepository ?? Create.Fake.QuestionnaireRepository(new KeyValuePair<string, QuestionnaireDocument>[]{}),
-                    executedCommandsStorage: Mock.Of<IExecutedCommandsStorage>()
+                    executedCommandsStorage: Mock.Of<IExecutedCommandsStorage>(),
+                    testerEventStore: Mock.Of<ITesterEventStore>(),
+                    questionnaireDocumentStorage: Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>()
                 ));
         }
 

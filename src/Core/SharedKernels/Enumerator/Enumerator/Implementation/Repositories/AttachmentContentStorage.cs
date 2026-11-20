@@ -92,11 +92,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public async Task RemoveAsync(string attachmentContentId)
         {
+            var fileCache = await GetFileCacheLocationAsync(attachmentContentId);
+
             this.attachmentContentMetadataRepository.Remove(attachmentContentId);
             this.attachmentContentDataRepository.Remove(attachmentContentId);
             this.attachmentPreviewContentDataRepository.Remove(attachmentContentId);
 
-            var fileCache = await GetFileCacheLocationAsync(attachmentContentId);
             if (files.IsFileExists(fileCache))
             {
                 files.DeleteFile(fileCache);

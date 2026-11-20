@@ -26,9 +26,22 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             this.aggregateLock = aggregateLock ?? throw new ArgumentNullException(nameof(aggregateLock));
         }
 
-        public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            return Task.Run(() => this.Execute(command, origin, cancellationToken), cancellationToken);
+            this.RegisterCommandExecution();
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    this.ExecuteImpl(command, origin, cancellationToken);
+                }).ConfigureAwait(false);
+            }
+            finally
+            {
+                this.UnregisterCommandExecution();
+            }
         }
 
         public void Execute(ICommand command, string origin)

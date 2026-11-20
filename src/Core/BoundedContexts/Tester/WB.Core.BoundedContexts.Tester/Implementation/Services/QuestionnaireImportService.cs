@@ -81,7 +81,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                     Id = Guid.NewGuid().FormatGuid()
                 }).ToList();
 
-            this.translationsStorage.RemoveAll();
+            var questionnaireId = questionnaireIdentity.ToString();
+            this.translationsStorage.Remove(this.translationsStorage.Where(x => x.QuestionnaireId == questionnaireId));
             this.translationsStorage.Store(filteredTranslations);
 
             this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);

@@ -23,10 +23,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             this.executedCommandsStorage = executedCommandsStorage;
         }
 
-        protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
+        protected override void OnCommandExecuted(ICommand command)
         {
-            base.ExecuteImpl(command, origin, cancellationToken);
-
             if (command is InterviewCommand interviewCommand)
             {
                 this.executedCommandsStorage.Add(interviewCommand.InterviewId, interviewCommand);

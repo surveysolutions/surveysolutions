@@ -14,12 +14,17 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
         public void Add(Guid interviewId, InterviewCommand command)
         {
             var storedCommands = commands.GetOrAdd(interviewId, id => new List<InterviewCommand>());
-            storedCommands.Add(command);
+            lock (storedCommands)
+                storedCommands.Add(command);
         }
 
         public List<InterviewCommand> Get(Guid interviewId)
         {
-            return this.commands.ContainsKey(interviewId) ? this.commands[interviewId] : new List<InterviewCommand>();
+            if (!this.commands.TryGetValue(interviewId, out var storedCommands))
+                return new List<InterviewCommand>();
+
+            lock (storedCommands)
+                return new List<InterviewCommand>(storedCommands);
         }
 
         public void Clear(Guid interviewId)

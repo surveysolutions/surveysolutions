@@ -4,6 +4,7 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -20,7 +21,7 @@ namespace WB.UI.Tester
 
         protected override async Task<object> ApplicationStartup(object hint = null)
         {
-            ClearAttachmentStorage();
+            await ClearAttachmentStorage();
             ClearPlainInterviewStorage();
 
             Mvx.IoCProvider.Resolve<IPlainStorage<TranslationInstance>>().RemoveAll();
@@ -44,8 +45,14 @@ namespace WB.UI.Tester
             }
         }
 
-        private void ClearAttachmentStorage()
+        private async Task ClearAttachmentStorage()
         {
+            var attachmentContentStorage = Mvx.IoCProvider.Resolve<IAttachmentContentStorage>();
+            foreach (var attachmentId in await attachmentContentStorage.EnumerateCacheAsync())
+            {
+                await attachmentContentStorage.RemoveAsync(attachmentId);
+            }
+
             var attachmentContentMetadataStorage = Mvx.IoCProvider.Resolve<IPlainStorage<AttachmentContentMetadata>>();
             attachmentContentMetadataStorage.RemoveAll();
 

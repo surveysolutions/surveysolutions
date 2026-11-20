@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\UI\Shared\WB.UI.Shared.Enumerator\Services\DevicePasswordHasher.cs" Link="GenericSubdomains\Utils\PasswordHasherTests\DevicePasswordHasher.cs" />
+    <Compile Include="..\..\UI\Tester\WB.UI.Tester\Infrastructure\Internals\Storage\TesterQuestionnaireAssemblyFileAccessor.cs" Link="BoundedContexts\Tester\Services\TesterQuestionnaireAssemblyFileAccessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SharedKernels\DataCollection\InterviewEntities\serializedAnswers.json" />
