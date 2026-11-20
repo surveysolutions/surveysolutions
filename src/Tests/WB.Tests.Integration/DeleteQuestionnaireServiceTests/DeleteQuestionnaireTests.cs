@@ -15,25 +15,20 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
-using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Users;
-using WB.Core.BoundedContexts.Headquarters.Users.Providers;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Mappings;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.HttpServices.Services;
@@ -43,7 +38,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -176,7 +170,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
         }
 
         [Test]
-        public void when_remove_questionnaire_binary_data_and_storage_fails_then_should_propagate_exception_after_starting_all_deletions()
+        public async Task when_remove_questionnaire_binary_data_and_storage_fails_then_should_propagate_exception_after_starting_all_deletions()
         {
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 5);
             var brokenOnlyInterviewId = Guid.NewGuid();
@@ -208,7 +202,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 interviewsReader,
                 Mock.Of<ILogger<InterviewsToDeleteFactory>>());
 
-            var exception = Assert.ThrowsAsync<InvalidOperationException>(() =>
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 interviewsToDeleteFactory.RemoveAllInterviewsDataAsync(questionnaireIdentity));
 
             Assert.That(exception, Is.SameAs(expectedException));

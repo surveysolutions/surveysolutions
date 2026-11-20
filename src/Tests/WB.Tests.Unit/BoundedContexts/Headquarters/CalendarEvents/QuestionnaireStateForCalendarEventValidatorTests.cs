@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
 
             var validator = Create.Service.QuestionnaireStateForCalendarEventValidator(questionnaireBrowseItemRepository);
 
-            TestDelegate act = () =>
+            Action act = () =>
                 validator.Validate(null, Create.Command.CreateCalendarEventCommand(questionnaireIdentity:questionnaireIdentity, userId: Id.gA));
 
             Assert.That(act, Throws.Exception.InstanceOf<CalendarEventException>()
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
 
             var validator = Create.Service.QuestionnaireStateForCalendarEventValidator(questionnaireBrowseItemRepository);
 
-            TestDelegate act = () =>
+           Action act = () =>
                 validator.Validate(null, Create.Command.CreateCalendarEventCommand(questionnaireIdentity:questionnaireIdentity, userId: Id.gA));
 
             Assert.That(act, Throws.Exception.InstanceOf<CalendarEventException>()
@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.CalendarEvents
 
             var validator = Create.Service.QuestionnaireStateForCalendarEventValidator(questionnaireBrowseItemRepository);
 
-            TestDelegate act = () =>
+           Action act = () =>
                 validator.Validate(null, Create.Command.UpdateCalendarEventCommand(questionnaireIdentity:questionnaireIdentity, userId: Id.gA));
 
             Assert.That(act, Throws.Exception.InstanceOf<CalendarEventException>()

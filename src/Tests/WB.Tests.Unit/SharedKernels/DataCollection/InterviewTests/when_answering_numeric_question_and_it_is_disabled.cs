@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Tests.Abc;
 
@@ -16,8 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview.Apply(Create.Event.QuestionsDisabled(new[]{Create.Identity(Id.g1)}));
 
-            TestDelegate act = () => interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: Id.g1));
-
+            Action act = () => interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: Id.g1));
+           
             Assert.That(act, Throws.Exception.InstanceOf<InterviewException>()
                                    .And.Message.EqualTo("Question (or it's parent) is disabled and question's answer cannot be changed."));
         }

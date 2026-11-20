@@ -262,7 +262,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         [Test]
         public void when_create_substitution_text_with_markdown_syntax_then_any_exceptions_should_not_be_throwing()
         {
-            TestDelegate testDelegate = () =>
+           Action testDelegate = () =>
                 CreateSubstitutionText(Id.Identity1,
                     "2. Mira este dibujo aquí arriba (SEÑALE ARRIBA). \n" +
                     "<br>A este dibujo le falta un tuquito. \n\n<br>" +

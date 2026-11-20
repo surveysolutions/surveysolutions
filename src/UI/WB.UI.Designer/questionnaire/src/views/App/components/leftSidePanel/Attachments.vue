@@ -21,7 +21,7 @@
                     :class="{ 'btn-primary': !isReadOnlyForUser }" v-if="!isReadOnlyForUser" capture />
 
                 <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
-                    :size="maxFileSize" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
+                    :size="maxFileSize" :multiple="true" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
                     @input-filter="inputFilter" accept=".pdf,image/*,video/*,audio/*">
                 </file-upload>
             </div>
@@ -74,6 +74,7 @@ export default {
             allowedMaxResolution: 4096,
             variableNameHtml: "<span class=\"variable-name\">" + this.$t('QuestionnaireEditor.VariableName') + "</span>",
             maxFileSize: 100 * 1024 * 1024,
+            uploadQueue: Promise.resolve(),
         }
     },
     computed: {
@@ -138,6 +139,7 @@ export default {
             self = this;
 
             if (file.type.startsWith('image')) {
+                await new Promise((resolve) => {
                 var reader = new FileReader();
                 reader.onload = function (e) {
                     var image = new Image();
@@ -153,16 +155,24 @@ export default {
                         if (((attachment.content.details.height || 0) > self.allowedMaxResolution)
                             || ((attachment.content.details.width || 0) > self.allowedMaxResolution)) {
                             notice(self.$t('QuestionnaireEditor.AttachmentDimensionsAreTooBig'));
+                            resolve();
                             return;
                         }
 
-                        if (!_.isUndefined(callback)) {
-                            await callback();
+                        try {
+                            if (!_.isUndefined(callback)) {
+                                await callback();
+                            }
+                        } finally {
+                            resolve();
                         }
                     }
+                    image.onerror = () => resolve();
                     image.src = e.target.result;
                 };
-                await reader.readAsDataURL(file.file);
+                reader.onerror = () => resolve();
+                reader.readAsDataURL(file.file);
+                });
             }
             else {
                 if (!_.isUndefined(callback)) {
@@ -171,10 +181,18 @@ export default {
             }
         },
 
-        async createAndUploadFile(file) {
+        createAndUploadFile(file) {
             if (_.isNull(file) || _.isUndefined(file)) {
                 return;
             }
+
+            // upload files one by one, as each upload is a separate questionnaire command
+            this.uploadQueue = this.uploadQueue
+                .then(() => this.uploadSingleFile(file))
+                .catch(() => { });
+        },
+
+        async uploadSingleFile(file) {
 
             if (this.isReadOnlyForUser) {
                 notice(this.$t('QuestionnaireEditor.NoPermissions'));

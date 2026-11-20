@@ -73,6 +73,29 @@ namespace WB.Tests.Abc.TestFactories
              interviewStateCalculationStrategy,
              questionnaireRepository: questionnaireRepository ?? SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Mock.Of<IQuestionnaire>()));
 
+        public CompleteInterviewViewModel CompleteInterviewViewModel(
+            IViewModelNavigationService viewModelNavigationService = null,
+            ICommandService commandService = null,
+            IPrincipal principal = null,
+            IEntitiesListViewModelFactory entitiesListViewModelFactory = null,
+            ILastCompletionComments lastCompletionComments = null,
+            InterviewStateViewModel interviewState = null,
+            DynamicTextViewModel dynamicTextViewModel = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            IQuestionnaireStorage questionnaireRepository = null,
+            ILogger logger = null)
+            => new CompleteInterviewViewModel(
+                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
+                commandService ?? Mock.Of<ICommandService>(),
+                principal ?? Mock.Of<IPrincipal>(),
+                entitiesListViewModelFactory ?? Mock.Of<IEntitiesListViewModelFactory>(),
+                lastCompletionComments ?? Mock.Of<ILastCompletionComments>(),
+                interviewState ?? Create.ViewModel.InterviewStateViewModel(),
+                dynamicTextViewModel ?? Create.ViewModel.DynamicTextViewModel(),
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                logger ?? Mock.Of<ILogger>());
+
         public ErrorMessageViewModel ErrorMessageViewModel(
             IViewModelEventRegistry eventRegistry = null,
             IStatefulInterviewRepository interviewRepository = null,

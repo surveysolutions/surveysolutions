@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
             this.inScopeExecutor = inScopeExecutor;
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken = default)
         {
             this.logger.Debug("Assignments verification job: Starting");
             try

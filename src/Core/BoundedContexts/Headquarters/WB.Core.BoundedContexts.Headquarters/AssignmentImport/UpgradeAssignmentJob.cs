@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
     [DisallowConcurrentExecution]
     [RetryFailedJob]
     [DisplayName("Upgrade assignments"), Category("Import")]
-    public class UpgradeAssignmentJob : IJob<AssignmentsUpgradeProcess>
+    public class UpgradeAssignmentJob : IJobWithData<AssignmentsUpgradeProcess>
     {
         public UpgradeAssignmentJob(IAssignmentsUpgrader assignmentsUpgrader)
         {

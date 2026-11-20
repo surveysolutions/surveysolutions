@@ -9,7 +9,6 @@ using MvvmCross.Platforms.Android.Views;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using NLog;
-using Plugin.CurrentActivity;
 using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Utils;
@@ -29,7 +28,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             log.Trace("Create");
             base.OnCreate(bundle);
             Xamarin.Essentials.Platform.Init(this, bundle);
-            CrossCurrentActivity.Current.Init(this, bundle);
 
             if (BackButtonCustomAction)
             {

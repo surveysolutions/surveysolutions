@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var validator = Create.Service.QuestionnaireStateForAssignmentValidator(questionnaireBrowseItemRepository);
 
-            TestDelegate act = () =>
+           Action act = () =>
                 validator.Validate(null, Create.Command.CreateAssignment(questionnaireId:questionnaireIdentity,responsibleId: Id.gA, webMode: true));
 
             Assert.That(act, Throws.Exception.InstanceOf<AssignmentException>()
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var validator = Create.Service.QuestionnaireStateForAssignmentValidator(questionnaireBrowseItemRepository);
 
-            TestDelegate act = () =>
+           Action act = () =>
                 validator.Validate(null, Create.Command.CreateAssignment(questionnaireId:questionnaireIdentity, responsibleId: Id.gA, webMode: true));
 
             Assert.That(act, Throws.Exception.InstanceOf<AssignmentException>().With.Message.EqualTo(CommandValidatorsMessages.QuestionnaireWasDeleted)
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var validator = Create.Service.QuestionnaireStateForAssignmentValidator(questionnaireBrowseItemRepository);
 
-            TestDelegate act = () =>
+           Action act = () =>
                 validator.Validate(null, Create.Command.ArchiveAssignment(questionnaireIdentity:questionnaireIdentity, userId: Id.gA, assignmentId:Id.g1));
 
             Assert.That(act, Throws.Exception.InstanceOf<AssignmentException>().With.Message.EqualTo(CommandValidatorsMessages.QuestionnaireWasDeleted)

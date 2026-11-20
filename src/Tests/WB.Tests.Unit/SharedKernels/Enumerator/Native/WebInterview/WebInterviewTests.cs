@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Native.WebInterview
                    { Context = context, Groups = groups.Object })
             {
                 if (throwOnConnect)
-                    Assert.That(Assert.ThrowsAsync<InvalidOperationException>(() => connectedHub.OnConnectedAsync()), Is.SameAs(connectError));
+                    Assert.That(await Assert.ThrowsAsync<InvalidOperationException>(() => connectedHub.OnConnectedAsync()), Is.SameAs(connectError));
                 else
                     await connectedHub.OnConnectedAsync();
 
@@ -91,7 +91,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Native.WebInterview
             var disconnectError = new Exception("Connection lost");
             if (throwOnDisconnect)
             {
-                var error = Assert.ThrowsAsync<InvalidOperationException>(() => disconnectedHub.OnDisconnectedAsync(disconnectError));
+                var error = await Assert.ThrowsAsync<InvalidOperationException>(() => disconnectedHub.OnDisconnectedAsync(disconnectError));
                 Assert.That(error, Is.SameAs(cleanupError));
             }
             else

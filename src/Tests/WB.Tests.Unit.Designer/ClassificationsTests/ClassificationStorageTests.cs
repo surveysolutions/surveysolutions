@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         }
 
         [Test]
-        public void When_non_admin_is_updating_public_classification()
+        public async Task When_non_admin_is_updating_public_classification()
         {
             var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(Id.g1, title: "Z"),
@@ -93,12 +93,12 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
             var classificationStorage = Create.ClassificationStorage(
                  storage);
 
-            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.UpdateClassification(
+            await Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.UpdateClassification(
                 new Classification(id : Id.g2, title:"", new ClassificationGroup(), 0),userId:Id.gA, isAdmin: false));
         }
 
         [Test]
-        public void When_non_admin_is_updating_others_classification()
+        public async Task When_non_admin_is_updating_others_classification()
         {
             var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(Id.g1, title: "Z"),
@@ -107,7 +107,7 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
             var classificationStorage = Create.ClassificationStorage(
                  storage);
 
-            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.UpdateClassification(new Classification
+            await Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.UpdateClassification(new Classification
             (
                 id : Id.g2,
                 title:"Classification A",
@@ -189,7 +189,7 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         }
 
         [Test]
-        public void When_non_admin_is_deleting_classification()
+        public async Task When_non_admin_is_deleting_classification()
         {
             var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(Id.g1, title: "Z"),
@@ -198,17 +198,17 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
             var classificationStorage = Create.ClassificationStorage(
                  storage);
 
-            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.DeleteClassificationAsync(Id.g2, userId:Id.gA, isAdmin: false));
+            await Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.DeleteClassificationAsync(Id.g2, userId:Id.gA, isAdmin: false));
         }
 
 
         [Test]
-        public void When_non_admin_is_creating_classification_group()
+        public async Task When_non_admin_is_creating_classification_group()
         {
             var classificationStorage = Create.ClassificationStorage(
                  Create.ClassificationsAccessor());
 
-            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.CreateClassificationGroup(new ClassificationGroup(), isAdmin: false));
+            await Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.CreateClassificationGroup(new ClassificationGroup(), isAdmin: false));
         }
 
         [Test]
@@ -232,12 +232,12 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         }
 
         [Test]
-        public void When_non_admin_is_updating_classification_group()
+        public async Task When_non_admin_is_updating_classification_group()
         {
             var classificationStorage = Create.ClassificationStorage(
                  Create.ClassificationsAccessor());
 
-            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.UpdateClassificationGroup(new ClassificationGroup
+            await Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.UpdateClassificationGroup(new ClassificationGroup
             {
                 Id = Id.g1,
                 Title = "New group"
@@ -268,12 +268,12 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         }
 
         [Test]
-        public void When_non_admin_is_deleting_classification_group()
+        public async Task When_non_admin_is_deleting_classification_group()
         {
             var classificationStorage = Create.ClassificationStorage(
                  Create.ClassificationsAccessor());
 
-            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.DeleteClassificationGroup(Id.g1, isAdmin: false));
+            await Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.DeleteClassificationGroup(Id.g1, isAdmin: false));
         }
 
         [Test]

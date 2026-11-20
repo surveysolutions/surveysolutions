@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [Test]
         public void then_should_create_db_and_run_all_migrations_successfully()
         {
-            TestDelegate runner = () =>
+            Action runner = () =>
             {
                 DatabaseManagement.InitDatabase(connectionString, "plainstore");
                 DatabaseManagement.InitDatabase(connectionString, "readside");

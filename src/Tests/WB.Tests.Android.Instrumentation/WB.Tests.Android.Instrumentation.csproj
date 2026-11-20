@@ -44,15 +44,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Enumerator\WB.UI.Shared.Enumerator.csproj" />
+    <ProjectReference Include="..\..\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="4.6.1" />
-    <PackageReference Include="NUnitLite" Version="4.3.2" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="MvvmCross.Tests" Version="10.1.2" />
+    <PackageReference Include="NUnit" Version="5.0.0" />
+    <PackageReference Include="NUnitLite" Version="5.0.0" />
   </ItemGroup>
 </Project>
-
-
 

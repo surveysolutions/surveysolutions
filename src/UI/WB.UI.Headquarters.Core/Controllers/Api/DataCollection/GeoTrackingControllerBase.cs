@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection;
 
+[RequestSizeLimit(1L * 1024 * 1024 * 1024)]
 public abstract class GeoTrackingControllerBase : DataCollectionControllerBase
 {
     private readonly ILogger<GeoTrackingControllerBase> logger;

@@ -510,6 +510,7 @@ export default {
             providerSettingsResult: null,
             sendEmailResult: null,
             sendingErrors: [],
+            testEmailRequestId: 0,
         }
     },
     mounted() {
@@ -605,6 +606,11 @@ export default {
                 this.$refs.settigsForm.validate()
             }
         },
+        testEmailAddress: function () {
+            this.testEmailRequestId += 1
+            this.sendEmailResult = null
+            this.sendingErrors = []
+        },
     },
     methods: {
         noAction() {
@@ -617,6 +623,8 @@ export default {
             var validationResult = await this.$refs.testEmailForm.validate()
 
             if (validationResult.valid == true) {
+                const testEmailRequestId = self.testEmailRequestId
+
                 self.$store.dispatch('showProgress')
 
                 this.$http
@@ -630,6 +638,9 @@ export default {
                         }
                     )
                     .then(function (response) {
+                        if (testEmailRequestId !== self.testEmailRequestId)
+                            return
+
                         //self.$refs.testEmailForm.resetForm()
                         self.$refs.testEmailForm.resetForm({ values: self.$refs.testEmailForm.values })
                         //self.$validator.reset('testEmail')
@@ -643,6 +654,9 @@ export default {
                         }
                     })
                     .catch(function (error) {
+                        if (testEmailRequestId !== self.testEmailRequestId)
+                            return
+
                         self.sendEmailResult = false
                         const data = error.response.data
                         self.sendingErrors =

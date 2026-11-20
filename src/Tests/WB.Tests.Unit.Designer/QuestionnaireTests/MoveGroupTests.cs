@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     regularGroupId: targetRegularGroupId,
                     responsibleId: Guid.NewGuid());
             // act
-            TestDelegate act = () => questionnaire.MoveGroup(moveAutoPropagateGroupId, targetRegularGroupId, 0, responsibleId: Guid.NewGuid());
+           Action act = () => questionnaire.MoveGroup(moveAutoPropagateGroupId, targetRegularGroupId, 0, responsibleId: Guid.NewGuid());
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(Guid.NewGuid(), groupId, responsibleId);
             
             // act
-            TestDelegate act = () => 
+           Action act = () => 
                 questionnaire.MoveGroup(groupId, questionnaire.QuestionnaireDocument.CoverPageSectionId, 0, responsibleId: responsibleId);
 
             // assert
