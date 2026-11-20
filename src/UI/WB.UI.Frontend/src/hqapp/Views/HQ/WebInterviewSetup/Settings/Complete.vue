@@ -127,7 +127,7 @@ import settings from './settingsMixin'
 import { Form, Field } from 'vee-validate'
 import { escape, unescape } from 'lodash-es'
 import { marked } from 'marked'
-import { escapeMarkdownTitle } from '~/shared/markdown'
+import { renderMarkdownWithQuestionnaireTitle } from '~/shared/markdown'
 
 export default {
     components: {
@@ -149,8 +149,7 @@ export default {
         previewCompleteScreenText(text) {
             const renderer = new marked.Renderer()
             renderer.html = ({ text }) => escape(text)
-            const markdown = this.previewText(unescape(text))
-            return marked(escapeMarkdownTitle(markdown, this.questionnaireTitle), { renderer })
+            return renderMarkdownWithQuestionnaireTitle(unescape(text), this.questionnaireTitle, { renderer, breaks: true })
         },
         updateCompleteScreenText(value, handleChange) {
             handleChange(unescape(value))

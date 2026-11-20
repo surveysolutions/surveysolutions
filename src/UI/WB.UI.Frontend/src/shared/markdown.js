@@ -1,6 +1,18 @@
-export function escapeMarkdownTitle(text, title) {
-    if (!title) return text
+import { marked } from 'marked'
 
-    const escapedTitle = title.replace(/([!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~])/g, '\\$1')
-    return text.split(title).join(escapedTitle)
+export function renderMarkdownWithQuestionnaireTitle(text, title, options = {}) {
+    const renderer = options.renderer || new marked.Renderer()
+    const renderText = renderer.text.bind(renderer)
+    const questionnaireTitle = title ?? ''
+
+    renderer.text = token => {
+        if (token.tokens) return renderText(token)
+
+        const text = token.text
+            .replaceAll('%SURVEYNAME%', questionnaireTitle)
+            .replaceAll('%QUESTIONNAIRE%', questionnaireTitle)
+        return renderText({ ...token, text })
+    }
+
+    return marked(text, { ...options, renderer })
 }

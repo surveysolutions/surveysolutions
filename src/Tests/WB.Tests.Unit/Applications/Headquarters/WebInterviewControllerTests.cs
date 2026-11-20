@@ -176,7 +176,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 as WebInterviewIndexPageModel;
 
             Assert.That(model, Is.Not.Null);
-            Assert.That(model!.CustomMessages[WebInterviewUserMessages.CompleteScreenText], Is.EqualTo("Welcome to Survey title"));
+            Assert.That(model!.CustomMessages[WebInterviewUserMessages.CompleteScreenText], Is.EqualTo(message));
+            Assert.That(model.QuestionnaireTitle, Is.EqualTo(questionnaire.Title));
             Assert.That(config.CustomMessages[WebInterviewUserMessages.CompleteScreenText], Is.EqualTo(message));
         }
 

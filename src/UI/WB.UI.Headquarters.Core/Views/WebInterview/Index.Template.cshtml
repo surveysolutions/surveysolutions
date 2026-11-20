@@ -42,6 +42,7 @@
             verboseLogging: false,
             supportedTransports: ["webSockets", "longPolling"],
             appVersion: '@(productVersion.ToString())',
+            questionnaireTitle: '@Html.ToSafeJavascriptMessage(Model.QuestionnaireTitle)',
             googleApiKey: '@(googleMapsConfig.Value.ApiKey)',
             googleMapsApiBaseUrl: '@googleMapsConfig.Value.ApiBaseUrl',
             googleMapsBaseUrl: '@googleMapsConfig.Value.BaseUrl',

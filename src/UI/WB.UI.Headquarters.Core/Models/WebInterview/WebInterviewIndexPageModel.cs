@@ -6,6 +6,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class WebInterviewIndexPageModel
     {
         public string Id { get; set; }
+        public string QuestionnaireTitle { get; set; }
         public Dictionary<WebInterviewUserMessages, string> CustomMessages { get; set; }
         public string IsResumeLinkAvailable { get; set; }
         public string CoverPageId { get; set; }
