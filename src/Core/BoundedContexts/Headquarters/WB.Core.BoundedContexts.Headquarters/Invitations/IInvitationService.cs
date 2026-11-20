@@ -45,6 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         void MigrateInvitationToNewAssignment(int oldAssignmentId, int newAssignmentId);
         IEnumerable<int> GetInvitationsWithRejectedInterview(QuestionnaireIdentity questionnaireIdentity);
         void MarkRejectedInterviewReminderSent(int invitationId, string emailId);
+        void MarkRejectedInterviewReminderSent(int invitationId, string emailId, int rejectedStatusPosition);
         void RejectedInterviewReminderWasNotSent(int invitationId);
     }
 }

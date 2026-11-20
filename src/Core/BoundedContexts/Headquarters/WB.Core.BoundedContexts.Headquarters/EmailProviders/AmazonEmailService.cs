@@ -85,8 +85,20 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             }
             catch (AggregateException ae)
             {
-                throw new EmailServiceException(to, HttpStatusCode.Accepted, ae, 
+                var providerException = ae.Flatten().InnerExceptions.OfType<AmazonServiceException>().FirstOrDefault();
+                var statusCode = providerException != null && (int)providerException.StatusCode >= 400 &&
+                                 (int)providerException.StatusCode < 500
+                    ? providerException.StatusCode
+                    : HttpStatusCode.Accepted;
+                throw new EmailServiceException(to, statusCode, ae,
                     ae.UnwrapAllInnerExceptions().Select(x => x.Message).ToArray());
+            }
+            catch (AmazonServiceException ex)
+            {
+                var statusCode = (int)ex.StatusCode >= 400 && (int)ex.StatusCode < 500
+                    ? ex.StatusCode
+                    : HttpStatusCode.Accepted;
+                throw new EmailServiceException(to, statusCode, ex, ex.Message);
             }
             catch (Exception ex)
             {

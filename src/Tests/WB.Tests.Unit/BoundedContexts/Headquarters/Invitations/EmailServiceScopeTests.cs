@@ -49,10 +49,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             settings = new EmailProviderSettings { Provider = EmailProvider.None };
             Assert.That(service.IsConfigured(), Is.False);
             Assert.That(active, Is.False);
-            Assert.Throws<Exception>(() => service.SendEmailAsync("recipient@example.com", "subject", "html", "text", null));
+            var exception = Assert.Throws<EmailServiceException>(() =>
+                service.SendEmailAsync("recipient@example.com", "subject", "html", "text", null));
+            Assert.That(exception.DeliveryIsAmbiguous, Is.False);
             Assert.That(active, Is.False);
             storage.Verify(s => s.GetById(AppSetting.EmailProviderSettings), Times.Exactly(4));
         }
     }
 }
-

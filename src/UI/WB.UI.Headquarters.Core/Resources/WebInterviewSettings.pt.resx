@@ -135,6 +135,15 @@
   <data name="CustomizeEmailsText" xml:space="preserve">
     <value>Personalizar o texto dos e-mails</value>
   </data>
+  <data name="CustomizeAndSendEmailsText" xml:space="preserve">
+    <value>Personalizar o texto dos e-mails e enviá-los</value>
+  </data>
+  <data name="SendNow" xml:space="preserve">
+    <value>ENVIAR AGORA</value>
+  </data>
+  <data name="SendNowTooltip" xml:space="preserve">
+    <value>Os lembretes do tipo {{reminderType}} para todas as atribuições e entrevistas serão enviados agora mesmo, sem período de espera.</value>
+  </data>
   <data name="Invitation" xml:space="preserve">
     <value>Convite</value>
   </data>

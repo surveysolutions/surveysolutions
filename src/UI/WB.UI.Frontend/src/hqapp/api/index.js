@@ -548,6 +548,36 @@ class WebInterviewSettingsApi {
                 headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
+
+    sendRemindersNow(questionnaireId, type, requestId, signal) {
+        var url = `${this.base}/${questionnaireId}/sendReminders`
+        return this.http(
+            {
+                method: 'post',
+                url: url,
+                data: { type: type, requestId: requestId },
+                signal: signal,
+                headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            })
+    }
+
+    sendRemindersNowStatus(questionnaireId, requestId, signal) {
+        return this.http.get(`${this.base}/${questionnaireId}/sendReminders/${requestId}`, { signal })
+    }
+
+    unresolvedReminderDeliveries(questionnaireId, offset = 0, limit = 100) {
+        return this.http.get(`${this.base}/${questionnaireId}/unresolvedReminderDeliveries`, {
+            params: { offset, limit },
+        })
+    }
+
+    reconcileUnresolvedReminderDelivery(questionnaireId, invitationId, delivered) {
+        return this.http.post(
+            `${this.base}/${questionnaireId}/unresolvedReminderDeliveries/${invitationId}`,
+            { delivered },
+            { headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() } }
+        )
+    }
 }
 
 class ExportSettings {

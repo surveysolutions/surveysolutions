@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -44,6 +46,20 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             finally
             {
                 memoryCache.Remove(CachePrefix + id);
+            }
+        }
+
+        public override void Remove(IEnumerable<string> ids)
+        {
+            var keys = ids.ToArray();
+            try
+            {
+                base.Remove(keys);
+            }
+            finally
+            {
+                foreach (var key in keys)
+                    memoryCache.Remove(CachePrefix + key);
             }
         }
 
