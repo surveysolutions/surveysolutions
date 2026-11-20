@@ -127,9 +127,6 @@
     <PackageReference Include="System.ValueTuple">
       <Version>4.6.1</Version>
     </PackageReference>
-    <PackageReference Include="Xam.Plugin.Media">
-      <Version>6.0.2</Version>
-    </PackageReference>
     <PackageReference Include="Xam.Plugins.Android.ExoPlayer.UI">
       <Version>2.19.1</Version>
     </PackageReference>

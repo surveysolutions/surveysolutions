@@ -7,8 +7,6 @@ using Ncqrs.Eventing.Storage;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using Plugin.Media;
-using Plugin.Media.Abstractions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -80,8 +78,6 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<ITranslationStorage, TranslationsStorage>();
             registry.BindAsSingleton<IPasswordHasher, DevicePasswordHasher>();
             registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
-
-            registry.BindToMethod<IMedia>(() => CrossMedia.Current);
 
             registry.Bind<InterviewEntitiesListFragment>();
             registry.Bind<CompleteInterviewFragment>();
