@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using NHibernate;
 using NUnit.Framework;
 using Quartz;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
@@ -182,7 +183,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             Assert.That(scopeCount, Is.EqualTo(2));
             rootParameters.Verify(x => x.Store(It.IsAny<EmailParameters>(), It.IsAny<string>()), Times.Never);
             if (type == EmailTextTemplateType.RejectEmail)
-                delivery.Invitations.Verify(x => x.MarkRejectedInterviewReminderSent(1, "email-id"), Times.Once);
+                delivery.Invitations.Verify(x => x.MarkRejectedInterviewReminderSent(1, "email-id", 5),
+                    Times.Once);
             else
                 delivery.Invitations.Verify(x => x.MarkInvitationAsReminded(1, "email-id"), Times.Once);
         }
@@ -282,13 +284,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             public readonly TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk> UnresolvedChunks =
                 new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>();
             public readonly Invitation Invitation = Create.Entity.Invitation(1,
-                Create.Entity.Assignment(email: "respondent@email.com"), token: "token");
+                Create.Entity.Assignment(email: "respondent@email.com"), token: "token",
+                interview: CreateRejectedInterviewSummary());
 
             public DeliveryContext()
             {
                 Invitations.Setup(x => x.GetInvitation(1)).Returns(Invitation);
                 Invitations.Setup(x => x.GetInvitation(2)).Returns(Create.Entity.Invitation(2,
-                    Create.Entity.Assignment(email: "second@email.com"), token: "second"));
+                    Create.Entity.Assignment(email: "second@email.com"), token: "second",
+                    interview: CreateRejectedInterviewSummary()));
                 Configs.Setup(x => x.GetByIdUncached(It.IsAny<string>()))
                     .Returns(new WebInterviewConfig { Started = true });
                 Email.Setup(x => x.GetSenderInfo()).Returns(Mock.Of<ISenderInformation>());
@@ -341,6 +345,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                     Invitations.Setup(x => x.GetPartialResponseInvitations(Identity, 0)).Returns(ids);
                 else
                     Invitations.Setup(x => x.GetInvitationsWithRejectedInterview(Identity)).Returns(ids);
+            }
+
+            private static WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewSummary
+                CreateRejectedInterviewSummary()
+            {
+                var rejection = Create.Entity.InterviewCommentedStatus(
+                    InterviewExportedAction.RejectedBySupervisor);
+                rejection.Position = 5;
+                return Create.Entity.InterviewSummary(status: InterviewStatus.RejectedBySupervisor,
+                    statuses: new[] { rejection });
             }
         }
 
@@ -465,6 +479,45 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 delivery.Identity, 1)), Is.Null);
             Assert.That(ReminderEmailUnresolvedDeliveryStorage.GetCount(delivery.UnresolvedIndexes, delivery.Identity),
                 Is.Zero);
+        }
+
+        [Test]
+        public async Task when_counting_unresolved_deliveries_then_only_the_selected_request_is_counted()
+        {
+            var delivery = new DeliveryContext();
+            var requestId = Guid.NewGuid();
+            var otherRequestId = Guid.NewGuid();
+            ReminderEmailUnresolvedDeliveryStorage.Store(delivery.UnresolvedDeliveries, delivery.UnresolvedIndexes,
+                delivery.UnresolvedChunks, delivery.Identity, 1, EmailTextTemplateType.Reminder_NoResponse, requestId);
+            ReminderEmailUnresolvedDeliveryStorage.Store(delivery.UnresolvedDeliveries, delivery.UnresolvedIndexes,
+                delivery.UnresolvedChunks, delivery.Identity, 2, EmailTextTemplateType.Reminder_NoResponse,
+                otherRequestId);
+            ReminderEmailUnresolvedDeliveryStorage.Store(delivery.UnresolvedDeliveries, delivery.UnresolvedIndexes,
+                delivery.UnresolvedChunks, delivery.Identity, 3, EmailTextTemplateType.Reminder_NoResponse, null);
+            delivery.Outcomes.Store(new ReminderEmailDeliveryOutcomes { UnconfirmedCount = 1 },
+                ReminderEmailDeliveryOutcomes.GetStorageKey(requestId));
+            delivery.SetRecipients(EmailTextTemplateType.Reminder_NoResponse);
+
+            var result = await delivery.Sender.SendRemindersAsync(delivery.Identity, "Survey",
+                EmailTextTemplateType.Reminder_NoResponse, 0, requestId);
+
+            Assert.That(result.UnconfirmedCount, Is.EqualTo(1));
+            Assert.That(ReminderEmailUnresolvedDeliveryStorage.GetCount(delivery.UnresolvedIndexes, delivery.Identity,
+                requestId), Is.EqualTo(1));
+            Assert.That(ReminderEmailUnresolvedDeliveryStorage.GetCount(delivery.UnresolvedIndexes, delivery.Identity),
+                Is.EqualTo(3));
+        }
+
+        [Test]
+        public async Task when_sending_rejected_reminder_then_the_targeted_rejection_is_marked_sent()
+        {
+            var delivery = new DeliveryContext();
+            delivery.SetRecipients(EmailTextTemplateType.RejectEmail, 1);
+
+            await delivery.Sender.SendRemindersAsync(delivery.Identity, "Survey",
+                EmailTextTemplateType.RejectEmail, 0);
+
+            delivery.Invitations.Verify(x => x.MarkRejectedInterviewReminderSent(1, "email-id", 5), Times.Once);
         }
 
         [Test]
@@ -805,9 +858,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 .WithSenderInfo()
                 .CollectSentEmails(sentEmails, new [] {"email_id_1"});
 
+            var rejection = Create.Entity.InterviewCommentedStatus(InterviewExportedAction.RejectedBySupervisor);
+            rejection.Position = 7;
             var invitation = Create.Entity.Invitation(1, 
                 Create.Entity.Assignment(email: "some@email.com", password: "AAAAAAAA"),
-                interview: Create.Entity.InterviewSummary(status: InterviewStatus.RejectedBySupervisor), 
+                interview: Create.Entity.InterviewSummary(status: InterviewStatus.RejectedBySupervisor,
+                    statuses: new[] { rejection }),
                 token: "token");
             var invitationWithBlankEmail = Create.Entity.Invitation(2,
                 Create.Entity.Assignment(email: "   ", password: "BBBBBBBB"),
@@ -851,7 +907,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             Assert.That(emailParameters.ValueAt(0).SurveyName, Is.EqualTo("Web Survey"));
             Assert.That(emailParameters.ValueAt(0).Link, Is.EqualTo("http://localhost/WebInterview/Continue/token"));
            
-            invitationServiceMock.Verify(x => x.MarkRejectedInterviewReminderSent(1, "email_id_1"), Times.Once);
+            invitationServiceMock.Verify(x => x.MarkRejectedInterviewReminderSent(1, "email_id_1", 7), Times.Once);
         }
         
         private Mock<IInvitationService> CreateInvitationService()
@@ -1197,6 +1253,19 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
     public class SendRemindersNowServiceTests
     {
         [Test]
+        public void when_request_lock_is_cancelled_then_acquisition_stops()
+        {
+            var query = new Mock<ISQLQuery>();
+            query.Setup(x => x.UniqueResultAsync<bool>(It.IsAny<CancellationToken>())).ReturnsAsync(false);
+            using var cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.Cancel();
+
+            Assert.ThrowsAsync<TaskCanceledException>(() => ReminderEmailSendLock.AcquireRequestAsync(
+                SendRemindersNowJobTests.CreateExecutionUnitOfWork(query),
+                Create.Entity.QuestionnaireIdentity(), Guid.NewGuid(), cancellationTokenSource.Token));
+        }
+
+        [Test]
         public async Task when_creating_request_then_queued_status_is_stored_before_scheduling()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
@@ -1400,6 +1469,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             await service.SendAsync(questionnaireIdentity, "Web Survey", activeStatus.Type, Guid.NewGuid());
 
             scheduledTask.Verify(x => x.Schedule(It.IsAny<SendRemindersNowRequest>()), Times.Once);
+            scheduler.Verify(x => x.QueryFireInstances(
+                It.Is<FireInstanceQuery>(query => query.Job.Equals(
+                    ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key)),
+                It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -1588,6 +1661,26 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 delivered && type != EmailTextTemplateType.RejectEmail ? Times.Once : Times.Never);
             invitationService.Verify(x => x.MarkRejectedInterviewReminderSent(1, string.Empty),
                 delivered && type == EmailTextTemplateType.RejectEmail ? Times.Once : Times.Never);
+        }
+
+        [Test]
+        public async Task when_reconciling_rejected_delivery_then_only_the_claimed_rejection_is_marked_sent()
+        {
+            var identity = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var deliveries = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDelivery>();
+            var indexes = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>();
+            var chunks = new TestInMemoryKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>();
+            ReminderEmailUnresolvedDeliveryStorage.Store(deliveries, indexes, chunks, identity, 1,
+                EmailTextTemplateType.RejectEmail, null, rejectedStatusPosition: 4);
+            var invitationService = new Mock<IInvitationService>();
+            invitationService.Setup(x => x.GetInvitation(1)).Returns(Create.Entity.Invitation(1,
+                Create.Entity.Assignment(email: "respondent@email.com")));
+            var service = CreateService(deliveries, indexes, chunks, invitationService.Object);
+
+            await service.ReconcileAsync(identity, 1, delivered: true);
+
+            invitationService.Verify(x => x.MarkRejectedInterviewReminderSent(1, string.Empty, 4), Times.Once);
+            invitationService.Verify(x => x.MarkRejectedInterviewReminderSent(1, string.Empty), Times.Never);
         }
 
         private static ReminderEmailDeliveryReconciliationService CreateService(

@@ -213,6 +213,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             invitation.RejectedReminderSent(emailId, lastRejectedStatus.Position);
         }
 
+        public void MarkRejectedInterviewReminderSent(int invitationId, string emailId, int rejectedStatusPosition)
+        {
+            var invitation = this.invitationStorage.GetById(invitationId);
+            invitation.RejectedReminderSent(emailId, rejectedStatusPosition);
+        }
+
         public void RejectedInterviewReminderWasNotSent(int invitationId)
         {
             var invitation = this.invitationStorage.GetById(invitationId);

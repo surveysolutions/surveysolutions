@@ -108,6 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public Guid? RequestId { get; set; }
         public DateTime CreatedAtUtc { get; set; }
         public int IndexChunk { get; set; } = -1;
+        public int? RejectedStatusPosition { get; set; }
 
         public static string GetStorageKey(QuestionnaireIdentity questionnaireIdentity, int invitationId) =>
             $"ReminderUnresolvedDelivery-{questionnaireIdentity}-{invitationId}";

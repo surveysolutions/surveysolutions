@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -9,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
@@ -79,8 +82,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }
 
             var result = outcomes.GetResult();
-            result.UnconfirmedCount += ReminderEmailUnresolvedDeliveryStorage.GetCount(
+            var unresolvedCount = ReminderEmailUnresolvedDeliveryStorage.GetCount(
                 unresolvedDeliveryIndexes, questionnaireIdentity, requestId);
+            result.UnconfirmedCount = requestId.HasValue
+                ? Math.Max(result.UnconfirmedCount, unresolvedCount)
+                : result.UnconfirmedCount + unresolvedCount;
             var config = webInterviewConfigs.GetByIdUncached(questionnaireIdentity.ToString());
             if (config == null || !config.Started)
                 return result;
@@ -122,8 +128,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 if (string.IsNullOrWhiteSpace(invitation.Assignment.Email))
                     continue;
 
+                var rejectedStatusPosition = reminderType == EmailTextTemplateType.RejectEmail
+                    ? invitation.Interview?.InterviewCommentedStatuses?.LastOrDefault(
+                        status => status.Status == InterviewExportedAction.RejectedBySupervisor)?.Position
+                    : null;
+                if (reminderType == EmailTextTemplateType.RejectEmail && !rejectedStatusPosition.HasValue)
+                    continue;
                 var deliveryResult = await SendReminderAsync(invitation, questionnaireIdentity, questionnaireTitle,
-                    emailTemplate, senderInfo, reminderType, requestId).ConfigureAwait(false);
+                    emailTemplate, senderInfo, reminderType, requestId, rejectedStatusPosition).ConfigureAwait(false);
                 switch (deliveryResult)
                 {
                     case ReminderDeliveryResult.Sent:
@@ -144,7 +156,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private async Task<ReminderDeliveryResult> SendReminderAsync(Invitation invitation,
             QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
             WebInterviewEmailTemplate emailTemplate, ISenderInformation senderInfo,
-            EmailTextTemplateType reminderType, Guid? requestId)
+            EmailTextTemplateType reminderType, Guid? requestId, int? rejectedStatusPosition)
         {
             var rejected = reminderType == EmailTextTemplateType.RejectEmail;
             var password = invitation.Assignment.Password;
@@ -178,7 +190,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     locator.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDelivery>>(),
                     locator.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryIndex>>(),
                     locator.GetInstance<IPlainKeyValueStorage<ReminderEmailUnresolvedDeliveryChunk>>(),
-                    questionnaireIdentity, invitation.Id, reminderType, requestId);
+                    questionnaireIdentity, invitation.Id, reminderType, requestId, rejectedStatusPosition);
 
                 if (requestId.HasValue)
                 {
@@ -248,7 +260,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 if (deliveryResult == ReminderDeliveryResult.Sent)
                 {
                     if (rejected)
-                        localInvitations.MarkRejectedInterviewReminderSent(invitation.Id, emailId);
+                        localInvitations.MarkRejectedInterviewReminderSent(invitation.Id, emailId,
+                            rejectedStatusPosition.Value);
                     else
                         localInvitations.MarkInvitationAsReminded(invitation.Id, emailId);
                     ReminderEmailUnresolvedDeliveryStorage.Remove(

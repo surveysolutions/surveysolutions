@@ -17,8 +17,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     public interface ISendRemindersNowService
     {
         Task<SendRemindersNowStatus> SendAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
-            EmailTextTemplateType type, Guid requestId);
-        Task<SendRemindersNowStatus> GetStatusAsync(QuestionnaireIdentity questionnaireIdentity, Guid requestId);
+            EmailTextTemplateType type, Guid requestId, CancellationToken cancellationToken = default);
+        Task<SendRemindersNowStatus> GetStatusAsync(QuestionnaireIdentity questionnaireIdentity, Guid requestId,
+            CancellationToken cancellationToken = default);
     }
 
     public class ReminderRequestIdConflictException : Exception
@@ -49,7 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         }
 
         public async Task<SendRemindersNowStatus> SendAsync(QuestionnaireIdentity questionnaireIdentity,
-            string questionnaireTitle, EmailTextTemplateType type, Guid requestId)
+            string questionnaireTitle, EmailTextTemplateType type, Guid requestId,
+            CancellationToken cancellationToken = default)
         {
             if (requestId == Guid.Empty)
                 throw new ArgumentException("A request ID is required.", nameof(requestId));
@@ -57,7 +59,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var status = await rootScopeExecutor.ExecuteAsync(async locator =>
             {
                 var unitOfWork = locator.GetInstance<IUnitOfWork>();
-                await ReminderEmailSendLock.AcquireRequestAsync(unitOfWork, questionnaireIdentity, requestId)
+                await ReminderEmailSendLock.AcquireRequestAsync(unitOfWork, questionnaireIdentity, requestId,
+                        cancellationToken)
                     .ConfigureAwait(false);
 
                 var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
@@ -114,12 +117,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 return status;
             }).ConfigureAwait(false);
 
-            await EnsureScheduledAsync(status).ConfigureAwait(false);
+            await EnsureScheduledAsync(status, cancellationToken).ConfigureAwait(false);
             return status;
         }
 
         public async Task<SendRemindersNowStatus> GetStatusAsync(QuestionnaireIdentity questionnaireIdentity,
-            Guid requestId)
+            Guid requestId, CancellationToken cancellationToken = default)
         {
             var status = await rootScopeExecutor.ExecuteAsync(locator =>
             {
@@ -140,11 +143,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             if (status?.QuestionnaireIdentity != questionnaireIdentity)
                 return null;
 
-            await EnsureScheduledAsync(status).ConfigureAwait(false);
+            await EnsureScheduledAsync(status, cancellationToken).ConfigureAwait(false);
             return status;
         }
 
-        private async Task EnsureScheduledAsync(SendRemindersNowStatus status)
+        private async Task EnsureScheduledAsync(SendRemindersNowStatus status, CancellationToken cancellationToken)
         {
             if (status == null)
                 return;
@@ -152,7 +155,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             await rootScopeExecutor.ExecuteAsync(async locator =>
             {
                 var unitOfWork = locator.GetInstance<IUnitOfWork>();
-                await ReminderEmailSendLock.AcquireSchedulingAsync(unitOfWork, status.RequestId)
+                await ReminderEmailSendLock.AcquireSchedulingAsync(unitOfWork, status.RequestId, cancellationToken)
                     .ConfigureAwait(false);
 
                 var storage = locator.GetInstance<IPlainKeyValueStorage<SendRemindersNowStatus>>();
@@ -169,7 +172,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     Type = currentStatus.Type
                 };
 
-                if (await IsScheduledOrRunningAsync(request).ConfigureAwait(false))
+                if (await IsScheduledOrRunningAsync(request, cancellationToken).ConfigureAwait(false))
                     return true;
 
                 var startedAtUtc = currentStatus.StartedAtUtc;
@@ -182,7 +185,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     var latestStatus = storage.GetByIdUncached(statusStorageKey);
                     if (latestStatus?.State is not (SendRemindersNowState.Queued or SendRemindersNowState.InProgress)
                         || latestStatus.StartedAtUtc != startedAtUtc
-                        || await IsScheduledOrRunningAsync(request).ConfigureAwait(false))
+                        || await IsScheduledOrRunningAsync(request, cancellationToken).ConfigureAwait(false))
                         return true;
 
                     latestStatus.State = SendRemindersNowState.Failed;
@@ -198,19 +201,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }).ConfigureAwait(false);
         }
 
-        private async Task<bool> IsScheduledOrRunningAsync(SendRemindersNowRequest request)
+        private async Task<bool> IsScheduledOrRunningAsync(SendRemindersNowRequest request,
+            CancellationToken cancellationToken)
         {
-            var scheduler = await schedulerFactory.GetScheduler().ConfigureAwait(false);
+            var scheduler = await schedulerFactory.GetScheduler(cancellationToken).ConfigureAwait(false);
             var jobKey = ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key;
             var workspaceName = workspaceContextAccessor.CurrentWorkspace()?.Name;
             var executingJobs = await scheduler.QueryFireInstances(new FireInstanceQuery { Job = jobKey },
-                CancellationToken.None).ConfigureAwait(false);
+                cancellationToken).ConfigureAwait(false);
             foreach (var executingJob in executingJobs.Items)
             {
-                if (!executingJob.JobKey.Equals(jobKey))
-                    continue;
-
-                var trigger = await scheduler.GetTrigger(executingJob.TriggerKey).ConfigureAwait(false);
+                var trigger = await scheduler.GetTrigger(executingJob.TriggerKey, cancellationToken)
+                    .ConfigureAwait(false);
                 if (trigger != null && HasWorkspace(trigger.JobDataMap, workspaceName) &&
                     HasRequestId(trigger.JobDataMap.GetString(BaseTask.TaskDataKey), request.RequestId))
                     return true;
@@ -224,12 +226,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     Job = jobKey,
                     Skip = skip,
                     Take = pageSize
-                }, CancellationToken.None).ConfigureAwait(false);
+                }, cancellationToken).ConfigureAwait(false);
                 if (triggerPage.Items.Count == 0)
                     return false;
 
                 var triggers = await scheduler.GetTriggers(triggerPage.Items.Select(trigger => trigger.Key).ToArray(),
-                    CancellationToken.None).ConfigureAwait(false);
+                    cancellationToken).ConfigureAwait(false);
                 if (triggers.Any(trigger =>
                         HasWorkspace(trigger.JobDataMap, workspaceName) &&
                         HasRequestId(trigger.JobDataMap.GetString(BaseTask.TaskDataKey), request.RequestId)))

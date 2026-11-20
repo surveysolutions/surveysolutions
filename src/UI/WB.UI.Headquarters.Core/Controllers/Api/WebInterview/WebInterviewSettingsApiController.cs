@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers.Api.WebInterview
@@ -223,9 +225,11 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         }
 
         [ValidateAntiForgeryToken]
+        [ObservingNotAllowed]
         [Route(@"{id}/sendReminders")]
         [HttpPost]
-        public async Task<IActionResult> SendRemindersNow(string id, [FromBody] SendRemindersNowModel model)
+        public async Task<IActionResult> SendRemindersNow(string id, [FromBody] SendRemindersNowModel model,
+            CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -241,8 +245,17 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
                 or EmailTextTemplateType.RejectEmail))
                 return BadRequest(new { error = "Only reminder and rejected-interview templates can be sent now." });
 
-            var existingStatus = await sendRemindersNowService.GetStatusAsync(questionnaireIdentity, model.RequestId.Value)
-                .ConfigureAwait(false);
+            SendRemindersNowStatus existingStatus;
+            try
+            {
+                existingStatus = await sendRemindersNowService.GetStatusAsync(questionnaireIdentity,
+                    model.RequestId.Value, cancellationToken).ConfigureAwait(false);
+            }
+            catch (ReminderSendLockTimeoutException exception)
+            {
+                Response.Headers["Retry-After"] = "1";
+                return StatusCode(503, new { error = exception.Message });
+            }
             if (existingStatus != null)
             {
                 if (existingStatus.Type != model.Type.Value)
@@ -267,11 +280,16 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             try
             {
                 status = await sendRemindersNowService.SendAsync(questionnaireIdentity, questionnaire.Title,
-                    model.Type.Value, model.RequestId.Value).ConfigureAwait(false);
+                    model.Type.Value, model.RequestId.Value, cancellationToken).ConfigureAwait(false);
             }
             catch (ReminderRequestIdConflictException exception)
             {
                 return Conflict(new { error = exception.Message });
+            }
+            catch (ReminderSendLockTimeoutException exception)
+            {
+                Response.Headers["Retry-After"] = "1";
+                return StatusCode(503, new { error = exception.Message });
             }
 
             return AcceptedAtAction(nameof(SendRemindersNowStatus), new { id, requestId = status.RequestId }, status);
@@ -279,13 +297,23 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [Route(@"{id}/sendReminders/{requestId:guid}")]
         [HttpGet]
-        public async Task<IActionResult> SendRemindersNowStatus(string id, System.Guid requestId)
+        public async Task<IActionResult> SendRemindersNowStatus(string id, System.Guid requestId,
+            CancellationToken cancellationToken)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
-            var status = await sendRemindersNowService.GetStatusAsync(questionnaireIdentity, requestId)
-                .ConfigureAwait(false);
+            SendRemindersNowStatus status;
+            try
+            {
+                status = await sendRemindersNowService.GetStatusAsync(questionnaireIdentity, requestId,
+                    cancellationToken).ConfigureAwait(false);
+            }
+            catch (ReminderSendLockTimeoutException exception)
+            {
+                Response.Headers["Retry-After"] = "1";
+                return StatusCode(503, new { error = exception.Message });
+            }
             if (status == null)
                 return NotFound();
 

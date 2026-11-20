@@ -15,7 +15,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             QuestionnaireIdentity questionnaireIdentity,
             int invitationId,
             EmailTextTemplateType type,
-            Guid? requestId)
+            Guid? requestId,
+            int? rejectedStatusPosition = null)
         {
             var claimKey = ReminderEmailUnresolvedDelivery.GetStorageKey(questionnaireIdentity, invitationId);
             var claim = deliveries.GetByIdUncached(claimKey);
@@ -43,6 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 RequestId = requestId,
                 CreatedAtUtc = DateTime.UtcNow
             };
+            claim.RejectedStatusPosition ??= rejectedStatusPosition;
             claim.IndexChunk = chunkIndex;
             deliveries.Store(claim, claimKey);
 
@@ -148,12 +150,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             if (index == null)
                 return 0;
 
-            var count = index.Count;
-            if (requestId.HasValue && index.RequestCounts != null &&
-                index.RequestCounts.TryGetValue(requestId.Value, out var requestCount))
-                count -= requestCount;
+            if (requestId.HasValue)
+                return index.RequestCounts != null &&
+                       index.RequestCounts.TryGetValue(requestId.Value, out var requestCount)
+                    ? Math.Max(0, requestCount)
+                    : 0;
 
-            return Math.Max(0, count);
+            return index.Count;
         }
     }
 }

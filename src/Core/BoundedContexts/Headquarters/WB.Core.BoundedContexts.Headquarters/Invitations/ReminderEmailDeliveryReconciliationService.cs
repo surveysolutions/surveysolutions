@@ -120,7 +120,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     return false;
 
                 if (claim.Type == WB.Core.BoundedContexts.Headquarters.WebInterview.EmailTextTemplateType.RejectEmail)
-                    invitationService.MarkRejectedInterviewReminderSent(invitationId, string.Empty);
+                {
+                    if (claim.RejectedStatusPosition.HasValue)
+                        invitationService.MarkRejectedInterviewReminderSent(invitationId, string.Empty,
+                            claim.RejectedStatusPosition.Value);
+                    else
+                        invitationService.MarkRejectedInterviewReminderSent(invitationId, string.Empty);
+                }
                 else
                     invitationService.MarkInvitationAsReminded(invitationId, string.Empty);
             }

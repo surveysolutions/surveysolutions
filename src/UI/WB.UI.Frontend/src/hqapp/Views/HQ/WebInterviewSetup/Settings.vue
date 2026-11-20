@@ -1045,9 +1045,12 @@ export default {
                 // Continue tracking the request in memory if browser storage is unavailable.
             }
         },
-        clearPendingReminderRequest(type) {
+        clearPendingReminderRequest(type, requestId) {
             try {
-                window.localStorage.removeItem(this.reminderRequestStorageKey(type))
+                const key = this.reminderRequestStorageKey(type)
+                if (window.localStorage.getItem(key) === requestId) {
+                    window.localStorage.removeItem(key)
+                }
             } catch {
                 // The terminal result was observed; stale local state is harmless on next load.
             }
@@ -1080,7 +1083,8 @@ export default {
             if (signal.aborted || this.pendingReminderTypes[emailTemplate.value]) return
 
             this.pendingReminderTypes[emailTemplate.value] = true
-            let requestId = this.pendingReminderRequestIds[emailTemplate.value]
+            let requestId = this.readPendingReminderRequest(emailTemplate.value) ||
+                this.pendingReminderRequestIds[emailTemplate.value]
             try {
                 if (!requestId) {
                     requestId = this.createReminderRequestId()
@@ -1096,6 +1100,15 @@ export default {
                         requestId,
                         signal
                     )
+                } catch (error) {
+                    const statusCode = error.response?.status
+                    if (error.response && statusCode < 500 && statusCode !== 408 && statusCode !== 429) {
+                        if (this.pendingReminderRequestIds[emailTemplate.value] === requestId) {
+                            this.pendingReminderRequestIds[emailTemplate.value] = null
+                        }
+                        this.clearPendingReminderRequest(emailTemplate.value, requestId)
+                    }
+                    throw error
                 } finally {
                     this.$store.dispatch('hideProgress')
                 }
@@ -1155,7 +1168,7 @@ export default {
                 }
                 if (this.pendingReminderRequestIds[emailTemplate.value] === requestId) {
                     this.pendingReminderRequestIds[emailTemplate.value] = null
-                    this.clearPendingReminderRequest(emailTemplate.value)
+                    this.clearPendingReminderRequest(emailTemplate.value, requestId)
                 }
             } catch (error) {
                 if (!signal.aborted) this.$errorHandler(error, this)
