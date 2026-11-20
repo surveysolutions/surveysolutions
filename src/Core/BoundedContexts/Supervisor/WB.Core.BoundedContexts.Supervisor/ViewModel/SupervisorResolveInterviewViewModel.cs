@@ -91,7 +91,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
 
             base.AnsweredCount = interview.CountActiveAnsweredQuestionsInInterviewForSupervisor();
-            base.ErrorsCount = interview.CountInvalidEntitiesInInterviewForSupervisor();
             base.UnansweredCount = interview.CountActiveQuestionsInInterviewForSupervisor() - base.AnsweredCount;
 
             var interviewView = this.interviews.GetById(interviewId);
