@@ -241,4 +241,13 @@
     <value>Частота</value>
   </data>
 
+  <data name="AreaQestion_Coordinates" xml:space="preserve">
+    <value>Координаты</value>
+  </data>
+  <data name="AreaQestion_Latitude" xml:space="preserve">
+    <value>Широта</value>
+  </data>
+  <data name="AreaQestion_Longitude" xml:space="preserve">
+    <value>Долгота</value>
+  </data>
 </root>

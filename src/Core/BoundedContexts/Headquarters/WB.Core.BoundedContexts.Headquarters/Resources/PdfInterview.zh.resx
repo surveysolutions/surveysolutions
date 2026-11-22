@@ -181,4 +181,13 @@
     <data name="AreaQestion_AreaMeter" xml:space="preserve">
         <value>米</value>
     </data>
+    <data name="AreaQestion_Coordinates" xml:space="preserve">
+        <value>坐标</value>
+    </data>
+    <data name="AreaQestion_Latitude" xml:space="preserve">
+        <value>纬度</value>
+    </data>
+    <data name="AreaQestion_Longitude" xml:space="preserve">
+        <value>经度</value>
+    </data>
 </root>
