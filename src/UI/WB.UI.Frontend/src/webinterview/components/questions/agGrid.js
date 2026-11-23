@@ -38,10 +38,25 @@ ModuleRegistry.registerModules(modules)
 // so the grids have to opt out of the theming api
 export const agGridTheme = 'legacy'
 
-// Keeps the header of an auto height grid visible below the fixed navbar while the page
+// Bottom edge of the bars pinned to the top of the window: the fixed navbar and the section
+// title, which is sticky and covers the content only once it is stuck.
+function getPinnedTopBarsBottom() {
+    let bottom = 0
+    for (const bar of document.querySelectorAll('.navbar-fixed-top, .unit-title')) {
+        const style = getComputedStyle(bar)
+        if (style.position !== 'fixed' && style.position !== 'sticky') continue
+
+        const rect = bar.getBoundingClientRect()
+        const isStuck = rect.top <= (parseFloat(style.top) || 0) + 1
+        if (isStuck) bottom = Math.max(bottom, rect.bottom)
+    }
+    return bottom
+}
+
+// Keeps the header of an auto height grid visible below the pinned top bars while the page
 // scrolls through the grid. The header container is already sticky, but only within the
 // grid viewport, which also owns the horizontal scroll and therefore can't drop its overflow.
-// Pushing its sticky offset by the part of the grid hidden under the navbar moves it along
+// Pushing its sticky offset by the part of the grid hidden under the bars moves it along
 // with the page; the sticky containing block keeps it within the grid.
 export function stickGridHeaderToPage(getGridElement) {
     let frame = null
@@ -57,8 +72,7 @@ export function stickGridHeaderToPage(getGridElement) {
             return
         }
 
-        const navbarHeight = document.querySelector('.navbar-fixed-top')?.offsetHeight || 0
-        const hiddenPart = navbarHeight - header.parentElement.getBoundingClientRect().top
+        const hiddenPart = getPinnedTopBarsBottom() - header.parentElement.getBoundingClientRect().top
         header.style.top = hiddenPart > 0 ? `${hiddenPart}px` : ''
     }
     const scheduleUpdate = () => {
