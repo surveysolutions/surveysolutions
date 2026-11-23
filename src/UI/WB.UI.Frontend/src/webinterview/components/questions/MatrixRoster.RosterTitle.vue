@@ -24,7 +24,7 @@ export default {
     },
     created() {
         this.rowIndex = this.params.value.rowIndex
-        this.matrixRoster = this.params.value.matrixRoster
+        this.matrixRoster = this.params.context.componentParent
     },
 }
 </script>

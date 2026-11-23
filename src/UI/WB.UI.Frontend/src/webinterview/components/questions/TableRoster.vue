@@ -24,7 +24,7 @@
 
 import { entityDetails } from '../mixins'
 import { debounce, every, some, map } from 'lodash-es'
-import { AgGridVue, agGridTheme, stickGridHeaderToPage } from './agGrid'
+import { AgGridVue, agGridTheme, stickGridHeaderToPage, GridContext } from './agGrid'
 
 import TableRoster_QuestionEditor from './TableRoster.QuestionEditor'
 import TableRoster_ViewAnswer from './TableRoster.ViewAnswer'
@@ -100,9 +100,7 @@ export default {
                 stopEditingWhenCellsLoseFocus: true,
                 suppressMovableColumns: true,
                 singleClickEdit: true,
-                context: {
-                    componentParent: this,
-                },
+                context: new GridContext(this),
             }
         },
     },
@@ -167,7 +165,6 @@ export default {
                     var instanceAsRow = {
                         rosterVector: instance.rosterVector,
                         rosterTitle: {
-                            tableRoster: self,
                             rowIndex: key,
                         },
                     }

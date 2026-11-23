@@ -38,6 +38,16 @@ ModuleRegistry.registerModules(modules)
 // so the grids have to opt out of the theming api
 export const agGridTheme = 'legacy'
 
+// ag-grid-vue3 deep unwraps plain objects of gridOptions and rowData. A Vue component reached
+// that way gets walked together with the whole app, evaluating every computed property on
+// the way, so a reference to the roster component has to be wrapped into a class instance,
+// which the wrapper passes through untouched.
+export class GridContext {
+    constructor(componentParent) {
+        this.componentParent = componentParent
+    }
+}
+
 // Bottom edge of the bars pinned to the top of the window: the fixed navbar, the review mode
 // banner and interview details panel, and the section title, which is sticky and covers
 // the content only once it is stuck.

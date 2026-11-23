@@ -22,7 +22,7 @@
 /* eslint-disable vue/no-unused-components */
 import { entityDetails } from '../mixins'
 import { debounce, map } from 'lodash-es'
-import { AgGridVue, agGridTheme, stickGridHeaderToPage } from './agGrid'
+import { AgGridVue, agGridTheme, stickGridHeaderToPage, GridContext } from './agGrid'
 
 import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'
 import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'
@@ -122,9 +122,7 @@ export default {
                 suppressClickEdit: true,
                 suppressCellFocus: true,
                 suppressMovableColumns: true,
-                context: {
-                    componentParent: this,
-                },
+                context: new GridContext(this),
             }
         },
     },
@@ -196,7 +194,6 @@ export default {
                     var instanceAsRow = {
                         rosterVector: instance.rosterVector,
                         rosterTitle: {
-                            matrixRoster: self,
                             rowIndex: key,
                         },
                     }
