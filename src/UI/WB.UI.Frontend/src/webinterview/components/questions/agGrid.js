@@ -38,11 +38,12 @@ ModuleRegistry.registerModules(modules)
 // so the grids have to opt out of the theming api
 export const agGridTheme = 'legacy'
 
-// Bottom edge of the bars pinned to the top of the window: the fixed navbar and the section
-// title, which is sticky and covers the content only once it is stuck.
+// Bottom edge of the bars pinned to the top of the window: the fixed navbar, the review mode
+// banner and interview details panel, and the section title, which is sticky and covers
+// the content only once it is stuck.
 function getPinnedTopBarsBottom() {
     let bottom = 0
-    for (const bar of document.querySelectorAll('.navbar-fixed-top, .unit-title')) {
+    for (const bar of document.querySelectorAll('.navbar-fixed-top, .view-mode, .panel-details, .unit-title')) {
         const style = getComputedStyle(bar)
         if (style.position !== 'fixed' && style.position !== 'sticky') continue
 
