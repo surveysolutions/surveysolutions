@@ -22,7 +22,7 @@
 
 import { entityDetails } from '../mixins'
 import { debounce, every, some, map } from 'lodash-es'
-import { AgGridVue, agGridTheme } from './agGrid'
+import { AgGridVue, agGridTheme, stickGridHeaderToPage } from './agGrid'
 
 import TableRoster_QuestionEditor from './TableRoster.QuestionEditor'
 import TableRoster_ViewAnswer from './TableRoster.ViewAnswer'
@@ -85,6 +85,11 @@ export default {
 
     mounted() {
         this.scroll()
+        this.stopStickingHeader = stickGridHeaderToPage(() => this.$refs.tableRoster?.$el)
+    },
+
+    beforeUnmount() {
+        this.stopStickingHeader?.()
     },
 
     computed: {

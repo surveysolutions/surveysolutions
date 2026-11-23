@@ -38,4 +38,42 @@ ModuleRegistry.registerModules(modules)
 // so the grids have to opt out of the theming api
 export const agGridTheme = 'legacy'
 
+// Keeps the header of an auto height grid visible below the fixed navbar while the page
+// scrolls through the grid. The header container is already sticky, but only within the
+// grid viewport, which also owns the horizontal scroll and therefore can't drop its overflow.
+// Pushing its sticky offset by the part of the grid hidden under the navbar moves it along
+// with the page; the sticky containing block keeps it within the grid.
+export function stickGridHeaderToPage(getGridElement) {
+    let frame = null
+
+    const update = () => {
+        frame = null
+        const header = getGridElement()?.querySelector('.ag-grid-pinned-top-rows')
+        if (!header) return
+
+        // grids with own vertical scroll (normal dom layout) keep the default sticky header
+        if (!header.closest('.ag-grid-viewport')?.classList.contains('ag-layout-auto-height')) {
+            header.style.top = ''
+            return
+        }
+
+        const navbarHeight = document.querySelector('.navbar-fixed-top')?.offsetHeight || 0
+        const hiddenPart = navbarHeight - header.parentElement.getBoundingClientRect().top
+        header.style.top = hiddenPart > 0 ? `${hiddenPart}px` : ''
+    }
+    const scheduleUpdate = () => {
+        if (frame == null) frame = requestAnimationFrame(update)
+    }
+
+    window.addEventListener('scroll', scheduleUpdate, { passive: true })
+    window.addEventListener('resize', scheduleUpdate)
+    scheduleUpdate()
+
+    return () => {
+        window.removeEventListener('scroll', scheduleUpdate)
+        window.removeEventListener('resize', scheduleUpdate)
+        if (frame != null) cancelAnimationFrame(frame)
+    }
+}
+
 export { AgGridVue } from 'ag-grid-vue3'
