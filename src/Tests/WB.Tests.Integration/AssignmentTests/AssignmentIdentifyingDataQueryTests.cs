@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.AssignmentTests
         public void OneTimeSetup()
         {
             SetUp.MockedServiceLocator();
-            connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide, DbType.Users);
+            connectionString = DatabaseTestInitializer.CreateAndInitializeDb(DbType.ReadSide, DbType.Users, DbType.PlainStore);
             var workspace = Create.Service.WorkspaceContextAccessor();
             sessionFactory = IntegrationCreate.SessionFactory(connectionString, new List<Type>
             {
@@ -103,6 +103,9 @@ namespace WB.Tests.Integration.AssignmentTests
                 {
                     Create.Entity.IdentifyingAnswer(identity: Create.Identity(Id.gB), answer: "yes", answerAsString: "Yes")
                 });
+
+            matching.CreatedAtUtc = matching.UpdatedAtUtc = DateTime.UtcNow;
+            differentQuestion.CreatedAtUtc = differentQuestion.UpdatedAtUtc = DateTime.UtcNow;
 
             unitOfWork.Session.Save(matching);
             unitOfWork.Session.Save(differentQuestion);
