@@ -187,6 +187,23 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             header.Should().Equal("interview__key", "interview__id", "r__id", "nested__id", "randomization__group", "variable", "type", "order");
         }
 
+        [Test]
+        public void should_write_header_for_randomized_sections_of_questionnaire()
+        {
+            var section1 = Create.Group(SectionId, "s1", Create.TextQuestion(Q1)); section1.RandomizeOrder = true;
+            var section2 = Create.Group(Id.gD, "s2", Create.TextQuestion(Q2)); section2.RandomizeOrder = true;
+            var questionnaire = Create.QuestionnaireDocument(variableName: "q", children: new[] { section1, section2 });
+            var csvWriter = new Mock<ICsvWriter>();
+
+            new InterviewItemsOrderExporter(csvWriter.Object)
+                .WriteHeaders(Create.QuestionnaireExportStructure(questionnaire), questionnaire, "base", "tab");
+
+            csvWriter.Verify(x => x.WriteData(System.IO.Path.Combine("base", "sections__order.tab"),
+                It.Is<IEnumerable<string[]>>(d => d.Single().SequenceEqual(new[]
+                    { "interview__key", "interview__id", "randomization__group", "variable", "type", "order" })),
+                It.IsAny<string>()), Times.Once);
+        }
+
         private static QuestionnaireDocument CreateQuestionnaire()
         {
             var q5 = Create.TextQuestion(Q5, variable: "q5"); q5.RandomizeOrder = true;

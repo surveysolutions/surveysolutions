@@ -74,7 +74,10 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         public string[] GetHeader(QuestionnaireExportStructure exportStructure, QuestionnaireDocument questionnaire, Guid groupId)
         {
-            var rosterScope = new ValueVector<Guid>(questionnaire.GetRosterSizeSourcesForEntity(groupId));
+            // questionnaire document itself is not stored in the entities cache
+            var rosterScope = groupId == questionnaire.PublicKey
+                ? new ValueVector<Guid>()
+                : new ValueVector<Guid>(questionnaire.GetRosterSizeSourcesForEntity(groupId));
 
             var header = new List<string> { CommonHeaderItems.InterviewKey.Title };
 
