@@ -448,8 +448,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var isCover = this.sourceInterview.Questionnaire.IsCoverPage(sectionId.Id);
 
-            return section
-                .TreeToEnumerableDepthFirst(s => s.Children)
+            return this.GetAllNodesInDisplayOrder(new[] { section })
                 .Where(x => isCover || !(x is InterviewTreeVariable))
                 .Select(x => x.Identity);
         }

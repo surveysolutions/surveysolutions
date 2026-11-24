@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 yield break;
             }
             
-            var enabledSectionIds = interview.GetEnabledSections().Select(x => x.Identity);
+            var enabledSectionIds = interview.OrderForDisplay(null, interview.GetEnabledSections().Select(x => x.Identity));
 
             foreach (var enabledSectionId in enabledSectionIds)
             {

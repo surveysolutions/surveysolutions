@@ -143,6 +143,24 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(interview.GetUnderlyingInterviewerEntities(Create.Identity(ChapterId)).Select(x => x.Id), Is.EqualTo(entities));
         }
 
+        [Test]
+        public void interview_should_return_all_nested_entities_in_deterministic_randomized_order()
+        {
+            var subSectionId = Guid.Parse("99999999999999999999999999999999");
+            var questionIds = Enumerable.Range(1, 8).Select(i => Guid.NewGuid()).ToArray();
+            var document = Create.Entity.QuestionnaireDocumentWithOneChapter(ChapterId,
+                Create.Entity.Group(subSectionId,
+                    children: questionIds.Select(id => (IComposite)Randomized(Create.Entity.TextQuestion(id))).ToArray()));
+            var interview = SetUp.StatefulInterview(document);
+
+            var orderedQuestions = RandomizedItemsOrder.GetChildrenOrder(Create.Entity.PlainQuestionnaire(document),
+                new InterviewProperties(interview.Id).IRnd(), subSectionId, RosterVector.Empty);
+
+            var expected = new[] { ChapterId, subSectionId }.Concat(orderedQuestions).ToList();
+            Assert.That(interview.GetUnderlyingEntitiesForReviewRecursive(Create.Identity(ChapterId)).Select(x => x.Id), Is.EqualTo(expected));
+            Assert.That(interview.GetUnderlyingInterviewerEntities().Select(x => x.Id), Is.EqualTo(expected));
+        }
+
         private static T Randomized<T>(T entity) where T : IConditional
         {
             entity.RandomizeOrder = true;
