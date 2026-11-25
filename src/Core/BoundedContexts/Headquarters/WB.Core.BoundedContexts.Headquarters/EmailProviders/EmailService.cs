@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
@@ -29,7 +30,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
         {
             var emailService = GetProvider();
             if (emailService == null || !emailService.IsConfigured())
-                throw new Exception("Email provider was not set up properly");
+                throw new EmailServiceException(to, HttpStatusCode.ServiceUnavailable, false, null,
+                    "Email provider was not set up properly");
 
             return emailService.SendEmailAsync(to, subject, htmlBody, textBody, attachments);
         }

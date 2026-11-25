@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using MimeKit.Utils;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -56,10 +57,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             }
             
             message.Body = body.ToMessageBody();
+            message.MessageId ??= MimeUtils.GenerateMessageId();
 
             using (var client = new SmtpClient())
             {
                 SecureSocketOptions tls = settings.SmtpTlsEncryption ? SecureSocketOptions.Auto : SecureSocketOptions.None;
+                var sendStarted = false;
 
                 try
                 {
@@ -70,22 +73,37 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                         await client.AuthenticateAsync(settings.SmtpUsername, settings.SmtpPassword);
                     }
 
+                    sendStarted = true;
                     await client.SendAsync(message);
-                    return message.MessageId ?? string.Empty;
                 }
                 catch (AggregateException ae)
                 {
-                    throw new EmailServiceException(to, HttpStatusCode.Accepted, ae,
+                    var statusCode = sendStarted && !ae.Flatten().InnerExceptions.All(x => x is SmtpCommandException)
+                        ? HttpStatusCode.Accepted
+                        : HttpStatusCode.BadGateway;
+                    throw new EmailServiceException(to, statusCode, statusCode == HttpStatusCode.Accepted, ae,
                         ae.UnwrapAllInnerExceptions().Select(x => x.Message).ToArray());
                 }
                 catch (Exception ex)
                 {
-                    throw new EmailServiceException(to, HttpStatusCode.Accepted, ex, ex.Message);
+                    var statusCode = sendStarted && ex is not SmtpCommandException
+                        ? HttpStatusCode.Accepted
+                        : HttpStatusCode.BadGateway;
+                    throw new EmailServiceException(to, statusCode, statusCode == HttpStatusCode.Accepted, ex,
+                        ex.Message);
                 }
                 finally
                 {
-                    await client.DisconnectAsync(true);
+                    try
+                    {
+                        await client.DisconnectAsync(true);
+                    }
+                    catch
+                    {
+                    }
                 }
+
+                return message.MessageId ?? string.Empty;
             }
         }
 

@@ -1,8 +1,14 @@
-﻿using System.Threading;
+﻿using Quartz;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
+    public interface IScheduledTaskDataWithTriggerKey
+    {
+        TriggerKey GetTriggerKey(string workspaceName);
+    }
+
     public interface IScheduledTask<TJob, in TJobData> 
         where TJob: IJobWithData<TJobData>
     {

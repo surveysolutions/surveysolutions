@@ -153,6 +153,15 @@
   <data name="CustomizeEmailsText" xml:space="preserve">
     <value>Налаштуйте текст імейлів</value>
   </data>
+  <data name="CustomizeAndSendEmailsText" xml:space="preserve">
+    <value>Налаштувати текст листів і надіслати їх</value>
+  </data>
+  <data name="SendNow" xml:space="preserve">
+    <value>НАДІСЛАТИ ЗАРАЗ</value>
+  </data>
+  <data name="SendNowTooltip" xml:space="preserve">
+    <value>Нагадування типу «{{reminderType}}» для всіх завдань та інтерв'ю будуть надіслані просто зараз, без очікування.</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Опис:</value>
   </data>

@@ -83,6 +83,11 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                 trigger = trigger.UsingJobData(WorkspaceConstants.QuartzJobKey, workspace.Name);
             }
 
+            if (data is IScheduledTaskDataWithTriggerKey identifiedData)
+            {
+                trigger = trigger.WithIdentity(identifiedData.GetTriggerKey(workspace?.Name ?? string.Empty));
+            }
+
             return trigger.Build();
         }
 

@@ -137,6 +137,15 @@
   <data name="CustomizeEmailsText" xml:space="preserve">
     <value>Настройка текстов писем</value>
   </data>
+  <data name="CustomizeAndSendEmailsText" xml:space="preserve">
+    <value>Настроить текст писем и отправить их</value>
+  </data>
+  <data name="SendNow" xml:space="preserve">
+    <value>ОТПРАВИТЬ СЕЙЧАС</value>
+  </data>
+  <data name="SendNowTooltip" xml:space="preserve">
+    <value>Напоминания типа «{{reminderType}}» для всех заданий и интервью будут отправлены прямо сейчас, без ожидания.</value>
+  </data>
   <data name="Invitation" xml:space="preserve">
     <value>Приглашение</value>
   </data>

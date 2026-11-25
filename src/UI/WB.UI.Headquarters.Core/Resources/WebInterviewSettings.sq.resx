@@ -147,6 +147,15 @@
   <data name="CustomizeEmailsText" xml:space="preserve">
     <value>Personalizo tekstin e email-eve</value>
   </data>
+  <data name="CustomizeAndSendEmailsText" xml:space="preserve">
+    <value>Përshtatni tekstin e emaileve dhe dërgojini ato</value>
+  </data>
+  <data name="SendNow" xml:space="preserve">
+    <value>DËRGO TANI</value>
+  </data>
+  <data name="SendNowTooltip" xml:space="preserve">
+    <value>Kujtesat e llojit {{reminderType}} për të gjitha detyrat dhe intervistat do të dërgohen menjëherë, pa periudhë pritjeje.</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Përshkrim:</value>
   </data>

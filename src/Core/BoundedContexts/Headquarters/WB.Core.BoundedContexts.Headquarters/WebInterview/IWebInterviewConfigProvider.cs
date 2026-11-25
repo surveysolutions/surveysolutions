@@ -5,6 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
     public interface IWebInterviewConfigProvider
     {
         WebInterviewConfig Get(QuestionnaireIdentity identity);
+        WebInterviewConfig GetUncached(QuestionnaireIdentity identity);
         void Store(QuestionnaireIdentity identity, WebInterviewConfig config);
     }
 }
