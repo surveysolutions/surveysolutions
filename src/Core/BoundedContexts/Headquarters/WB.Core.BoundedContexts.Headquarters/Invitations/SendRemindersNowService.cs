@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
@@ -207,58 +206,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var scheduler = await schedulerFactory.GetScheduler(cancellationToken).ConfigureAwait(false);
             var jobKey = ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key;
             var workspaceName = workspaceContextAccessor.CurrentWorkspace()?.Name;
+            var triggerKey = request.GetTriggerKey(workspaceName ?? string.Empty);
             var executingJobs = await scheduler.QueryFireInstances(new FireInstanceQuery { Job = jobKey },
                 cancellationToken).ConfigureAwait(false);
-            foreach (var executingJob in executingJobs.Items)
-            {
-                var trigger = await scheduler.GetTrigger(executingJob.TriggerKey, cancellationToken)
-                    .ConfigureAwait(false);
-                if (trigger != null && HasWorkspace(trigger.JobDataMap, workspaceName) &&
-                    HasRequestId(trigger.JobDataMap.GetString(BaseTask.TaskDataKey), request.RequestId))
-                    return true;
-            }
+            if (executingJobs.Items.Any(executingJob => executingJob.TriggerKey.Equals(triggerKey)))
+                return true;
 
-            const int pageSize = 100;
-            for (var skip = 0; ; skip += pageSize)
-            {
-                var triggerPage = await scheduler.QueryTriggers(new TriggerQuery
-                {
-                    Job = jobKey,
-                    Skip = skip,
-                    Take = pageSize
-                }, cancellationToken).ConfigureAwait(false);
-                if (triggerPage.Items.Count == 0)
-                    return false;
-
-                var triggers = await scheduler.GetTriggers(triggerPage.Items.Select(trigger => trigger.Key).ToArray(),
-                    cancellationToken).ConfigureAwait(false);
-                if (triggers.Any(trigger =>
-                        HasWorkspace(trigger.JobDataMap, workspaceName) &&
-                        HasRequestId(trigger.JobDataMap.GetString(BaseTask.TaskDataKey), request.RequestId)))
-                    return true;
-
-                if (!triggerPage.HasMore)
-                    return false;
-            }
-        }
-
-        private static bool HasWorkspace(JobDataMap jobData, string workspaceName) =>
-            string.Equals(jobData.GetString(WorkspaceConstants.QuartzJobKey), workspaceName,
-                StringComparison.Ordinal);
-
-        private static bool HasRequestId(string serializedRequest, Guid requestId)
-        {
-            if (string.IsNullOrEmpty(serializedRequest))
-                return false;
-
-            try
-            {
-                return JsonSerializer.Deserialize<SendRemindersNowRequest>(serializedRequest)?.RequestId == requestId;
-            }
-            catch (JsonException)
-            {
-                return false;
-            }
+            return await scheduler.GetTrigger(triggerKey, cancellationToken).ConfigureAwait(false) != null;
         }
     }
 }

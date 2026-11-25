@@ -14,7 +14,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
-    public class SendRemindersNowRequest
+    public class SendRemindersNowRequest : IScheduledTaskDataWithTriggerKey
     {
         public Guid RequestId { get; set; }
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
@@ -29,6 +29,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             $"SendRemindersNow-{questionnaireIdentity}-{type}";
 
         public static string GetStatusStorageKey(Guid requestId) => $"SendRemindersNow-{requestId}";
+
+        public TriggerKey GetTriggerKey(string workspaceName)
+        {
+            var jobKey = ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key;
+            return new TriggerKey(RequestId.ToString("N"),
+                $"{jobKey.Group}.{jobKey.Name}.{workspaceName}");
+        }
     }
 
     public class SendRemindersNowStatus : AppSetting

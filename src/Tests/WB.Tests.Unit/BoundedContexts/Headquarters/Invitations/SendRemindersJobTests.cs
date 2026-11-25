@@ -1383,6 +1383,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 State = SendRemindersNowState.Queued
             };
             storage.Store(status, SendRemindersNowRequest.GetStorageKey(questionnaireIdentity, status.Type));
+            storage.Store(status, SendRemindersNowRequest.GetStatusStorageKey(status.RequestId));
             var request = new SendRemindersNowRequest
             {
                 RequestId = status.RequestId,
@@ -1390,25 +1391,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 QuestionnaireTitle = status.QuestionnaireTitle,
                 Type = status.Type
             };
-            var trigger = new Mock<ITrigger>();
-            trigger.SetupGet(x => x.JobDataMap).Returns(new JobDataMap
-            {
-                [BaseTask.TaskDataKey] = JsonSerializer.Serialize(request),
-                [WorkspaceConstants.QuartzJobKey] = "test"
-            });
-            var triggerKey = new TriggerKey("queued-trigger");
-            scheduler.Setup(x => x.QueryTriggers(It.IsAny<TriggerQuery>(), It.IsAny<CancellationToken>()))
-                .Returns(new ValueTask<PagedResult<TriggerHeader>>(
-                    CreateTriggerPage(ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key, triggerKey)));
-            scheduler.Setup(x => x.GetTriggers(It.Is<IReadOnlyCollection<TriggerKey>>(keys =>
-                    keys.Contains(triggerKey)), It.IsAny<CancellationToken>()))
-                .Returns(new ValueTask<List<ITrigger>>(new List<ITrigger> { trigger.Object }));
+            var triggerKey = request.GetTriggerKey("test");
+            scheduler.Setup(x => x.GetTrigger(triggerKey, It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask<ITrigger>(Mock.Of<ITrigger>()));
 
             var returnedStatus = await service.SendAsync(questionnaireIdentity, "Web Survey", status.Type,
                 Guid.NewGuid());
 
             Assert.That(returnedStatus.RequestId, Is.EqualTo(status.RequestId));
             scheduledTask.Verify(x => x.Schedule(It.IsAny<SendRemindersNowRequest>()), Times.Never);
+            scheduler.Verify(x => x.GetTrigger(triggerKey, It.IsAny<CancellationToken>()), Times.Once);
+            scheduler.Verify(x => x.QueryTriggers(It.IsAny<TriggerQuery>(), It.IsAny<CancellationToken>()),
+                Times.Never);
         }
 
         [Test]
@@ -1434,15 +1428,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 QuestionnaireIdentity = questionnaireIdentity,
                 Type = activeStatus.Type
             };
-            var executionTrigger = new Mock<ITrigger>();
-            executionTrigger.SetupGet(x => x.JobDataMap).Returns(new JobDataMap
-            {
-                [BaseTask.TaskDataKey] = JsonSerializer.Serialize(request),
-                [WorkspaceConstants.QuartzJobKey] = "other"
-            });
             var executionTriggerKey = new TriggerKey("executing-trigger");
-            scheduler.Setup(x => x.GetTrigger(executionTriggerKey, It.IsAny<CancellationToken>()))
-                .Returns(new ValueTask<ITrigger>(executionTrigger.Object));
             scheduler.Setup(x => x.QueryFireInstances(It.IsAny<FireInstanceQuery>(),
                     It.IsAny<CancellationToken>()))
                 .Returns(new ValueTask<PagedResult<FireInstance>>(new PagedResult<FireInstance>(
@@ -1452,19 +1438,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                             ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key, "test",
                             default, DateTimeOffset.UtcNow, null, null)
                     }, false, 1)));
-            var trigger = new Mock<ITrigger>();
-            trigger.SetupGet(x => x.JobDataMap).Returns(new JobDataMap
-            {
-                [BaseTask.TaskDataKey] = JsonSerializer.Serialize(request),
-                [WorkspaceConstants.QuartzJobKey] = "other"
-            });
-            var triggerKey = new TriggerKey("other-workspace-trigger");
-            scheduler.Setup(x => x.QueryTriggers(It.IsAny<TriggerQuery>(), It.IsAny<CancellationToken>()))
-                .Returns(new ValueTask<PagedResult<TriggerHeader>>(
-                    CreateTriggerPage(ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key, triggerKey)));
-            scheduler.Setup(x => x.GetTriggers(It.Is<IReadOnlyCollection<TriggerKey>>(keys =>
-                    keys.Contains(triggerKey)), It.IsAny<CancellationToken>()))
-                .Returns(new ValueTask<List<ITrigger>>(new List<ITrigger> { trigger.Object }));
+            var expectedTriggerKey = request.GetTriggerKey("test");
+            scheduler.Setup(x => x.GetTrigger(expectedTriggerKey, It.IsAny<CancellationToken>()))
+                .Returns(new ValueTask<ITrigger>((ITrigger)null));
 
             await service.SendAsync(questionnaireIdentity, "Web Survey", activeStatus.Type, Guid.NewGuid());
 
@@ -1473,6 +1449,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 It.Is<FireInstanceQuery>(query => query.Job.Equals(
                     ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key)),
                 It.IsAny<CancellationToken>()), Times.Once);
+            scheduler.Verify(x => x.GetTrigger(expectedTriggerKey, It.IsAny<CancellationToken>()), Times.Once);
+            scheduler.Verify(x => x.QueryTriggers(It.IsAny<TriggerQuery>(), It.IsAny<CancellationToken>()),
+                Times.Never);
         }
 
         [Test]
@@ -1480,29 +1459,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
             var (service, storage, scheduledTask, scheduler) = CreateService();
-            ITrigger publishedTrigger = null;
             TriggerKey publishedTriggerKey = null;
-            var jobKey = ScheduledTask<SendRemindersNowJob, SendRemindersNowRequest>.Key;
-            scheduler.Setup(x => x.QueryTriggers(It.IsAny<TriggerQuery>(), It.IsAny<CancellationToken>()))
-                .Returns(() => new ValueTask<PagedResult<TriggerHeader>>(publishedTriggerKey == null
-                    ? new PagedResult<TriggerHeader>(Array.Empty<TriggerHeader>(), false, 0)
-                    : CreateTriggerPage(jobKey, publishedTriggerKey)));
-            scheduler.Setup(x => x.GetTriggers(It.IsAny<IReadOnlyCollection<TriggerKey>>(),
-                    It.IsAny<CancellationToken>()))
-                .Returns((IReadOnlyCollection<TriggerKey> keys, CancellationToken _) =>
-                    new ValueTask<List<ITrigger>>(publishedTrigger != null && keys.Contains(publishedTriggerKey)
-                        ? new List<ITrigger> { publishedTrigger }
-                        : new List<ITrigger>()));
+            scheduler.Setup(x => x.GetTrigger(It.IsAny<TriggerKey>(), It.IsAny<CancellationToken>()))
+                .Returns((TriggerKey key, CancellationToken _) =>
+                    new ValueTask<ITrigger>(publishedTriggerKey == key ? Mock.Of<ITrigger>() : null));
             scheduledTask.Setup(x => x.Schedule(It.IsAny<SendRemindersNowRequest>()))
                 .Callback<SendRemindersNowRequest>(request =>
                 {
-                    publishedTrigger = new Mock<ITrigger>().Object;
-                    publishedTriggerKey = new TriggerKey("published-trigger");
-                    Mock.Get(publishedTrigger).SetupGet(x => x.JobDataMap).Returns(new JobDataMap
-                    {
-                        [BaseTask.TaskDataKey] = JsonSerializer.Serialize(request),
-                        [WorkspaceConstants.QuartzJobKey] = "test"
-                    });
+                    publishedTriggerKey = request.GetTriggerKey("test");
                 })
                 .ThrowsAsync(new InvalidOperationException("Request was already published"));
 
@@ -1605,12 +1569,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             return (service, storage, scheduledTask, scheduler);
         }
 
-        private static PagedResult<TriggerHeader> CreateTriggerPage(JobKey jobKey, TriggerKey triggerKey) =>
-            new PagedResult<TriggerHeader>(new[]
-            {
-                new TriggerHeader(triggerKey, jobKey, null, null, default, DateTimeOffset.UtcNow, null, null, null,
-                    null, 0, null, null, 0)
-            }, false, 1);
     }
 
     [TestOf(typeof(ReminderEmailDeliveryReconciliationService))]
