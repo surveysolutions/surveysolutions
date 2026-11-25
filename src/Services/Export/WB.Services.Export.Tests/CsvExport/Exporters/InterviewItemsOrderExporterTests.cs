@@ -198,7 +198,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             new InterviewItemsOrderExporter(csvWriter.Object)
                 .WriteHeaders(Create.QuestionnaireExportStructure(questionnaire), questionnaire, "base", "tab");
 
-            csvWriter.Verify(x => x.WriteData(System.IO.Path.Combine("base", "sections__order.tab"),
+            csvWriter.Verify(x => x.WriteData(System.IO.Path.Combine("base", "q__order.tab"),
                 It.Is<IEnumerable<string[]>>(d => d.Single().SequenceEqual(new[]
                     { "interview__key", "interview__id", "randomization__group", "variable", "type", "order" })),
                 It.IsAny<string>()), Times.Once);

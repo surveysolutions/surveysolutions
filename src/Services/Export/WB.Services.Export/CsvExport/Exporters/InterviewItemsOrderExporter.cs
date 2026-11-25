@@ -22,7 +22,6 @@ namespace WB.Services.Export.CsvExport.Exporters
     public class InterviewItemsOrderExporter : IInterviewItemsOrderExporter
     {
         public const string FileNameSuffix = "__order";
-        public const string RootLevelName = "sections";
 
         public const string ItemTypeQuestion = "Question";
         public const string ItemTypeStaticText = "StaticText";
@@ -57,10 +56,10 @@ namespace WB.Services.Export.CsvExport.Exporters
             foreach (var group in groups)
             {
                 var levelName = group is QuestionnaireDocument
-                    ? RootLevelName
-                    : string.IsNullOrWhiteSpace(group.VariableName) ? group.PublicKey.FormatGuid() : group.VariableName;
+                    ? GetQuestionnaireLevelName(questionnaire)
+                    : group.VariableName;
 
-                if (!usedNames.Add(levelName))
+                if (string.IsNullOrWhiteSpace(levelName) || !usedNames.Add(levelName))
                 {
                     levelName = group.PublicKey.FormatGuid();
                     usedNames.Add(levelName);
@@ -71,6 +70,11 @@ namespace WB.Services.Export.CsvExport.Exporters
 
             return result;
         }
+
+        private static string? GetQuestionnaireLevelName(QuestionnaireDocument questionnaire)
+            => string.IsNullOrWhiteSpace(questionnaire.VariableName)
+                ? questionnaire.Title.MakeStataCompatibleFileName()
+                : questionnaire.VariableName;
 
         public string[] GetHeader(QuestionnaireExportStructure exportStructure, QuestionnaireDocument questionnaire, Guid groupId)
         {
