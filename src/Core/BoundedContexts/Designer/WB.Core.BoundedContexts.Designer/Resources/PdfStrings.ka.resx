@@ -193,6 +193,9 @@
     <data name="RandomizedOrder" xml:space="preserve">
         <value>შემთხვევითი რიგი</value>
     </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>პასუხის შემთხვევითი ვარიანტები</value>
+  </data>
     <data name="QuestionType_Picture" xml:space="preserve">
         <value>სურათი</value>
         </data>

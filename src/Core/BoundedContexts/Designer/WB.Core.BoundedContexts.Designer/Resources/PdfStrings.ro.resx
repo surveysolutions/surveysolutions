@@ -294,6 +294,9 @@
   <data name="RandomizedOrder" xml:space="preserve">
     <value>Ordine aleatorie</value>
   </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>Opțiuni de răspuns aleatorii</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>imagine</value>
   </data>

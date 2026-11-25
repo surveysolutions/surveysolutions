@@ -249,6 +249,9 @@
   <data name="RandomizedOrder" xml:space="preserve">
     <value>Случайный порядок</value>
   </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>Случайный порядок вариантов ответа</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>картинка</value>
   </data>

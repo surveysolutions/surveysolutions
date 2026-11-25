@@ -193,6 +193,9 @@
     <data name="RandomizedOrder" xml:space="preserve">
         <value>លំដាប់ចៃដន្យ</value>
     </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>ជម្រើសចម្លើយចៃដន្យ</value>
+  </data>
     <data name="QuestionType_Picture" xml:space="preserve">
         <value>រូបភាព</value>
     </data>

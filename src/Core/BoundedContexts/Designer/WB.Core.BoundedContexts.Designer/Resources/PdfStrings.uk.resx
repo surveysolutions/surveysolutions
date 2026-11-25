@@ -330,6 +330,9 @@
   <data name="RandomizedOrder" xml:space="preserve">
     <value>Випадковий порядок</value>
   </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>Випадковий порядок варіантів відповіді</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>зображення</value>
   </data>

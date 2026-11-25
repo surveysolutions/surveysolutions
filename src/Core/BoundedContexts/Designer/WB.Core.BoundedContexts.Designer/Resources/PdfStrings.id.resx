@@ -193,6 +193,9 @@
     <data name="RandomizedOrder" xml:space="preserve">
         <value>Urutan acak</value>
     </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>Opsi jawaban acak</value>
+  </data>
     <data name="QuestionType_Picture" xml:space="preserve">
         <value>gambar</value>
     </data>

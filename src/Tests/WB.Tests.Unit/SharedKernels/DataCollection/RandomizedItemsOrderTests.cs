@@ -161,6 +161,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(interview.GetUnderlyingInterviewerEntities().Select(x => x.Id), Is.EqualTo(expected));
         }
 
+        [Test]
+        public void interview_should_return_complete_page_lists_in_deterministic_randomized_order()
+        {
+            var questionIds = Enumerable.Range(1, 8).Select(i => Guid.NewGuid()).ToArray();
+            var document = Create.Entity.QuestionnaireDocumentWithOneChapter(ChapterId,
+                questionIds.Select(id => (IComposite)Randomized(Create.Entity.TextQuestion(id))).ToArray());
+            var interview = SetUp.StatefulInterview(document);
+            interview.Apply(Create.Event.AnswersDeclaredInvalid(questionIds.Select(id => Create.Identity(id)).ToArray()));
+
+            var expected = RandomizedItemsOrder.GetChildrenOrder(Create.Entity.PlainQuestionnaire(document),
+                new InterviewProperties(interview.Id).IRnd(), ChapterId, RosterVector.Empty);
+
+            Assert.That(interview.GetAllUnansweredQuestions(false).Select(x => x.Id), Is.EqualTo(expected));
+            Assert.That(interview.GetInvalidEntitiesInInterview().Select(x => x.Id), Is.EqualTo(expected));
+            Assert.That(interview.CountInvalidEntitiesInInterview(), Is.EqualTo(questionIds.Length));
+        }
+
         private static T Randomized<T>(T entity) where T : IConditional
         {
             entity.RandomizeOrder = true;

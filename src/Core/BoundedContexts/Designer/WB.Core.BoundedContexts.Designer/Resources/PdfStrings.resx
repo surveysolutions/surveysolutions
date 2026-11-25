@@ -252,6 +252,9 @@
   <data name="RandomizedOrder" xml:space="preserve">
     <value>Randomized order</value>
   </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>Randomized answer options</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>picture</value>
   </data>

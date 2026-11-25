@@ -538,6 +538,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                    && (parent == null || !questionnaire.IsCoverPage(parent.PublicKey));
         }
 
+        public bool AreAnswerOptionsRandomized(IQuestion question)
+            => question.RandomizeAnswerOptions
+               && question.QuestionType is QuestionType.SingleOption or QuestionType.MultyOption
+               && question.IsFilteredCombobox != true
+               && !question.CascadeFromQuestionId.HasValue;
+
         public bool IsConditionsAppendixEmpty => ItemsWithLongConditions.Count == 0;
         public bool IsValidationsAppendixEmpty => ItemsWithLongValidations.Count == 0;
         public bool IsInstructionsAppendixEmpty => QuestionsWithLongInstructions.Count == 0;

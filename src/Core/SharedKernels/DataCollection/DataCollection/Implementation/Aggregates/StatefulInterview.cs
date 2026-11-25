@@ -488,7 +488,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public int CountActiveQuestionsInInterview() =>
             this.GetEnabledInterviewerQuestions().Count();
 
-        public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
+        public int CountInvalidEntitiesInInterview() => this.GetInvalidInterviewerEntities().Count();
 
         public int CountActiveAnsweredQuestionsInInterviewForSupervisor() =>
             this.GetEnabledQuestionsForSupervisor().Count(question => question.IsAnswered());
@@ -508,9 +508,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Concat(this.GetEnabledInvalidQuestions(true).Select(question => question.Identity));
 
         public IEnumerable<Identity> GetInvalidEntitiesInInterview()
+            => this.SortInDisplayOrder(this.GetInvalidInterviewerEntities());
+
+        private IEnumerable<Identity> GetInvalidInterviewerEntities()
             => this.GetEnabledInvalidStaticTexts()
                 .Concat(this.GetEnabledInvalidQuestions().Where(question => question.IsInterviewer)
                     .Select(question => question.Identity));
+
+        private IEnumerable<Identity> SortInDisplayOrder(IEnumerable<Identity> identities)
+        {
+            var questionnaire = this.GetQuestionnaireOrThrow();
+            var hasRandomizedItems = questionnaire.HasRandomizedChildren(questionnaire.QuestionnaireId)
+                                     || questionnaire.GetAllGroups().Any(questionnaire.HasRandomizedChildren);
+            if (!hasRandomizedItems)
+                return identities;
+
+            var positions = new Dictionary<Identity, int>();
+            foreach (var node in this.GetAllNodesInDisplayOrder(this.Tree.Sections))
+                positions[node.Identity] = positions.Count;
+
+            return identities
+                .OrderBy(identity => positions.TryGetValue(identity, out var position) ? position : int.MaxValue)
+                .ToList();
+        }
 
         private IEnumerable<Identity> GetInvalidEntitiesInInterviewForSupervisor()
             => this.GetEnabledInvalidStaticTexts()
@@ -1135,18 +1155,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Identity> GetAllUnansweredCriticalQuestions()
         {
             var questions = base.GetUnansweredCriticalQuestions();
-            return questions.Select(q => q.Identity);
+            return this.SortInDisplayOrder(questions.Select(q => q.Identity));
         }
         
         public IEnumerable<Identity> GetAllUnansweredQuestions(bool forSupervisor)
         {
-            return this.Tree.FindQuestions()
+            return this.SortInDisplayOrder(this.Tree.FindQuestions()
                 .Where(question => !question.IsDisabled() 
                                    && !question.IsAnswered() 
                                    && !question.IsReadonly
                                    && (!forSupervisor ? question.IsInterviewer : true)
                                    && !question.IsHidden)
-                .Select(q => q.Identity);
+                .Select(q => q.Identity));
         }
 
         public IEnumerable<Guid> GetFailedCriticalRules()

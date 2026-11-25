@@ -225,6 +225,9 @@
   <data name="RandomizedOrder" xml:space="preserve">
     <value>随机顺序</value>
   </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>随机答案选项</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>图片型</value>
   </data>

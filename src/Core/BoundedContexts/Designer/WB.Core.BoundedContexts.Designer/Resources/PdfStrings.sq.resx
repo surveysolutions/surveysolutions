@@ -294,6 +294,9 @@
   <data name="RandomizedOrder" xml:space="preserve">
     <value>Renditje e rastësishme</value>
   </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>Opsione përgjigjeje të rastësishme</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>Foto</value>
   </data>

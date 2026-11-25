@@ -333,6 +333,12 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             }
         }
         
+        public static string RandomizedAnswerOptions {
+            get {
+                return ResourceManager.GetString("RandomizedAnswerOptions", resourceCulture);
+            }
+        }
+        
         public static string RandomizedOrder {
             get {
                 return ResourceManager.GetString("RandomizedOrder", resourceCulture);

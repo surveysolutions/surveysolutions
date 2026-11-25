@@ -41,6 +41,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfQuestionnaireModelT
         }
 
         [Test]
+        public void AreAnswerOptionsRandomized_should_be_true_only_for_categorical_questions_with_randomized_options()
+        {
+            var randomizedSingle = Create.SingleOptionQuestion(Guid.NewGuid());
+            randomizedSingle.RandomizeAnswerOptions = true;
+            var randomizedMulti = Create.MultyOptionsQuestion(Guid.NewGuid());
+            randomizedMulti.RandomizeAnswerOptions = true;
+            var plainSingle = Create.SingleOptionQuestion(Guid.NewGuid());
+            var randomizedCombobox = Create.SingleOptionQuestion(Guid.NewGuid());
+            randomizedCombobox.RandomizeAnswerOptions = true;
+            randomizedCombobox.IsFilteredCombobox = true;
+
+            var model = CreateModel(Create.QuestionnaireDocumentWithOneChapter(Guid.NewGuid(),
+                randomizedSingle, randomizedMulti, plainSingle, randomizedCombobox));
+
+            Assert.That(model.AreAnswerOptionsRandomized(randomizedSingle), Is.True);
+            Assert.That(model.AreAnswerOptionsRandomized(randomizedMulti), Is.True);
+            Assert.That(model.AreAnswerOptionsRandomized(plainSingle), Is.False);
+            Assert.That(model.AreAnswerOptionsRandomized(randomizedCombobox), Is.False);
+        }
+
+        [Test]
         public void IsOrderRandomized_should_be_true_only_for_entities_marked_with_randomize_order()
         {
             var randomizedQuestion = Create.TextQuestion(Guid.NewGuid());

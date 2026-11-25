@@ -330,6 +330,9 @@
   <data name="RandomizedOrder" xml:space="preserve">
     <value>Náhodné pořadí</value>
   </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>Náhodné pořadí možností odpovědí</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>obraz</value>
   </data>
