@@ -13,6 +13,10 @@
             <div class="type">@PdfStrings.StaticText</div>
         </div>
         <div class="common-info">
+            @if (questionnaire.IsOrderRandomized(staticText))
+            {
+                <div class="instructions"><span>R</span>@PdfStrings.RandomizedOrder</div>
+            }
             @if (questionnaire.StaticTextHasEnablementCondition(staticText))
             {
                 <div class="condition">

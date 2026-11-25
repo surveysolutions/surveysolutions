@@ -1628,4 +1628,16 @@
     <data name="Stick" xml:space="preserve">
         <value>ភ្ជាប់</value>
     </data>
+    <data name="RandomizeOrder" xml:space="preserve">
+        <value>តម្រៀបតាមចៃដន្យ</value>
+    </data>
+    <data name="RandomizeOrderTooltip" xml:space="preserve">
+        <value>លំដាប់បង្ហាញនៃធាតុនេះត្រូវបានតម្រៀបតាមចៃដន្យជាមួយធាតុជិតខាងដែលបានសម្គាល់ 'តម្រៀបតាមចៃដន្យ'</value>
+    </data>
+    <data name="RandomizeAnswerOptions" xml:space="preserve">
+        <value>តម្រៀបជម្រើសចម្លើយតាមចៃដន្យ</value>
+    </data>
+    <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+        <value>ជម្រើសចម្លើយត្រូវបានបង្ហាញតាមលំដាប់ចៃដន្យ ដែលនៅតែដដែលក្នុងការសម្ភាសន៍មួយ</value>
+    </data>
 </root>

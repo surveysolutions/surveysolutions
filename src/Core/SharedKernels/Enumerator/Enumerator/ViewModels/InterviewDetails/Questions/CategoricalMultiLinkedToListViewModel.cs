@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -73,7 +74,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             if (listOptions == null || filteredOptions == null) yield break;
 
-            foreach (var optionCode in filteredOptions)
+            var options = RandomizedItemsOrder.OrderAnswerOptionsForDisplay(this.GetQuestionnaire(interview),
+                RandomizedItemsOrder.GetSeed(interview.Id), this.Identity, filteredOptions, x => x);
+
+            foreach (var optionCode in options)
             {
                 var vm = interviewViewModelFactory.GetNew<CategoricalMultiOptionViewModel<int>>();
                 base.InitViewModel(listOptions.First(x => x.Value == optionCode).Text, optionCode, interview, vm, null);

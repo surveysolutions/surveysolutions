@@ -2345,7 +2345,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var targetList = sectionId != null
                 ? this.Tree.GetGroup(sectionId).Children
-                : this.Tree.GetAllNodesInEnumeratorOrder().Where(x =>
+                : this.GetAllNodesInDisplayOrder(this.Tree.Sections).Where(x =>
                     !questionnaire.IsCoverPage(x.Identity.Id) && (x.Parent == null || !questionnaire.IsCoverPage(x.Parent.Identity.Id)));
 
             IEnumerable<IInterviewTreeNode> result = sectionId != null && questionnaire.IsCoverPage(sectionId.Id)
@@ -2355,7 +2355,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 || (!includeVariables && questionnaire.IsVariable(x.Identity.Id))
             );
 
-            return result.Select(x => x.Identity);
+            var identities = result.Select(x => x.Identity);
+
+            return sectionId != null
+                ? this.OrderForDisplay(sectionId, identities)
+                : identities;
+        }
+
+        public IEnumerable<Identity> OrderForDisplay(Identity parentIdentity, IEnumerable<Identity> children)
+            => RandomizedItemsOrder.OrderForDisplay(this.GetQuestionnaireOrThrow(),
+                new InterviewProperties(this.EventSourceId).IRnd(), parentIdentity, children);
+
+        protected IEnumerable<IInterviewTreeNode> GetAllNodesInDisplayOrder(IEnumerable<IInterviewTreeNode> roots)
+            => this.OrderNodesForDisplay(null, roots)
+                .TreeToEnumerableDepthFirst(node => this.OrderNodesForDisplay(node.Identity, node.Children));
+
+        private IEnumerable<IInterviewTreeNode> OrderNodesForDisplay(Identity parentIdentity, IEnumerable<IInterviewTreeNode> nodes)
+        {
+            var nodesList = nodes.ToList();
+            if (nodesList.Count < 2)
+                return nodesList;
+
+            var nodesByIdentity = nodesList.ToDictionary(node => node.Identity);
+            return this.OrderForDisplay(parentIdentity, nodesList.Select(node => node.Identity))
+                .Select(identity => nodesByIdentity[identity]);
         }
 
         protected bool HasInvalidAnswers()

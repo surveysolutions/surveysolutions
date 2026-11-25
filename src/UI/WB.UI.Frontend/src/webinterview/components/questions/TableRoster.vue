@@ -12,6 +12,8 @@
             :rowData="rowData"
             :grid-options="gridOptions"
             @grid-ready="onGridReady"
+            @first-data-rendered="autosizeRosterTitleColumn"
+            @row-data-updated="autosizeRosterTitleColumn"
             @column-resized="autosizeHeaders"
             @cell-editing-stopped="endCellEditting"></ag-grid-vue>
     </div>
@@ -22,7 +24,7 @@
 
 import { entityDetails } from '../mixins'
 import { debounce, every, some, map } from 'lodash-es'
-import { AgGridVue, agGridTheme } from './agGrid'
+import { AgGridVue, agGridTheme, stickGridHeaderToPage, GridContext } from './agGrid'
 
 import TableRoster_QuestionEditor from './TableRoster.QuestionEditor'
 import TableRoster_ViewAnswer from './TableRoster.ViewAnswer'
@@ -78,13 +80,17 @@ export default {
             if (this.countOfInstances != this.$me.instances.length) {
                 this.countOfInstances = this.$me.instances.length
                 this.initQuestionsInRows()
-                this.setTableRosterHeight()
             }
         },
     },
 
     mounted() {
         this.scroll()
+        this.stopStickingHeader = stickGridHeaderToPage(() => this.$refs.tableRoster?.$el)
+    },
+
+    beforeUnmount() {
+        this.stopStickingHeader?.()
     },
 
     computed: {
@@ -94,9 +100,7 @@ export default {
                 stopEditingWhenCellsLoseFocus: true,
                 suppressMovableColumns: true,
                 singleClickEdit: true,
-                context: {
-                    componentParent: this,
-                },
+                context: new GridContext(this),
             }
         },
     },
@@ -138,6 +142,8 @@ export default {
                     title: this.$me.title,
                 },
                 field: 'rosterTitle',
+                minWidth: 180,
+                maxWidth: 400,
                 autoHeight: true,
                 pinned: true,
                 editable: false,
@@ -159,7 +165,6 @@ export default {
                     var instanceAsRow = {
                         rosterVector: instance.rosterVector,
                         rosterTitle: {
-                            tableRoster: self,
                             rowIndex: key,
                         },
                     }
@@ -183,7 +188,6 @@ export default {
             this.columnApi = params.columnApi
 
             this.autosizeHeaders(params)
-            this.setTableRosterHeight()
         },
 
         autosizeHeaders(event) {
@@ -205,16 +209,9 @@ export default {
             }
         },
 
-        setTableRosterHeight() {
-            if (this.$refs.tableRoster != undefined) {
-                if (this.$me.instances.length > 20) {
-                    this.gridApi.setGridOption('domLayout', 'normal')
-                    this.$refs.tableRoster.$el.style.height = '1024px'
-                } else {
-                    this.gridApi.setGridOption('domLayout', 'autoHeight')
-                    this.$refs.tableRoster.$el.style.height = ''
-                }
-            }
+        autosizeRosterTitleColumn(event) {
+            // the width is bounded by minWidth/maxWidth of the column, longer titles wrap
+            event.api.autoSizeColumns(['rosterTitle'], true)
         },
 
         doScroll: debounce(function () {

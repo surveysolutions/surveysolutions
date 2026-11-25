@@ -288,6 +288,15 @@
   <data name="QuestionType_Ordered" xml:space="preserve">
     <value>renditur</value>
   </data>
+  <data name="QuestionType_RandomizedOptions" xml:space="preserve">
+    <value>opsione të rastësishme</value>
+  </data>
+  <data name="RandomizedOrder" xml:space="preserve">
+    <value>Renditje e rastësishme</value>
+  </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>Opsione përgjigjeje të rastësishme</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>Foto</value>
   </data>

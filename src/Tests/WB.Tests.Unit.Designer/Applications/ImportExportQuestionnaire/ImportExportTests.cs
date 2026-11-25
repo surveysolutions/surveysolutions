@@ -762,6 +762,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 AreAnswersOrdered = true,
                 MaxAllowedAnswers = 7,
                 YesNoView = true,
+                RandomizeAnswerOptions = true,
                 CategoriesId = Guid.NewGuid(),
                 Answers = new List<Answer>()
                 {
@@ -875,6 +876,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 HideIfDisabled = true,
                 ShowAsList = true,
                 ShowAsListThreshold = 77,
+                RandomizeAnswerOptions = true,
                 CategoriesId = Guid.NewGuid(),
                 Answers = new List<Answer>()
                 {

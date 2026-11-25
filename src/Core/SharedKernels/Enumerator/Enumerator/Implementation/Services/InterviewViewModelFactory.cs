@@ -187,11 +187,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             IReadOnlyList<Guid> groupWithoutNestedChildren = GetUnderlyingInterviewerEntities(groupIdentity, questionnaire);
 
-            List<IInterviewEntityViewModel> viewmodels = groupWithoutNestedChildren
+            var entitiesInDisplayOrder = interview.OrderForDisplay(groupIdentity, groupWithoutNestedChildren
                 .Where(entityId => this.settings.ShowVariables || !questionnaire.HasVariable(entityId))
-                .Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
-                    identity: new Identity(questionnaireEntity, groupIdentity.RosterVector),
-                    entityModelType: GetEntityModelType(new Identity(questionnaireEntity, groupIdentity.RosterVector), questionnaire, interview),
+                .Select(entityId => new Identity(entityId, groupIdentity.RosterVector)));
+
+            List<IInterviewEntityViewModel> viewmodels = entitiesInDisplayOrder
+                .Select(entityIdentity => this.CreateInterviewEntityViewModel(
+                    identity: entityIdentity,
+                    entityModelType: GetEntityModelType(entityIdentity, questionnaire, interview),
                     interviewId: interviewId,
                     navigationState: navigationState))
                 .ToList();

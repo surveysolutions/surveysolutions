@@ -274,4 +274,22 @@
   <data name="IncludeScenarios" xml:space="preserve">
       <value>Incluir cenários</value>
   </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>Aviso global</value>
+  </data>
+  <data name="GlobalNoticeDescription" xml:space="preserve">
+    <value>A mensagem é exibida no topo das páginas para todos os usuários do Designer. Salve uma mensagem vazia para removê-la.</value>
+  </data>
+  <data name="GlobalNoticeMessage" xml:space="preserve">
+    <value>Mensagem</value>
+  </data>
+  <data name="GlobalNoticeMessageTooLong" xml:space="preserve">
+    <value>A mensagem não deve exceder {1} caracteres.</value>
+  </data>
+  <data name="GlobalNoticeUpdated" xml:space="preserve">
+    <value>Aviso global atualizado com sucesso</value>
+  </data>
+  <data name="GlobalNoticeRemoved" xml:space="preserve">
+    <value>Aviso global removido com sucesso</value>
+  </data>
 </root>

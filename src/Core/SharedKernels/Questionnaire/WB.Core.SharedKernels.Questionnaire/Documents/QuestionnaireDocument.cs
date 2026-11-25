@@ -83,6 +83,12 @@ namespace Main.Core.Documents
 
         public bool HideIfDisabled { get; set; }
 
+        bool IConditional.RandomizeOrder
+        {
+            get => false;
+            set { }
+        }
+
         public DateTime CreationDate { get; set; }
 
         public DateTime LastEntryDate { get; set; }
@@ -506,7 +512,10 @@ namespace Main.Core.Documents
                         question.Featured = isTargetGroupCoverPage;
                     
                     if (isTargetGroupCoverPage)
+                    {
                         conditional.ConditionExpression = string.Empty;
+                        conditional.RandomizeOrder = false;
+                    }
                 }
             }
             targetContainer.Insert(targetIndex, item, targetGroupId);

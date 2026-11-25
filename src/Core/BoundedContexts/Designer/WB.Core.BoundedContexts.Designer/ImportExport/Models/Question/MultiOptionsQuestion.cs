@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models.Question
         public List<Answer>? Answers { get; set; }
         public string? LinkedTo { get; set; }
         public string? FilterExpression { get; set; }
+        public bool RandomizeAnswerOptions { get; set; }
     }
 
     public enum MultiOptionsDisplayMode

@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview.Models;
@@ -62,9 +63,17 @@ namespace WB.Enumerator.Native.WebInterview.Services
             // custom view rosters (flat/table/matrix) are hidden from the sidebar table of contents,
             // but they still participate in the navigation hierarchy: their child subsections are
             // surfaced in place of the roster root so they remain reachable from the TOC
+            IEnumerable<InterviewTreeGroup> InDisplayOrder(Identity parentIdentity, IEnumerable<InterviewTreeGroup> groups)
+            {
+                var groupsList = groups.ToList();
+                var groupsByIdentity = groupsList.ToDictionary(g => g.Identity);
+                return interview.OrderForDisplay(parentIdentity, groupsList.Select(g => g.Identity))
+                    .Select(identity => groupsByIdentity[identity]);
+            }
+
             IEnumerable<InterviewTreeGroup> GetVisibleChildSections(InterviewTreeGroup group)
             {
-                foreach (var child in group.Children.OfType<InterviewTreeGroup>())
+                foreach (var child in InDisplayOrder(group.Identity, group.Children.OfType<InterviewTreeGroup>()))
                 {
                     if (!IsSectionVisible(child))
                         continue;
@@ -103,7 +112,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 IEnumerable<InterviewTreeGroup> children;
                 if (isRoot)
                 {
-                    children = interview.GetAllSections().OfType<InterviewTreeGroup>().Where(IsSectionVisible);
+                    children = InDisplayOrder(null, interview.GetAllSections().OfType<InterviewTreeGroup>().Where(IsSectionVisible));
                 }
                 else
                 {
@@ -182,7 +191,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     case InterviewQuestionType.SingleLinkedToList:
                         {
                             var singleQ = question.ToSingleOptionQuestion();
-                            singleQ.Options = GetOptionsLinkedToListQuestion(callerInterview, identity, question).ToList();
+                            singleQ.Options = GetOptionsLinkedToListQuestion(callerInterview, questionnaire, identity, question).ToList();
                             singleQ.RenderAsCombobox = questionnaire.IsQuestionFilteredCombobox(identity.Id);
                             result = singleQ;
                         }
@@ -269,7 +278,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     case InterviewQuestionType.MultiLinkedOption:
                         {
                             var linkedMultiQ = question.ToLinkedMultiQuestion();
-                            linkedMultiQ.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
+                            linkedMultiQ.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, questionnaire, identity, question.AsLinked.Options).ToList();
                             linkedMultiQ.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                             linkedMultiQ.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                             result = linkedMultiQ;
@@ -278,7 +287,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     case InterviewQuestionType.MultiLinkedToList:
                         {
                             var multiQ = question.ToMultiOptionQuestion();
-                            multiQ.Options = GetOptionsLinkedToListQuestion(callerInterview, identity, question).ToList();
+                            multiQ.Options = GetOptionsLinkedToListQuestion(callerInterview, questionnaire, identity, question).ToList();
                             var callerQuestionnaire = questionnaire;
                             multiQ.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                             multiQ.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
@@ -328,7 +337,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     case InterviewQuestionType.SingleLinkedOption:
                         {
                             var linkedSingleQ = question.ToLinkedSingleQuestion();
-                            linkedSingleQ.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
+                            linkedSingleQ.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, questionnaire, identity, question.AsLinked.Options).ToList();
                             linkedSingleQ.RenderAsCombobox = questionnaire.IsQuestionFilteredCombobox(identity.Id);
                             result = linkedSingleQ;
                         }
@@ -431,9 +440,15 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         substitutionText?.BrowserReadyText, questionIdentity, questionnaire, callerInterview, webLinksVirtualDirectory);
                 }
 
-                var tableRosterInstances = parentGroup.Children
+                var rosterInstances = parentGroup.Children
                     .Where(c => c.Identity.Id == identity.Id)
                     .Cast<InterviewTreeRoster>()
+                    .ToList();
+                var rosterInstancesByIdentity = rosterInstances.ToDictionary(ri => ri.Identity);
+
+                var tableRosterInstances = callerInterview
+                    .OrderForDisplay(parentGroup.Identity, rosterInstances.Select(ri => ri.Identity))
+                    .Select(rosterInstanceIdentity => rosterInstancesByIdentity[rosterInstanceIdentity])
                     .Select(ri => new TableRosterInstance()
                     {
                         Id = ri.Identity.ToString(),
@@ -521,12 +536,20 @@ namespace WB.Enumerator.Native.WebInterview.Services
         }
 
         private static IEnumerable<LinkedOption> GetLinkedOptionsForLinkedQuestion(IStatefulInterview callerInterview,
-            Identity identity, List<RosterVector> options) => options.Select(x => new LinkedOption
-            {
-                Value = x.ToString(),
-                RosterVector = x,
-                Title = callerInterview.GetLinkedOptionTitle(identity, x)
-            });
+            IQuestionnaire questionnaire, Identity identity, List<RosterVector> options) 
+            => RandomizedItemsOrder.OrderLinkedAnswerOptionsForDisplay(questionnaire, RandomizedItemsOrder.GetSeed(callerInterview.Id),
+                    identity, options, x => x)
+                .Select(x => new LinkedOption
+                {
+                    Value = x.ToString(),
+                    RosterVector = x,
+                    Title = callerInterview.GetLinkedOptionTitle(identity, x)
+                });
+
+        private static IEnumerable<CategoricalOption> GetOptionsLinkedToListQuestion(IStatefulInterview callerInterview,
+            IQuestionnaire questionnaire, Identity identity, InterviewTreeQuestion question)
+            => RandomizedItemsOrder.OrderAnswerOptionsForDisplay(questionnaire, RandomizedItemsOrder.GetSeed(callerInterview.Id),
+                identity, GetOptionsLinkedToListQuestion(callerInterview, identity, question), x => x.Value);
 
         private static IEnumerable<CategoricalOption> GetOptionsLinkedToListQuestion(IStatefulInterview callerInterview,
             Identity identity, InterviewTreeQuestion question)

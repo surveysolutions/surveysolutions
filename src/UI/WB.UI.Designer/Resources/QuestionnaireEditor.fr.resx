@@ -1688,4 +1688,16 @@ Vous avez entré une entrée invalide. Chaque ligne doit suivre le format : "Tit
   <data name="Stick" xml:space="preserve">
       <value>Adhérer</value>
   </data>
+  <data name="RandomizeOrder" xml:space="preserve">
+      <value>Ordre aléatoire</value>
+  </data>
+  <data name="RandomizeOrderTooltip" xml:space="preserve">
+      <value>L'ordre d'affichage de cet élément est rendu aléatoire avec les éléments voisins marqués 'Ordre aléatoire'</value>
+  </data>
+  <data name="RandomizeAnswerOptions" xml:space="preserve">
+      <value>Ordre aléatoire des options de réponse</value>
+  </data>
+  <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+      <value>Les options de réponse sont affichées dans un ordre aléatoire qui reste le même au sein d'un entretien</value>
+  </data>
 </root>

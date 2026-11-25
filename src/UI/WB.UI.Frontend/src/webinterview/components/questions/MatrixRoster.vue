@@ -13,6 +13,7 @@
         <ag-grid-vue ref="matrixRoster" class="ag-theme-customStyles roster-matrix" domLayout="autoHeight"
             :rowHeight="40" :headerHeight="50" :defaultColDef="defaultColDef" :columnDefs="columnDefs"
             :rowData="rowData" :grid-options="gridOptions" @grid-ready="onGridReady"
+            @first-data-rendered="autosizeRosterTitleColumn" @row-data-updated="autosizeRosterTitleColumn"
             @column-resized="autosizeHeaders"></ag-grid-vue>
     </div>
 </template>
@@ -21,7 +22,7 @@
 /* eslint-disable vue/no-unused-components */
 import { entityDetails } from '../mixins'
 import { debounce, map } from 'lodash-es'
-import { AgGridVue, agGridTheme } from './agGrid'
+import { AgGridVue, agGridTheme, stickGridHeaderToPage, GridContext } from './agGrid'
 
 import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'
 import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'
@@ -107,6 +108,11 @@ export default {
 
     mounted() {
         this.scroll()
+        this.stopStickingHeader = stickGridHeaderToPage(() => this.$refs.matrixRoster?.$el)
+    },
+
+    beforeUnmount() {
+        this.stopStickingHeader?.()
     },
 
     computed: {
@@ -116,9 +122,7 @@ export default {
                 suppressClickEdit: true,
                 suppressCellFocus: true,
                 suppressMovableColumns: true,
-                context: {
-                    componentParent: this,
-                },
+                context: new GridContext(this),
             }
         },
     },
@@ -167,6 +171,8 @@ export default {
             columnsFromQuestions.unshift({
                 headerName: '', //this.$me.title,
                 field: 'rosterTitle',
+                minWidth: 180,
+                maxWidth: 400,
                 autoHeight: true,
                 pinned: true,
                 editable: false,
@@ -188,7 +194,6 @@ export default {
                     var instanceAsRow = {
                         rosterVector: instance.rosterVector,
                         rosterTitle: {
-                            matrixRoster: self,
                             rowIndex: key,
                         },
                     }
@@ -236,6 +241,11 @@ export default {
                 // set header height to calculated height + padding (top: 8px, bottom: 8px)
                 this.gridApi.setGridOption('headerHeight', minHeight)
             }
+        },
+
+        autosizeRosterTitleColumn(event) {
+            // the width is bounded by minWidth/maxWidth of the column, longer titles wrap
+            event.api.autoSizeColumns(['rosterTitle'], true)
         },
 
         setTableRosterHeight() {

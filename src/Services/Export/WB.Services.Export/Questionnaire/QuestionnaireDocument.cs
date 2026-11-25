@@ -24,6 +24,8 @@ namespace WB.Services.Export.Questionnaire
         public string Id { get; set;} = String.Empty;
         public int Revision { get; set; }
 
+        public Guid CoverPageSectionId { get; set; } = Guid.Parse("C46EE895-0E6E-4063-8136-31E6BFA7C3F8");
+
         public bool IsIntegerQuestion(Guid publicKey)
         {
             var result = this.Find<NumericQuestion>(x => x.PublicKey == publicKey && x.QuestionType == QuestionType.Numeric && x.IsInteger).FirstOrDefault();

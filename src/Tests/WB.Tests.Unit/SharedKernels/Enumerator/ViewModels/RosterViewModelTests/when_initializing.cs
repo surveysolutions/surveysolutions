@@ -31,6 +31,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                     Create.Entity.Identity(rosterId, Create.Entity.RosterVector(1)),
                     Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2))
                 });
+            interview.Setup(x => x.OrderForDisplay(It.IsAny<Identity>(), It.IsAny<IEnumerable<Identity>>()))
+                .Returns((Identity parent, IEnumerable<Identity> children) => children);
 
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview.Object);
             var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);

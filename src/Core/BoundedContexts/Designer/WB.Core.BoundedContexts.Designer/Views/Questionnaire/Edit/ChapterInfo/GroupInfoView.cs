@@ -26,5 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public bool HasCondition { get; set; }
         
         public bool HideIfDisabled { get; set; }
+
+        public bool RandomizeOrder { get; set; }
     }
 }

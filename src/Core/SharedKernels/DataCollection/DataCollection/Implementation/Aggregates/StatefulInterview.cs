@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
@@ -424,9 +425,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var isCover = this.sourceInterview.Questionnaire.IsCoverPage(sectionId.Id);
 
-            return section.Children
+            return this.OrderForDisplay(sectionId, section.Children
                 .Where(x => isCover || !(x is InterviewTreeVariable))
-                .Select(x => x.Identity);
+                .Select(x => x.Identity));
         }
 
         public IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId)
@@ -447,8 +448,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var isCover = this.sourceInterview.Questionnaire.IsCoverPage(sectionId.Id);
 
-            return section
-                .TreeToEnumerableDepthFirst(s => s.Children)
+            return this.GetAllNodesInDisplayOrder(new[] { section })
                 .Where(x => isCover || !(x is InterviewTreeVariable))
                 .Select(x => x.Identity);
         }
@@ -488,7 +488,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public int CountActiveQuestionsInInterview() =>
             this.GetEnabledInterviewerQuestions().Count();
 
-        public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
+        public int CountInvalidEntitiesInInterview() => this.GetInvalidInterviewerEntities().Count();
 
         public int CountActiveAnsweredQuestionsInInterviewForSupervisor() =>
             this.GetEnabledQuestionsForSupervisor().Count(question => question.IsAnswered());
@@ -508,9 +508,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Concat(this.GetEnabledInvalidQuestions(true).Select(question => question.Identity));
 
         public IEnumerable<Identity> GetInvalidEntitiesInInterview()
+            => this.SortInDisplayOrder(this.GetInvalidInterviewerEntities());
+
+        private IEnumerable<Identity> GetInvalidInterviewerEntities()
             => this.GetEnabledInvalidStaticTexts()
                 .Concat(this.GetEnabledInvalidQuestions().Where(question => question.IsInterviewer)
                     .Select(question => question.Identity));
+
+        private IEnumerable<Identity> SortInDisplayOrder(IEnumerable<Identity> identities)
+        {
+            var questionnaire = this.GetQuestionnaireOrThrow();
+            var hasRandomizedItems = questionnaire.HasRandomizedChildren(questionnaire.QuestionnaireId)
+                                     || questionnaire.GetAllGroups().Any(questionnaire.HasRandomizedChildren);
+            if (!hasRandomizedItems)
+                return identities;
+
+            var positions = new Dictionary<Identity, int>();
+            foreach (var node in this.GetAllNodesInDisplayOrder(this.Tree.Sections))
+                positions[node.Identity] = positions.Count;
+
+            return identities
+                .OrderBy(identity => positions.TryGetValue(identity, out var position) ? position : int.MaxValue)
+                .ToList();
+        }
 
         private IEnumerable<Identity> GetInvalidEntitiesInInterviewForSupervisor()
             => this.GetEnabledInvalidStaticTexts()
@@ -620,6 +640,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>();
+
+        public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRostersInDisplayOrder()
+        {
+            IEnumerable<InterviewTreeGroup> GetInDisplayOrder(Identity parentIdentity, IReadOnlyCollection<InterviewTreeGroup> groups)
+            {
+                var groupsByIdentity = groups.ToDictionary(group => group.Identity);
+
+                foreach (var identity in this.OrderForDisplay(parentIdentity, groups.Select(group => group.Identity)))
+                {
+                    var group = groupsByIdentity[identity];
+                    yield return group;
+
+                    foreach (var child in GetInDisplayOrder(group.Identity, group.Children.OfType<InterviewTreeGroup>().ToList()))
+                        yield return child;
+                }
+            }
+
+            return GetInDisplayOrder(null, this.Tree.Sections.Cast<InterviewTreeGroup>().ToList());
+        }
 
         public IEnumerable<IInterviewTreeNode> GetAllInterviewNodes()
         {
@@ -757,20 +796,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.IsLinkedToListQuestion(questionIdentity.Id))
             {
-                return OptionsForLinkedToTextListQuestion(questionIdentity)
+                return this.OrderAnswerOptionsForDisplay(questionnaire, questionIdentity, OptionsForLinkedToTextListQuestion(questionIdentity)
                     .Where(x => filter.IsNullOrEmpty() || x.Title.Contains(filter, StringComparison.CurrentCultureIgnoreCase))
                     .Where(x => excludedOptionIds == null || !excludedOptionIds.Contains(x.Value))
-                    .Take(itemsCount)
-                    .ToList();
+                    .Take(itemsCount));
             }
 
             var options = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter, excludedOptionIds);
 
             if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
-                return options.Take(itemsCount).ToList();
+                return this.OrderAnswerOptionsForDisplay(questionnaire, questionIdentity, options.Take(itemsCount));
 
-            return this.FilteredCategoricalOptions(questionIdentity, itemsCount, options);
+            return this.OrderAnswerOptionsForDisplay(questionnaire, questionIdentity, 
+                this.FilteredCategoricalOptions(questionIdentity, itemsCount, options));
         }
+
+        private List<CategoricalOption> OrderAnswerOptionsForDisplay(IQuestionnaire questionnaire, Identity questionIdentity,
+            IEnumerable<CategoricalOption> options)
+            => RandomizedItemsOrder.OrderAnswerOptionsForDisplay(questionnaire, RandomizedItemsOrder.GetSeed(this.EventSourceId),
+                questionIdentity, options, option => option.Value).ToList();
 
         private IEnumerable<CategoricalOption> OptionsForLinkedToTextListQuestion(Identity questionId)
         {
@@ -1111,18 +1155,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Identity> GetAllUnansweredCriticalQuestions()
         {
             var questions = base.GetUnansweredCriticalQuestions();
-            return questions.Select(q => q.Identity);
+            return this.SortInDisplayOrder(questions.Select(q => q.Identity));
         }
         
         public IEnumerable<Identity> GetAllUnansweredQuestions(bool forSupervisor)
         {
-            return this.Tree.FindQuestions()
+            return this.SortInDisplayOrder(this.Tree.FindQuestions()
                 .Where(question => !question.IsDisabled() 
                                    && !question.IsAnswered() 
                                    && !question.IsReadonly
                                    && (!forSupervisor ? question.IsInterviewer : true)
                                    && !question.IsHidden)
-                .Select(q => q.Identity);
+                .Select(q => q.Identity));
         }
 
         public IEnumerable<Guid> GetFailedCriticalRules()

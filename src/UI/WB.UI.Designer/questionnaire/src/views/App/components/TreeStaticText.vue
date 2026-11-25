@@ -12,6 +12,8 @@
             </div>
             <div class="qname-block">
                 <div class="conditions-block">
+                    <div class="randomize-order-marker" v-if="item.randomizeOrder"
+                        :title="$t('QuestionnaireEditor.RandomizeOrderTooltip')"></div>
                     <div class="enabling-group-marker" :class="{ 'hide-if-disabled': item.hideIfDisabled }"
                         v-if="item.hasCondition"></div>
                     <div class="validation-group-marker" v-if="item.hasValidation"></div>

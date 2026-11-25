@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public string? VariableLabel { get; set; }
         public string? EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
+        public bool RandomizeOrder { get; set; }
         public string? Instructions { get; set; }
         public bool HideInstructions { get; set; }
         public string? OptionsFilterExpression { get; set; }

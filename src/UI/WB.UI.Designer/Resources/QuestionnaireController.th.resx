@@ -274,4 +274,22 @@
     <data name="IncludeScenarios" xml:space="preserve">
         <value>รวมสถานการณ์</value>
     </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>ประกาศทั่วไป</value>
+  </data>
+  <data name="GlobalNoticeDescription" xml:space="preserve">
+    <value>ข้อความจะแสดงที่ด้านบนของหน้าสำหรับผู้ใช้ Designer ทุกคน บันทึกข้อความว่างเพื่อลบประกาศ</value>
+  </data>
+  <data name="GlobalNoticeMessage" xml:space="preserve">
+    <value>ข้อความ</value>
+  </data>
+  <data name="GlobalNoticeMessageTooLong" xml:space="preserve">
+    <value>ข้อความต้องมีความยาวไม่เกิน {1} ตัวอักษร</value>
+  </data>
+  <data name="GlobalNoticeUpdated" xml:space="preserve">
+    <value>อัปเดตประกาศทั่วไปเรียบร้อยแล้ว</value>
+  </data>
+  <data name="GlobalNoticeRemoved" xml:space="preserve">
+    <value>ลบประกาศทั่วไปเรียบร้อยแล้ว</value>
+  </data>
 </root>

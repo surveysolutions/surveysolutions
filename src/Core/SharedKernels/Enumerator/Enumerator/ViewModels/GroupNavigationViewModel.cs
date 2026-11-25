@@ -186,7 +186,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var interview = this.interviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
 
-            var sections = questionnaire.GetAllSections().ToList();
+            var sections = interview.OrderForDisplay(null, questionnaire.GetAllSections()
+                    .Select(x => new Identity(x, RosterVector.Empty)))
+                .Select(x => x.Id)
+                .ToList();
 
             int currentSectionIndex = this.Identity == null ? 0 :sections.FindIndex(x => x == this.Identity.Id);
             int startSectionIndex = !questionnaire.IsCoverPageSupported && this.Identity == null 

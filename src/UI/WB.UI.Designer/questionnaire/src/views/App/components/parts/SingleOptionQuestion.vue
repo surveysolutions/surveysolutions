@@ -141,6 +141,19 @@
             </CategoricalFilterExpression>
         </div>
     </div>
+    <div class="row" v-if="isCascade === false && !activeQuestion.isFilteredCombobox">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <div class="checkbox-in-column randomize-column">
+                    <div class="randomize-options-marker"></div>
+                    <input id="cb-randomizeAnswerOptions" type="checkbox" class="wb-checkbox"
+                        v-model="activeQuestion.randomizeAnswerOptions" />
+                    <label for="cb-randomizeAnswerOptions"><span></span>{{ $t('QuestionnaireEditor.RandomizeAnswerOptions')
+                    }} <help link="randomizeAnswerOptions"></help></label>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row" v-if="isCascade === true">
         <div class="col-xs-12">
             <div class="form-group">

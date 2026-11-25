@@ -274,6 +274,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
                     /\S/.test(payload.group.enablementCondition);
                 this.info.chapters[index].hideIfDisabled =
                     payload.group.hideIfDisabled;
+                this.info.chapters[index].randomizeOrder =
+                    payload.group.randomizeOrder;
             }
         },
 

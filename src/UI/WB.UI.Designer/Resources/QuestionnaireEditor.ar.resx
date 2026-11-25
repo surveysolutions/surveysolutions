@@ -1629,4 +1629,16 @@
   <data name="Stick" xml:space="preserve">
       <value>إرفاق</value>
   </data>
+  <data name="RandomizeOrder" xml:space="preserve">
+      <value>ترتيب عشوائي</value>
+  </data>
+  <data name="RandomizeOrderTooltip" xml:space="preserve">
+      <value>يتم عرض هذا العنصر بترتيب عشوائي مع العناصر المجاورة المحددة بـ 'ترتيب عشوائي'</value>
+  </data>
+  <data name="RandomizeAnswerOptions" xml:space="preserve">
+      <value>ترتيب عشوائي لخيارات الإجابة</value>
+  </data>
+  <data name="RandomizeAnswerOptionsTooltip" xml:space="preserve">
+      <value>تُعرض خيارات الإجابة بترتيب عشوائي يبقى ثابتًا خلال المقابلة</value>
+  </data>
 </root>

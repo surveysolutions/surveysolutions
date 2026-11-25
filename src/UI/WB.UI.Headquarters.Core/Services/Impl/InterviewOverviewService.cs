@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Services.Impl
         {
             var enabledSectionIds = Enumerable.ToHashSet(interview.GetEnabledSections().Select(x => x.Identity));
 
-            foreach (var enabledSectionId in enabledSectionIds)
+            foreach (var enabledSectionId in interview.OrderForDisplay(null, enabledSectionIds))
             {
                 var interviewEntities = isReviewMode
                     ? interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId)

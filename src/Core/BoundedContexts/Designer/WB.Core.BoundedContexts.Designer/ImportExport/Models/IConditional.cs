@@ -5,5 +5,6 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models
     {
         string? ConditionExpression { get; set; }
         bool HideIfDisabled { get; set; }
+        bool RandomizeOrder { get; set; }
     }
 }

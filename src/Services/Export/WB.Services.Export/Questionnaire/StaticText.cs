@@ -29,6 +29,8 @@ namespace WB.Services.Export.Questionnaire
 
         public IList<ValidationCondition> ValidationConditions { get; set; }
 
+        public bool RandomizeOrder { get; set; }
+
         private string? columnName;
         public string ColumnName
         {

@@ -243,6 +243,15 @@
   <data name="QuestionType_Ordered" xml:space="preserve">
     <value>упорядоченный</value>
   </data>
+  <data name="QuestionType_RandomizedOptions" xml:space="preserve">
+    <value>случайный порядок вариантов</value>
+  </data>
+  <data name="RandomizedOrder" xml:space="preserve">
+    <value>Случайный порядок</value>
+  </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>Случайный порядок вариантов ответа</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>картинка</value>
   </data>

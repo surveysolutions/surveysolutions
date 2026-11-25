@@ -6,5 +6,6 @@ namespace Main.Core.Entities.SubEntities
     {
         string ConditionExpression { get; set; }
         bool HideIfDisabled { get; set; }
+        bool RandomizeOrder { get; set; }
     }
 }

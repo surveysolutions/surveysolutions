@@ -187,6 +187,15 @@
   <data name="QuestionType_Ordered" xml:space="preserve">
     <value>ordenado</value>
   </data>
+  <data name="QuestionType_RandomizedOptions" xml:space="preserve">
+    <value>opções aleatórias</value>
+  </data>
+  <data name="RandomizedOrder" xml:space="preserve">
+    <value>Ordem aleatória</value>
+  </data>
+  <data name="RandomizedAnswerOptions" xml:space="preserve">
+    <value>Opções de resposta aleatórias</value>
+  </data>
   <data name="QuestionType_Picture" xml:space="preserve">
     <value>imagem</value>
   </data>

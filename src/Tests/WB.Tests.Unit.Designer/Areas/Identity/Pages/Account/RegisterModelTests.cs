@@ -56,13 +56,32 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
             userManager.Verify(x => x.CreateAsync(It.IsAny<DesignerIdentityUser>(), It.IsAny<string>()), Times.Never);
         }
 
-        private static RegisterModel CreateRegisterModel(UserManager<DesignerIdentityUser> userManager, RecaptchaResponse recaptchaResponse)
+        [TestCase(CaptchaProviderType.None)]
+        [TestCase(CaptchaProviderType.Hosted)]
+        public async Task when_captcha_is_disabled_should_create_user_without_captcha_validation(CaptchaProviderType captchaType)
+        {
+            var userManager = CreateUserManager();
+            userManager.Setup(x => x.CreateAsync(It.IsAny<DesignerIdentityUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "failure" }));
+            var recaptchaService = new Mock<IRecaptchaService>();
+
+            var model = CreateRegisterModel(userManager.Object, null, captchaType, recaptchaService);
+
+            await model.OnPostAsync("/return");
+
+            recaptchaService.Verify(x => x.Validate(It.IsAny<HttpRequest>(), It.IsAny<bool>()), Times.Never);
+            userManager.Verify(x => x.CreateAsync(It.IsAny<DesignerIdentityUser>(), It.IsAny<string>()), Times.Once);
+        }
+
+        private static RegisterModel CreateRegisterModel(UserManager<DesignerIdentityUser> userManager, RecaptchaResponse recaptchaResponse,
+            CaptchaProviderType captchaType = CaptchaProviderType.RecaptchaV3,
+            Mock<IRecaptchaService> recaptchaService = null)
         {
             var urlHelper = new Mock<IUrlHelper>();
             urlHelper.Setup(x => x.IsLocalUrl(It.IsAny<string>()))
                 .Returns(true);
 
-            var recaptchaService = new Mock<IRecaptchaService>();
+            recaptchaService ??= new Mock<IRecaptchaService>();
             recaptchaService.Setup(x => x.Validate(It.IsAny<HttpRequest>(), It.IsAny<bool>()))
                 .ReturnsAsync(recaptchaResponse);
 
@@ -74,7 +93,7 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
                 recaptchaService.Object,
                 Options.Create(new CaptchaConfig
                 {
-                    CaptchaType = CaptchaProviderType.RecaptchaV3,
+                    CaptchaType = captchaType,
                     RecaptchaV3MinimumScore = 0.5
                 }))
             {

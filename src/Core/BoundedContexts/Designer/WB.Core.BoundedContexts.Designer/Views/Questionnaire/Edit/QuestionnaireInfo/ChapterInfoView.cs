@@ -49,5 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             get;
             set;
         }
+
+        public bool RandomizeOrder { get; set; }
     }
 }

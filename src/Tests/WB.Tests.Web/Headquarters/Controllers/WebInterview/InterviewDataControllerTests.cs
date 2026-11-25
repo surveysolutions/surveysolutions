@@ -52,6 +52,49 @@ namespace WB.Tests.Web.Headquarters.Controllers.WebInterview
             Assert.That(navigationButtonState.Type, Is.EqualTo(ButtonType.Complete));
         }
 
+        [Test]
+        public void GetNavigationButtonState_for_randomized_sections_should_follow_display_order()
+        {
+            var sectionIds = Enumerable.Range(0, 6).Select(_ => Guid.NewGuid()).ToArray();
+            var sections = sectionIds.Select(id =>
+            {
+                var section = Abc.Create.Entity.Group(id, children: new IComposite[]
+                {
+                    Abc.Create.Entity.NumericIntegerQuestion(Guid.NewGuid())
+                });
+                section.RandomizeOrder = true;
+                return (IComposite)section;
+            }).ToArray();
+
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocument(children: sections);
+            var plainQuestionnaire = Abc.Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
+            var webInterview = CreateInterviewDataController(statefulInterview, questionnaireDocument);
+
+            var displayOrder = statefulInterview
+                .OrderForDisplay(null, sectionIds.Select(id => Identity.Create(id, RosterVector.Empty)))
+                .ToArray();
+
+            var startButton = webInterview.GetNavigationButtonState(statefulInterview.Id, null, "NavigationButton", plainQuestionnaire);
+            Assert.That(startButton.Type, Is.EqualTo(ButtonType.Start));
+            Assert.That(startButton.Target, Is.EqualTo(displayOrder[0].ToString()));
+
+            for (int i = 0; i < displayOrder.Length; i++)
+            {
+                var button = webInterview.GetNavigationButtonState(statefulInterview.Id, displayOrder[i].ToString(), "NavigationButton", plainQuestionnaire);
+
+                if (i + 1 < displayOrder.Length)
+                {
+                    Assert.That(button.Type, Is.EqualTo(ButtonType.Next));
+                    Assert.That(button.Target, Is.EqualTo(displayOrder[i + 1].ToString()));
+                }
+                else
+                {
+                    Assert.That(button.Type, Is.EqualTo(ButtonType.Complete));
+                }
+            }
+        }
+
         [TestCase("not-a-guid")]
         [TestCase("00000000-0000-0000-0000-000000000000")]
         public void GetFullSectionInfo_returns_empty_section_data_when_section_id_is_not_a_valid_identity(string invalidSectionId)

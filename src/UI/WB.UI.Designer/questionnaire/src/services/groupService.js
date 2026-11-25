@@ -31,6 +31,7 @@ export function updateGroup(questionnaireId, group) {
         title: group.title,
         condition: group.enablementCondition,
         hideIfDisabled: group.hideIfDisabled,
+        randomizeOrder: group.randomizeOrder,
         isRoster: false,
         rosterSizeQuestionId: null,
         rosterSizeSource: 'Question',

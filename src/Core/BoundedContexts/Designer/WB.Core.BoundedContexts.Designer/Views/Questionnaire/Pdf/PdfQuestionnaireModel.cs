@@ -317,7 +317,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     {
                         isLinked ? PdfStrings.QuestionType_Linked : "",
                         isCascading? PdfStrings.QuestionType_Cascading : "",
-                        isCombobox? PdfStrings.QuestionType_Combobox : ""
+                        isCombobox? PdfStrings.QuestionType_Combobox : "",
+                        singleQuestion?.RandomizeAnswerOptions ?? false ? PdfStrings.QuestionType_RandomizedOptions : ""
                     }).Where(x => !string.IsNullOrWhiteSpace(x));
 
                     var stringifiedQuestionOptions = string.Join(", ", questionOptions);
@@ -335,7 +336,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     {
                         areAnswersOrdered ? PdfStrings.QuestionType_Ordered : "",
                         isYesNoView ? PdfStrings.QuestionType_YesNo : "",
-                        isLinked ? PdfStrings.QuestionType_Linked : ""
+                        isLinked ? PdfStrings.QuestionType_Linked : "",
+                        multyOptionsQuestion?.RandomizeAnswerOptions ?? false ? PdfStrings.QuestionType_RandomizedOptions : ""
                     }).Where(x => !string.IsNullOrWhiteSpace(x));
                     var stringifiedQuestionOptions = string.Join(", ", questionOptions);
                     return PdfStrings.QuestionType_MultiSelect + (string.IsNullOrWhiteSpace(stringifiedQuestionOptions) ? "" : ": " + stringifiedQuestionOptions);
@@ -523,6 +525,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public bool IsInterviewerQuestion(IQuestion question) => question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
         public bool IsParentCover(IQuestion question) => questionnaire.IsCoverPageSupported && questionnaire.IsCoverPage(question.GetParent()!.PublicKey);
+
+        public bool IsOrderRandomized(IComposite entity)
+        {
+            if (entity is not IConditional { RandomizeOrder: true })
+                return false;
+            if (!questionnaire.IsCoverPageSupported)
+                return true;
+
+            var parent = entity.GetParent();
+            return !questionnaire.IsCoverPage(entity.PublicKey)
+                   && (parent == null || !questionnaire.IsCoverPage(parent.PublicKey));
+        }
+
+        public bool AreAnswerOptionsRandomized(IQuestion question)
+            => question.RandomizeAnswerOptions
+               && question.QuestionType is QuestionType.SingleOption or QuestionType.MultyOption
+               && question.IsFilteredCombobox != true
+               && !question.CascadeFromQuestionId.HasValue;
 
         public bool IsConditionsAppendixEmpty => ItemsWithLongConditions.Count == 0;
         public bool IsValidationsAppendixEmpty => ItemsWithLongValidations.Count == 0;

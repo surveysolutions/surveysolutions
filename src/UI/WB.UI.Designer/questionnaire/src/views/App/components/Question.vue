@@ -161,6 +161,16 @@
                     $t('QuestionnaireEditor.AddValidationRule') }}</button>
             </div>
 
+            <div class="form-group" v-if="!currentChapter.isCover">
+                <div class="checkbox-in-column">
+                    <div class="randomize-order-marker"></div>
+                    <input id="cb-randomizeOrder" type="checkbox" class="wb-checkbox"
+                        v-model="activeQuestion.randomizeOrder" />
+                    <label for="cb-randomizeOrder"><span></span>{{ $t('QuestionnaireEditor.RandomizeOrder')
+                    }} <help link="randomizeOrder"></help></label>
+                </div>
+            </div>
+
             <div class="form-group">
                 <div class="checkbox-in-column pull-left">
                     <div class="criticality-group-marker"></div>
