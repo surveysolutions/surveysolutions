@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable
         {
             Index = index;
             VariableData = variableData;
+            variableData.Name = variableData.Name?.Trim() ?? string.Empty;
             variableData.Type = VariableData.Type == 0 ? VariableType.Boolean : variableData.Type;
         }
 
