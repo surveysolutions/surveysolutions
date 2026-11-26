@@ -301,6 +301,9 @@
   <data name="NoResultsFound" xml:space="preserve">
     <value>لم يتم العثور على نتائج</value>
   </data>
+  <data name="TypeToFilterForMore" xml:space="preserve">
+    <value>يتم عرض أول {{count}} من الخيارات. اكتب للبحث عن المزيد.</value>
+  </data>
   <data name="NumberCannotParse" xml:space="preserve">
     <value>لا يمكن تحليل القيمة التي تم إدخالها كقيمة عدد صحيح</value>
   </data>
