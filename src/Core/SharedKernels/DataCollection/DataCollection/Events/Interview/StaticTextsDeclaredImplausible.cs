@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class StaticTextsDeclaredImplausible : InterviewPassiveEvent
+    public class StaticTextsDeclaredImplausible : InterviewPassiveEvent, IEventWithAffectedEntities
     {
         private IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditionsDictionary;
 
@@ -24,5 +24,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         {
             this.FailedValidationConditions = failedValidationConditions;
         }
+
+        public IReadOnlyCollection<Identity> GetAffectedEntities() =>
+            System.Linq.Enumerable.ToArray(this.GetFailedValidationConditionsDictionary().Keys);
     }
 }

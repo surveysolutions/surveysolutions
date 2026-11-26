@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class SubstitutionTitlesChanged : InterviewPassiveEvent
+    public class SubstitutionTitlesChanged : InterviewPassiveEvent, IEventWithAffectedEntities
     {
         [JsonIgnore]
         public Identity[] Questions { get; }
@@ -24,5 +25,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.StaticTexts = staticTexts?.ToArray() ?? Array.Empty<Identity>();
             this.Groups      = groups?.ToArray()      ?? Array.Empty<Identity>();
         }
+
+        IReadOnlyCollection<Identity> IEventWithAffectedEntities.GetAffectedEntities() =>
+            Questions.Concat(StaticTexts).Concat(Groups).ToArray();
     }
 }

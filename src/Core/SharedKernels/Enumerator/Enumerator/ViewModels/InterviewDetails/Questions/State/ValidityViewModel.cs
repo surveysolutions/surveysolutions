@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Identity = entityIdentity;
             this.UpdateValidStateAsync().WaitAndUnwrapException();
 
-            this.liteEventRegistry.Subscribe(this, interviewId);
+            this.liteEventRegistry.Subscribe(this, interviewId, entityIdentity);
         }
 
         private string exceptionErrorMessageFromViewModel;

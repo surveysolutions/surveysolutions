@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class AnswersDeclaredInvalid : InterviewPassiveEvent
+    public class AnswersDeclaredInvalid : InterviewPassiveEvent, IEventWithAffectedEntities
     {
         private IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions;
 
@@ -44,5 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
                 this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
             }
         }
+
+        public IReadOnlyCollection<Identity> GetAffectedEntities() => this.FailedValidationConditions.Keys.ToArray();
     }
 }

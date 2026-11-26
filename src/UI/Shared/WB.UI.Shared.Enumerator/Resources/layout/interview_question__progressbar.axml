@@ -10,6 +10,6 @@
   <ProgressBar
                style="@style/Interview_Question_Progress_Indicator"
                android:indeterminate="true"
-               local:MvxBind="Visible InProgress" />
+               local:MvxBind="Visible Or(InProgress, UserInterfaceStateService.IsUserInterfaceLocked)" />
   <View style="@style/Interview_Entity_Divider" />
 </LinearLayout>

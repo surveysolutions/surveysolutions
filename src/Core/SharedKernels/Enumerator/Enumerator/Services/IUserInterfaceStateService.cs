@@ -1,8 +1,9 @@
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
-    public interface IUserInterfaceStateService
+    public interface IUserInterfaceStateService : INotifyPropertyChanged
     {
         void NotifyRefreshStarted();
 
