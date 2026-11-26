@@ -103,6 +103,40 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             updated.StatusComment.Should().Be("Completed by supervisor");
         }
 
+        [TestCase("local comment", "remote comment", "remote comment")]
+        [TestCase("local comment", null, "local comment")]
+        public async Task syncs_assignment_comments_without_clearing_existing_comments(string localComment, string remoteComment, string expectedComment)
+        {
+            var localAssignment = Create.Entity
+                .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            localAssignment.Comments = localComment;
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { localAssignment });
+
+            var remoteView = new AssignmentApiView
+            {
+                Id = 1,
+                Quantity = 10,
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
+                Comments = remoteComment
+            };
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<AssignmentApiView> { remoteView });
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo
+            );
+
+            await synchronizer.SynchronizeAssignmentsAsync(Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
+
+            assignmentsRepo.GetById(1).Comments.Should().Be(expectedComment);
+        }
+
         [Test]
         public async Task uploads_local_status_change_before_downloading()
         {
