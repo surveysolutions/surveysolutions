@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
@@ -26,6 +28,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
 
             var fixture = Create.Other.AutoFixture();
 
+            fixture.Register<IEnumerable<FeaturedQuestionMeta>>(() => fixture.CreateMany<FeaturedQuestionMeta>().ToList());
             fixture.Register<IPublishableEvent>(() =>
                 Create.Other.CommittedEvent(payload: Create.Event.TextQuestionAnswered()));
             fixture.Register<WB.Core.Infrastructure.EventBus.IEvent>(() => Create.Event.TextQuestionAnswered());

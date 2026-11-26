@@ -55,7 +55,47 @@ namespace WB.Infrastructure.Native.Storage
                 typeName = typeName.Replace(OldAssemblyGenericReplacePattern, NewAssemblyGenericReplacePattern);
             }
 
-            return base.BindToType(assemblyName, typeName);
+            var resolved = base.BindToType(assemblyName, typeName);
+            EnsureTypeAllowed(resolved);
+            return resolved;
+        }
+
+        private static readonly string[] AllowedAssemblyPrefixes = { "WB.", "Main.Core" };
+
+        private static readonly HashSet<string> AllowedFrameworkNamespaces = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "System",
+            "System.Collections",
+            "System.Collections.Generic",
+            "System.Collections.Concurrent",
+            "System.Collections.ObjectModel",
+            "System.Collections.Immutable",
+            "Newtonsoft.Json.Linq"
+        };
+
+        // Type-name handling is enabled, so payloads must not be able to instantiate arbitrary types.
+        private static void EnsureTypeAllowed(Type type)
+        {
+            if (type.HasElementType)
+            {
+                EnsureTypeAllowed(type.GetElementType());
+                return;
+            }
+
+            if (type.IsGenericType)
+            {
+                foreach (var argument in type.GetGenericArguments())
+                    EnsureTypeAllowed(argument);
+            }
+
+            var assemblyName = type.Assembly.GetName().Name ?? string.Empty;
+            if (AllowedAssemblyPrefixes.Any(prefix => assemblyName.StartsWith(prefix, StringComparison.Ordinal)))
+                return;
+
+            if (type.Namespace != null && AllowedFrameworkNamespaces.Contains(type.Namespace))
+                return;
+
+            throw new Newtonsoft.Json.JsonSerializationException($"Type '{type.FullName}' is not allowed for deserialization");
         }
 
         public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
