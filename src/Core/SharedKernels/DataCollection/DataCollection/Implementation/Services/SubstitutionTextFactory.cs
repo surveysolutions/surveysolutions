@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -42,6 +43,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 
             foreach (var variable in variableNames)
             {
+                if (this.substitutionService.IsRosterServiceVariable(variable))
+                    continue;
+
                 if (questionnaire.HasQuestion(variable)) substitutionVariables.Add(new SubstitutionVariable
                 {
                     Name = variable,
@@ -79,6 +83,39 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                         Name = this.substitutionService.RosterTitleSubstitutionReference,
                         Id = rostersFromTop.Count > 0 ? rostersFromTop[rostersFromTop.Count - 1] : identity.Id
                     });
+                }
+            }
+
+            if (identity != null && this.substitutionService.ContainsAnyRosterServiceVariable(text))
+            {
+                var rosterServiceVariablesInText = variableNames
+                    .Where(v => this.substitutionService.IsRosterServiceVariable(v))
+                    .Distinct()
+                    .ToList();
+
+                if (rosterServiceVariablesInText.Count > 0)
+                {
+                    Guid containingRosterId;
+                    if (questionnaire.IsRosterGroup(identity.Id))
+                    {
+                        containingRosterId = identity.Id;
+                    }
+                    else
+                    {
+                        var rostersFromTop = questionnaire.GetRostersFromTopToSpecifiedEntity(identity.Id).ToList();
+                        containingRosterId = rostersFromTop.Count > 0
+                            ? rostersFromTop[rostersFromTop.Count - 1]
+                            : identity.Id;
+                    }
+
+                    foreach (var rosterServiceVariable in rosterServiceVariablesInText)
+                    {
+                        substitutionVariables.Add(new SubstitutionVariable
+                        {
+                            Name = rosterServiceVariable,
+                            Id = containingRosterId
+                        });
+                    }
                 }
             }
             
