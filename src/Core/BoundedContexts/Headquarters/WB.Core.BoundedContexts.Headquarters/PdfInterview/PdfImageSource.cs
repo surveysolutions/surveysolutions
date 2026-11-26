@@ -19,10 +19,32 @@ public static class PdfImageSource
     {
         using var bitmap = SkiaImageDecoder.Decode(content, out var format);
 
-        var keepTransparency = format == SKEncodedImageFormat.Png;
+        return Encode(bitmap, format);
+    }
 
+    public static string FromBinaryResized(byte[] content, int maxDimension = 1024)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxDimension);
+
+        using var bitmap = SkiaImageDecoder.Decode(content, out var format);
+        if (bitmap.Width <= maxDimension && bitmap.Height <= maxDimension)
+            return Encode(bitmap, format);
+
+        var scale = (double)maxDimension / Math.Max(bitmap.Width, bitmap.Height);
+        var resizedInfo = bitmap.Info.WithSize(
+            Math.Max(1, (int)Math.Round(bitmap.Width * scale)),
+            Math.Max(1, (int)Math.Round(bitmap.Height * scale)));
+        using var resized = bitmap.Resize(resizedInfo, new SKSamplingOptions(SKFilterMode.Linear, SKMipmapMode.Linear))
+            ?? throw new InvalidImageException("Image cannot be resized");
+
+        return Encode(resized, format);
+    }
+
+    private static string Encode(SKBitmap bitmap, SKEncodedImageFormat format)
+    {
         using var image = SKImage.FromBitmap(bitmap);
-        using var data = keepTransparency
+        using var data = format == SKEncodedImageFormat.Png
             ? image.Encode(SKEncodedImageFormat.Png, 100)
             : image.Encode(SKEncodedImageFormat.Jpeg, JpegQuality);
 

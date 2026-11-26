@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                     {
                         try
                         {
-                            var image = paragraph.AddImage(PdfImageSource.FromBinary(binaryData));
+                            var image = paragraph.AddImage(PdfImageSource.FromBinaryResized(binaryData));
                             image.Width = Unit.FromPoint(300);
                             image.Height = Unit.FromPoint(300);
                         }
