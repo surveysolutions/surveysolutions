@@ -35,14 +35,15 @@
         </FilterBlock>
 
         <FilterBlock :title="$t('Reports.ByAnswerValue')" v-if="question && question.Type == 'Numeric'">
-            <Form as="div" v-slot="{ errors, meta }" class="row">
+            <Form as="div" v-slot="{ errors }" class="row">
                 <div class="col-xs-6">
                     <div class="form-group" v-bind:class="{ 'has-error': errors.min }" :title="errors.min">
                         <label for="min">
                             {{ $t("Reports.Min") }}
                         </label>
-                        <Field type="number" class="form-control input-sm" name="min" :placeholder="$t('Reports.Min')"
-                            v-number="/^([-]?\d*)$/" @input="inputChange" :rules="{ max_value: max || 2147483647 }"
+                        <Field type="text" class="form-control input-sm" name="min" :placeholder="$t('Reports.Min')"
+                            @input="inputChange"
+                            :rules="{ regex: /^-?\d*$/, min_value: -2147483648, max_value: max != null ? max : 2147483647 }"
                             :value="min" />
                     </div>
                 </div>
@@ -51,8 +52,8 @@
                         <label for="max">
                             {{ $t("Reports.Max") }}
                         </label>
-                        <Field type="number" class="form-control input-sm" :placeholder="$t('Reports.Max')"
-                            v-number="/^([-]?\d*)$/" :rules="{ min_value: min == 0 ? Number(0) : (min || -2147483648) }"
+                        <Field type="text" class="form-control input-sm" :placeholder="$t('Reports.Max')"
+                            :rules="{ regex: /^-?\d*$/, min_value: min == 0 ? Number(0) : (min != null ? min : -2147483648), max_value: 2147483647 }"
                             name="max" @input="inputChange" :value="max" />
                     </div>
                 </div>
@@ -259,6 +260,23 @@ export default {
                 query.ans = this.selectedAnswers
             })
         },
+
+        // Accepts only a well-formed, optionally signed integer that fits into a 32-bit signed int,
+        // matching the constraints of the Min/Max query parameters accepted by the server.
+        isValidInt32(value) {
+            if (value == null || value === '') return true
+            if (!/^-?\d+$/.test(value)) return false
+
+            const parsed = parseInt(value, 10)
+            return parsed >= -2147483648 && parsed <= 2147483647
+        },
+
+        parseInt32(value) {
+            if (!this.isValidInt32(value)) return null
+
+            const result = parseInt(value, 10)
+            return isNaN(result) ? null : result
+        },
     },
 
     computed: {
@@ -273,6 +291,7 @@ export default {
                     question: this.question,
                     condition: this.condition,
                     conditionAnswers: this.conditionAnswers,
+                    valid: this.isNumericFilterValid,
                 },
                 state
             )
@@ -300,9 +319,7 @@ export default {
         },
 
         max() {
-            const result = parseInt(this.query.max)
-            const returnVal = isNaN(result) ? null : result
-            return returnVal
+            return this.parseInt32(this.query.max)
         },
 
         expandTeams() {
@@ -310,9 +327,17 @@ export default {
         },
 
         min() {
-            const result = parseInt(this.query.min)
-            const returnVal = isNaN(result) ? null : result
-            return returnVal
+            return this.parseInt32(this.query.min)
+        },
+
+        isNumericFilterValid() {
+            if (this.question == null || this.question.Type != 'Numeric') return true
+
+            if (!this.isValidInt32(this.query.min)) return false
+            if (!this.isValidInt32(this.query.max)) return false
+            if (this.min != null && this.max != null && this.min > this.max) return false
+
+            return true
         },
 
         questionnaireList() {

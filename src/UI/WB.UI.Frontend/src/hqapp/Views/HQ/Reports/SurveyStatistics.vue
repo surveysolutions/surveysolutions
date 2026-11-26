@@ -36,8 +36,13 @@
             $t('Reports.QuestionnaireCompatibilityIssues_UnknownAnswer')}}
         </div>
 
+        <div class="alert-warning"
+            v-if="filter.valid === false">{{
+            $t('Reports.InvalidNumericFilter')}}
+        </div>
+
         <DataTables ref="table"
-            v-if="isFiltersLoaded"
+            v-if="isFiltersLoaded && filter.valid !== false"
             noSearch
             exportable
             multiorder
@@ -73,6 +78,7 @@ export default {
                 min: this.min,
                 max: this.max,
                 pivot: false,
+                valid: true,
             },
             warnings: [],
             status: {
